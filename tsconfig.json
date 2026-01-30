@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    
+    "paths": {
+      "@/*": ["./*"]
+    },
     "target": "ES2017",
     "lib": [
       "dom",
@@ -30,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "app/lib/mock/products.mock,ts"  ],
   "exclude": [
     "node_modules"
   ]
