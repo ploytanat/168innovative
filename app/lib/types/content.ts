@@ -39,6 +39,8 @@ export interface HomeContent {
   seo: SEOContent
 }
 
+
+
 export interface Category {
   id: string
   slug: string
