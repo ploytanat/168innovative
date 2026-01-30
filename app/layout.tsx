@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-
-
+import Navigation from '../components/layout/Navigation';
+import Footer from '../components/layout/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
-
 
 export const metadata: Metadata = {
   title: 'Reveal Footer Effect',
@@ -20,10 +19,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+
+        <Navigation />
+
     
+         
             {children}
          
-
+<Footer />
      
       </body>
     </html>
