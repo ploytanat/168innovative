@@ -1,2 +1,14 @@
 @import "tailwindcss";
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+
+.marquee {
+  animation: marquee 2s linear infinite;
+}

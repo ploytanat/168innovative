@@ -45,6 +45,16 @@ export interface Category {
   id: string
   slug: string
   name: LocalizedText
+  image?: ImageAsset
+}
+export interface CategoryView {
+  id: string
+  slug: string
+  name: string
+  image?: {
+    src: string
+    alt: string
+  }
 }
 
 export interface Product {

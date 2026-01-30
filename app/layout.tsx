@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html >
       <body className={inter.className}>
         <Navigation />
-        <div className='container mx-auto'>
+        <div className=''>
        {children}
         </div>
  
