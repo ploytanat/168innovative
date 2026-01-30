@@ -108,3 +108,9 @@ export interface WhyItem {
   title: LocalizedText
   description: LocalizedText
 }
+
+export interface WhyItemView {
+  title: LocalizedText
+  description: LocalizedText
+}
+
