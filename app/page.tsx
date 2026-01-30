@@ -1,13 +1,14 @@
 // app/(site)/page.tsx
-import { getHome } from "./lib/api/home"
+import { getHome } from './lib/api/home';
+import HeroSection from './components/sections/HeroSection';
 
 export default function HomePage() {
   const home = getHome('th')
 
   return (
     <>
-      <h1>{home.hero.title}</h1>
-      <p>{home.hero.description}</p>
+      <HeroSection data={home.hero} />
+
     </>
   )
 }

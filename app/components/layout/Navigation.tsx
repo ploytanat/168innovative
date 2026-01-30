@@ -40,7 +40,7 @@ export default function Navigation() {
         <button
           onClick={toggleLanguage}
           aria-label="Toggle language"
-          className="relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200"
+          className=" cursor-pointer relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200"
         >
           <span
             className={`absolute left-1 top-1 h-5 w-6 rounded-full bg-white shadow transition ${

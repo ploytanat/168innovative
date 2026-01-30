@@ -11,7 +11,7 @@ export const homeMock: HomeContent = {
       en: 'Leading plastic packaging solutions for cosmetics and industrial businesses'
     },
     image: {
-      src: '/mock/home/hero.png',
+      src: '/images/home/hero_trans.png',
       alt: {
         th: 'บรรจุภัณฑ์เครื่องสำอางและพลาสติก',
         en: 'Cosmetic and plastic packaging'
