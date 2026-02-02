@@ -9,7 +9,7 @@ export const categoriesMock: Category[] = [
       en: 'Spout & Cap'
     },
     image: {
-    src: '',
+    src: '/images/category/spout2.png',
     alt:{
       th:'',
       en:''
