@@ -1,23 +1,43 @@
-import { CompanyInfo } from '../types/content'
-
-export const companyMock: CompanyInfo = {
+export const companyMock = {
   name: {
-    th: '168 Innovative Co., Ltd.',
-    en: '168 Innovative Co., Ltd.'
+    th: '168 Innovative',
+    en: '168 Innovative',
   },
   address: {
-    th: '89/269 ซอยเทียนทะเล 20 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพฯ 10150',
-    en: '89/269 Soi Thian Thale 20, Samae Dam, Bang Khun Thian, Bangkok 10150'
+    th: '89/259 แขวงบางบอน เขตบางบอน กรุงเทพฯ 10150',
+    en: 'Bang Bon, Bangkok 10150',
   },
   phones: [
     {
       number: '098-614-9646',
-      label: { th: 'คุณจอย', en: 'Joy' }
+      label: { th: 'ฝ่ายขาย', en: 'Sales' },
+    },
+  ],
+  email: ['sales.168innovative@gmail.com'],
+  socials: [
+    {
+      type: 'line',
+      url: 'https://line.me/ti/p/~168innovative',
+      icon: {
+        src: '/icons/line.png',
+        alt: 'LINE Official',
+      },
     },
     {
-      number: '080-465-6669',
-      label: { th: 'คุณเบิร์ด', en: 'Bird' }
-    }
+      type: 'facebook',
+      url: 'https://facebook.com/168innovative',
+      icon: {
+        src: '/icons/facebook.svg',
+        alt: 'Facebook',
+      },
+    },
+    {
+      type: 'shopee',
+      url: 'https://shopee.co.th/shop/1240917079',
+      icon: {
+        src: '/icons/shopee.png',
+        alt: 'Shopee',
+      },
+    },
   ],
-  email: ['sales.168innovative@gmail.com']
 }

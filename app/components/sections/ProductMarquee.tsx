@@ -1,6 +1,6 @@
 // components/sections/ProductMarquee.tsx
 import Image from 'next/image'
-import { ProductView } from '@/app/lib/types/content'
+import { ProductView } from '@/app/lib/types/view'
 
 export default function ProductMarquee({
   items = [],
@@ -10,7 +10,7 @@ export default function ProductMarquee({
   if (!items.length) return null
 
   return (
-    <section className="overflow-hidden bg-white py-16">
+    <section className="container mx-auto overflow-hidden bg-white py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <h2 className="mb-8 text-lg font-semibold">
           Featured Products

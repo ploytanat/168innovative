@@ -1,13 +1,13 @@
 // components/Footer.tsx
-import React from 'react';
+
 
 const Footer = () => {
   return (
     <footer 
-      className="relative h-[600px]" // กำหนดความสูงตามต้องการ
+      className="relative h-100" // กำหนดความสูงตามต้องการ
       style={{ clipPath: "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)" }}
     >
-      <div className="fixed bottom-0 h-[600px] w-full bg-[#1a1a1a] text-white p-10 flex flex-col justify-between">
+      <div className="fixed bottom-0  w-full bg-linear-to-br from-[#f3e8e8] via-[#e6eef2] text-white p-10 flex flex-col justify-between">
         {/* ส่วนบนของ Footer */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>

@@ -19,7 +19,7 @@ export const productsMock: Product[] = [
         th: 'จุกพลาสติก HL160D',
         en: 'Plastic Spout HL160D'
       }
-    }
+    },
   },
 
   {

@@ -1,6 +1,6 @@
 // components/sections/CategorySection.tsx
 import Image from 'next/image'
-import { CategoryView } from '@/app/lib/types/content'
+import { CategoryView } from '@/app/lib/types/view'
 
 export default function CategorySection({
   items = [],
@@ -16,11 +16,12 @@ export default function CategorySection({
           Categories
         </h2>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
           {items.map(item => (
             <div
               key={item.id}
-              className="rounded-xl border bg-white p-4 text-center"
+              className="rounded-full shadow px-5 py-2
+hover:bg-gray-100 transition text-center"
             >
               {item.image && (
                 <div className="relative mx-auto h-16 w-16">

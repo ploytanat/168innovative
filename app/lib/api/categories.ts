@@ -1,7 +1,7 @@
 // lib/api/categories.ts
 import { categoriesMock } from '../mock/categories.mock'
 import { Locale } from '../types/content'
-import { CategoryView } from '../types/content'
+import { CategoryView } from '../types/view'
 
 export function getCategories(locale: Locale): CategoryView[] {
   return categoriesMock.map(cat => ({

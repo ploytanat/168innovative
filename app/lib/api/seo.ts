@@ -1,15 +1,11 @@
+// lib/api/seo.ts
 import { seoMock } from '../mock/seo.mock'
 import { Locale } from '../types/content'
 
-export function getSEO(
-  page: 'home' | 'products',
-  locale: Locale
-) {
-  return seoMock[page]
-    ? {
-        title: seoMock[page].title[locale],
-        description: seoMock[page].description[locale],
-        keywords: seoMock[page].keywords
-      }
-    : null
+export function getHomeSEO(locale: Locale) {
+  return {
+    title: seoMock.home.title[locale],
+    description: seoMock.home.description[locale],
+    keywords: seoMock.home.keywords,
+  }
 }

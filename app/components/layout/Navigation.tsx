@@ -23,7 +23,7 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="border-b">
+    <nav className="absolutetop-0">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <div className="text-lg font-bold">168 Innovative</div>

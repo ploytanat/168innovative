@@ -10,5 +10,25 @@
 }
 
 .marquee {
-  animation: marquee 2s linear infinite;
+  animation: marquee 10s linear infinite;
+}
+
+
+
+/* app/globals.css หรือ styles/globals.css */
+
+@layer components {
+  .footer-reveal-container {
+    @apply sticky bottom-0 -z-10 w-full;
+    /* ไล่สี เทา -> ชมพู -> ครีม ตามรูป */
+    background: linear-gradient(90deg, #EAEAEA 0%, #F5E3E6 45%, #FCF6E5 100%);
+  }
+
+  .footer-dotted-border {
+    @apply border-t border-dotted border-gray-400;
+  }
+
+  .footer-link-item {
+    @apply py-2 border-b border-dotted border-gray-400 text-gray-600 hover:text-black transition-colors;
+  }
 }

@@ -16,6 +16,22 @@ export interface CTA {
   href: string
 }
 
+export interface SocialLink {
+  type: 'facebook' | 'line' | 'instagram' | 'shopee'
+  icon:{
+    src:string
+    alt:string
+  }
+  url: string
+}
+
+export interface ContactPhone {
+  number: string
+  label: LocalizedText
+}
+
+//== Hero ==
+
 export interface HeroSection {
   title: LocalizedText
   description: LocalizedText
@@ -24,12 +40,15 @@ export interface HeroSection {
   ctaSecondary: CTA
 }
 
+//== SEO ==
 export interface SEOContent {
   title: LocalizedText
   description: LocalizedText
   keywords?: string[]
 }
 
+
+//== Home ==
 export interface HomeContent {
   hero: HeroSection
   why: {
@@ -39,24 +58,15 @@ export interface HomeContent {
   seo: SEOContent
 }
 
-
-
+//== category ==
 export interface Category {
   id: string
   slug: string
   name: LocalizedText
   image?: ImageAsset
 }
-export interface CategoryView {
-  id: string
-  slug: string
-  name: string
-  image?: {
-    src: string
-    alt: string
-  }
-}
 
+//== product ==
 export interface Product {
   id: string
   slug: string
@@ -64,52 +74,23 @@ export interface Product {
   description: LocalizedText
   categoryId: string
   image: ImageAsset
-}
-
-export interface ProductView {
-  id: string
-  slug: string
-  name: string
-  description: string
-  categoryId: string
-  image: {
-    src: string
-    alt: string
-  }
-  price?: string
-}
-
-export interface ContactPhone {
-  number: string
-  label: LocalizedText
+  price?:string
 }
 
 
+
+//=== company ===
 export interface CompanyInfo {
   name: LocalizedText
   address: LocalizedText
   phones: ContactPhone[]
   email: string[]
-}
-
-export interface CompanyView {
-  name: string
-  address: string
-  phones: {
-    number: string
-    label: string
-  }[]
-  email: string[]
+  socials: SocialLink[]
 }
 
 
-
+//== why choose us ==
 export interface WhyItem {
-  title: LocalizedText
-  description: LocalizedText
-}
-
-export interface WhyItemView {
   title: LocalizedText
   description: LocalizedText
 }

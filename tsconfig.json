@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "app/lib/mock/products.mock,ts"  ],
+, "app/lib/mock/products.mock,ts", "app/lib/api/contack.ts'"  ],
   "exclude": [
     "node_modules"
   ]
