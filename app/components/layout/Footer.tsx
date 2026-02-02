@@ -1,39 +1,92 @@
 // components/Footer.tsx
 
-
-const Footer = () => {
+import Image from "next/image";
+import { CompanyView } from "@/app/lib/types/view";
+export default function Footer({ company }: { company: CompanyView }) {
   return (
     <footer 
       className="relative h-100" // กำหนดความสูงตามต้องการ
       style={{ clipPath: "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)" }}
     >
-      <div className="fixed bottom-0  w-full bg-linear-to-br from-[#f3e8e8] via-[#e6eef2] text-white p-10 flex flex-col justify-between">
+      <div className="fixed bottom-0  w-full  text-zinc-900 p-10 flex flex-col justify-between">
         {/* ส่วนบนของ Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div>
-            <h3 className="text-gray-500 uppercase text-sm mb-4">Sitemap</h3>
-            <ul className="space-y-2 text-2xl">
-              <li className="hover:italic cursor-pointer transition-all">Work</li>
-              <li className="hover:italic cursor-pointer transition-all">Studio</li>
-              <li className="hover:italic cursor-pointer transition-all">Contact</li>
-            </ul>
+<div className="relative mx-auto max-w-7xl px-6 py-20">
+          <div className="grid gap-12 lg:grid-cols-4">
+
+            {/* LOGO + ADDRESS */}
+            <div>
+              <Image
+                src="/images/logo.png"
+                alt={company.name}
+                width={120}
+                height={40}
+              />
+              <p className="mt-4 text-sm text-gray-600 max-w-xs">
+                {company.address}
+              </p>
+            </div>
+
+            {/* PHONE */}
+            <div>
+              <h4 className="mb-4 text-sm font-semibold text-gray-900">
+                Phone Number
+              </h4>
+              <ul className="space-y-2 text-sm text-gray-600">
+                {company.phones.map(p => (
+                  <li key={p.number}>
+                    {p.label}: {p.number}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* EMAIL */}
+            <div>
+              <h4 className="mb-4 text-sm font-semibold text-gray-900">
+                Email
+              </h4>
+              <ul className="space-y-2 text-sm text-gray-600">
+                {company.email.map(e => (
+                  <li key={e}>{e}</li>
+                ))}
+              </ul>
+            </div>
+
+            {/* SOCIAL */}
+            <div>
+              <h4 className="mb-4 text-sm font-semibold text-gray-900">
+                Social
+              </h4>
+              <div className="flex gap-4">
+                {company.socials.map(s => (
+                  <a
+                    key={s.type}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Image
+                      src={s.icon.src}
+                      alt={s.icon.alt}
+                      width={20}
+                      height={20}
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+
           </div>
-          {/* เพิ่มส่วนอื่นๆ ตามดีไซน์ */}
+
+          {/* bottom */}
+          <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-black/5 pt-6 sm:flex-row">
+            <p className="text-xs text-gray-500">
+              © {new Date().getFullYear()} {company.name}. All rights reserved.
+            </p>
+          </div>
         </div>
 
-        {/* ตัวอักษร SONAR ขนาดใหญ่ด้านล่าง */}
-        <div className="mt-auto">
-          <h1 className="text-[15vw] font-bold leading-none tracking-tighter select-none">
-            168
-          </h1>
-          <div className="flex justify-between items-end border-t border-gray-700 pt-4 text-xs uppercase">
-            <span>© 2024 . All Rights Reserved.</span>
-            <span>Website by YourName</span>
-          </div>
-        </div>
       </div>
     </footer>
-  );
-};
-
-export default Footer;
+  )
+}

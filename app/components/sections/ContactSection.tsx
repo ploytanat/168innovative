@@ -7,7 +7,7 @@ export default function ContactSection({
   data: CompanyView
 }) {
   return (
-    <section className="bg-amber-50 container mx-auto py-20 border-b border-dashed">
+    <section className="  container mx-auto py-20 border-b border-dashed">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid gap-12 lg:grid-cols-2 items-center">
 
