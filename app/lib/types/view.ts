@@ -39,7 +39,7 @@ export interface CompanyView {
     label: string
   }[]
   email: string[]
-  socials: SocialView[]
+  socials:SocialView[]
 }
 
 // Why

@@ -10,7 +10,7 @@ export default function Footer({ company }: { company: CompanyView }) {
     >
       <div className="fixed bottom-0  w-full  text-zinc-900 p-10 flex flex-col justify-between">
         {/* ส่วนบนของ Footer */}
-<div className="relative mx-auto max-w-7xl px-6 py-20">
+<div className="relative mx-auto max-w-7xl px-6 pt-20">
           <div className="grid gap-12 lg:grid-cols-4">
 
             {/* LOGO + ADDRESS */}

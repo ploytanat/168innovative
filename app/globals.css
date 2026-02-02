@@ -14,21 +14,26 @@
 }
 
 
-
-/* app/globals.css หรือ styles/globals.css */
-
 @layer components {
-  .footer-reveal-container {
-    @apply sticky bottom-0 -z-10 w-full;
-    /* ไล่สี เทา -> ชมพู -> ครีม ตามรูป */
-    background: linear-gradient(90deg, #EAEAEA 0%, #F5E3E6 45%, #FCF6E5 100%);
+  .hero-gradient-card {
+    /* ใช้สีที่ล้อไปกับ Footer แต่ปรับให้สว่างและดูแพง */
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
   }
 
-  .footer-dotted-border {
-    @apply border-t border-dotted border-gray-400;
+  .hero-glow {
+    background: radial-gradient(circle, rgba(245,227,230,0.6) 0%, rgba(252,246,229,0) 70%);
   }
 
-  .footer-link-item {
-    @apply py-2 border-b border-dotted border-gray-400 text-gray-600 hover:text-black transition-colors;
+  .floating-animation {
+    animation: floating 6s ease-in-out infinite;
   }
+
+  @keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+
+
 }

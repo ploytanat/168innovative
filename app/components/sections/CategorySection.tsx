@@ -10,31 +10,36 @@ export default function CategorySection({
   if (!items.length) return null
 
   return (
-    <section className="py-12">
+    <section className="py-16">
       <div className="mx-auto max-w-7xl px-4">
-        <h2 className="mb-6 text-lg font-semibold">
+        <h2 className="mb-10 text-lg font-semibold text-gray-900">
           Categories
         </h2>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
           {items.map(item => (
             <div
               key={item.id}
-              className="rounded-full shadow px-5 py-2
-hover:bg-gray-100 transition text-center"
+              className="
+                rounded-2xl bg-white/70
+               shadow-md
+                transition hover:shadow-xl
+              "
             >
-              {item.image && (
-                <div className="relative mx-auto h-16 w-16">
+              {/* IMAGE 1:1 */}
+              {item.image?.src && (
+                <div className="relative aspect-square w-full overflow-hidden rounded-xl   ">
                   <Image
                     src={item.image.src}
                     alt={item.image.alt}
                     fill
-                    className="object-contain"
+                    className="object-contain p-4 "
                   />
                 </div>
               )}
 
-              <p className="mt-3 text-sm font-medium">
+              {/* TITLE */}
+              <p className="mt-4 text-center text-sm font-medium text-gray-800">
                 {item.name}
               </p>
             </div>

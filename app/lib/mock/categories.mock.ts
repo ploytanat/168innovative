@@ -7,7 +7,14 @@ export const categoriesMock: Category[] = [
     name: {
       th: 'จุกและฝา Spout',
       en: 'Spout & Cap'
-    }
+    },
+    image: {
+    src: '',
+    alt:{
+      th:'',
+      en:''
+    } 
+  }
   },
   {
     id: 'cat-02',
@@ -23,7 +30,14 @@ export const categoriesMock: Category[] = [
     name: {
       th: 'แพ็กเกจลิปสติก',
       en: 'Lipstick Packaging'
-    }
+    },
+    image: {
+    src: '/images/category/lipstick_bottle.png',
+    alt:{
+      th:'แพ็กเกจลิปสติก',
+      en:'Lipstick Packaging'
+    } 
+  }
   },
   {
     id: 'cat-04',
