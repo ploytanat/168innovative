@@ -96,7 +96,6 @@ export interface CompanyInfo {
 
 }
 
-
 //== about us ==
 export interface AboutContent {
   hero: {
@@ -104,13 +103,14 @@ export interface AboutContent {
     description: LocalizedText
     image: ImageAsset
   }
-  whoWeAre: {
+
+  whoAreWe: {
     title: LocalizedText
     description: LocalizedText
-    quote?: LocalizedText
     image: ImageAsset
   }
 }
+
 
 
 //== why choose us ==

@@ -1,8 +1,12 @@
+// lib/api/about.ts
 import { Locale } from '../types/content'
+import { AboutView } from '../types/view'
 import { aboutMock } from '../mock/about.mock'
-import { getAboutSEO } from './seo'
+import { getWhy } from './why'
 
-export function getAbout(locale: Locale) {
+export function getAbout(locale: Locale): AboutView {
+  const whyItems = getWhy(locale)
+
   return {
     hero: {
       title: aboutMock.hero.title[locale],
@@ -13,15 +17,21 @@ export function getAbout(locale: Locale) {
       },
     },
 
-    who: {
-      title: aboutMock.whoWeAre.title[locale],
-      description: aboutMock.whoWeAre.description[locale],
+    whoAreWe: {
+      title: aboutMock.whoAreWe.title[locale],
+      description: aboutMock.whoAreWe.description[locale],
       image: {
-        src: aboutMock.whoWeAre.image.src,
-        alt: aboutMock.whoWeAre.image.alt[locale],
+        src: aboutMock.whoAreWe.image.src,
+        alt: aboutMock.whoAreWe.image.alt[locale],
       },
     },
 
-    seo: getAboutSEO(locale),
+    why: {
+      title:
+        locale === 'th'
+          ? 'ทำไมต้องเลือก 168 Innovative'
+          : 'Why Choose 168 Innovative',
+      items: whyItems,
+    },
   }
 }

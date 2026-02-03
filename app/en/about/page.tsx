@@ -1,10 +1,10 @@
 // app/about/page.tsx
-import AboutHero from "../components/sections/AboutHero"
-import WhyChooseUs from "../components/sections/WhyChooseUs"
-import { getAbout } from "../lib/api/about"
+import AboutHero from "@/app/components/sections/AboutHero"
+import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import { getAbout } from "@/app/lib/api/about"
 
 export default function AboutPage() {
-  const about = getAbout('th')
+  const about = getAbout('en')
 
   return (
     <main className="space-y-24">

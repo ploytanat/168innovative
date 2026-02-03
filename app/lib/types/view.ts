@@ -1,44 +1,43 @@
 // types/view.ts
 
-// Category
+/* =======================
+   Shared / Base
+======================= */
+
+export interface ImageView {
+  src: string
+  alt: string
+}
+
+/* =======================
+   Category
+======================= */
+
 export interface CategoryView {
   id: string
   slug: string
   name: string
-  image?: {
-    src: string
-    alt: string
-  }
   description?: string
-  // เพิ่มส่วนนี้เพื่อแสดงผลคำบรรยาย SEO ด้านล่างหน้า All Categories
-  seoTitle?: string      // เช่น "หมวดหมู่ตลับแป้งและอุปกรณ์แพคเกจจิ้ง"
-  seoDescription?: string // เช่น "เรามีตลับแป้งและบรรจุภัณฑ์หลากหลายประเภท..."
+
+  image?: ImageView
+
+  // SEO display content
+  seoTitle?: string
+  seoDescription?: string
 }
+
+/* =======================
+   Social / Company
+======================= */
+
+export type SocialType = 'facebook' | 'line' | 'instagram' | 'shopee'
 
 export interface SocialView {
-  type: string
+  type: SocialType
   url: string
-  icon: {
-    src: string
-    alt: string
-  }
+  icon: ImageView
 }
 
-// Product
-export interface ProductView {
-  id: string
-  slug: string
-  name: string
-  description: string
-  categoryId: string
-  image: {
-    src: string
-    alt: string
-  }
-  price?: string
-}
-
-// Company
 export interface CompanyView {
   name: string
   address: string
@@ -48,60 +47,56 @@ export interface CompanyView {
   }[]
   email: string[]
   socials: SocialView[]
-  lineQrCode?: {
-    src: string
-    alt: string
-  }
-  contactImage?: {
-    src: string
-    alt: string
-  }
+  lineQrCode?: ImageView
+  contactImage?: ImageView
 }
 
-//about us
-export interface AboutView {
-  hero: {
-    title: string
-    description: string
-    image: { src: string; alt: string }
-  }
-  whoWeAre: {
-    title: string
-    description: string
-    quote: string
-    image: { src: string; alt: string }
-  }
+/* =======================
+   Product
+======================= */
+
+export interface ProductView {
+  id: string
+  slug: string
+  name: string
+  description: string
+  categoryId: string
+  image: ImageView
+  price?: string
 }
 
-// Why
+/* =======================
+   Why Choose Us
+======================= */
+
 export interface WhyItemView {
-  image?: {
-    src: string
-    alt: string
-  }
   title: string
   description: string
+  image?: ImageView
 }
 
-// Hero
+/* =======================
+   Hero (Home)
+======================= */
+
 export interface HeroView {
   title: string
   description: string
-  image: {
-    src: string
-    alt: string
-  }
+  image: ImageView
   ctaPrimary: {
-    href: string
     label: string
+    href: string
   }
   ctaSecondary: {
-    href: string
     label: string
+    href: string
   }
 }
 
-// Home (ดึง SEO มาเป็นชุดข้อมูลที่พร้อมใช้)
+/* =======================
+   Home
+======================= */
+
 export interface HomeView {
   hero: HeroView
   categories: CategoryView[]
@@ -112,5 +107,35 @@ export interface HomeView {
     title: string
     description: string
     keywords?: string[]
+  }
+}
+
+/* =======================
+   About
+======================= */
+
+export interface AboutHeroView {
+  title: string
+  description: string
+  image: ImageView
+}
+
+export interface AboutSectionView {
+  title: string
+  description: string
+}
+
+export interface AboutView {
+  hero: AboutHeroView
+
+  // Who We Are (รองรับรูปที่ 2)
+  whoAreWe: AboutSectionView & {
+    image?: ImageView
+  }
+
+  // Why Choose Us (reuse component)
+  why: {
+    title: string
+    items: WhyItemView[]
   }
 }
