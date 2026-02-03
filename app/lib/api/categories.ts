@@ -8,6 +8,7 @@ export function getCategories(locale: Locale): CategoryView[] {
     id: cat.id,
     slug: cat.slug,
     name: cat.name[locale],
+    description: cat.description[locale],
     image: cat.image
       ? {
           src: cat.image.src,

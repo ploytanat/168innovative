@@ -14,7 +14,7 @@ export const productsMock: Product[] = [
       en: 'High-quality plastic spout for liquid packaging bags.'
     },
     image: {
-      src: '/products/spout-16.png',
+      src: '/products/Product20250926090552.png',
       alt: {
         th: 'จุกพลาสติก HL160D',
         en: 'Plastic Spout HL160D'
@@ -35,7 +35,7 @@ export const productsMock: Product[] = [
       en: '20mm spout suitable for sauces and beverages.'
     },
     image: {
-      src: '/products/spout-20.png',
+      src: '/products/จุกซองครีม.png',
       alt: {
         th: 'จุกพลาสติก HL200',
         en: 'Plastic Spout HL200'
@@ -55,7 +55,7 @@ export const productsMock: Product[] = [
       en: '20mm spout suitable for sauces and beverages.'
     },
     image: {
-      src: '/products/spout-20.png',
+      src: '/products/Product20250820145317.png',
       alt: {
         th: 'จุกพลาสติก HL200',
         en: 'Plastic Spout HL200'
@@ -75,7 +75,7 @@ export const productsMock: Product[] = [
       en: '20mm spout suitable for sauces and beverages.'
     },
     image: {
-      src: '/products/spout-20.png',
+      src: '/products/Product20250926090552.png',
       alt: {
         th: 'จุกพลาสติก HL200',
         en: 'Plastic Spout HL200'
@@ -95,7 +95,7 @@ export const productsMock: Product[] = [
       en: '20mm spout suitable for sauces and beverages.'
     },
     image: {
-      src: '/products/spout-20.png',
+      src: '/products/Product20250926090552.png',
       alt: {
         th: 'จุกพลาสติก HL200',
         en: 'Plastic Spout HL200'

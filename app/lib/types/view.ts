@@ -7,6 +7,7 @@ export interface CategoryView {
     src: string
     alt: string
   }
+  description?:string
 }
 export interface SocialView {
   type: string

@@ -62,6 +62,7 @@ export interface HomeContent {
 export interface Category {
   id: string
   slug: string
+  description: LocalizedText
   name: LocalizedText
   image?: ImageAsset
 }

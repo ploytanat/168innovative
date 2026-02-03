@@ -1,18 +1,28 @@
 @import "tailwindcss";
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
+/* tailwind.config.ts (หรือใส่ใน globals.css ก็ได้) */
+@layer utilities {
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
   }
-  100% {
-    transform: translateX(-10%);
+
+  /* ถ้าเอาเมาส์วางให้หยุดวิ่ง (Optional) */
+  .group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* เลื่อนไปครึ่งหนึ่งของความกว้างทั้งหมดเพื่อให้ลูปเนียน */
+      transform: translateX(-50%);
+    }
   }
 }
-
-.marquee {
-  animation: marquee 10s linear infinite;
-}
-
 
 @layer components {
   .hero-gradient-card {

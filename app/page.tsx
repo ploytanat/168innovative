@@ -21,8 +21,9 @@ export default function HomePage() {
   return (
     <>
       <HeroSection data={home.hero} />
+      <ProductMarquee items={products} />
        <CategorySection items={category} />
-       <ProductMarquee items={products} />
+       
        <WhyChooseUs items={why} />
       <ContactSection data={company} />
     </>

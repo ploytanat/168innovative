@@ -51,12 +51,12 @@ export default function Navigation() {
           className="relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200"
         >
           <span
-            className={`absolute left-1 top-1 h-5 w-6 rounded-full bg-white shadow transition ${
+            className={`absolute left-1 top-1 h-5 w-6 rounded-full bg-white  shadow transition ${
               isEN ? 'translate-x-6' : ''
             }`}
           />
-          <span className="absolute left-2 text-xs">TH</span>
-          <span className="absolute right-2 text-xs">EN</span>
+          <span className="cursor-pointer absolute left-2 text-xs">TH</span>
+          <span className="cursor-pointer absolute right-2 text-xs">EN</span>
         </button>
 
       </div>
