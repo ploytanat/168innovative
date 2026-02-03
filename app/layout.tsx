@@ -15,6 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: home.seo.title,
     description: home.seo.description,
     keywords: home.seo.keywords,
+    formatDetection: {
+    telephone: false,
+  },
   }
 }
 
@@ -24,10 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const company = getCompany('th')
   return (
-    <html >
+    <html lang="th">
       <body className={inter.className}>
         <Navigation />
-        <div className="bg-gradient-to-r from-[#bcd6e083] via-[#F5E3E6] to-[#FCF6E5]">
+        <div className="bg-custom-gradient">
        {children}
        <BackToTop />
        <Footer  company={company}/>

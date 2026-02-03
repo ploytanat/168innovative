@@ -1,79 +1,83 @@
 // components/sections/CategorySection.tsx
-'use client'
+"use client";
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { CategoryView } from '@/app/lib/types/view'
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { CategoryView } from "@/app/lib/types/view";
 
 export default function CategorySection({
   items = [],
 }: {
-  items: CategoryView[]
+  items: CategoryView[];
 }) {
-  const pathname = usePathname()
-  const isEN = pathname.startsWith('/en')
-  
-  if (!items.length) return null
+  const pathname = usePathname();
+  const isEN = pathname.startsWith("/en");
 
-  // เลือกแสดง 6-8 อันแรกเพื่อให้เต็มแถวเมื่อปรับเป็น 4 คอลัมน์
-  const displayItems = items.slice(0, 6)
+  if (!items.length) return null;
+
+  // เลือกแสดง 6 อันแรก
+  const displayItems = items.slice(0, 6);
 
   return (
     <section className="py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-4">
-        
-        {/* หัวข้อ Section */}
-        <h2 className="mb-8 text-center md:text-left text-xl font-bold text-gray-900">
-          {isEN ? 'Our Categories' : 'หมวดหมู่สินค้า'}
-        </h2>
+        {/* กล่อง Container ขาวขนาดใหญ่ */}
+        <div className="group relative overflow-hidden rounded-[32px] md:rounded-[48px] lg:rounded-[64px] border border-white/50 bg-white/30 px-6 py-10 sm:px-10 sm:py-16 lg:px-16 lg:py-20 shadow-2xl backdrop-blur-sm">
+          
+          <h2 className="mb-10 text-center md:text-left text-xl md:text-2xl font-bold text-gray-900">
+            {isEN ? "Our Categories" : "หมวดหมู่สินค้า"}
+          </h2>
 
-        {/* Grid: ปรับเป็น 4 คอลัมน์ (lg:grid-cols-4) เพื่อให้การ์ดเล็กลง */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3 md:gap-6    group relative overflow-hidden rounded-4xl md:rounded-[40px] lg:rounded-[64px] border border-white/50 px-6 py-10 sm:px-10 sm:py-16 lg:px-20 lg:py-24 shadow-2xl">
-          {displayItems.map(item => (
-            <div
-              key={item.id}
-              className="group flex flex-col items-center overflow-hidden rounded-4xl md:rounded-[2.5rem] bg-white p-2 md:p-3 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-xl"
+          {/* Grid Container: ต้องอยู่นอก map */}
+          <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 lg:grid-cols-3 md:gap-12">
+            {displayItems.map((item) => (
+              <div
+                key={item.id}
+                className="group/card flex flex-col items-center overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-white p-2 md:p-3 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              >
+                {/* Image Section: 1:1 และขยายรูปให้เต็ม */}
+                <div className="relative aspect-square w-full overflow-hidden rounded-2xl md:rounded-4xl bg-[#f2f2f2]">
+                  {item.image?.src && (
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-500 group-hover/card:scale-110"
+                    />
+                  )}
+                </div>
+
+                {/* Text Section */}
+                <div className="flex flex-col items-center pt-2 md:py-6 px-2 text-center">
+                  <h3 className="text-sm md:text-lg font-bold tracking-tight text-gray-900 leading-tight">
+                    {item.name}
+                  </h3>
+
+                  <span className="hidden md:block mt-1  text-sm lowercase   text-gray-600">
+                    {item.description}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ปุ่มดูทั้งหมด (อยู่ข้างในกล่องขาวใหญ่) */}
+          <div className="mt-12 flex justify-center">
+            <Link
+              href={isEN ? "/en/categories" : "/categories"}
+              className="group/btn inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white/50 px-8 py-2.5 text-[12px] font-medium text-gray-500 transition-all hover:border-gray-900 hover:text-gray-900 hover:bg-white"
             >
-              {/* IMAGE WRAPPER - 1:1 มนและเล็กลงตามสัดส่วนการ์ด */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-[1.8rem] md:rounded-[2.2rem] bg-[#f2f2f2]">
-                {item.image?.src && (
-                  <Image
-                    src={item.image.src}
-                    alt={item.image.alt}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                )}
-              </div>
+              {isEN ? "View All Categories" : "ดูหมวดหมู่ทั้งหมด"}
+              <span className="transition-transform group-hover/btn:translate-x-1">
+                →
+              </span>
+            </Link>
+          </div>
 
-              {/* TEXT CONTENT - ปรับ Padding ให้กระชับขึ้น */}
-              <div className="flex flex-col items-center py-4 md:py-6 px-2 text-center">
-                <h3 className="text-[12px] md:text-[13px] font-bold tracking-tight text-gray-900 leading-tight">
-                  {item.name}
-                </h3>
-                
-                <span className="hidden md:block mt-1 text-[10px] lowercase tracking-widest text-gray-400">
-                  {item.description}
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
-
-        {/* ปุ่มดูทั้งหมด */}
-        <div className="mt-10 flex justify-center">
-          <Link 
-            href={isEN ? "/en/categories" : "/categories"}
-            className="group inline-flex items-center gap-2 rounded-full border border-gray-300 px-8 py-2.5 text-[12px] font-medium text-gray-500 transition-all hover:border-gray-900 hover:text-gray-900"
-          >
-            {isEN ? 'View All Categories' : 'ดูหมวดหมู่ทั้งหมด'}
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-        </div>
-
       </div>
     </section>
-  )
+  );
 }

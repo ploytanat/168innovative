@@ -41,10 +41,22 @@ export interface CompanyView {
   }[]
   email: string[]
   socials:SocialView[]
+  lineQrCode?: {
+    src: string
+    alt: string
+  }
+  contactImage?: {
+    src: string
+    alt: string
+  }
 }
 
 // Why
 export interface WhyItemView {
+  image: {
+    src: string
+    alt: string
+  }
   title: string
   description: string
 }

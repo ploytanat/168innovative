@@ -2,6 +2,13 @@ import { WhyItem } from "../types/content"
 
 export const whyMock: WhyItem[] = [
   {
+    image: {
+      src: '/images/why/direct_import.png',
+      alt: {
+        th: '',
+        en: ''
+      }
+    },
     title: {
       th: 'ราคาโรงงาน',
       en: 'Factory Price'
@@ -12,6 +19,13 @@ export const whyMock: WhyItem[] = [
     }
   },
   {
+     image: {
+      src: '/images/why/quality_standard.png',
+      alt: {
+        th: '',
+        en: ''
+      }
+    },
     title: {
       th: 'คุณภาพพรีเมียม',
       en: 'Premium Quality'
@@ -22,6 +36,13 @@ export const whyMock: WhyItem[] = [
     }
   },
    {
+     image: {
+      src: '/images/why/oem_support.png',
+      alt: {
+        th: '',
+        en: ''
+      }
+    },
      title: {
        th: 'พร้อมส่งทั่วไทย',
        en: 'Nationwide Delivery'
@@ -32,6 +53,13 @@ export const whyMock: WhyItem[] = [
      }
    },
    {
+     image: {
+      src: '/images/why/reliable_supply.png',
+      alt: {
+        th: '',
+        en: ''
+      }
+    },
      title: {
        th: 'พร้อมส่งทั่วไทย',
        en: 'Nationwide Delivery'

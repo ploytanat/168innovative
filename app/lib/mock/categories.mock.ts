@@ -47,7 +47,7 @@ export const categoriesMock: Category[] = [
       en: 'Lipstick Packaging'
     },
     description:{
-      th:'',
+      th:'บรรจุภัณฑ์แท่งลิปสติกสำหรับเครื่องสำอาง ออกแบบสำหรับลิปสติกและผลิตภัณฑ์ประเภทแท่ง รองรับงาน OEM และการผลิตเชิงพาณิชย์',
       en:'Lipstick bottles designed for cosmetic stick products. Suitable for lipstick packaging and OEM manufacturing in commercial production.'
     },
     image: {

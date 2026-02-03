@@ -30,7 +30,14 @@
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     position: relative;
   }
-
+  .bg-custom-gradient {
+  background: linear-gradient(
+    to right, 
+    #bcd6e083, 
+    #F5E3E6, 
+    #FCF6E5
+  );
+}
   .hero-glow {
     background: radial-gradient(circle, rgba(245,227,230,0.6) 0%, rgba(252,246,229,0) 70%);
   }

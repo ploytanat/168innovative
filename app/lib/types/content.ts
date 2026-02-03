@@ -87,11 +87,15 @@ export interface CompanyInfo {
   phones: ContactPhone[]
   email: string[]
   socials: SocialLink[]
+  lineQrCode: ImageAsset
+  contactImage: ImageAsset
+
 }
 
 
 //== why choose us ==
 export interface WhyItem {
+  image: ImageAsset
   title: LocalizedText
   description: LocalizedText
 }
