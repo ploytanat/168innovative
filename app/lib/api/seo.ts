@@ -9,3 +9,19 @@ export function getHomeSEO(locale: Locale) {
     keywords: seoMock.home.keywords,
   }
 }
+
+export function getAboutSEO(locale: Locale) {
+  return {
+    title: seoMock.about.title[locale],
+    description: seoMock.about.description[locale],
+    keywords: seoMock.about.keywords,
+  }
+}
+
+export function getProductsSEO(locale: Locale) {
+  return {
+    title: seoMock.products.title[locale],
+    description: seoMock.products.description[locale],
+    keywords: seoMock.products.keywords,
+  }
+}

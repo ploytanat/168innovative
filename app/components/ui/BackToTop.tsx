@@ -22,7 +22,7 @@ export default function BackToTop() {
         backdrop-blur-sm
         transition-all duration-500
         [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]
-        hover:bg-black
+        hover:bg-blackฟฟ
         ${
           visible
             ? 'opacity-100 translate-y-0 scale-100'

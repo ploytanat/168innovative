@@ -1,3 +1,5 @@
+// types/view.ts
+
 // Category
 export interface CategoryView {
   id: string
@@ -7,8 +9,12 @@ export interface CategoryView {
     src: string
     alt: string
   }
-  description?:string
+  description?: string
+  // เพิ่มส่วนนี้เพื่อแสดงผลคำบรรยาย SEO ด้านล่างหน้า All Categories
+  seoTitle?: string      // เช่น "หมวดหมู่ตลับแป้งและอุปกรณ์แพคเกจจิ้ง"
+  seoDescription?: string // เช่น "เรามีตลับแป้งและบรรจุภัณฑ์หลากหลายประเภท..."
 }
+
 export interface SocialView {
   type: string
   url: string
@@ -17,6 +23,7 @@ export interface SocialView {
     alt: string
   }
 }
+
 // Product
 export interface ProductView {
   id: string
@@ -40,7 +47,7 @@ export interface CompanyView {
     label: string
   }[]
   email: string[]
-  socials:SocialView[]
+  socials: SocialView[]
   lineQrCode?: {
     src: string
     alt: string
@@ -51,9 +58,24 @@ export interface CompanyView {
   }
 }
 
+//about us
+export interface AboutView {
+  hero: {
+    title: string
+    description: string
+    image: { src: string; alt: string }
+  }
+  whoWeAre: {
+    title: string
+    description: string
+    quote: string
+    image: { src: string; alt: string }
+  }
+}
+
 // Why
 export interface WhyItemView {
-  image: {
+  image?: {
     src: string
     alt: string
   }
@@ -79,7 +101,7 @@ export interface HeroView {
   }
 }
 
-// Home (optional แต่จะดีมาก)
+// Home (ดึง SEO มาเป็นชุดข้อมูลที่พร้อมใช้)
 export interface HomeView {
   hero: HeroView
   categories: CategoryView[]

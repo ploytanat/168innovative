@@ -32,11 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navigation />
         <div className="bg-custom-gradient">
        {children}
-       <BackToTop />
+       
        <Footer  company={company}/>
         </div>
  
-        
+        <BackToTop />
       </body>
     </html>
   )

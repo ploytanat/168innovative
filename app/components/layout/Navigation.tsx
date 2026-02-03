@@ -39,7 +39,7 @@ export default function Navigation() {
         {/* Desktop Menu */}
         <ul className="hidden gap-6 text-sm md:flex">
           <li><Link href={withLocale('/')}>{menu.home}</Link></li>
-          <li><Link href={withLocale('/products')}>{menu.products}</Link></li>
+          <li><Link href={withLocale('/categories')}>{menu.products}</Link></li>
           <li><Link href={withLocale('/about')}>{menu.about}</Link></li>
           <li><Link href={withLocale('/contact')}>{menu.contact}</Link></li>
         </ul>

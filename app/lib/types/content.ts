@@ -1,3 +1,5 @@
+// types/content.ts
+
 
 export type Locale = 'th' | 'en'
 
@@ -62,11 +64,13 @@ export interface HomeContent {
 export interface Category {
   id: string
   slug: string
-  description: LocalizedText
   name: LocalizedText
+  description: LocalizedText // คำบรรยายสั้นในการ์ด
   image?: ImageAsset
+  // เพิ่มส่วนนี้เพื่อเก็บข้อมูล SEO ประจำหมวดหมู่
+  seoTitle?: LocalizedText      // หัวข้อใหญ่ (H1/H2) ด้านล่าง
+  seoDescription?: LocalizedText // เนื้อหายาวๆ ที่เน้น Keywords
 }
-
 //== product ==
 export interface Product {
   id: string
@@ -90,6 +94,22 @@ export interface CompanyInfo {
   lineQrCode: ImageAsset
   contactImage: ImageAsset
 
+}
+
+
+//== about us ==
+export interface AboutContent {
+  hero: {
+    title: LocalizedText
+    description: LocalizedText
+    image: ImageAsset
+  }
+  whoWeAre: {
+    title: LocalizedText
+    description: LocalizedText
+    quote?: LocalizedText
+    image: ImageAsset
+  }
 }
 
 
