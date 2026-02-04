@@ -12,7 +12,7 @@ export const aboutMock: AboutContent = {
       en: '168 Innovative Company Limited specializes in plastic packaging components for manufacturers and OEM brands, focusing on quality, standards, and customer understanding.',
     },
     image: {
-      src: '/about/factory.jpg',
+      src: '/about/factory.png',
       alt: {
         th: 'โรงงานผลิตบรรจุภัณฑ์พลาสติก',
         en: 'Plastic packaging manufacturing factory',
@@ -30,7 +30,7 @@ export const aboutMock: AboutContent = {
       en: 'We have extensive experience in manufacturing plastic packaging components, supporting both small and large-scale production with a team that truly understands OEM needs.',
     },
     image: {
-      src: '/about/warehouse.jpg',
+      src: '/about/warehouse.png',
       alt: {
         th: 'คลังสินค้าและพื้นที่จัดเก็บบรรจุภัณฑ์',
         en: 'Warehouse and packaging storage area',
