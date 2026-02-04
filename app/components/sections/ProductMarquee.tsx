@@ -13,29 +13,28 @@ export default function ProductMarquee({
   const doubleItems = [...items, ...items, ...items, ...items]
 
   return (
-    <section className="overflow-hidden bg-white/50 py-8 md:py-8">
-      <div className="mx-auto max-w-7xl px-4 mb-10">
-        <h2 className="text-xl font-bold text-gray-900">Featured Products</h2>
+    <section className=" overflow-hidden bg-[#494a4b] border-y border-gray-100 shadow-md py-4 md:py-4">
+      <div className="mx-auto max-w-7xl p-4 ">
+        <h2 className="text-2xl font-bold text-center  text-white">Featured Products</h2>
       </div>
 
       <div className="group relative flex overflow-hidden p-2 cursor-pointer">
-        {/* Shadow Overlays */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-white to-transparent md:w-40" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-white to-transparent md:w-40" />
+      
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-[#ffffff5a] to-transparent md:w-40" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-[#ffffff5a] to-transparent md:w-40" />
 
         <div className="flex animate-marquee gap-6 whitespace-nowrap py-4">
           {doubleItems.map((item, i) => (
             <div
               key={`${item.id}-${i}`}
-              className="w-[200px] shrink-0 rounded-[2.5rem] border border-gray-100 bg-white p-3 text-center shadow-md transition-transform hover:scale-105"
+              className="w-50 shrink-0 rounded-md border border-gray-100 p-2 bg-[#ececec93]  text-center shadow-md transition-transform hover:scale-105"
             >
-              {/* IMAGE DIV: ปรับให้รูปเต็มพื้นที่ */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-[1.8rem] bg-[#f8f8f8]">
+              
+              <div className="relative aspect-square w-full overflow-hidden rounded-md bg-[#f8f8f8]">
                 <Image
                   src={item.image.src}
                   alt={item.image.alt}
                   fill
-                  // เปลี่ยนเป็น object-cover เพื่อให้รูปเต็ม div
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>

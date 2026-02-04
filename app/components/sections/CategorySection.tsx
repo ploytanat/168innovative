@@ -21,30 +21,33 @@ export default function CategorySection({
 
   return (
     <section className="py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto container  px-4">
         {/* กล่อง Container ขาวขนาดใหญ่ */}
-        <div className="group relative overflow-hidden rounded-[32px] md:rounded-[48px] lg:rounded-[64px] border border-white/50 bg-white/30 px-6 py-10 sm:px-10 sm:py-16 lg:px-16 lg:py-20 shadow-2xl backdrop-blur-sm">
+        <div className="group relative overflow-hidden rounded-2xl  border border-white/50 bg-white/30 px-6 py-10 sm:px-10 sm:py-16 lg:px-16 lg:py-20 shadow-2xl backdrop-blur-sm">
           
-          <h2 className="mb-10 text-center md:text-left text-xl md:text-2xl font-bold text-gray-900">
+          <h2 className="mb-10 text-center text-xl md:text-2xl font-bold text-gray-900">
             {isEN ? "Our Categories" : "หมวดหมู่สินค้า"}
           </h2>
 
-          {/* Grid Container: ต้องอยู่นอก map */}
-          <div className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 lg:grid-cols-3 md:gap-12">
+          {/* Grid Container*/}
+          <div className="grid grid-cols-2 p-4 gap-2 sm:grid-cols-3 lg:grid-cols-3 md:gap-12 max-w-6xl mx-auto">
             {displayItems.map((item) => (
               <div
                 key={item.id}
-                className="group/card flex flex-col items-center overflow-hidden rounded-2xl md:rounded-[2.5rem] bg-white p-2 md:p-3 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                className="group/card flex flex-col items-center overflow-hidden rounded-xl 
+                           md:rounded-2xl bg-white p-2 md:p-2
+                           shadow-[0_4px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 
+                           hover:shadow-xl hover:-translate-y-1"
               >
-                {/* Image Section: 1:1 และขยายรูปให้เต็ม */}
-                <div className="relative aspect-square w-full overflow-hidden rounded-2xl md:rounded-4xl bg-[#f2f2f2]">
+                {/* Image Section */}
+                <div className="relative aspect-square w-full overflow-hidden rounded-xl md:rounded-2xl bg-[#f2f2f2]">
                   {item.image?.src && (
                     <Image
                       src={item.image.src}
-                      alt={item.image.alt}
+                      alt={item.image.alt}  
                       fill
                       sizes="(max-width: 768px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover/card:scale-110"
+                      className="object-cover transition-transform duration-500 group-hover/card:scale-120"
                     />
                   )}
                 </div>

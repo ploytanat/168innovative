@@ -3,79 +3,110 @@ import { getCategories } from '@/app/lib/api/categories'
 import Image from 'next/image'
 import Link from 'next/link'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'หมวดหมู่สินค้าทั้งหมด | บรรจุภัณฑ์เครื่องสำอาง',
+  description:
+    'รวมหมวดหมู่บรรจุภัณฑ์เครื่องสำอางคุณภาพสูง สำหรับโรงงานและแบรนด์ OEM เลือกชมได้ตามการใช้งาน',
+}
 
 export default async function AllCategoriesPage() {
-  // 1. ดึงข้อมูลหมวดหมู่ทั้งหมดจาก API (ไม่จำกัดจำนวน)
   const categories = await getCategories('th')
 
+  if (!categories || categories.length === 0) {
+    return (
+      <main className="min-h-screen pt-32 pb-20">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <Breadcrumb />
+          <h1 className="mt-16 text-3xl font-bold">ไม่พบหมวดหมู่สินค้า</h1>
+          <p className="mt-4 text-gray-500">
+            ขณะนี้ยังไม่มีข้อมูลหมวดหมู่ กรุณากลับมาใหม่อีกครั้ง
+          </p>
+        </div>
+      </main>
+    )
+  }
+
+  const seoCategories = categories
+    .filter(c => c.seoDescription)
+    .slice(0, 4)
+
   return (
-    <main className="min-h-screen pt-32 pb-20 bg-custom-gradient">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
-        {/* Breadcrumb นำทาง */}
+    <main className="min-h-screen pt-32 pb-20  border-b">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8  border-gray-50">
         <Breadcrumb />
 
-        {/* ส่วนหัวข้อหลักของหน้า */}
-        <div className="mb-16 text-center md:text-left">
+        {/* Page Heading */}
+        <header className="mb-16 max-w-3xl">
           <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
             หมวดหมู่สินค้าทั้งหมด
           </h1>
-          <p className="mt-4 text-gray-500 max-w-2xl text-lg">
+          <p className="mt-4 text-lg text-gray-500">
             เลือกชมบรรจุภัณฑ์คุณภาพสูงตามหมวดหมู่การใช้งาน
           </p>
-        </div>
+        </header>
 
-        {/* 2. Grid แสดงผลหมวดหมู่ทั้งหมด (เรนเดอร์ตรงจาก API ไม่ผ่าน Section) */}
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 md:gap-10">
-          {categories.map((item) => (
+        {/* Categories Grid */}
+        <section
+          aria-label="Product Categories"
+          className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 md:gap-4 "
+        >
+          {categories.map(category => (
             <Link
-              key={item.id}
-              href={`/categories/${item.slug}`}
-              className="group flex flex-col items-center rounded-[3rem] bg-white p-4 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+              key={category.id}
+              href={`/categories/${category.slug}`}
+              className="group flex flex-col items-center rounded-2xl bg-white p-2 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
             >
-              {/* ส่วนรูปภาพหมวดหมู่ */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-[2.2rem] bg-[#f2f2f2]">
-                {item.image?.src && (
+              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-100">
+                {category.image?.src && (
                   <Image
-                    src={item.image.src}
-                    alt={item.image.alt}
+                    src={category.image.src}
+                    alt={category.image.alt || category.name}
                     fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 )}
               </div>
-              
-              {/* ชื่อและคำบรรยายหมวดหมู่จาก API */}
+
               <div className="py-6 text-center">
-                <h3 className="text-base font-bold text-gray-900">{item.name}</h3>
-                <p className="mt-2 text-xs text-gray-400 uppercase tracking-widest font-mono line-clamp-2 px-2">
-                  {item.description}
-                </p>
+                <h2 className="text-base font-bold text-gray-900">
+                  {category.name}
+                </h2>
+                {category.description && (
+                  <p className="mt-2 text-xs text-gray-400 uppercase tracking-widest font-mono line-clamp-2 px-2">
+                    {category.description}
+                  </p>
+                )}
               </div>
             </Link>
           ))}
-        </div>
+        </section>
 
-        {/* 3. SEO Content Section ดึงจาก API */}
-        <div className="mt-32 border-t border-gray-200 pt-16">
-          <div className="mx-auto max-w-4xl text-center">
-            {/* วนลูปแสดง SEO Title/Description ของแต่ละหมวดหมู่ (หรือตัวหลัก) */}
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-              ผู้ผลิตและจำหน่ายบรรจุภัณฑ์เครื่องสำอางครบวงจร
-            </h2>
-            <div className="grid gap-8 text-left md:grid-cols-2">
-              {categories.filter(c => c.seoDescription).slice(0, 4).map(cat => (
-                <div key={cat.id} className="space-y-2">
-                  <h4 className="font-bold text-gray-800">{cat.seoTitle || cat.name}</h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    {cat.seoDescription}
-                  </p>
-                </div>
-              ))}
+        {/* SEO Content */}
+        {seoCategories.length > 0 && (
+          <section className="mt-32 border-t border-gray-200 pt-16">
+            <div className="mx-auto max-w-4xl">
+              <h2 className="mb-10 text-center text-2xl md:text-3xl font-bold text-gray-900">
+                ผู้ผลิตและจำหน่ายบรรจุภัณฑ์เครื่องสำอางครบวงจร
+              </h2>
+
+              <div className="grid gap-8 md:grid-cols-2">
+                {seoCategories.map(cat => (
+                  <article key={cat.id} className="space-y-2">
+                    <h3 className="font-bold text-gray-800">
+                      {cat.seoTitle || cat.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {cat.seoDescription}
+                    </p>
+                  </article>
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
-        
+          </section>
+        )}
       </div>
     </main>
   )
