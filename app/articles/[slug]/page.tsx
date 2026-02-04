@@ -3,6 +3,8 @@ import { Locale } from '@/app/lib/types/content'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -54,9 +56,12 @@ export default async function ArticleDetailPage({ params }: Props) {
         )}
 
         {/* Content */}
-        <div className="prose prose-gray max-w-none">
-          {article.content}
-        </div>
+        <div className="prose prose-gray max-w-none prose-h2:mt-10 prose-h3:mt-6">
+  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+    {article.content}
+  </ReactMarkdown>
+</div>
+
 
       </article>
     </main>

@@ -15,24 +15,34 @@ export const articlesMock: Article[] = [
       en: 'An overview of spout packaging types, benefits, and OEM use cases.',
     },
 
-    content: {
-      th: `
-จุกซอง (Spout) เป็นส่วนประกอบสำคัญของบรรจุภัณฑ์แบบซอง...
+ content: {
+  th: `
+## จุกซองคืออะไร
 
-เหมาะสำหรับสินค้า เช่น
-- ซอส
-- เครื่องดื่ม
-- ครีม
-      `,
-      en: `
-Spout packaging is a key component of flexible packaging...
+จุกซอง (Spout) เป็นส่วนประกอบสำคัญของบรรจุภัณฑ์แบบซอง  
+เหมาะสำหรับสินค้า **ของเหลว / ครีม / เจล**
 
-Common use cases include:
-- Sauces
-- Beverages
-- Cream products
-      `,
-    },
+### ข้อดีของจุกซอง
+- เปิด–ปิดง่าย
+- ลดการหกเลอะเทอะ
+- เหมาะกับสินค้า OEM
+
+### ตัวอย่างการใช้งาน
+1. ซอส
+2. เครื่องดื่ม
+3. ครีมเครื่องสำอาง
+  `,
+  en: `
+## What is Spout Packaging?
+
+Spout packaging is a key component of flexible packaging.
+
+### Benefits
+- Easy to open
+- Clean usage
+- Ideal for OEM products
+  `,
+},
 
     category: 'packaging',
     publishedAt: '2025-01-15',

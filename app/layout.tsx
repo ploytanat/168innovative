@@ -35,7 +35,7 @@ export default function RootLayout({
     <html lang="th">
       <body className={inter.className}>
         {/* Fixed Navbar */}
-        <Navigation />
+        <Navigation logo={company.logo} />
 
         {/* ✅ ชดเชยความสูง Navbar (h-16 = 64px) */}
         <main className="pt-16 bg-custom-gradient">
