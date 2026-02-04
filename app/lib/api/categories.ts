@@ -20,3 +20,26 @@ export function getCategories(locale: Locale): CategoryView[] {
     seoDescription: cat.seoDescription ? cat.seoDescription[locale] : undefined,
   }))
 }
+
+export function getCategoryBySlug(
+  slug: string,
+  locale: Locale
+): CategoryView | undefined {
+  const cat = categoriesMock.find(c => c.slug === slug)
+  if (!cat) return undefined
+
+  return {
+    id: cat.id,
+    slug: cat.slug,
+    name: cat.name[locale],
+    description: cat.description[locale],
+    image: cat.image
+      ? {
+          src: cat.image.src,
+          alt: cat.image.alt[locale],
+        }
+      : undefined,
+    seoTitle: cat.seoTitle ? cat.seoTitle[locale] : undefined,
+    seoDescription: cat.seoDescription ? cat.seoDescription[locale] : undefined,
+  }
+}

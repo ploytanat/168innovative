@@ -120,3 +120,20 @@ export interface WhyItem {
   description: LocalizedText
 }
 
+
+
+// == Article / Blog ==
+
+export interface Article {
+  id: string
+  slug: string
+
+  title: LocalizedText
+  excerpt: LocalizedText
+  content: LocalizedText   // เนื้อหายาว (markdown หรือ html ก็ได้)
+
+  coverImage?: ImageAsset
+
+  category?: string        // เช่น "packaging", "oem", "knowledge"
+  publishedAt: string      // ISO date
+}

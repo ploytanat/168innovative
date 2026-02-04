@@ -140,3 +140,17 @@ export interface AboutView {
     items: WhyItemView[]
   }
 }
+// == Article View ==
+
+export interface ArticleView {
+  id: string
+  slug: string
+
+  title: string
+  excerpt: string
+  content: string
+
+  coverImage?: ImageView
+  category?: string
+  publishedAt: string
+}
