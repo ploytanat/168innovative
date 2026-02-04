@@ -7,14 +7,19 @@ export default function AboutPage() {
   const about = getAbout('th')
 
   return (
-    <main className="space-y-24">
+    <main className="space-y-24 bg-[#eeee] ">
+      <div className="container mx-auto">
       <AboutHero  hero={about.hero}
         whoAreWe={about.whoAreWe} />
 
-      <WhyChooseUs
+      <WhyChooseUs 
   title={about.why.title}
   items={about.why.items}
+
+  
 />
+      </div>
+
 
     </main>
   )

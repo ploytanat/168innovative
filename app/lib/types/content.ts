@@ -86,6 +86,7 @@ export interface Product {
 
 //=== company ===
 export interface CompanyInfo {
+  logo: ImageAsset
   name: LocalizedText
   address: LocalizedText
   phones: ContactPhone[]
@@ -93,7 +94,6 @@ export interface CompanyInfo {
   socials: SocialLink[]
   lineQrCode: ImageAsset
   contactImage: ImageAsset
-
 }
 
 //== about us ==

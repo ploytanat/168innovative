@@ -2,6 +2,13 @@
 import { CompanyInfo } from "../types/content";
 
 export const companyMock: CompanyInfo = {
+  logo:{
+    src:'/images/logo.png',
+    alt:{
+      th:'',
+      en:''
+    }
+  },
   name: {
     th: '168 Innovative',
     en: '168 Innovative',

@@ -39,6 +39,7 @@ export interface SocialView {
 }
 
 export interface CompanyView {
+  logo:ImageView
   name: string
   address: string
   phones: {

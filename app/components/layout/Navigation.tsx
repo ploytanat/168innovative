@@ -17,6 +17,12 @@ export default function Navigation() {
     return path
   }
 
+  // ตรวจสอบ Active Link เพื่อเปลี่ยนสีตัวหนังสือ
+  const isActive = (path: string) => {
+    const localizedPath = withLocale(path)
+    return pathname === localizedPath
+  }
+
   function toggleLanguage() {
     const nextPath = isEN
       ? pathname.replace(/^\/en/, '') || '/'
@@ -34,17 +40,29 @@ export default function Navigation() {
   ]
 
   return (
-    <nav className="fixed top-0 z-20 w-full bg-white shadow">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <nav className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-12">
 
-        {/* Logo */}
-        <div className="text-lg font-bold">168 Innovative</div>
+        {/* Logo Section */}
+        <Link 
+          href={withLocale('/')} 
+          className="text-xl font-extrabold text-[#1e3a5f] tracking-tight hover:opacity-80 transition-opacity"
+        >
+          168 Innovative
+        </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden gap-6 text-sm md:flex">
+        <ul className="hidden gap-8 text-[15px] font-medium md:flex items-center">
           {menu.map(item => (
             <li key={item.href}>
-              <Link href={withLocale(item.href)}>
+              <Link 
+                href={withLocale(item.href)}
+                className={`transition-colors duration-200 hover:text-[#1e3a5f] ${
+                  isActive(item.href) 
+                    ? 'text-[#1e3a5f] font-bold' 
+                    : 'text-gray-500'
+                }`}
+              >
                 {item.label}
               </Link>
             </li>
@@ -52,45 +70,42 @@ export default function Navigation() {
         </ul>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
 
-          {/* Language Toggle */}
+          {/* Language Toggle (UI แบบใหม่) */}
           <button
             onClick={toggleLanguage}
-            aria-label="Toggle language"
-            className="relative inline-flex h-7 w-14 items-center rounded-full bg-gray-200"
+            className="group flex items-center gap-1.5 text-xs font-bold text-gray-400 hover:text-[#1e3a5f] transition-colors"
           >
-            <span
-              className={`absolute left-1 top-1 h-5 w-6 rounded-full bg-white shadow transition ${
-                isEN ? 'translate-x-6' : ''
-              }`}
-            />
-            <span className="absolute left-2 text-xs">TH</span>
-            <span className="absolute right-2 text-xs">EN</span>
+            <span className={!isEN ? 'text-[#1e3a5f]' : ''}>TH</span>
+            <div className="h-3 w-[1px] bg-gray-300" />
+            <span className={isEN ? 'text-[#1e3a5f]' : ''}>EN</span>
           </button>
 
-          {/* Hamburger */}
+          {/* Hamburger Menu (Mobile Only) */}
           <button
-            className="md:hidden"
+            className="md:hidden text-[#1e3a5f]"
             aria-label="Open menu"
             onClick={() => setOpen(prev => !prev)}
           >
-            {open ? <X size={24} /> : <Menu size={24} />}
+            {open ? <X size={26} /> : <Menu size={26} />}
           </button>
 
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (Full Screen หรือ Slide Down) */}
       {open && (
-        <div className="md:hidden border-t bg-white">
-          <ul className="flex flex-col divide-y text-sm">
+        <div className="md:hidden border-t bg-white absolute w-full left-0 animate-in fade-in slide-in-from-top-5">
+          <ul className="flex flex-col text-base font-medium">
             {menu.map(item => (
               <li key={item.href}>
                 <Link
                   href={withLocale(item.href)}
                   onClick={() => setOpen(false)}
-                  className="block px-6 py-4"
+                  className={`block px-8 py-5 border-b border-gray-50 ${
+                    isActive(item.href) ? 'bg-blue-50/50 text-[#1e3a5f]' : 'text-gray-600'
+                  }`}
                 >
                   {item.label}
                 </Link>

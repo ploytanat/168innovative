@@ -5,6 +5,10 @@ import { CompanyView } from '../types/view'
 
 export function getCompany(locale: Locale): CompanyView {
   return {
+    logo:{
+      src: companyMock.logo.src,
+      alt: companyMock.logo.alt[locale],
+    },
     name: companyMock.name[locale],
     address: companyMock.address[locale],
     
