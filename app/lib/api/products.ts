@@ -1,5 +1,5 @@
 import { productsMock } from '../mock/products.mock'
-import { Locale } from '../types/content'
+import { Locale } from '../types/content';
 import { ProductView } from '../types/view'
 
 
@@ -63,4 +63,24 @@ export function getProductBySlug(
     },
     price: product.price,
   }
+}
+
+export function getRelatedProducts(
+  categoryId: string,
+  currentId: string,
+  locale: Locale
+){
+  return productsMock
+  .filter(p => p.categoryId === categoryId && p.id !== currentId)
+  .slice(0, 4)
+  .map(p => ({
+    id:p.id,
+    slug:p.slug,
+    name: p.name[locale],
+    image:{
+      src:p.image.src,
+      alt:p.image.alt[locale],
+    },
+    price:p.price,
+  }))
 }

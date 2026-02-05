@@ -16,7 +16,7 @@ export default function ContactSection({
   }, [])
 
   return (
-    <section className="w-full mx-auto  container py-10 md:py-24 border rounded-2xl border-dashed border-[#140a06] bg-[#EEEEEE] overflow-hidden">
+    <section className="w-full mx-auto  container py-10 md:py-24 border rounded-2xl border-dashed border-[#fcfdfd] bg-[#EEEEEE] overflow-hidden shadow-2xl">
       <div className="mx-auto  px-4 sm:px-6">
         {/* เพิ่ม text-center สำหรับจอเล็ก และ lg:text-left สำหรับจอใหญ่ */}
         <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] items-center text-center lg:text-left">

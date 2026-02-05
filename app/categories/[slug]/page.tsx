@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getArticles } from '@/app/lib/api/articles'
+import Breadcrumb from '@/app/components/ui/Breadcrumb'
 
 interface Props {
   params: Promise<{
@@ -25,6 +26,7 @@ export default async function CategoryProductsPage({ params }: Props) {
 
   return (
     <main className="min-h-screen pt-32 pb-20">
+      <Breadcrumb />
       <div className="mx-auto max-w-7xl px-6">
 
         <h1 className="text-3xl md:text-5xl font-bold mb-4">

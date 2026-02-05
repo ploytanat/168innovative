@@ -13,9 +13,10 @@ export default function ProductMarquee({
   const doubleItems = [...items, ...items, ...items, ...items]
 
   return (
-    <section className=" overflow-hidden bg-[#494a4b] border-y border-gray-100 shadow-md py-4 md:py-4">
-      <div className="mx-auto max-w-7xl p-4 ">
-        <h2 className="text-2xl font-bold text-center  text-white">Featured Products</h2>
+    <section className=" overflow-hidden  border-y border-gray-100 shadow-md py-4 md:py-4">
+       <h2 className="text-2xl font-bold text-center  ">Featured Products</h2>
+      <div className="mx-auto max-w-7xl bg-[#494a4b]">
+       
       </div>
 
       <div className="group relative flex overflow-hidden p-2 cursor-pointer">

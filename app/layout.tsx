@@ -24,12 +24,12 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const company = getCompany('th')
+  const company = await getCompany('th') // ✅ ต้อง await
 
   return (
     <html lang="th">
@@ -37,7 +37,6 @@ export default function RootLayout({
         {/* Fixed Navbar */}
         <Navigation logo={company.logo} />
 
-        {/* ✅ ชดเชยความสูง Navbar (h-16 = 64px) */}
         <main className="pt-16 bg-custom-gradient">
           {children}
           <Footer company={company} />
