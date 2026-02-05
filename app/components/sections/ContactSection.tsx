@@ -1,42 +1,87 @@
 'use client'
 
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import { CompanyView } from '@/app/lib/types/view'
-import { useState, useEffect } from 'react'
 
-export default function ContactSection({
-  data,
-}: {
-  data: CompanyView
-}) {
-  const [isMounted, setIsMounted] = useState(false)
+/* =======================
+   Motion Presets
+======================= */
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+}
 
+const fadeRight = {
+  hidden: { opacity: 0, x: 40 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  },
+}
+
+const stagger = {
+  show: {
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+}
+
+/* =======================
+   Component
+======================= */
+
+export default function ContactSection({ data }: { data: CompanyView }) {
   return (
-    <section className="w-full mx-auto  container py-10 md:py-24 border rounded-2xl border-dashed border-[#fcfdfd] bg-[#EEEEEE] overflow-hidden shadow-2xl">
-      <div className="mx-auto  px-4 sm:px-6">
-        {/* เพิ่ม text-center สำหรับจอเล็ก และ lg:text-left สำหรับจอใหญ่ */}
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] items-center text-center lg:text-left">
+    <motion.section
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: '-120px' }}
+      variants={fadeUp}
+      className="
+        w-full container mx-auto
+        py-14 md:py-24
+        rounded-3xl
+        bg-gradient-to-br from-[#F7F8FA] to-[#ECEDEF]
+        shadow-[0_40px_80px_-40px_rgba(0,0,0,0.25)]
+        overflow-hidden
+      "
+    >
+      <div className="px-4 sm:px-6">
+        <div className="grid gap-14 lg:grid-cols-[1fr_1.4fr] items-center text-center lg:text-left">
 
-          {/* LEFT : INFO (แสดงเป็นลำดับที่ 2 ในจอเล็ก เพื่อให้รูปภาพขึ้นก่อน หรือปรับ order ตามชอบ) */}
-          <div className="order-2 lg:order-1 z-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+          {/* LEFT : INFO */}
+          <motion.div
+            variants={stagger}
+            className="order-2 lg:order-1 z-10"
+          >
+            <motion.h2
+              variants={fadeUp}
+              className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900"
+            >
               Contact Us
-            </h2>
+            </motion.h2>
 
-            <div className="mt-10 space-y-8">
-              <div className="space-y-3">
-                {/* ปรับให้เบอร์โทรศัพท์อยู่ตรงกลางในจอเล็ก */}
-                <div className="flex flex-col items-center lg:items-start gap-4">
+            <motion.div variants={fadeUp} className="mt-10 space-y-10">
+
+              {/* Phones */}
+              <div className="space-y-4">
+                <div className="flex flex-col items-center lg:items-start gap-6">
                   {data.phones.map((p) => (
                     <div key={p.number} className="flex flex-col">
-                      <span className="text-xs text-gray-400 uppercase tracking-widest">{p.label}</span>
-                      <a 
-                        href={`tel:${p.number.replace(/-/g, '')}`} 
-                        className="text-xl md:text-2xl text-gray-900 hover:text-blue-600 transition-colors font-bold"
+                      <span className="text-xs text-gray-400 uppercase tracking-widest">
+                        {p.label}
+                      </span>
+                      <a
+                        href={`tel:${p.number.replace(/-/g, '')}`}
+                        className="text-xl md:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
                       >
                         {p.number}
                       </a>
@@ -45,19 +90,37 @@ export default function ContactSection({
                 </div>
               </div>
 
+              {/* Email */}
               <div className="space-y-3">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Email Address</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+                  Email Address
+                </p>
                 {data.email.map((e) => (
-                  <a key={e} href={`mailto:${e}`} className="block text-base text-gray-900 hover:text-blue-600 transition-colors">
+                  <a
+                    key={e}
+                    href={`mailto:${e}`}
+                    className="block text-base text-gray-900 hover:text-blue-600 transition-colors"
+                  >
                     {e}
                   </a>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            {/* QR Code: ใช้ mx-auto เพื่อให้อยู่ตรงกลางจอเล็ก */}
+            {/* QR Code */}
             {data.lineQrCode && (
-              <div className="mt-12 p-6 inline-block bg-white rounded-4xl border border-gray-100 shadow-sm mx-auto lg:mx-0">
+              <motion.div
+                variants={fadeUp}
+                className="
+                  mt-12 inline-block
+                  rounded-3xl
+                  bg-white/80 backdrop-blur
+                  border border-white/40
+                  shadow-lg
+                  p-6
+                  mx-auto lg:mx-0
+                "
+              >
                 <p className="mb-4 text-xs font-bold uppercase tracking-widest text-center text-gray-400">
                   Scan to Add LINE
                 </p>
@@ -69,27 +132,35 @@ export default function ContactSection({
                     className="object-contain"
                   />
                 </div>
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* RIGHT : IMAGE */}
+          <motion.div
+            variants={fadeRight}
+            className="
+              order-1 lg:order-2
+              relative w-full
+              h-80 md:h-[420px] lg:h-[520px]
+              flex items-center justify-center
+            "
+          >
+            {data.contactImage && (
+              <div className="relative h-full w-full">
+                <Image
+                  src={data.contactImage.src}
+                  alt={data.contactImage.alt}
+                  fill
+                  priority
+                  className="object-contain drop-shadow-xl"
+                />
               </div>
             )}
-          </div>
-
-          {/* RIGHT : MAIN IMAGE */}
-          <div className="order-1 lg:order-2 relative w-full h-80 md:h-120 lg:h-175 flex justify-center items-center">
-             {data.contactImage && (
-                <div className="relative h-full w-full group scale-100 lg:scale-125 transition-transform duration-1000">
-                  <Image
-                    src={data.contactImage.src}
-                    alt={data.contactImage.alt}
-                    fill
-                    priority
-                    className="object-contain drop-shadow-[0_20px_20px_rgba(0,0,0,0.1)] transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-             )}
-          </div>
+          </motion.div>
 
         </div>
       </div>
-    </section>
+    </motion.section>
   )
 }

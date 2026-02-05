@@ -1,4 +1,3 @@
-// components/sections/CategorySection.tsx
 "use client";
 
 import Image from "next/image";
@@ -6,79 +5,96 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CategoryView } from "@/app/lib/types/view";
 
-export default function CategorySection({
-  items = [],
-}: {
+interface CategorySectionProps {
   items: CategoryView[];
-}) {
+}
+
+export default function CategorySection({ items = [] }: CategorySectionProps) {
   const pathname = usePathname();
   const isEN = pathname.startsWith("/en");
 
-  if (!items.length) return null;
+  if (items.length === 0) return null;
 
-  // เลือกแสดง 6 อันแรก
+  const content = {
+    title: isEN ? "Our Categories" : "หมวดหมู่สินค้า",
+    viewAll: isEN ? "View All Categories" : "ดูหมวดหมู่ทั้งหมด",
+    link: isEN ? "/en/categories" : "/categories",
+  };
+
   const displayItems = items.slice(0, 6);
 
   return (
-    <section className="py-12 md:py-16">
-      <div className="mx-auto container  px-4">
-        {/* กล่อง Container ขาวขนาดใหญ่ */}
-        <div className="group relative overflow-hidden rounded-2xl  border border-white/50 bg-white/30 px-6 py-10 sm:px-10 sm:py-16 lg:px-16 lg:py-20 shadow-2xl backdrop-blur-sm">
+    <section className="py-16 md:py-24 bg-gray-50/50">
+      <div className="container mx-auto px-4">
+        {/* Main Glassmorphism Container */}
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-white bg-white/40 p-8 md:p-16 lg:p-20 shadow-2xl shadow-gray-200/50 backdrop-blur-md">
           
-          <h2 className="mb-10 text-center text-xl md:text-2xl font-bold text-gray-900">
-            {isEN ? "Our Categories" : "หมวดหมู่สินค้า"}
-          </h2>
+          {/* Header */}
+          <div className="mb-12 flex flex-col items-center text-center">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
+              {content.title}
+            </h2>
+            <div className="mt-4 h-1 w-20 rounded-full bg-gray-900 md:w-24" />
+          </div>
 
-          {/* Grid Container*/}
-          <div className="grid grid-cols-2 p-4 gap-2 sm:grid-cols-3 lg:grid-cols-3 md:gap-12 max-w-6xl mx-auto">
+          {/* Grid Layout */}
+          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:grid-cols-3 lg:gap-8">
             {displayItems.map((item) => (
-              <div
+              <Link
                 key={item.id}
-                className="group/card flex flex-col items-center overflow-hidden rounded-xl 
-                           md:rounded-2xl bg-white p-2 md:p-2
-                           shadow-[0_4px_20px_-5px_rgba(0,0,0,0.08)] transition-all duration-300 
-                           hover:shadow-xl hover:-translate-y-1"
+                href={`${content.link}/${item.id}`} // สมมติว่าต้องการกดเข้าหมวดหมู่ได้เลย
+                className="group/card flex flex-col items-center"
               >
-                {/* Image Section */}
-                <div className="relative aspect-square w-full overflow-hidden rounded-xl md:rounded-2xl bg-[#f2f2f2]">
-                  {item.image?.src && (
+                {/* Image Wrapper */}
+                <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-100 shadow-sm transition-all duration-500 group-hover/card:shadow-xl group-hover/card:-translate-y-2">
+                  {item.image?.src ? (
                     <Image
                       src={item.image.src}
-                      alt={item.image.alt}  
+                      alt={item.image.alt || item.name}
                       fill
                       sizes="(max-width: 768px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover/card:scale-120"
+                      className="object-cover transition-transform duration-700 group-hover/card:scale-110"
                     />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400">
+                      No Image
+                    </div>
                   )}
+                  {/* Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black/5 opacity-0 transition-opacity duration-300 group-hover/card:opacity-100" />
                 </div>
 
-                {/* Text Section */}
-                <div className="flex flex-col items-center pt-2 md:py-6 px-2 text-center">
-                  <h3 className="text-sm md:text-lg font-bold tracking-tight text-gray-900 leading-tight">
+                {/* Text Content */}
+                <div className="mt-4 text-center transition-colors duration-300">
+                  <h3 className="text-base font-bold text-gray-900 md:text-xl">
                     {item.name}
                   </h3>
-
-                  <span className="hidden md:block mt-1  text-sm lowercase   text-gray-600">
-                    {item.description}
-                  </span>
+                  {item.description && (
+                    <p className="mt-1 hidden line-clamp-1 text-sm text-gray-500 md:block">
+                      {item.description}
+                    </p>
+                  )}
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
-          {/* ปุ่มดูทั้งหมด (อยู่ข้างในกล่องขาวใหญ่) */}
-          <div className="mt-12 flex justify-center">
+          {/* Footer Action */}
+          <div className="mt-16 flex justify-center">
             <Link
-              href={isEN ? "/en/categories" : "/categories"}
-              className="group/btn inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white/50 px-8 py-2.5 text-[12px] font-medium text-gray-500 transition-all hover:border-gray-900 hover:text-gray-900 hover:bg-white"
+              href={content.link}
+              className="group/btn relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-gray-900 px-10 py-4 text-sm font-semibold text-white transition-all hover:bg-gray-800 hover:shadow-lg active:scale-95"
             >
-              {isEN ? "View All Categories" : "ดูหมวดหมู่ทั้งหมด"}
-              <span className="transition-transform group-hover/btn:translate-x-1">
+              <span className="relative z-10">{content.viewAll}</span>
+              <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
                 →
               </span>
             </Link>
           </div>
 
+          {/* Decorative Elements */}
+          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-blue-50/50 blur-3xl" />
+          <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-purple-50/50 blur-3xl" />
         </div>
       </div>
     </section>

@@ -22,7 +22,7 @@ export default function Breadcrumb() {
     .filter(seg => seg !== 'en')
 
   return (
-    <nav className="mb-8 border-b border-gray-400 p-3" aria-label="Breadcrumb">
+    <nav className="mb-3 " aria-label="Breadcrumb ">
       <ol className="flex items-center text-sm text-gray-500">
 
         {/* Home */}

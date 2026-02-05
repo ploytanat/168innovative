@@ -1,9 +1,13 @@
 import Image from "next/image";
+import BackgroundBlobs from "../ui/BackgroundBlobs";
 
 export default function HeroSection({ data }: any) {
   return (
     <section className="relative overflow-hidden pt-20 pb-12 md:pt-20 md:pb-16">
       <div className="mx-auto container px-4 sm:px-6">
+
+
+        <BackgroundBlobs />
         {/* คาร์ดหลัก: ปรับ rounded และ padding ตามขนาดหน้าจอ */}
         <div className="hero-gradient-card group relative overflow-hidden rounded-2xl md:rounded-4xl  border border-white/50 px-6 py-10 sm:px-10 sm:py-16 lg:px-20 lg:py-24 shadow-2xl">
           {/* Background Glows: ซ่อนหรือปรับขนาดบน Mobile เพื่อไม่ให้ฟุ้งจนเกินไป */}
@@ -14,7 +18,7 @@ export default function HeroSection({ data }: any) {
             {/* LEFT CONTENT: ปรับ Text Alignment บน Mobile */}
             <div className="relative z-10 flex flex-col items-center text-center lg:col-span-6 lg:items-start lg:text-left">
               {data.badge && (
-                <span className="mb-4 inline-block rounded-full bg-white/80 px-4 py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-widest text-cyan-600 shadow-sm backdrop-blur-md border border-white">
+                <span className="mb-4 inline-block rounded-full bg-white/40 px-4 py-1.5 text-[10px] md:text-xs font-bold uppercase tracking-widest text-cyan-600 shadow-sm backdrop-blur-md border border-white">
                   {data.badge}
                 </span>
               )}

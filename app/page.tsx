@@ -10,6 +10,7 @@ import CategorySection from './components/sections/CategorySection';
 import ProductMarquee from './components/sections/ProductMarquee';
 import WhyChooseUs from './components/sections/WhyChooseUs';
 import ContactSection from './components/sections/ContactSection';
+import BackgroundBlobs from './components/ui/BackgroundBlobs';
 
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
   const company = getCompany('th')
   return (
     <>
+   
       <HeroSection data={home.hero} />
       <ProductMarquee items={products} />
        <CategorySection items={category} />
