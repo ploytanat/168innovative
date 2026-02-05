@@ -33,7 +33,7 @@ export default function EnglishLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navigation />
+        <Navigation logo={company.logo} />
 
         {/* 👇 สำคัญที่สุด */}
         <main className="pt-16 bg-custom-gradient">
