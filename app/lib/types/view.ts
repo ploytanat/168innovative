@@ -1,18 +1,12 @@
 // types/view.ts
 
-/* =======================
-   Shared / Base
-======================= */
-
+// == Shared / Base == 
 export interface ImageView {
   src: string
   alt: string
 }
 
-/* =======================
-   Category
-======================= */
-
+// == Category ==
 export interface CategoryView {
   id: string
   slug: string
@@ -26,9 +20,7 @@ export interface CategoryView {
   seoDescription?: string
 }
 
-/* =======================
-   Social / Company
-======================= */
+// == Social / Company==
 
 export type SocialType = 'facebook' | 'line' | 'instagram' | 'shopee'
 
@@ -52,9 +44,7 @@ export interface CompanyView {
   contactImage?: ImageView
 }
 
-/* =======================
-   Product
-======================= */
+// ==  Product ==
 
 export interface ProductView {
   id: string
@@ -98,12 +88,6 @@ export interface HeroSlideView {
 
 export interface HomeView {
   hero: HomeHeroView
-  why: WhyItemView[]
-  seo: {
-    title: string
-    description: string
-    keywords?: string[]
-  }
 }
 
 

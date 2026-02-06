@@ -1,14 +1,12 @@
 // lib/api/home.ts
 import { homeMock } from '../mock/home.mock'
-import { HomeContent } from '../types/content'
+import { Locale } from '../types/content'
 import { HomeView } from '../types/view'
 
-export function getHome(locale: 'th' | 'en'): HomeView {
-  const content: HomeContent = homeMock
-
+export function getHome(locale: Locale): HomeView {
   return {
     hero: {
-      slides: content.hero.slides.map(slide => ({
+      slides: homeMock.hero.slides.map(slide => ({
         id: slide.id,
         title: slide.title[locale],
         subtitle: slide.subtitle[locale],
@@ -23,16 +21,6 @@ export function getHome(locale: 'th' | 'en'): HomeView {
         },
       })),
     },
-
-    why: content.why.map(item => ({
-      title: item.title[locale],
-      description: item.description[locale],
-    })),
-
-    seo: {
-      title: content.seo.title[locale],
-      description: content.seo.description[locale],
-      keywords: content.seo.keywords,
-    },
+    
   }
 }

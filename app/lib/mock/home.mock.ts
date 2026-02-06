@@ -63,27 +63,5 @@ export const homeMock: HomeContent = {
         },
       },
     ],
-  },
-
-  why: [
-    {
-      title: { th: 'ประสบการณ์กว่า 10 ปี', en: '10+ Years Experience' },
-      description: {
-        th: 'มีประสบการณ์ด้านบรรจุภัณฑ์ยาวนาน',
-        en: 'Long-standing experience in packaging solutions',
-      },
-    },
-  ],
-
-  seo: {
-    title: {
-      th: '168 Innovative | บรรจุภัณฑ์พลาสติก',
-      en: '168 Innovative | Plastic Packaging',
-    },
-    description: {
-      th: 'ผู้เชี่ยวชาญด้านบรรจุภัณฑ์พลาสติก',
-      en: 'Experts in plastic packaging solutions',
-    },
-    keywords: ['packaging', 'plastic', 'cosmetic'],
-  },
+  },  
 }

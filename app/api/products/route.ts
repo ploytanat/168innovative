@@ -1,3 +1,4 @@
+//api/products/route.ts
 import { NextResponse } from 'next/server'
 import { getProducts } from '@/app/lib/api/products'
 import { Locale } from '@/app/lib/types/content'

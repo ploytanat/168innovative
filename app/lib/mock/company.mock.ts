@@ -1,4 +1,4 @@
-// lib/mocks/company.ts
+// lib/mocks/company.mock.ts
 import { CompanyInfo } from "../types/content";
 
 export const companyMock: CompanyInfo = {

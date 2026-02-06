@@ -7,41 +7,37 @@ import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
 
-import { getHome } from './lib/api/home'
+import { getHomeSEO } from './lib/api/seo'
 import { getCompany } from './lib/api/company'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export async function generateMetadata(): Promise<Metadata> {
-  const home = getHome('th')
+  const seo = getHomeSEO('th')
   return {
-    title: home.seo.title,
-    description: home.seo.description,
-    keywords: home.seo.keywords,
-    formatDetection: {
-      telephone: false,
-    },
+      title: seo.title,
+      description: seo.description,
+      keywords: seo.keywords,
+      formatDetection: {
+        telephone: false,
+      },
+    }
   }
-}
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const company = await getCompany('th') // ✅ ต้อง await
-
+  const company = await getCompany('th')
   return (
     <html lang="th">
       <body className={inter.className}>
-        {/* Fixed Navbar */}
         <Navigation logo={company.logo} />
-
         <main className="pt-16 bg-custom-gradient">
           {children}
           <Footer company={company} />
         </main>
-
         <BackToTop />
       </body>
     </html>

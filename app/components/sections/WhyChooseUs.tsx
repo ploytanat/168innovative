@@ -1,15 +1,17 @@
-// components/sections/WhyChooseUs.tsx
-import Image from "next/image"
-import { WhyItemView } from "@/app/lib/types/view"
+'use client'
+
+import Image from 'next/image'
+import { WhyItemView } from '@/app/lib/types/view'
+import { uiText } from '@/app/lib/i18n/ui'
 
 interface WhyChooseUsProps {
   items: WhyItemView[]
-  title?: string   // 👈 optional
+  locale: 'th' | 'en'
 }
 
 export default function WhyChooseUs({
   items,
-  title = "Why Choose 168 Innovative", // 👈 default สำหรับ Home
+  locale,
 }: WhyChooseUsProps) {
   if (!items.length) return null
 
@@ -17,7 +19,7 @@ export default function WhyChooseUs({
     <section className="py-16 md:py-24 bg-transparent">
       <div className="mx-auto max-w-7xl px-4">
         <h2 className="mb-12 text-center text-2xl font-bold text-[#1e3a5f] md:text-3xl">
-          {title}
+          {uiText.whyChooseUs.title[locale]}
         </h2>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -37,7 +39,12 @@ export default function WhyChooseUs({
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gray-50 text-gray-300">
-                    <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg
+                      className="h-10 w-10"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
