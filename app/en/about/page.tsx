@@ -1,11 +1,11 @@
 // app/about/page.tsx
-import AboutHero from "../components/sections/AboutHero"
-import WhyChooseUs from "../components/sections/WhyChooseUs"
-import { getAbout } from "../lib/api/about"
-import { getWhy } from "../lib/api/why"
+import AboutHero from "../../components/sections/AboutHero"
+import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import { getAbout } from "@/app/lib/api/about"
+import { getWhy } from "@/app/lib/api/why"
 
 export default function AboutPage() {
-  const locale: 'th' | 'en' = 'th'
+  const locale = 'en'
 
   const about = getAbout(locale)
   const why = getWhy(locale)

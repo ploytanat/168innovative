@@ -2,11 +2,10 @@ import { getCompany } from "@/app/lib/api/company";
 import { Locale } from "@/app/lib/types/content";
 import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
-import Breadcrumb from "../components/ui/Breadcrumb";
-import BackgroundBlobs from "../components/ui/BackgroundBlobs";
-
+import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs";
+import Breadcrumb from "@/app/components/ui/Breadcrumb";
 export default async function ContactPage() {
-  const locale: Locale = "th";
+  const locale: Locale = "en";
   const company = await getCompany(locale);
 
   return (
@@ -19,7 +18,8 @@ export default async function ContactPage() {
         {/* ===== HEADER ===== */}
         <header className="mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-black text-center">
-            ติดต่อเรา
+            Contact Us
+
           </h1>
         </header>
 

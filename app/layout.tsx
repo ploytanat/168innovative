@@ -36,7 +36,7 @@ export default async function RootLayout({
         <Navigation logo={company.logo} />
         <main className="pt-16 bg-custom-gradient">
           {children}
-          <Footer company={company} />
+          <Footer company={company} locale='th' />
         </main>
         <BackToTop />
       </body>

@@ -1,16 +1,24 @@
 // components/Footer.tsx
 
-import Image from "next/image";
-import { CompanyView } from "@/app/lib/types/view";
-export default function Footer({ company }: { company: CompanyView }) {
+import Image from "next/image"
+import { CompanyView } from "@/app/lib/types/view"
+
+export default function Footer({
+  company,
+  locale,
+}: {
+  company: CompanyView
+  locale: 'th' | 'en'
+}) {
+  const isEN = locale === 'en'
+
   return (
-    <footer 
-      className="relative h-100" // กำหนดความสูงตามต้องการ
+    <footer
+      className="relative h-100"
       style={{ clipPath: "polygon(0% 0, 100% 0, 100% 100%, 0% 100%)" }}
     >
-      <div className="fixed bottom-0  w-full  text-zinc-900 p-10 flex flex-col justify-between">
-        {/* ส่วนบนของ Footer */}
-<div className="relative mx-auto max-w-7xl px-6 pt-20">
+      <div className="fixed bottom-0 w-full text-zinc-900 p-10 flex flex-col justify-between">
+        <div className="relative mx-auto max-w-7xl px-6 pt-20">
           <div className="grid gap-12 lg:grid-cols-4">
 
             {/* LOGO + ADDRESS */}
@@ -29,7 +37,7 @@ export default function Footer({ company }: { company: CompanyView }) {
             {/* PHONE */}
             <div>
               <h4 className="mb-4 text-sm font-semibold text-gray-900">
-                Phone Number
+                {isEN ? 'Phone Number' : 'เบอร์โทรศัพท์'}
               </h4>
               <ul className="space-y-2 text-sm text-gray-600">
                 {company.phones.map(p => (
@@ -43,7 +51,7 @@ export default function Footer({ company }: { company: CompanyView }) {
             {/* EMAIL */}
             <div>
               <h4 className="mb-4 text-sm font-semibold text-gray-900">
-                Email
+                {isEN ? 'Email' : 'อีเมล'}
               </h4>
               <ul className="space-y-2 text-sm text-gray-600">
                 {company.email.map(e => (
@@ -55,7 +63,7 @@ export default function Footer({ company }: { company: CompanyView }) {
             {/* SOCIAL */}
             <div>
               <h4 className="mb-4 text-sm font-semibold text-gray-900">
-                Social
+                {isEN ? 'Social' : 'โซเชียล'}
               </h4>
               <div className="flex gap-4">
                 {company.socials.map(s => (
@@ -85,7 +93,6 @@ export default function Footer({ company }: { company: CompanyView }) {
             </p>
           </div>
         </div>
-
       </div>
     </footer>
   )

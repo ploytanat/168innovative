@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 
 export default async function ArticlesENPage() {
-  const locale: Locale = 'th'
+  const locale: Locale = 'en'
   const articles = await getArticles(locale)
 
   const [featured, ...others] = articles
