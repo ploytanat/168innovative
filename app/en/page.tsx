@@ -1,13 +1,13 @@
-// app/en/page.tsx
-import { getHome } from "../lib/api/home"
+import { getHome } from '@/app/lib/api/home'
+import HeroCarousel from '@/app/components/sections/HeroCarousel'
 
-export default function HomePageEN() {
+export default function HomeENPage() {
   const home = getHome('en')
 
   return (
     <>
-      <h1>{home.hero.title}</h1>
-      <p>{home.hero.description}</p>
+      <HeroCarousel hero={home.hero} />
+      {/* section อื่น */}
     </>
   )
 }

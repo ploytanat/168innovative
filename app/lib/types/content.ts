@@ -49,15 +49,32 @@ export interface SEOContent {
   keywords?: string[]
 }
 
+/* =======================
+   Home
+======================= */
 
-//== Home ==
 export interface HomeContent {
-  hero: HeroSection
+  hero: {
+    slides: {
+      id: number
+      title: LocalizedText
+      subtitle: LocalizedText
+      description: LocalizedText
+      image: ImageAsset
+      ctaPrimary: CTA
+    }[]
+  }
+
   why: {
     title: LocalizedText
     description: LocalizedText
   }[]
-  seo: SEOContent
+
+  seo: {
+    title: LocalizedText
+    description: LocalizedText
+    keywords: string[]
+  }
 }
 
 //== category ==

@@ -1,40 +1,38 @@
 // lib/api/home.ts
-import { Locale } from '../types/content'
 import { homeMock } from '../mock/home.mock'
+import { HomeContent } from '../types/content'
+import { HomeView } from '../types/view'
 
-import { getCategories } from './categories'
-import { getProducts } from './products'
-import { getCompany } from './company'
-import { getHomeSEO } from './seo'
+export function getHome(locale: 'th' | 'en'): HomeView {
+  const content: HomeContent = homeMock
 
-export function getHome(locale: Locale) {
   return {
     hero: {
-      title: homeMock.hero.title[locale],
-      description: homeMock.hero.description[locale],
-      image: {
-        src: homeMock.hero.image.src,
-        alt: homeMock.hero.image.alt[locale],
-      },
-      ctaPrimary: {
-        href: homeMock.hero.ctaPrimary.href,
-        label: homeMock.hero.ctaPrimary.label[locale],
-      },
-      ctaSecondary: {
-        href: homeMock.hero.ctaSecondary.href,
-        label: homeMock.hero.ctaSecondary.label[locale],
-      },
+      slides: content.hero.slides.map(slide => ({
+        id: slide.id,
+        title: slide.title[locale],
+        subtitle: slide.subtitle[locale],
+        description: slide.description[locale],
+        image: {
+          src: slide.image.src,
+          alt: slide.image.alt[locale],
+        },
+        ctaPrimary: {
+          href: slide.ctaPrimary.href,
+          label: slide.ctaPrimary.label[locale],
+        },
+      })),
     },
 
-    categories: getCategories(locale),
-    products: getProducts(locale),
-
-    why: homeMock.why.map(w => ({
-      title: w.title[locale],
-      description: w.description[locale],
+    why: content.why.map(item => ({
+      title: item.title[locale],
+      description: item.description[locale],
     })),
 
-    company: getCompany(locale),
-    seo: getHomeSEO(locale),
+    seo: {
+      title: content.seo.title[locale],
+      description: content.seo.description[locale],
+      keywords: content.seo.keywords,
+    },
   }
 }

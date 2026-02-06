@@ -42,7 +42,7 @@ export default function CategorySection({ items = [] }: CategorySectionProps) {
             {displayItems.map((item) => (
               <Link
                 key={item.id}
-                href={`${content.link}/${item.id}`} // สมมติว่าต้องการกดเข้าหมวดหมู่ได้เลย
+                href={`${content.link}/${item.slug}`} // สมมติว่าต้องการกดเข้าหมวดหมู่ได้เลย
                 className="group/card flex flex-col items-center"
               >
                 {/* Image Wrapper */}

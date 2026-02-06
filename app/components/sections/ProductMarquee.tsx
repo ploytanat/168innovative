@@ -1,54 +1,92 @@
-// components/sections/ProductMarquee.tsx
+'use client'
+
 import Image from 'next/image'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { ProductView } from '@/app/lib/types/view'
+import { useRef, useState } from 'react'
+
+interface ProductMarqueeProps {
+  items: ProductView[]
+  categorySlug: string
+}
 
 export default function ProductMarquee({
-  items = [],
-}: {
-  items: ProductView[]
-}) {
+  items,
+  categorySlug,
+}: ProductMarqueeProps) {
   if (!items.length) return null
 
-  // Duplicate items เพื่อให้ Loop ไหลลื่น
-  const doubleItems = [...items, ...items, ...items, ...items]
+  const doubleItems = [...items, ...items, ...items]
+
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <section className=" overflow-hidden  border-y border-gray-100 shadow-md py-4 md:py-4">
-       <h2 className="text-2xl font-bold text-center  ">Featured Products</h2>
-      <div className="mx-auto max-w-7xl bg-[#494a4b]">
-       
-      </div>
+    <section className="overflow-hidden border-y border-gray-100 shadow-md py-6">
+      <h2 className="mb-4 text-center text-2xl font-bold">
+        Featured Products
+      </h2>
 
-      <div className="group relative flex overflow-hidden p-2 cursor-pointer">
-      
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-[#ffffff5a] to-transparent md:w-40" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-[#ffffff5a] to-transparent md:w-40" />
+      <div className="group relative overflow-hidden">
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent md:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent md:w-32" />
 
-        <div className="flex animate-marquee gap-6 whitespace-nowrap py-4">
+        {/* Marquee Track */}
+        <motion.div
+          ref={marqueeRef}
+          className="flex gap-6 px-4 py-4 cursor-grab active:cursor-grabbing"
+          drag="x"
+          dragConstraints={{ left: -2000, right: 0 }}
+          dragElastic={0.1}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={() => setIsDragging(false)}
+          animate={!isDragging ? { x: ['0%', '-50%'] } : undefined}
+          transition={{
+            repeat: Infinity,
+            ease: 'linear',
+            duration: 40,
+          }}
+        >
           {doubleItems.map((item, i) => (
-            <div
+            <Link
               key={`${item.id}-${i}`}
-              className="w-50 shrink-0 rounded-md border border-gray-100 p-2 bg-[#ececec93]  text-center shadow-md transition-transform hover:scale-105"
-            >
-              
-              <div className="relative aspect-square w-full overflow-hidden rounded-md bg-[#f8f8f8]">
-                <Image
-                  src={item.image.src}
-                  alt={item.image.alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
+            href={`/categories/${categorySlug}/${item.slug}`}
 
-              <div className="mt-4 p-1">
-                <p className="text-[11px] font-bold text-gray-800 line-clamp-1">
-                  {item.name}
-                </p>
-               
+              className={`block shrink-0 ${
+                isDragging ? 'pointer-events-none' : ''
+              }`}
+            >
+              <div
+                className="
+                  w-48 sm:w-52
+                  rounded-lg border border-gray-100
+                  bg-[#ececec93]
+                  p-2 text-center shadow-md
+                  transition-transform
+                  hover:scale-105
+                "
+              >
+                <div className="relative aspect-square w-full overflow-hidden rounded-md bg-[#f8f8f8]">
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt || item.name}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 200px"
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+
+                <div className="mt-3 px-1">
+                  <p className="text-xs font-bold text-gray-800 line-clamp-1">
+                    {item.name}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

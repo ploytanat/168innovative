@@ -80,30 +80,25 @@ export interface WhyItemView {
    Hero (Home)
 ======================= */
 
-export interface HeroView {
+
+export interface HeroSlideView {
+  id: number
   title: string
+  subtitle: string
   description: string
   image: ImageView
   ctaPrimary: {
-    label: string
     href: string
-  }
-  ctaSecondary: {
     label: string
-    href: string
   }
 }
-
 /* =======================
    Home
 ======================= */
 
 export interface HomeView {
-  hero: HeroView
-  categories: CategoryView[]
-  products: ProductView[]
+  hero: HomeHeroView
   why: WhyItemView[]
-  company: CompanyView
   seo: {
     title: string
     description: string
@@ -111,6 +106,11 @@ export interface HomeView {
   }
 }
 
+
+
+export interface HomeHeroView {
+  slides: HeroSlideView[]
+}
 /* =======================
    About
 ======================= */

@@ -1,87 +1,89 @@
+// lib/mock/home.mock.ts
 import { HomeContent } from '../types/content'
 
 export const homeMock: HomeContent = {
   hero: {
-    title: {
-      th: '168 Innovative',
-      en: '168 Innovative'
-    },
-    description: {
-      th: 'ผู้นำด้านบรรจุภัณฑ์พลาสติกและแพ็กเกจจิ้ง สำหรับเครื่องสำอางและอุตสาหกรรม',
-      en: 'Leading plastic packaging solutions for cosmetics and industrial businesses'
-    },
-    image: {
-    //  src: '/images/contact/contact-hero.png',
-      src: '/images/home/banner4.png',
-      alt: {
-        th: 'บรรจุภัณฑ์เครื่องสำอางและพลาสติก',
-        en: 'Cosmetic and plastic packaging'
-      }
-    },
-    ctaPrimary: {
-      label: {
-        th: 'ดูสินค้า',
-        en: 'View Products'
+    slides: [
+      {
+        id: 1,
+        title: {
+          th: '168 Innovative',
+          en: '168 Innovative',
+        },
+        subtitle: {
+          th: 'ผู้เชี่ยวชาญด้านบรรจุภัณฑ์',
+          en: 'Experts in Packaging Solutions',
+        },
+        description: {
+          th: 'ผู้นำด้านบรรจุภัณฑ์พลาสติกและแพ็กเกจจิ้ง สำหรับเครื่องสำอางและอุตสาหกรรม',
+          en: 'Leading plastic packaging solutions for cosmetics and industry',
+        },
+        image: {
+          src: '/images/home/banner4.png',
+          alt: {
+            th: 'บรรจุภัณฑ์เครื่องสำอาง',
+            en: 'Cosmetic packaging',
+          },
+        },
+        ctaPrimary: {
+          href: '/categories',
+          label: {
+            th: 'ดูสินค้า',
+            en: 'View Products',
+          },
+        },
       },
-      href: '/products'
-    },
-    ctaSecondary: {
-      label: {
-        th: 'ติดต่อเรา',
-        en: 'Contact Us'
+      {
+        id: 2,
+        title: {
+          th: 'Premium OEM Service',
+          en: 'Premium OEM Service',
+        },
+        subtitle: {
+          th: 'บริการครบวงจร',
+          en: 'One-Stop Solutions',
+        },
+        description: {
+          th: 'บริการรับผลิตและออกแบบบรรจุภัณฑ์ครบวงจร',
+          en: 'Complete OEM packaging and manufacturing services',
+        },
+        image: {
+          src: '/images/home/banner2.jpeg',
+          alt: {
+            th: 'บริการ OEM',
+            en: 'OEM Service',
+          },
+        },
+        ctaPrimary: {
+          href: '/contact',
+          label: {
+            th: 'ติดต่อเรา',
+            en: 'Contact Us',
+          },
+        },
       },
-      href: '/contact'
-    }
+    ],
   },
 
   why: [
     {
-      title: {
-        th: 'ประสบการณ์ด้านบรรจุภัณฑ์',
-        en: 'Packaging Expertise'
-      },
+      title: { th: 'ประสบการณ์กว่า 10 ปี', en: '10+ Years Experience' },
       description: {
-        th: 'มีประสบการณ์ด้านบรรจุภัณฑ์และแพ็กเกจจิ้งมากกว่า 10 ปี',
-        en: 'Over 10 years of experience in packaging and plastic solutions'
-      }
+        th: 'มีประสบการณ์ด้านบรรจุภัณฑ์ยาวนาน',
+        en: 'Long-standing experience in packaging solutions',
+      },
     },
-    {
-      title: {
-        th: 'สินค้าคุณภาพ',
-        en: 'High Quality Products'
-      },
-      description: {
-        th: 'คัดสรรวัสดุและกระบวนการผลิตที่ได้มาตรฐาน',
-        en: 'Carefully selected materials and standardized manufacturing processes'
-      }
-    },
-    {
-      title: {
-        th: 'รองรับธุรกิจหลากหลาย',
-        en: 'Multi-Industry Support'
-      },
-      description: {
-        th: 'รองรับกลุ่มเครื่องสำอาง อาหาร และอุตสาหกรรมทั่วไป',
-        en: 'Supporting cosmetics, food, and general industrial businesses'
-      }
-    }
   ],
 
   seo: {
     title: {
-      th: '168 Innovative | บรรจุภัณฑ์พลาสติกและแพ็กเกจจิ้ง',
-      en: '168 Innovative | Plastic Packaging Solutions'
+      th: '168 Innovative | บรรจุภัณฑ์พลาสติก',
+      en: '168 Innovative | Plastic Packaging',
     },
     description: {
-      th: '168 Innovative ผู้เชี่ยวชาญด้านบรรจุภัณฑ์พลาสติก เครื่องสำอาง และอุตสาหกรรม',
-      en: '168 Innovative is a specialist in plastic packaging for cosmetics and industrial use'
+      th: 'ผู้เชี่ยวชาญด้านบรรจุภัณฑ์พลาสติก',
+      en: 'Experts in plastic packaging solutions',
     },
-    keywords: [
-      'บรรจุภัณฑ์พลาสติก',
-      'ขวดเครื่องสำอาง',
-      'แพ็กเกจจิ้ง',
-      'plastic packaging',
-      'cosmetic packaging'
-    ]
-  }
+    keywords: ['packaging', 'plastic', 'cosmetic'],
+  },
 }
