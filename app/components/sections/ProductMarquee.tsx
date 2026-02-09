@@ -26,14 +26,14 @@ export default function ProductMarquee({
   const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <section className="overflow-hidden border-y border-gray-100 shadow-md py-6">
+    <section className="overflow-hidden border-y bg-[#02020218] border-gray-100 shadow-md py-6">
       <h2 className="mb-4 text-center text-2xl font-bold">
         {uiText.featuredProducts[locale]}
       </h2>
 
       <div className="group relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent md:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent md:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-linear-to-r from-white to-transparent md:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-linear-to-l from-white to-transparent md:w-32" />
 
         <motion.div
           ref={marqueeRef}
@@ -55,15 +55,16 @@ export default function ProductMarquee({
               )}
               className={isDragging ? 'pointer-events-none' : ''}
             >
-              <div className="w-48 sm:w-52 rounded-lg border bg-[#ececec93] p-2 text-center shadow-md hover:scale-105">
+              <div className="w-48 sm:w-52 rounded-lg border border-white bg-[#feffff93] p-2 text-center shadow-md hover:scale-105">
                 <div className="relative aspect-square w-full overflow-hidden rounded-md bg-[#f8f8f8]">
                   <Image
-                    src={item.image.src}
-                    alt={item.image.alt || item.name}
-                    fill
-                    sizes="(max-width: 768px) 50vw, 200px"
-                    className="object-cover"
-                  />
+  src={item.image.src}
+  alt={item.image.alt || item.name}
+  fill
+  sizes="(max-width: 768px) 50vw, 200px"
+  className="object-cover select-none" // 1. เพิ่ม select-none เพื่อกันการคลุมดำ/เลือกรูป
+  draggable={false}                    // 2. เพิ่ม draggable={false} เพื่อปิด Native Drag ของเบราว์เซอร์
+/>
                 </div>
 
                 <p className="mt-3 text-xs font-bold text-gray-800 line-clamp-1">
