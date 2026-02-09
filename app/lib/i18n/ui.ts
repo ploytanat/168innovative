@@ -1,9 +1,10 @@
-// app/lib/i18n/ui.ts
 export const uiText = {
   featuredProducts: {
     th: 'สินค้าแนะนำ',
     en: 'Featured Products',
   },
+ 
+
 
   categories: {
     title: {
@@ -14,7 +15,18 @@ export const uiText = {
       th: 'ดูหมวดหมู่ทั้งหมด',
       en: 'View All Categories',
     },
+
+    // ✅ เพิ่มตรงนี้
+    exploreMore: {
+      th: 'ดูเพิ่มเติม',
+      en: 'Explore More',
+    },
+    noImage: {
+      th: 'ไม่มีรูปภาพ',
+      en: 'No Image',
+    },
   },
+
   contact: {
     title: {
       th: 'สร้างแบรนด์ของคุณ',
@@ -52,5 +64,4 @@ export const uiText = {
       en: 'Why Choose 168 Innovative',
     },
   },
-  
 } as const

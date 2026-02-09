@@ -56,14 +56,13 @@ export default async function ProductDetailPage({ params }: Props) {
   }
 
   return (
-    <main className="relative min-h-screen pb-24 pt-24 md:pt-32 bg-[#FDFDFD]">
+    <main className="relative  pb-24 pt-12  bg-[#eeeeee]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <BackgroundBlobs />
-      
-      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+
+      <div className="mx-auto container px-4 lg:px-8">
         <Breadcrumb />
 
         <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12">

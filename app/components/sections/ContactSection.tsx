@@ -2,26 +2,25 @@
 
 import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
-import { CompanyView } from '@/app/lib/types/view'
 import { Phone, Mail } from 'lucide-react'
+import { CompanyView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
+import BackgroundBlobs from '../ui/BackgroundBlobs'
 
 /* =======================
    Motion Variants
 ======================= */
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: 'easeOut' },
+    transition: { duration: 0.6, ease: 'easeOut' },
   },
 }
 
 const stagger: Variants = {
-  show: {
-    transition: { staggerChildren: 0.12 },
-  },
+  show: { transition: { staggerChildren: 0.12 } },
 }
 
 interface ContactSectionProps {
@@ -34,22 +33,36 @@ export default function ContactSection({
   locale,
 }: ContactSectionProps) {
   return (
-    <section className="py-16 md:py-24 bg-white/40 border border-white overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section
+      id="contact"
+      className="relative py-16 md:py-24 bg-white/40 border-y border-white"
+    >
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, amount: 0.3 }}
           variants={stagger}
-          className="relative rounded-[3rem] bg-[#F8F9FB] p-8 md:p-16 lg:p-20 shadow-xl shadow-slate-200/50 border border-white overflow-hidden"
+          className="
+            relative overflow-hidden rounded-[2.5rem]
+            bg-[#F8F9FB]
+            p-6 sm:p-10 md:p-16 lg:p-20
+            border border-white
+            shadow-2xl shadow-slate-200/50
+          "
         >
-          <div className="grid gap-16 lg:grid-cols-[1.2fr_1fr] items-center relative z-10">
-            
-            {/* LEFT */}
-            <div className="order-2 lg:order-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+          {/* Background */}
+          <div className="absolute inset-0 -z-10">
+            <BackgroundBlobs />
+          </div>
+
+          <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr] items-center">
+
+            {/* ================= LEFT ================= */}
+            <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
               <motion.h2
                 variants={fadeUp}
-                className="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1]"
+                className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight"
               >
                 {uiText.contact.title[locale]} <br />
                 <span className="text-blue-600">
@@ -59,38 +72,46 @@ export default function ContactSection({
 
               <motion.p
                 variants={fadeUp}
-                className="mt-6 text-gray-500 text-lg max-w-md"
+                className="mt-6 max-w-md text-slate-500 text-base md:text-lg"
               >
                 {uiText.contact.desc[locale]}
               </motion.p>
 
-              {/* CONTACT CARD */}
-              <motion.div variants={fadeUp} className="mt-12 w-full max-w-md">
-                <div className="overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 shadow-sm">
-                  
+              {/* Contact Card */}
+              <motion.div
+                variants={fadeUp}
+                className="mt-10 w-full max-w-md"
+              >
+                <div className="overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-xl">
+
                   {/* Phone */}
                   <div className="p-6 md:p-8 border-b border-slate-50">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 text-left">
+                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                       {uiText.contact.phoneLabel[locale]}
                     </p>
 
-                    <div className="space-y-6">
+                    <div className="space-y-5">
                       {data.phones.map((p) => (
                         <a
                           key={p.number}
                           href={`tel:${p.number.replace(/-/g, '')}`}
-                          className="group flex items-center gap-4 text-left"
+                          className="group flex items-center gap-4"
                         >
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all">
-                            <Phone size={20} />
+                          <div className="
+                            flex h-12 w-12 items-center justify-center
+                            rounded-2xl bg-blue-50 text-blue-600
+                            group-hover:bg-blue-600 group-hover:text-white
+                            transition-colors
+                          ">
+                            <Phone size={20} aria-hidden />
                           </div>
-                          <div>
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                          <div className="text-left">
+                            <span className="block text-[10px] font-bold uppercase text-slate-400">
                               {p.label}
                             </span>
-                            <div className="text-xl font-bold text-slate-900 group-hover:text-blue-600">
+                            <span className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-blue-600">
                               {p.number}
-                            </div>
+                            </span>
                           </div>
                         </a>
                       ))}
@@ -98,8 +119,8 @@ export default function ContactSection({
                   </div>
 
                   {/* Email */}
-                  <div className="p-6 md:p-8 bg-slate-50/30">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-6 text-left">
+                  <div className="p-6 md:p-8 bg-slate-50/40">
+                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
                       {uiText.contact.emailLabel[locale]}
                     </p>
 
@@ -110,10 +131,16 @@ export default function ContactSection({
                           href={`mailto:${e}`}
                           className="group flex items-center gap-4"
                         >
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white border text-slate-400 group-hover:bg-slate-900 group-hover:text-white">
-                            <Mail size={18} />
+                          <div className="
+                            flex h-11 w-11 items-center justify-center
+                            rounded-xl bg-white border border-slate-200
+                            text-slate-400
+                            group-hover:bg-slate-900 group-hover:text-white
+                            transition-colors
+                          ">
+                            <Mail size={18} aria-hidden />
                           </div>
-                          <span className="font-semibold text-slate-600 break-all">
+                          <span className="text-sm md:text-base font-bold text-slate-700 break-all">
                             {e}
                           </span>
                         </a>
@@ -124,8 +151,15 @@ export default function ContactSection({
 
                 {/* LINE */}
                 {data.lineQrCode && (
-                  <div className="mt-6 flex items-center gap-5 p-4 rounded-[2rem] bg-emerald-50/50 border border-emerald-100/50">
-                    <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-white">
+                  <motion.div
+                    variants={fadeUp}
+                    className="
+                      mt-6 flex items-center gap-5
+                      p-4 rounded-2xl
+                      bg-emerald-50/40 border border-emerald-100/50
+                    "
+                  >
+                    <div className="relative h-16 w-16 rounded-xl bg-white overflow-hidden">
                       <Image
                         src={data.lineQrCode.src}
                         alt={data.lineQrCode.alt}
@@ -133,7 +167,7 @@ export default function ContactSection({
                         className="object-contain p-1"
                       />
                     </div>
-                    <div>
+                    <div className="text-left">
                       <p className="text-sm font-bold text-emerald-900">
                         {uiText.contact.lineLabel[locale]}
                       </p>
@@ -141,13 +175,58 @@ export default function ContactSection({
                         {uiText.contact.lineDesc[locale]}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </motion.div>
             </div>
 
-            {/* RIGHT IMAGE */}
-         <motion.div initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="order-1 lg:order-2 relative" > <motion.div animate={{ y: [0, -20, 0] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="relative h-80 md:h-[500px] w-full" > {data.contactImage && ( <Image src={data.contactImage.src} alt={data.contactImage.alt} fill priority className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)]" /> )} </motion.div> {/* Decorative Blur */} <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[120%] h-[120%] bg-blue-100/40 rounded-full blur-3xl" /> </motion.div> </div> </motion.div>
+            {/* ================= RIGHT / GALLERY ================= */}
+            <motion.div
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="grid grid-cols-2 gap-6 md:gap-8">
+                {data.contactGallery?.slice(0, 4).map((img, i) => {
+                  const zigzag = i % 2 === 1
+                  return (
+                    <motion.div
+                      key={img.src}
+                      animate={{ y: [0, -8, 0] }}
+                      transition={{
+                        duration: 6 + i * 0.4,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                      className={`
+                        relative overflow-hidden rounded-3xl shadow-xl bg-white
+                        transform-gpu
+                        ${zigzag ? 'translate-y-10 md:translate-y-14' : ''}
+                      `}
+                    >
+                      <div className="relative h-[220px] sm:h-[260px] lg:h-[300px] w-full">
+                        <Image
+                          src={img.src}
+                          alt={img.alt || 'Product'}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 400px"
+                          className="
+                            object-cover object-center
+                            transition-transform duration-700 ease-out
+                            hover:scale-[1.05]
+                          "
+                        />
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </motion.div>
+
+          </div>
+        </motion.div>
       </div>
     </section>
   )

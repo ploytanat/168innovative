@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <>
-      <HeroCarousel hero={home.hero} />
+      <HeroCarousel hero={home.hero} locale={locale} />
       <ProductMarquee
         items={products}
         categorySlug="spout"

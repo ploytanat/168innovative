@@ -6,14 +6,18 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { HomeHeroView } from '@/app/lib/types/view'
-
+import BackgroundBlobs from '../ui/BackgroundBlobs'
+import { uiText } from '@/app/lib/i18n/ui'
 interface HeroCarouselProps {
   hero: HomeHeroView
+  locale?: 'th'
 }
+
+
 
 const SWIPE_THRESHOLD = 50
 
-export default function HeroCarousel({ hero }: HeroCarouselProps) {
+export default function HeroCarousel({ hero, locale }: HeroCarouselProps) {
   const slides = hero.slides
   const hasMultipleSlides = slides.length > 1
 
@@ -70,16 +74,18 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
   return (
     <section
       aria-roledescription="carousel"
-      className="relative w-full px-4 py-8 md:py-16 lg:py-20 flex justify-center"
+      className="relative container mx-auto px-4 py-8 md:py-16 lg:py-20 flex justify-center"
     >
+        <BackgroundBlobs />
       <div
         className="relative w-full max-w-7xl min-h-[580px] sm:min-h-[620px]
         overflow-hidden rounded-[2.5rem] md:rounded-[4rem]
-        bg-white/40 border border-white/60 backdrop-blur-xl
-        shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)]"
+        bg-white/60 border border-white backdrop-blur-xl
+        shadow-2xl"
         onMouseEnter={() => setIsAutoPlay(false)}
         onMouseLeave={() => setIsAutoPlay(true)}
       >
+      
         <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 items-center p-8 sm:p-12 lg:p-20">
 
           {/* ================= IMAGE (Animated only this part) ================= */}
@@ -148,14 +154,16 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
               </Link>
 
               <Link
-                href="/contact"
-                className="flex-1 sm:flex-none border border-slate-200
-                bg-white/50 backdrop-blur px-6 sm:px-10 py-3.5 sm:py-4
-                rounded-2xl font-bold hover:bg-white transition
-                active:scale-95 text-center whitespace-nowrap"
-              >
-                ติดต่อเรา →
-              </Link>
+            href={active.ctaSecondary.href}
+            className="flex-1 sm:flex-none border border-slate-200
+            bg-white/50 backdrop-blur px-6 sm:px-10 py-3.5 sm:py-4
+            rounded-2xl font-bold hover:bg-white transition
+            active:scale-95 text-center whitespace-nowrap"
+          >
+             {active.ctaSecondary.label}
+              
+          </Link>
+
             </div>
           </div>
         </div>

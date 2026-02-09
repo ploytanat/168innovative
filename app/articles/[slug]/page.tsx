@@ -41,8 +41,8 @@ export default async function ArticleDetailPage({ params }: Props) {
   if (!article) notFound()
 
   return (
-    <main className="min-h-screen bg-white pb-24 pt-24 md:pt-32 scroll-smooth">
-      <div className="mx-auto max-w-5xl px-6">
+    <main className="min-h-screen bg-white pb-24 pt-12 scroll-smooth">
+      <div className="mx-auto container px-4 lg:px-8">
         <Breadcrumb />
 
         {/* Action Bar */}

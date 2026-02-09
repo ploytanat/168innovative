@@ -32,6 +32,13 @@ export const homeMock: HomeContent = {
             en: 'View Products',
           },
         },
+         ctaSecondary: {
+          href:'/contact',
+          label: {
+            th: 'ติดต่อเรา →',
+            en: 'Contact Us →',
+          },
+        },
       },
       {
         id: 2,
@@ -59,6 +66,13 @@ export const homeMock: HomeContent = {
           label: {
             th: 'ติดต่อเรา',
             en: 'Contact Us',
+          },
+        },
+          ctaSecondary: {
+          href:'/contact',
+          label: {
+            th: 'ติดต่อเรา →',
+            en: 'Contact Us →',
           },
         },
       },

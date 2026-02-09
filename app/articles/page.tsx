@@ -11,8 +11,8 @@ export default async function ArticlesENPage() {
   const [featured, ...others] = articles
 
   return (
-    <main className="min-h-screen bg-[#FBFBFB] pb-24 pt-24 md:pt-32">
-      <div className="mx-auto max-w-6xl px-6">
+    <main className=" bg-[#FBFBFB] pb-24 py-12 ">
+      <div className="mx-auto container px-4 lg:px-8">
         <Breadcrumb />
 
         <header className="mb-16 mt-8">

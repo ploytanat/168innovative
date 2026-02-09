@@ -21,23 +21,56 @@ export default function ProductMarquee({
 }: ProductMarqueeProps) {
   if (!items.length) return null
 
-  const doubleItems = [...items, ...items, ...items]
+  const doubleItems = [...items, ...items]
   const marqueeRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <section className="overflow-hidden border-y bg-[#02020218] border-gray-100 shadow-md py-6">
-      <h2 className="mb-4 text-center text-2xl font-bold">
+    <section className="border-y border-white  bg-[#02020218] py-6">
+      <h2 className="mb-4 text-center text-xl  sm:text-2xl font-bold">
         {uiText.featuredProducts[locale]}
       </h2>
 
-      <div className="group relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-linear-to-r from-white to-transparent md:w-32" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-linear-to-l from-white to-transparent md:w-32" />
+      {/* ================= MOBILE: Native Scroll ================= */}
+      <div className="md:hidden overflow-x-auto px-4">
+        <div className="flex gap-4 snap-x snap-mandatory">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={withLocalePath(
+                `/categories/${categorySlug}/${item.slug}`,
+                locale
+              )}
+              className="snap-start shrink-0"
+            >
+              <div className="w-40 rounded-xl bg-white p-2 shadow-md">
+                <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt || item.name}
+                    fill
+                    sizes="160px"
+                    className="object-cover"
+                    draggable={false}
+                  />
+                </div>
+                <p className="mt-2 text-xs font-bold line-clamp-1 text-center">
+                  {item.name}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ================= DESKTOP: Marquee ================= */}
+      <div className="relative hidden md:block overflow-hidden group">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-32 bg-linear-to-r from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-32 bg-linear-to-l from-white to-transparent" />
 
         <motion.div
           ref={marqueeRef}
-          className="flex gap-6 px-4 py-4 cursor-grab active:cursor-grabbing"
+          className="flex gap-6 px-6 py-4 cursor-grab active:cursor-grabbing"
           drag="x"
           dragConstraints={{ left: -2000, right: 0 }}
           dragElastic={0.1}
@@ -55,19 +88,18 @@ export default function ProductMarquee({
               )}
               className={isDragging ? 'pointer-events-none' : ''}
             >
-              <div className="w-48 sm:w-52 rounded-lg border border-white bg-[#feffff93] p-2 text-center shadow-md hover:scale-105">
-                <div className="relative aspect-square w-full overflow-hidden rounded-md bg-[#f8f8f8]">
+              <div className="w-48 rounded-xl bg-white p-2 shadow-md hover:scale-105 transition">
+                <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
                   <Image
-  src={item.image.src}
-  alt={item.image.alt || item.name}
-  fill
-  sizes="(max-width: 768px) 50vw, 200px"
-  className="object-cover select-none" // 1. เพิ่ม select-none เพื่อกันการคลุมดำ/เลือกรูป
-  draggable={false}                    // 2. เพิ่ม draggable={false} เพื่อปิด Native Drag ของเบราว์เซอร์
-/>
+                    src={item.image.src}
+                    alt={item.image.alt || item.name}
+                    fill
+                    sizes="200px"
+                    className="object-cover select-none"
+                    draggable={false}
+                  />
                 </div>
-
-                <p className="mt-3 text-xs font-bold text-gray-800 line-clamp-1">
+                <p className="mt-3 text-xs font-bold text-center line-clamp-1">
                   {item.name}
                 </p>
               </div>

@@ -20,9 +20,9 @@ export default async function AllCategoriesPage() {
 
   if (!categories || categories.length === 0) {
     return (
-      <main className="relative min-h-screen bg-gray-50 pt-32">
+      <main className="relative bg-gray-50 ">
         <BackgroundBlobs />
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto  text-center">
           <Breadcrumb />
           <h1 className="mt-24 text-3xl font-bold text-gray-900">
             ไม่พบหมวดหมู่สินค้า
@@ -36,17 +36,15 @@ export default async function AllCategoriesPage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#F8F9FA] pt-28 pb-32">
+    <main className="bg-[#F8F9FA] pt-12 pb-32">
       <BackgroundBlobs />
 
-      <div className="container relative mx-auto px-4 lg:px-8">
-        <Breadcrumb />
+           <div className="mx-auto container relative px-4 lg:px-8">
+             <Breadcrumb />
 
         {/* ================= Hero ================= */}
         <header className="mx-auto mt-12 max-w-4xl text-center">
-          <span className="inline-block rounded-full bg-blue-100 px-4 py-1 text-sm font-semibold text-blue-600">
-            Cosmetic Packaging Solutions
-          </span>
+          
 
           <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
             หมวดหมู่บรรจุภัณฑ์เครื่องสำอาง
@@ -64,49 +62,74 @@ export default async function AllCategoriesPage() {
           className="mt-20 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
         >
           {categories.map((category, index) => (
-            <Link
-              key={category.id}
-              href={`/categories/${category.slug}`}
-              className="group relative overflow-hidden rounded-3xl bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
-            >
-              {/* Image */}
-              <div className="relative aspect-square bg-gray-100">
-                {category.image?.src ? (
-                  <Image
-                    src={category.image.src}
-                    alt={category.image.alt || `บรรจุภัณฑ์${category.name}`}
-                    fill
-                    priority={index < 4}
-                    sizes="(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-gray-300">
-                    No Image
-                  </div>
-                )}
-              </div>
+           <Link
+           key={category.id}
+  href={`/categories/${category.slug}`}
+  className="
+    group relative overflow-hidden rounded-3xl bg-white
+    shadow-sm transition-all duration-500
+    hover:-translate-y-2 hover:shadow-2xl
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60
+  "
+>
+  {/* IMAGE */}
+  <div className="relative aspect-square overflow-hidden bg-gray-100">
+    {category.image?.src ? (
+      <Image
+        src={category.image.src}
+        alt={category.image.alt || `บรรจุภัณฑ์${category.name}`}
+        fill
+        priority={index < 4}
+        sizes="(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw"
+        className="
+          object-cover transition-transform duration-700
+          group-hover:scale-110
+        "
+      />
+    ) : (
+      <div className="
+        flex h-full w-full items-center justify-center
+        bg-gradient-to-br from-gray-100 to-gray-200
+      ">
+        <span className="text-xs font-semibold text-gray-400">
+          Image coming soon
+        </span>
+      </div>
+    )}
+  </div>
 
-              {/* Content */}
-              <div className="flex flex-col items-center p-6 text-center">
-                <h2 className="text-lg font-bold text-gray-900 transition-colors group-hover:text-blue-600">
-                  {category.name}
-                </h2>
+  {/* CONTENT */}
+  <div className="flex flex-col items-center p-6 text-center">
+    <h2 className="
+      text-lg font-bold text-gray-900
+      transition-colors
+      group-hover:text-blue-600
+    ">
+      {category.name}
+    </h2>
 
-                {category.description && (
-                  <p className="mt-2 line-clamp-2 text-sm text-gray-500">
-                    {category.description}
-                  </p>
-                )}
+    {category.description && (
+      <p className="mt-2 line-clamp-2 text-sm text-gray-500">
+        {category.description}
+      </p>
+    )}
 
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-blue-600">
-                  ดูบรรจุภัณฑ์ทั้งหมด
-                  <span className="transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </span>
-              </div>
-            </Link>
+    {/* CTA */}
+    <span
+      className="
+        relative mt-5 inline-flex items-center gap-1
+        text-sm font-bold text-blue-600
+        transition-colors
+        group-hover:text-blue-700
+      "
+    >
+      ดูบรรจุภัณฑ์ทั้งหมด
+      <span className="transition-transform group-hover:translate-x-1">
+        →
+      </span>
+    </span>
+  </div>
+</Link>
           ))}
         </section>
 

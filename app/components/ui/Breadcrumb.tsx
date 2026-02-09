@@ -23,10 +23,10 @@ export default function Breadcrumb() {
 
   return (
     <nav className="mb-3 " aria-label="Breadcrumb ">
-      <ol className="flex items-center text-sm text-gray-500">
+      <ol className="flex items-center text-sm text-gray-500 ">
 
         {/* Home */}
-        <li className="flex items-center">
+        <li className="flex items-center  ">
           <Link
             href={isEn ? '/en' : '/'}
             className="transition-colors hover:text-gray-900"

@@ -19,6 +19,10 @@ export function getHome(locale: Locale): HomeView {
           href: slide.ctaPrimary.href,
           label: slide.ctaPrimary.label[locale],
         },
+        ctaSecondary: {
+          href: slide.ctaSecondary.href,
+          label : slide.ctaSecondary.label[locale],
+        },
       })),
     },
     

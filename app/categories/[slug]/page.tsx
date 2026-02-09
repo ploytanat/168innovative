@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import { getArticles } from '@/app/lib/api/articles'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import type { Metadata } from 'next'
+import BackgroundBlobs from '@/app/components/ui/BackgroundBlobs'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -55,12 +56,12 @@ export default async function CategoryProductsPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen bg-[#FDFDFD] pb-24 pt-24 md:pt-32">
+    <main className=" bg-[#ffffff] pb-24 pt-12 ">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
+      <BackgroundBlobs />
       <div className="container mx-auto px-4 lg:px-8">
         <Breadcrumb />
 
@@ -79,18 +80,18 @@ export default async function CategoryProductsPage({ params }: Props) {
         {/* Product Grid */}
         <section 
           aria-label={`รายการสินค้าในหมวด ${category.name}`}
-          className="relative rounded-[2.5rem] bg-white p-6 shadow-xl shadow-gray-100/50 border border-gray-50 md:p-12"
+          className="relative rounded-xl bg-[#8d8a8a1d]  p-6 shadow-xl shadow-gray-100/50 border border-gray-50 md:p-12"
         >
           {products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 lg:gap-10">
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 lg:gap-10 ">
               {products.map((product) => (
                 <article key={product.id}>
                   <Link
                     href={`/categories/${category.slug}/${product.slug}`}
-                    className="group flex flex-col"
+                    className="group flex flex-col    shadow-xl"
                     title={product.name}
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-3xl bg-gray-50 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-100">
+                    <div className="relative aspect-square overflow-hidden   bg-gray-50 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-blue-100 ">
                       <Image
                         src={product.image.src}
                         alt={product.image.alt || product.name}
@@ -100,15 +101,12 @@ export default async function CategoryProductsPage({ params }: Props) {
                       />
                     </div>
 
-                    <div className="mt-5 px-1">
+                    <div className="mt-3 px-1 text-center">
                       {/* ใช้ h2 สำหรับชื่อสินค้าในหน้าหมวดหมู่เพื่อ SEO */}
-                      <h2 className="text-base font-bold text-gray-800 transition-colors group-hover:text-blue-600 md:text-lg">
+                      <h2 className="text-base font-normal md:text-md">
                         {product.name}
                       </h2>
-                      <p className="mt-2 flex items-center text-xs font-semibold uppercase tracking-wider text-gray-400 group-hover:text-blue-500 transition-colors">
-                        รายละเอียดสินค้า 
-                        <span className="ml-1 transition-transform group-hover:translate-x-1">→</span>
-                      </p>
+               
                     </div>
                   </Link>
                 </article>
@@ -147,7 +145,7 @@ export default async function CategoryProductsPage({ params }: Props) {
                     {/* Placeholder หรือ Image จริงของบทความ */}
                     <div className="flex h-full w-full items-center justify-center bg-gray-50 text-gray-400">
                        <Image 
-                         src="/api/placeholder/400/250" 
+                         src="/articles/จุกซอง.jpg" 
                          alt={article.title} 
                          width={400} 
                          height={250} 

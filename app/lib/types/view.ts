@@ -42,6 +42,7 @@ export interface CompanyView {
   socials: SocialView[]
   lineQrCode?: ImageView
   contactImage?: ImageView
+  contactGallery?: ImageView[]
 }
 
 // ==  Product ==
@@ -81,6 +82,11 @@ export interface HeroSlideView {
     href: string
     label: string
   }
+  ctaSecondary: {
+    href: string
+    label: string
+  }
+
 }
 /* =======================
    Home

@@ -70,5 +70,35 @@ export const companyMock: CompanyInfo = {
   contactImage: {
     src: '/images/contact/contact-hero.png', // รูปสินค้ากลุ่มใหญ่ในภาพของคุณ
     alt: { th: 'บรรจุภัณฑ์ 168 Innovative', en: '168 Innovative Packaging' }
-  }
+  },
+  contactGallery: [
+    {
+      src: '/products/จุก.png',
+      alt: {
+        th: 'ขวดพลาสติก',
+        en: 'Plastic Bottle',
+      },
+    },
+    {
+      src: '/products/ขวดลิปสติก1.png',
+      alt: {
+        th: 'กระปุกเครื่องสำอาง',
+        en: 'Cosmetic Jar',
+      },
+    },
+    {
+      src: '/products/ฝาขวดปั๊ม.png',
+      alt: {
+        th: 'ขวดปั๊ม',
+        en: 'Pump Bottle',
+      },
+    },
+     {
+      src: '/products/มาสคารา1.png',
+      alt: {
+        th: 'ขวดปั๊ม2',
+        en: 'Pump Bottl2e',
+      },
+    },
+  ],
 }

@@ -58,6 +58,7 @@ export interface HomeContent {
       description: LocalizedText;
       image: ImageAsset;
       ctaPrimary: CTA;
+      ctaSecondary: CTA;
     }[];
   };
 }
@@ -94,6 +95,7 @@ export interface CompanyInfo {
   socials: SocialLink[];
   lineQrCode: ImageAsset;
   contactImage: ImageAsset;
+  contactGallery?: ImageAsset[];
 }
 
 //== about us ==

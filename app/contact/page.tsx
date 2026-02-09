@@ -10,10 +10,10 @@ export default async function ContactPage() {
   const company = await getCompany(locale);
 
   return (
-    <main className="min-h-screen pt-24 bg-[#ebebeb5c] relative overflow-hidden font-sans">
+    <main className=" pt-12 bg-[#ebebeb5c]  font-sans">
       <BackgroundBlobs />
 
-      <div className="mx-auto container px-4 sm:px-6 relative z-10 pb-16">
+      <div className="mx-auto container relative px-4 lg:px-8">
         <Breadcrumb />
         
         {/* ===== HEADER ===== */}
@@ -23,77 +23,92 @@ export default async function ContactPage() {
           </h1>
         </header>
 
-        {/* ===== MAIN CONTACT CARD ===== */}
-        <section className="relative mx-auto max-w-5xl rounded-[2.5rem] border border-white/40 bg-white/40 backdrop-blur-xl shadow-2xl overflow-hidden">
-          {/* Decorative inner blobs */}
-          <div className="pointer-events-none absolute -top-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl" />
+      
+  {/* ===== MAIN CONTACT CARD ===== */}
+<section className="relative rounded-[2.5rem] border border-white/40 bg-white/40 backdrop-blur-xl shadow-2xl overflow-hidden">
+  {/* Decorative inner blobs */}
+  <div className="pointer-events-none absolute -top-10 -left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl" />
+  <div className="pointer-events-none absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl" />
 
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-200/50">
-            
-            {/* LEFT SIDE: DIRECT CONTACT */}
-            <div className="p-8 md:p-14 space-y-12">
-              {/* Phone Section */}
-              <ContactSection icon={<Phone />} title="Phone">
-                {company.phones.map((p, i) => (
-                  <div key={i} className="mb-4 last:mb-0">
-                    <p className="text-2xl font-bold text-gray-800">{p.number}</p>
-                    <p className="text-sm font-medium text-gray-500">คุณ{p.label}</p>
-                  </div>
-                ))}
-              </ContactSection>
-
-              {/* Email Section */}
-              <ContactSection icon={<Mail />} title="Email">
-                {company.email.map((mail, i) => (
-                  <p key={i} className="text-lg font-semibold text-gray-800 break-all">
-                    {mail}
-                  </p>
-                ))}
-              </ContactSection>
+  <div
+    className="
+      relative z-10
+      grid grid-cols-1
+      lg:grid-cols-[3fr_2fr]
+      divide-y lg:divide-y-0 lg:divide-x
+      divide-gray-200/50
+    "
+  >
+    {/* ===== LEFT SIDE: DIRECT CONTACT ===== */}
+    <div className="p-8 md:p-14    justify-center">
+      <div className="w-full max-w-md space-y-12">
+        <ContactSection icon={<Phone />} title="Phone">
+          {company.phones.map((p, i) => (
+            <div key={i} className="mb-4 last:mb-0">
+              <p className="text-2xl font-bold text-gray-800">{p.number}</p>
+              <p className="text-sm font-medium text-gray-500">
+                คุณ{p.label}
+              </p>
             </div>
+          ))}
+        </ContactSection>
 
-            {/* RIGHT SIDE: CONNECT & QR */}
-            <div className="p-8 md:p-14 bg-white/20 flex flex-col items-center justify-center text-center">
-              {company.lineQrCode && (
-                <div className="mb-8">
-                  <div className="bg-white p-3 rounded-3xl shadow-xl inline-block">
-                    <div className="relative h-40 w-40">
-                      <Image
-                        src={company.lineQrCode.src}
-                        alt={company.lineQrCode.alt}
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
-                  </div>
-                  <p className="mt-4 font-bold text-gray-600 tracking-widest uppercase text-sm">Scan to Add Line</p>
-                </div>
-              )}
+        <ContactSection icon={<Mail />} title="Email">
+          {company.email.map((mail, i) => (
+            <p
+              key={i}
+              className="text-lg font-semibold text-gray-800 break-all"
+            >
+              {mail}
+            </p>
+          ))}
+        </ContactSection>
+      </div>
+    </div>
 
-              {/* Social Icons */}
-              <div className="flex gap-4">
-                {company.socials?.map((social) => (
-                  <a
-                    key={social.type}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:scale-110 active:scale-95 transition-transform"
-                  >
-                    <Image
-                      src={social.icon.src}
-                      alt={social.icon.alt}
-                      width={48}
-                      height={48}
-                      className="rounded-2xl shadow-md"
-                    />
-                  </a>
-                ))}
-              </div>
+    {/* ===== RIGHT SIDE: CONNECT & QR ===== */}
+    <div className="p-8 md:p-14 bg-white/20 flex flex-col items-center justify-center text-center">
+      {company.lineQrCode && (
+        <div className="mb-8">
+          <div className="bg-white p-3 rounded-3xl shadow-xl inline-block">
+            <div className="relative h-40 w-40">
+              <Image
+                src={company.lineQrCode.src}
+                alt={company.lineQrCode.alt}
+                fill
+                className="object-contain"
+              />
             </div>
           </div>
-        </section>
+          <p className="mt-4 font-bold text-gray-600 tracking-widest uppercase text-sm">
+            Scan to Add Line
+          </p>
+        </div>
+      )}
+
+      <div className="flex gap-4">
+        {company.socials?.map((social) => (
+          <a
+            key={social.type}
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:scale-110 active:scale-95 transition-transform"
+          >
+            <Image
+              src={social.icon.src}
+              alt={social.icon.alt}
+              width={48}
+              height={48}
+              className="rounded-2xl shadow-md"
+            />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
       </div>
 
       {/* ===== ADDRESS & MAP SECTION ===== */}
@@ -118,6 +133,7 @@ export default async function ContactPage() {
           />
         </div>
       </section>
+
     </main>
   );
 }
