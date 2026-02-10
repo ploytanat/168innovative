@@ -66,7 +66,7 @@ export default async function AllCategoriesPage() {
            key={category.id}
   href={`/categories/${category.slug}`}
   className="
-    group relative overflow-hidden rounded-3xl bg-white
+    group relative overflow-hidden rounded-xl bg-white
     shadow-sm transition-all duration-500
     hover:-translate-y-2 hover:shadow-2xl
     focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60

@@ -1,45 +1,49 @@
 import { productsMock } from '../mock/products.mock'
-import { Locale } from '../types/content';
+import { Locale } from '../types/content'
 import { ProductView } from '../types/view'
 
-
-export function getProducts(locale: Locale): ProductView[] {
-  return productsMock.map(p => ({
-    id: p.id,
-    slug: p.slug,
-    name: p.name[locale],
-    description: p.description[locale],
-    categoryId: p.categoryId,
+/* ================= Utils ================= */
+function mapProductToView(
+  product: typeof productsMock[number],
+  locale: Locale
+): ProductView {
+  return {
+    id: product.id,
+    slug: product.slug,
+    name: product.name[locale] ?? product.name.th,
+    description: product.description?.[locale] ?? '',
+    categoryId: product.categoryId,
     image: {
-      src: p.image.src,
-      alt: p.image.alt[locale],
+      src: product.image.src,
+      alt: product.image.alt?.[locale] ?? product.name.th,
     },
-    price: p.price,
-  }))
+    price: product.price,
+  }
 }
 
+/* ================= All Products ================= */
+export function getProducts(locale: Locale): ProductView[] {
+  return productsMock.map(p => mapProductToView(p, locale))
+}
 
+/* ================= Products by Category ================= */
+/**
+ * @param categoryId ใช้ id เท่านั้น (ไม่ใช่ slug)
+ */
 export function getProductsByCategory(
   categoryId: string,
   locale: Locale
 ): ProductView[] {
   return productsMock
     .filter(p => p.categoryId === categoryId)
-    .map(p => ({
-      id: p.id,
-      slug: p.slug,
-      name: p.name[locale],              // ✅ ตรงนี้สำคัญ
-      description: p.description[locale],
-      categoryId: p.categoryId,
-      image: {
-        src: p.image.src,
-        alt: p.image.alt[locale],        // ✅ ตรงนี้ด้วย
-      },
-      price: p.price,
-    }))
+    .map(p => mapProductToView(p, locale))
 }
 
-
+/* ================= Single Product ================= */
+/**
+ * @param categoryId category.id
+ * @param productSlug product.slug
+ */
 export function getProductBySlug(
   categoryId: string,
   productSlug: string,
@@ -51,19 +55,9 @@ export function getProductBySlug(
 
   if (!product) return undefined
 
-  return {
-    id: product.id,
-    slug: product.slug,
-    name: product.name[locale],
-    description: product.description[locale],
-    categoryId: product.categoryId,
-    image: {
-      src: product.image.src,
-      alt: product.image.alt[locale],
-    },
-    price: product.price,
-  }
+  return mapProductToView(product, locale)
 }
+
 
 export function getRelatedProducts(
   categoryId: string,

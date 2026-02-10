@@ -45,8 +45,9 @@ export function getCategoryBySlug(
 }
 
 
-// ใช้เฉพาะ filter
-export function getCategoryFilters(locale: Locale) {
+export function getCategoryFilters(
+  locale: Locale
+): Pick<CategoryView, 'id' | 'slug' | 'name'>[] {
   return categoriesMock.map(cat => ({
     id: cat.id,
     slug: cat.slug,

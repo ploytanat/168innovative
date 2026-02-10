@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return { title: 'ไม่พบสินค้า' }
 
   return {
-    title: `${product.name} | ขายส่งบรรจุภัณฑ์เครื่องสำอางพรีเมียม`,
+    title: `${product.slug} | ขายส่งบรรจุภัณฑ์เครื่องสำอางพรีเมียม`,
     description: product.description.slice(0, 160),
     openGraph: {
       images: [product.image.src],

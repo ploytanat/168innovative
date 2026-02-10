@@ -83,6 +83,7 @@ export interface Product {
   categoryId: string;
   image: ImageAsset;
   price?: string;
+ // createdAt?: string
 }
 
 //=== company ===

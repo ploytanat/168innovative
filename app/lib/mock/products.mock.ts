@@ -13,6 +13,7 @@ export const productsMock: Product[] = [
       th: 'จุกพลาสติกคุณภาพสูง สำหรับถุงบรรจุของเหลว',
       en: 'High-quality plastic spout for liquid packaging bags.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -34,6 +35,7 @@ export const productsMock: Product[] = [
       th: 'จุก Spout ขนาด 20 มม. เหมาะสำหรับซอสและเครื่องดื่ม',
       en: '20mm spout suitable for sauces and beverages.',
     },
+    
     image: {
       src: '/products/จุกซองครีม.png',
       alt: {
@@ -54,6 +56,7 @@ export const productsMock: Product[] = [
       th: 'จุก Spout ขนาดใหญ่ เหมาะกับผลิตภัณฑ์เข้มข้น',
       en: 'Large spout suitable for thick liquid products.',
     },
+    
     image: {
       src: '/products/Product20250820145317.png',
       alt: {
@@ -75,6 +78,7 @@ export const productsMock: Product[] = [
       th: 'จุกเกลียวเปิด–ปิดง่าย สำหรับซองบรรจุภัณฑ์',
       en: 'Easy open-close screw spout for packaging pouches.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -96,6 +100,7 @@ export const productsMock: Product[] = [
       th: 'จุกเกลียวขนาด 20 มม. สำหรับเครื่องดื่ม',
       en: '20mm screw spout for beverage packaging.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -117,6 +122,7 @@ export const productsMock: Product[] = [
       th: 'จุกฝาแบน ดีไซน์เรียบ เหมาะกับสินค้า OEM',
       en: 'Flat cap spout with clean design for OEM products.',
     },
+    
     image: {
       src: '/products/Product20250820145317.png',
       alt: {
@@ -140,6 +146,7 @@ export const productsMock: Product[] = [
       th: 'กระปุกพลาสติกสำหรับบรรจุครีมและสกินแคร์',
       en: 'Plastic jar for creams and skincare products.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -161,6 +168,7 @@ export const productsMock: Product[] = [
       th: 'กระปุกขนาดใหญ่ เหมาะกับครีมบำรุง',
       en: 'Large jar suitable for skincare creams.',
     },
+    
     image: {
       src: '/products/Product20250820145317.png',
       alt: {
@@ -182,6 +190,7 @@ export const productsMock: Product[] = [
       th: 'ขวด Airless ช่วยป้องกันอากาศเข้า',
       en: 'Airless bottle prevents air contamination.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -203,6 +212,7 @@ export const productsMock: Product[] = [
       th: 'เหมาะสำหรับเซรั่มและครีมบำรุง',
       en: 'Suitable for serums and skincare creams.',
     },
+    
     image: {
       src: '/products/Product20250820145317.png',
       alt: {
@@ -224,6 +234,7 @@ export const productsMock: Product[] = [
       th: 'ขวดปั๊มใช้งานง่าย เหมาะกับโลชั่น',
       en: 'Pump bottle suitable for lotions.',
     },
+    
     image: {
       src: '/products/Product20250926090552.png',
       alt: {
@@ -245,6 +256,7 @@ export const productsMock: Product[] = [
       th: 'ขวดดรอปเปอร์สำหรับเซรั่มและน้ำมัน',
       en: 'Dropper bottle for serums and oils.',
     },
+    
     image: {
       src: '/products/Product20250820145317.png',
       alt: {

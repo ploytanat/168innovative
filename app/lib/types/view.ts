@@ -55,6 +55,7 @@ export interface ProductView {
   categoryId: string
   image: ImageView
   price?: string
+  //createdAt: string
 }
 
 /* =======================
