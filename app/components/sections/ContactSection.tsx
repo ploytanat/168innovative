@@ -35,9 +35,9 @@ export default function ContactSection({
   return (
     <section
       id="contact"
-      className="relative py-16 md:py-24 bg-white/40 border-y border-white"
+      className="relative py-16 md:py-24 bg-white/40 border-y border-white "
     >
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-10  ">
         <motion.div
           initial="hidden"
           whileInView="show"
@@ -45,14 +45,14 @@ export default function ContactSection({
           variants={stagger}
           className="
             relative overflow-hidden rounded-[2.5rem]
-            bg-[#F8F9FB]
+            bg-[#363636fd]
             p-6 sm:p-10 md:p-16 lg:p-20
             border border-white
-            shadow-2xl shadow-slate-200/50
+            shadow-2xl
           "
         >
           {/* Background */}
-          <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 -z-10 ">
             <BackgroundBlobs />
           </div>
 
@@ -62,7 +62,7 @@ export default function ContactSection({
             <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
               <motion.h2
                 variants={fadeUp}
-                className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight"
+                className="text-3xl sm:text-4xl md:text-5xl font-black text-white  leading-tight"
               >
                 {uiText.contact.title[locale]} <br />
                 <span className="text-blue-600">
@@ -72,7 +72,7 @@ export default function ContactSection({
 
               <motion.p
                 variants={fadeUp}
-                className="mt-6 max-w-md text-slate-500 text-base md:text-lg"
+                className="mt-6 max-w-md text-white text-base md:text-lg"
               >
                 {uiText.contact.desc[locale]}
               </motion.p>
@@ -86,7 +86,7 @@ export default function ContactSection({
 
                   {/* Phone */}
                   <div className="p-6 md:p-8 border-b border-slate-50">
-                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                       {uiText.contact.phoneLabel[locale]}
                     </p>
 
@@ -106,7 +106,7 @@ export default function ContactSection({
                             <Phone size={20} aria-hidden />
                           </div>
                           <div className="text-left">
-                            <span className="block text-[10px] font-bold uppercase text-slate-400">
+                            <span className="block text-[10px] font-bold uppercase text-slate-500">
                               {p.label}
                             </span>
                             <span className="text-lg md:text-xl font-bold text-slate-900 group-hover:text-blue-600">
@@ -120,7 +120,7 @@ export default function ContactSection({
 
                   {/* Email */}
                   <div className="p-6 md:p-8 bg-slate-50/40">
-                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <p className="mb-6 text-[10px] font-bold uppercase tracking-widest text-slate-500">
                       {uiText.contact.emailLabel[locale]}
                     </p>
 
@@ -134,7 +134,7 @@ export default function ContactSection({
                           <div className="
                             flex h-11 w-11 items-center justify-center
                             rounded-xl bg-white border border-slate-200
-                            text-slate-400
+                            text-slate-500
                             group-hover:bg-slate-900 group-hover:text-white
                             transition-colors
                           ">
@@ -156,10 +156,10 @@ export default function ContactSection({
                     className="
                       mt-6 flex items-center gap-5
                       p-4 rounded-2xl
-                      bg-emerald-50/40 border border-emerald-100/50
+                      bg-emerald-50 border border-emerald-100
                     "
                   >
-                    <div className="relative h-16 w-16 rounded-xl bg-white overflow-hidden">
+                    <div className="relative h-16 w-16 rounded-xl bg-white overflow-hidden border border-emerald-600">
                       <Image
                         src={data.lineQrCode.src}
                         alt={data.lineQrCode.alt}

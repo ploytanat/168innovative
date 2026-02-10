@@ -43,3 +43,13 @@ export function getCategoryBySlug(
     seoDescription: cat.seoDescription ? cat.seoDescription[locale] : undefined,
   }
 }
+
+
+// ใช้เฉพาะ filter
+export function getCategoryFilters(locale: Locale) {
+  return categoriesMock.map(cat => ({
+    id: cat.id,
+    slug: cat.slug,
+    name: cat.name[locale],
+  }))
+}

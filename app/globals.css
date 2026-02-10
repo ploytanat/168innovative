@@ -8,6 +8,13 @@
     animation: marquee 40s linear infinite;
   }
 
+
+  /* globals.css */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
   /* ถ้าเอาเมาส์วางให้หยุดวิ่ง (Optional) */
   .group:hover .animate-marquee {
     animation-play-state: paused;

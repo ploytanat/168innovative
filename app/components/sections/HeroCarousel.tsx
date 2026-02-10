@@ -4,20 +4,18 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { HomeHeroView } from '@/app/lib/types/view'
 import BackgroundBlobs from '../ui/BackgroundBlobs'
-import { uiText } from '@/app/lib/i18n/ui'
+
 interface HeroCarouselProps {
   hero: HomeHeroView
   locale?: 'th'
 }
 
-
-
 const SWIPE_THRESHOLD = 50
 
-export default function HeroCarousel({ hero, locale }: HeroCarouselProps) {
+export default function HeroCarousel({ hero }: HeroCarouselProps) {
   const slides = hero.slides
   const hasMultipleSlides = slides.length > 1
 
@@ -25,9 +23,6 @@ export default function HeroCarousel({ hero, locale }: HeroCarouselProps) {
   const [direction, setDirection] = useState<1 | -1>(1)
   const [isAutoPlay, setIsAutoPlay] = useState(true)
 
-  /* ======================
-     Slide control
-  ====================== */
   const slideNext = useCallback(() => {
     if (!hasMultipleSlides) return
     setDirection(1)
@@ -40,9 +35,6 @@ export default function HeroCarousel({ hero, locale }: HeroCarouselProps) {
     setCurrent(i => (i - 1 + slides.length) % slides.length)
   }, [slides.length, hasMultipleSlides])
 
-  /* ======================
-     Autoplay (client only)
-  ====================== */
   useEffect(() => {
     if (!isAutoPlay || !hasMultipleSlides) return
     const id = setInterval(slideNext, 6000)
@@ -53,157 +45,196 @@ export default function HeroCarousel({ hero, locale }: HeroCarouselProps) {
 
   const active = slides[current]
 
-  /* ======================
-     Motion variants
-  ====================== */
-  const slideVariants = {
-    enter: (dir: number) => ({
-      x: dir > 0 ? '40%' : '-40%',
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (dir: number) => ({
-      x: dir < 0 ? '40%' : '-40%',
-      opacity: 0,
-    }),
-  }
+  // ✅ แก้: ให้สไลด์แรก (index 0) เป็น Full Background
+  const isFullBg = current === 0
 
   return (
-    <section
-      aria-roledescription="carousel"
-      className="relative container mx-auto px-4 py-8 md:py-16 lg:py-20 flex justify-center"
-    >
-        <BackgroundBlobs />
+    <section className="relative container mx-auto px-4 py-8 md:py-16 lg:py-20 flex justify-center group">
+      <BackgroundBlobs />
+
       <div
-        className="relative w-full max-w-7xl min-h-[580px] sm:min-h-[620px]
+        className="relative w-full max-w-7xl min-h-[600px] sm:min-h-[650px]
         overflow-hidden rounded-[2.5rem] md:rounded-[4rem]
         bg-white/60 border border-white backdrop-blur-xl
-        shadow-2xl"
+        shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] transition-all duration-700"
         onMouseEnter={() => setIsAutoPlay(false)}
         onMouseLeave={() => setIsAutoPlay(true)}
       >
-      
-        <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-12 items-center p-8 sm:p-12 lg:p-20">
 
-          {/* ================= IMAGE (Animated only this part) ================= */}
-          <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center">
-            <AnimatePresence initial={false} custom={direction} mode="popLayout">
-              <motion.div
-                key={current}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                drag={hasMultipleSlides ? 'x' : false}
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.15}
-                dragMomentum={false}
-                onDragStart={() => setIsAutoPlay(false)}
-                onDragEnd={(_, info) => {
-                  setIsAutoPlay(true)
-                  if (info.offset.x < -SWIPE_THRESHOLD) slideNext()
-                  else if (info.offset.x > SWIPE_THRESHOLD) slidePrev()
-                }}
-                className="relative w-[240px] h-[240px] sm:w-[320px] sm:h-[320px] lg:w-[480px] lg:h-[480px]"
-              >
-                <Image
-                  src={active.image.src}
-                  alt={active.image.alt}
-                  fill
-                  sizes="(max-width: 768px) 280px, 500px"
-                  priority={current === 0}   // ⭐ LCP
-                  loading={current === 0 ? 'eager' : 'lazy'}
-                  className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
+        {/* --- Background Layer (Full BG Slide) --- */}
+        <AnimatePresence initial={false}>
+          {isFullBg && (
+            <motion.div
+              key={`bg-${current}`}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="absolute inset-0 z-0"
+            >
+              <Image
+                src={active.image.src}
+                alt={active.image.alt}
+                fill
+                priority={current === 0}
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent md:from-black/50" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          {/* ================= CONTENT (NO animation delay) ================= */}
-          <div className="lg:col-span-6 order-2 lg:order-1 z-10
-            flex flex-col items-center lg:items-start text-center lg:text-left">
+        <div
+          className={`absolute inset-0 grid items-center p-8 sm:p-12 lg:p-24 z-10
+          ${isFullBg ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-12'}`}
+        >
 
-            <span className="text-[10px] sm:text-xs font-bold tracking-[0.4em]
-              text-blue-600 mb-4 uppercase bg-blue-50 px-3 py-1 rounded-full">
+          {/* --- Side Image (Split Layout Slide) --- */}
+          {!isFullBg && (
+            <div className="lg:col-span-6 order-1 lg:order-2 flex justify-center">
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={current}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative w-[280px] h-[280px] lg:w-[500px] lg:h-[500px]"
+                >
+                  <Image
+                    src={active.image.src}
+                    alt={active.image.alt}
+                    fill
+                    className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]"
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* --- Content Area --- */}
+          <div
+            className={`flex flex-col z-10 transition-all duration-500
+            ${isFullBg
+              ? 'items-center lg:items-start text-center lg:text-left text-white max-w-2xl'
+              : 'lg:col-span-6 text-slate-900 items-center lg:items-start text-center lg:text-left'
+            }`}
+          >
+            <motion.span
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`text-[11px] font-bold tracking-[0.3em] mb-6 uppercase px-4 py-1.5 rounded-full border
+              ${isFullBg
+                ? 'bg-white/10 border-white/20 text-white backdrop-blur-md'
+                : 'bg-blue-50 border-blue-100 text-blue-600'
+              }`}
+            >
               {active.subtitle}
-            </span>
+            </motion.span>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl
-              font-black text-slate-900 leading-[1.1]">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight"
+            >
               {active.title}
-            </h1>
+            </motion.h1>
 
-            <p className="mt-4 md:mt-6 text-sm sm:text-lg text-slate-600 max-w-md">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className={`mt-6 text-lg sm:text-xl leading-relaxed max-w-lg opacity-90
+              ${isFullBg ? 'text-slate-100' : 'text-slate-600'}`}
+            >
               {active.description}
-            </p>
+            </motion.p>
 
-            <div className="mt-8 md:mt-10 flex gap-3 sm:gap-4 w-full sm:w-auto
-              justify-center lg:justify-start">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
+            >
               <Link
                 href={active.ctaPrimary.href}
-                className="flex-1 sm:flex-none bg-slate-900 text-white
-                px-6 sm:px-10 py-3.5 sm:py-4 rounded-2xl font-bold
-                hover:bg-blue-600 transition active:scale-95 text-center"
+                className={`group/btn flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all active:scale-[0.98] shadow-lg
+                ${isFullBg
+                  ? 'bg-white text-slate-900 hover:bg-blue-50 hover:shadow-white/20'
+                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
+                }`}
               >
                 {active.ctaPrimary.label}
+                <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
 
               <Link
-            href={active.ctaSecondary.href}
-            className="flex-1 sm:flex-none border border-slate-200
-            bg-white/50 backdrop-blur px-6 sm:px-10 py-3.5 sm:py-4
-            rounded-2xl font-bold hover:bg-white transition
-            active:scale-95 text-center whitespace-nowrap"
-          >
-             {active.ctaSecondary.label}
-              
-          </Link>
-
-            </div>
+                href={active.ctaSecondary.href}
+                className={`flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-lg border transition-all active:scale-[0.98]
+                ${isFullBg
+                  ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
+                  : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+                }`}
+              >
+                {active.ctaSecondary.label}
+              </Link>
+            </motion.div>
           </div>
         </div>
 
-        {/* ================= CONTROLS ================= */}
+        {/* --- Navigation Controls --- */}
         {hasMultipleSlides && (
           <>
-            <button
-              aria-label="Previous slide"
-              onClick={slidePrev}
-              className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2
-              p-4 rounded-full bg-white/80 shadow-xl backdrop-blur
-              hover:text-blue-600 active:scale-90"
-            >
-              <ChevronLeft size={28} />
-            </button>
+            <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between items-center pointer-events-none z-30">
+              <button
+                onClick={slidePrev}
+                aria-label="Previous slide"
+                title="Previous slide"
+                className={`group pointer-events-auto cursor-pointer p-4 rounded-2xl transition-all duration-300 active:scale-90
+                ${isFullBg ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-white/80 hover:bg-white text-slate-900 shadow-lg'}
+                opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 backdrop-blur-md`}
+              >
+                <ChevronLeft size={32} strokeWidth={2.5} />
+              </button>
 
-            <button
-              aria-label="Next slide"
-              onClick={slideNext}
-              className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2
-              p-4 rounded-full bg-white/80 shadow-xl backdrop-blur
-              hover:text-blue-600 active:scale-90"
-            >
-              <ChevronRight size={28} />
-            </button>
+              <button
+                onClick={slideNext}
+                aria-label="Next slide"
+                title="Next slide"
+                className={`group pointer-events-auto cursor-pointer p-4  rounded-2xl transition-all duration-300 active:scale-90
+                ${isFullBg ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-white/80 hover:bg-white text-slate-900 shadow-lg'}
+                opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 backdrop-blur-md`}
+              >
+                <ChevronRight size={32} strokeWidth={2.5} />
+              </button>
+            </div>
 
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+            {/* --- Pagination Dots --- */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-30 bg-black/5 hover:bg-black/10 px-4 py-2.5 rounded-full backdrop-blur-sm transition-colors">
               {slides.map((_, i) => (
                 <button
                   key={i}
-                  aria-label={`Go to slide ${i + 1}`}
                   onClick={() => {
                     setDirection(i > current ? 1 : -1)
                     setCurrent(i)
                   }}
-                  className={`h-1.5 rounded-full transition-all ${
-                    i === current ? 'w-8 bg-blue-600' : 'w-2 bg-slate-300'
-                  }`}
-                />
+                  aria-label={`Go to slide ${i + 1}`}
+                  title={`Go to slide ${i + 1}`}
+                  className="relative flex items-center justify-center w-8 h-2 group"
+                >
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 
+                    ${i === current
+                      ? (isFullBg
+                        ? 'w-full bg-white shadow-[0_0_12px_rgba(255,255,255,0.5)] cursor-pointer' 
+                        : 'w-full bg-blue-600 cursor-pointer')
+                      : (isFullBg
+                        ? 'w-2 bg-white/30 group-hover:bg-white/50 cursor-pointer'
+                        : 'w-2 bg-slate-300 group-hover:bg-slate-400 cursor-pointer')
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           </>

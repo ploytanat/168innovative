@@ -19,7 +19,7 @@ export const homeMock: HomeContent = {
           en: 'Leading plastic packaging solutions for cosmetics and industry',
         },
         image: {
-          src: '/images/home/banner4.png',
+          src: '/images/home/banner2.jpeg',
           alt: {
             th: 'บรรจุภัณฑ์เครื่องสำอาง',
             en: 'Cosmetic packaging',
@@ -55,17 +55,17 @@ export const homeMock: HomeContent = {
           en: 'Complete OEM packaging and manufacturing services',
         },
         image: {
-          src: '/images/home/banner2.jpeg',
+          src: '/images/home/banner4.png',
           alt: {
             th: 'บริการ OEM',
             en: 'OEM Service',
           },
         },
         ctaPrimary: {
-          href: '/contact',
+          href: '/categories',
           label: {
-            th: 'ติดต่อเรา',
-            en: 'Contact Us',
+            th: 'ดูสินค้า',
+            en: 'View Products',
           },
         },
           ctaSecondary: {
