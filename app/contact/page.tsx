@@ -40,31 +40,32 @@ export default async function ContactPage() {
     "
   >
     {/* ===== LEFT SIDE: DIRECT CONTACT ===== */}
-    <div className="p-8 md:p-14    justify-center">
-      <div className="w-full max-w-md space-y-12">
-        <ContactSection icon={<Phone />} title="Phone">
-          {company.phones.map((p, i) => (
-            <div key={i} className="mb-4 last:mb-0">
-              <p className="text-2xl font-bold text-gray-800">{p.number}</p>
-              <p className="text-sm font-medium text-gray-500">
-                คุณ{p.label}
-              </p>
-            </div>
-          ))}
-        </ContactSection>
+{/* ===== LEFT SIDE: DIRECT CONTACT ===== */}
+<div className="p-8 md:p-14 flex justify-center"> {/* เพิ่ม flex และ justify-center ตรงนี้ */}
+  <div className="w-full max-w-md space-y-12">
+    <ContactSection icon={<Phone />} title="Phone">
+      {company.phones.map((p, i) => (
+        <div key={i} className="mb-4 last:mb-0">
+          <p className="text-2xl font-bold text-gray-800">{p.number}</p>
+          <p className="text-sm font-medium text-gray-500">
+            คุณ{p.label}
+          </p>
+        </div>
+      ))}
+    </ContactSection>
 
-        <ContactSection icon={<Mail />} title="Email">
-          {company.email.map((mail, i) => (
-            <p
-              key={i}
-              className="text-lg font-semibold text-gray-800 break-all"
-            >
-              {mail}
-            </p>
-          ))}
-        </ContactSection>
-      </div>
-    </div>
+    <ContactSection icon={<Mail />} title="Email">
+      {company.email.map((mail, i) => (
+        <p
+          key={i}
+          className="text-lg font-semibold text-gray-800 break-all"
+        >
+          {mail}
+        </p>
+      ))}
+    </ContactSection>
+  </div>
+</div>
 
     {/* ===== RIGHT SIDE: CONNECT & QR ===== */}
     <div className="p-8 md:p-14 bg-white/20 flex flex-col items-center justify-center text-center">

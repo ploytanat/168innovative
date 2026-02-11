@@ -3,232 +3,161 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Facebook, Instagram, Send, Globe } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-interface NavigationProps {
-  logo: {
-    src: string
-    alt: string
-  }
-}
+// แยก Menu Items ออกมาเพื่อให้จัดการง่าย
+const NAV_MENU = [
+  { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
+  { href: '/categories', label: { th: 'สินค้าของเรา', en: 'Products' } },
+  { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About' } },
+  { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
+]
 
-export default function Navigation({ logo }: NavigationProps) {
+export default function Navigation({ logo }: { logo: { src: string, alt: string } }) {
   const router = useRouter()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   const isEN = pathname.startsWith('/en')
+  const lang = isEN ? 'en' : 'th'
 
-  /* ======================
-     Close mobile menu on resize
-  ====================== */
+  // ตรวจสอบการ Scroll เพื่อเปลี่ยน Style ของ Navbar
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) setOpen(false)
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  /* ======================
-     Lock body scroll on mobile menu open
-  ====================== */
+  // จัดการ Body Scroll เมื่อเปิดเมนูมือถือ
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
-    }
   }, [open])
 
-  /* ======================
-     Locale helpers
-  ====================== */
-  const withLocale = (path: string) => {
-    if (isEN) return path === '/' ? '/en' : `/en${path}`
-    return path
-  }
+  const withLocale = (path: string) => (isEN ? (path === '/' ? '/en' : `/en${path}`) : path)
+  const isActive = (path: string) => pathname === withLocale(path)
 
-  const isActive = (path: string) => {
-    const localizedPath = withLocale(path)
-    return pathname === localizedPath
-  }
-
-  function toggleLanguage() {
-    const nextPath = isEN
-      ? pathname.replace(/^\/en/, '') || '/'
+  const toggleLanguage = () => {
+    const nextPath = isEN 
+      ? pathname.replace(/^\/en/, '') || '/' 
       : pathname === '/' ? '/en' : `/en${pathname}`
-
     router.push(nextPath)
     setOpen(false)
   }
 
-  const menu = [
-    { href: '/', label: isEN ? 'Home' : 'หน้าหลัก' },
-    { href: '/categories', label: isEN ? 'Products' : 'สินค้าของเรา' },
-    { href: '/about', label: isEN ? 'About' : 'เกี่ยวกับเรา' },
-    { href: '/contact', label: isEN ? 'Contact' : 'ติดต่อเรา' },
-  ]
-
   return (
-    <nav className="fixed top-0 z-[100] w-full bg-white/70 backdrop-blur-xl border-b border-gray-100/50">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-12">
-
-        {/* ===== Logo ===== */}
-        <Link
-          href={withLocale('/')}
-          className="relative z-[110] flex items-center transition-transform active:scale-95"
-        >
-          <Image
-            src={logo.src}
-            alt={logo.alt}
-            width={140}
-            height={40}
+    <nav className={`fixed top-0 z-[100] w-full transition-all duration-300 ${
+      scrolled ? 'bg-white/90 backdrop-blur-md py-3 shadow-sm' : 'bg-transparent py-5'
+    }`}>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">
+        
+        {/* Logo Section */}
+        <Link href={withLocale('/')} className="relative z-[110] transition-transform active:scale-95">
+          <Image 
+            src={logo.src} 
+            alt={logo.alt} // สำคัญต่อ SEO
+            width={160} 
+            height={50} 
+            className="h-10 md:h-12 w-auto object-contain"
             priority
-            className="h-9 md:h-10 w-auto object-contain"
           />
         </Link>
 
-        {/* ===== Desktop Menu ===== */}
-        <ul className="hidden md:flex items-center gap-10 text-[14px] font-bold tracking-wide">
-          {menu.map(item => (
-            <li key={item.href} className="relative group">
-              <Link
-                href={withLocale(item.href)}
-                className={`transition-colors duration-300 hover:text-[#1e3a5f] ${
-                  isActive(item.href) ? 'text-[#1e3a5f]' : 'text-gray-400'
-                }`}
-              >
-                {item.label}
-              </Link>
-
-              {isActive(item.href) && (
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute -bottom-[31px] left-0 right-0 h-[3px] bg-[#1e3a5f] rounded-full"
-                />
-              )}
-            </li>
-          ))}
-        </ul>
-
-        {/* ===== Right Actions ===== */}
-        <div className="relative z-[110] flex items-center gap-4">
-
-
-          {/* ===== Language Toggle ===== */}
-<button
-  onClick={toggleLanguage}
-  aria-label="Toggle Language"
-  className={`
-    relative flex items-center w-[72px] h-[34px] rounded-full cursor-pointer
-    border border-slate-300/50 shadow-inner
-    transition-all duration-500 overflow-hidden
-    ${isEN ? 'bg-slate-100' : 'bg-slate-100'}
-  `}
->
-  {/* 1. ปุ่ม Knob ที่เลื่อนไปมา (ลอยอยู่เหนือตัวอักษร) */}
-  <motion.div
-    initial={false}
-    animate={{ x: isEN ? 36 : 4 }}
-    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-    className="absolute z-10 w-[32px] h-[26px] bg-white rounded-full shadow-md flex items-center justify-center pointer-events-none"
-  >
-    {/* แสดงภาษาปัจจุบันใน Knob เพื่อความชัดเจนที่สุด */}
-    <span className="text-[10px] font-black text-slate-900">
-      {isEN ? 'EN' : 'TH'}
-    </span>
-  </motion.div>
-
-  {/* 2. พื้นหลัง Label (อยู่ด้านล่าง Knob) */}
-  <div className="flex w-full justify-between px-3 relative z-0">
-    <span className={`text-[10px] font-black transition-opacity duration-300 ${isEN ? 'opacity-40 text-slate-900' : 'opacity-0'}`}>
-      TH
-    </span>
-    <span className={`text-[10px] font-black transition-opacity duration-300 ${!isEN ? 'opacity-40 text-slate-900' : 'opacity-0'}`}>
-      EN
-    </span>
-  </div>
-</button>
-
-          {/* ===== Hamburger ===== */}
-         <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden flex h-10 w-10 items-center justify-center rounded-xl bg-slate-50 border border-slate-100 text-slate-900 transition-active active:scale-90"
-          >
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-      </div>
-
-{/* ===== Mobile Menu Overlay ===== */}
-  <AnimatePresence>
-    {open && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] md:hidden" 
-      >
-        {/* Backdrop: แผ่นสีมืดจางๆ ช่วยให้เมนูสี Amber/White ดูลอยเด่นขึ้น */}
-        <div 
-          className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" 
-          onClick={() => setOpen(false)} 
-        />
-
-        {/* Menu Panel */}
-        <motion.div
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="
-            absolute right-0 top-0 h-full w-[80%] max-w-sm
-            bg-white shadow-2xl p-8 pt-24
-          "
-        >
-          <nav className="flex flex-col gap-2">
-            {menu.map((item, i) => (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 + 0.2 }}
-              >
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-10">
+          <ul className="flex items-center gap-8">
+            {NAV_MENU.map((item) => (
+              <li key={item.href} className="relative group">
                 <Link
                   href={withLocale(item.href)}
-                  onClick={() => setOpen(false)}
-                  className={`
-                    block py-5 text-2xl font-black
-                    border-b border-slate-50
-                    transition-colors
-                    ${isActive(item.href) ? 'text-[#1e3a5f]' : 'text-slate-400'}
-                  `}
+                  className={`text-sm font-semibold transition-colors duration-300 hover:text-[#1e3a5f] ${
+                    isActive(item.href) ? 'text-[#1e3a5f]' : 'text-slate-600'
+                  }`}
                 >
-                  {item.label}
+                  {item.label[lang]}
                 </Link>
-              </motion.div>
+                {isActive(item.href) && (
+                  <motion.div 
+                    layoutId="underline" 
+                    className="absolute -bottom-1 left-0 h-[2px] w-full bg-[#1e3a5f]" 
+                  />
+                )}
+              </li>
             ))}
-          </nav>
+          </ul>
 
-          {/* Social Footer */}
-          <div className="mt-12">
-             <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-               Follow Us
-             </p>
-             <div className="flex gap-6 text-slate-900 font-bold">
-               <a href="#" className="hover:text-[#1e3a5f]">FB</a>
-               <a href="#" className="hover:text-[#1e3a5f]">LN</a>
-               <a href="#" className="hover:text-[#1e3a5f]">IG</a>
-             </div>
-          </div>
-        </motion.div>
-      </motion.div>
-    )}
-  </AnimatePresence>
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all text-[12px] font-bold"
+          >
+            <Globe size={14} className="text-[#1e3a5f]" />
+            <span>{isEN ? 'TH' : 'EN'}</span>
+          </button>
+        </div>
 
+        {/* Mobile Toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden relative z-[110] p-2 text-slate-900"
+        >
+          {open ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm md:hidden ิเข"
+              onClick={() => setOpen(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 z-[105] h-full w-[85%] max-w-sm bg-white p-10 pt-32 shadow-2xl md:hidden"
+            >
+              <nav className="flex flex-col gap-6">
+                {NAV_MENU.map((item, i) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <Link
+                      href={withLocale(item.href)}
+                      onClick={() => setOpen(false)}
+                      className={`text-4xl font-black tracking-tighter ${
+                        isActive(item.href) ? 'text-[#1e3a5f]' : 'text-slate-800'
+                      }`}
+                    >
+                      {item.label[lang]}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <div className="mt-20 border-t pt-10">
+                <p className="mb-6 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Follow Us</p>
+                <div className="flex justify-center gap-8 text-slate-900">
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Facebook /></a>
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Instagram /></a>
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Send /></a>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }
