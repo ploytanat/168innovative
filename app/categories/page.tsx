@@ -21,7 +21,9 @@ export default async function AllCategoriesPage() {
   if (!categories || categories.length === 0) {
     return (
       <main className="relative bg-gray-50 ">
-        <BackgroundBlobs />
+        <div className="hidden lg:block">
+    <BackgroundBlobs />
+  </div>
         <div className="container mx-auto  text-center">
           <Breadcrumb />
         
@@ -35,7 +37,9 @@ export default async function AllCategoriesPage() {
 
   return (
     <main className="bg-[#F8F9FA] pt-12 pb-32">
-      <BackgroundBlobs />
+     <div className="hidden lg:block">
+    <BackgroundBlobs />
+  </div>
 
       <div className="mx-auto container relative px-4 lg:px-8">
         <Breadcrumb />

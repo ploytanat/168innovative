@@ -15,7 +15,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250926090552.png',
+      src: '/products/spout/hl086l.png',
       alt: {
         th: 'จุกพลาสติก HL160D',
         en: 'Plastic Spout HL160D',
@@ -37,7 +37,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/จุกซองครีม.png',
+      src: '/products/spout/hl101st.png',
       alt: {
         th: 'จุกพลาสติก HL200',
         en: 'Plastic Spout HL200',
@@ -58,7 +58,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250820145317.png',
+      src: '/products/spout/hl160d-b.png',
       alt: {
         th: 'จุกพลาสติก HL220',
         en: 'Plastic Spout HL220',
@@ -80,7 +80,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250926090552.png',
+      src: '/products/spout/hl160f.png',
       alt: {
         th: 'จุกเกลียวพลาสติก 16mm',
         en: 'Plastic Screw Spout 16mm',
@@ -102,7 +102,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250926090552.png',
+      src: '/products/spout/hl160w-b.png',
       alt: {
         th: 'จุกเกลียวพลาสติก 20mm',
         en: 'Plastic Screw Spout 20mm',
@@ -124,7 +124,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250820145317.png',
+      src: '/products/spout/hl160w.png',
       alt: {
         th: 'จุก Spout ฝาแบน',
         en: 'Flat Cap Spout',
@@ -148,7 +148,7 @@ export const productsMock: Product[] = [
     },
     
     image: {
-      src: '/products/Product20250926090552.png',
+      src: '/products/spout/hl330w.png',
       alt: {
         th: 'กระปุกครีม 50 กรัม',
         en: 'Cosmetic Jar 50g',
@@ -265,4 +265,215 @@ export const productsMock: Product[] = [
       },
     },
   },
+
+    {
+    id: 'p13',
+    slug: 'spout-hl180-18mm',
+    categoryId: 'cat-01',
+    name: {
+      th: 'จุก Spout HL180 (18mm)',
+      en: 'Plastic Spout HL180 (18mm)',
+    },
+    description: {
+      th: 'จุก Spout ขนาด 18 มม. สำหรับซองบรรจุอาหารและเครื่องดื่ม ซีลแน่น ป้องกันการรั่วซึม',
+      en: '18mm spout suitable for food and beverage pouches with secure sealing.',
+    },
+    image: {
+      src: '/products/spout/hl330w.png',
+      alt: {
+        th: 'จุก Spout HL180',
+        en: 'Plastic Spout HL180',
+      },
+    },
+  },
+
+  {
+    id: 'p14',
+    slug: 'spout-wide-mouth-25mm',
+    categoryId: 'cat-01',
+    name: {
+      th: 'จุก Spout ปากกว้าง 25mm',
+      en: 'Wide Mouth Spout 25mm',
+    },
+    description: {
+      th: 'จุก Spout ปากกว้าง เหมาะสำหรับผลิตภัณฑ์เนื้อข้น เช่น ซอสและครีม',
+      en: '25mm wide-mouth spout ideal for thicker products such as sauces and creams.',
+    },
+    image: {
+      src: '/products/spout/hl400d.png',
+      alt: {
+        th: 'จุก Spout ปากกว้าง 25mm',
+        en: 'Wide Mouth Spout 25mm',
+      },
+    },
+  },
+
+  {
+    id: 'p15',
+    slug: 'cosmetic-jar-30g',
+    categoryId: 'cat-02',
+    name: {
+      th: 'กระปุกครีม 30 กรัม',
+      en: 'Cosmetic Jar 30g',
+    },
+    description: {
+      th: 'กระปุกขนาดเล็ก เหมาะสำหรับสกินแคร์ขนาดพกพา',
+      en: 'Compact cosmetic jar ideal for travel-size skincare products.',
+    },
+    image: {
+      src: '/products/Product20250926090552.png',
+      alt: {
+        th: 'กระปุกครีม 30 กรัม',
+        en: 'Cosmetic Jar 30g',
+      },
+    },
+  },
+
+  {
+    id: 'p16',
+    slug: 'cosmetic-jar-double-wall-50g',
+    categoryId: 'cat-02',
+    name: {
+      th: 'กระปุกครีม 50 กรัม แบบสองชั้น',
+      en: 'Double Wall Cosmetic Jar 50g',
+    },
+    description: {
+      th: 'กระปุกสองชั้นดีไซน์พรีเมียม เหมาะสำหรับแบรนด์ระดับสูง',
+      en: 'Premium double-wall jar suitable for high-end cosmetic brands.',
+    },
+    image: {
+      src: '/products/Product20250820145317.png',
+      alt: {
+        th: 'กระปุกครีมสองชั้น 50g',
+        en: 'Double Wall Cosmetic Jar 50g',
+      },
+    },
+  },
+
+  {
+    id: 'p17',
+    slug: 'airless-bottle-15ml',
+    categoryId: 'cat-03',
+    name: {
+      th: 'ขวด Airless 15 ml',
+      en: 'Airless Bottle 15 ml',
+    },
+    description: {
+      th: 'ขวด Airless ขนาดเล็ก เหมาะสำหรับเซรั่มตัวอย่าง',
+      en: '15ml airless bottle suitable for serum samples.',
+    },
+    image: {
+      src: '/products/Product20250926090552.png',
+      alt: {
+        th: 'ขวด Airless 15 ml',
+        en: 'Airless Bottle 15 ml',
+      },
+    },
+  },
+
+  {
+    id: 'p18',
+    slug: 'airless-bottle-100ml',
+    categoryId: 'cat-03',
+    name: {
+      th: 'ขวด Airless 100 ml',
+      en: 'Airless Bottle 100 ml',
+    },
+    description: {
+      th: 'ขวด Airless ขนาดใหญ่ เหมาะสำหรับผลิตภัณฑ์ดูแลผิวระดับพรีเมียม',
+      en: '100ml airless bottle ideal for premium skincare products.',
+    },
+    image: {
+      src: '/products/Product20250820145317.png',
+      alt: {
+        th: 'ขวด Airless 100 ml',
+        en: 'Airless Bottle 100 ml',
+      },
+    },
+  },
+
+  {
+    id: 'p19',
+    slug: 'dropper-bottle-50ml',
+    categoryId: 'cat-03',
+    name: {
+      th: 'ขวดดรอปเปอร์ 50 ml',
+      en: 'Dropper Bottle 50 ml',
+    },
+    description: {
+      th: 'ขวดดรอปเปอร์ขนาดใหญ่ สำหรับผลิตภัณฑ์บำรุงผิวเข้มข้น',
+      en: '50ml dropper bottle for concentrated skincare products.',
+    },
+    image: {
+      src: '/products/Product20250926090552.png',
+      alt: {
+        th: 'ขวดดรอปเปอร์ 50 ml',
+        en: 'Dropper Bottle 50 ml',
+      },
+    },
+  },
+
+  {
+    id: 'p20',
+    slug: 'pump-bottle-200ml',
+    categoryId: 'cat-07',
+    name: {
+      th: 'ขวดปั๊ม 200 ml',
+      en: 'Pump Bottle 200 ml',
+    },
+    description: {
+      th: 'ขวดปั๊มขนาดใหญ่ เหมาะสำหรับโลชั่นและสบู่เหลว',
+      en: '200ml pump bottle suitable for lotions and liquid soaps.',
+    },
+    image: {
+      src: '/products/Product20250820145317.png',
+      alt: {
+        th: 'ขวดปั๊ม 200 ml',
+        en: 'Pump Bottle 200 ml',
+      },
+    },
+  },
+
+  {
+    id: 'p21',
+    slug: 'pump-bottle-300ml',
+    categoryId: 'cat-07',
+    name: {
+      th: 'ขวดปั๊ม 300 ml',
+      en: 'Pump Bottle 300 ml',
+    },
+    description: {
+      th: 'ขวดปั๊มสำหรับผลิตภัณฑ์ดูแลร่างกาย ใช้งานสะดวก',
+      en: '300ml pump bottle for body care products.',
+    },
+    image: {
+      src: '/products/Product20250926090552.png',
+      alt: {
+        th: 'ขวดปั๊ม 300 ml',
+        en: 'Pump Bottle 300 ml',
+      },
+    },
+  },
+
+  {
+    id: 'p22',
+    slug: 'serum-bottle-30ml-glass',
+    categoryId: 'cat-03',
+    name: {
+      th: 'ขวดเซรั่มแก้ว 30 ml',
+      en: 'Glass Serum Bottle 30 ml',
+    },
+    description: {
+      th: 'ขวดแก้วสำหรับเซรั่ม ดีไซน์เรียบหรู รองรับงาน OEM',
+      en: '30ml glass serum bottle with elegant design for OEM brands.',
+    },
+    image: {
+      src: '/products/Product20250820145317.png',
+      alt: {
+        th: 'ขวดเซรั่มแก้ว 30 ml',
+        en: 'Glass Serum Bottle 30 ml',
+      },
+    },
+  },
+
 ]

@@ -5,8 +5,8 @@ export const whyMock: WhyItem[] = [
     image: {
       src: '/images/why/direct_import.png',
       alt: {
-        th: '',
-        en: ''
+        th: 'นำเข้าโดยตรงจากโรงงาน',
+        en: 'Direct factory import'
       }
     },
     title: {
@@ -19,11 +19,11 @@ export const whyMock: WhyItem[] = [
     }
   },
   {
-     image: {
+    image: {
       src: '/images/why/quality_standard.png',
       alt: {
-        th: '',
-        en: ''
+        th: 'มาตรฐานคุณภาพระดับพรีเมียม',
+        en: 'Premium quality standards'
       }
     },
     title: {
@@ -35,38 +35,38 @@ export const whyMock: WhyItem[] = [
       en: 'Selection of safe Food Grade and Cosmetic Grade materials.'
     }
   },
-   {
-     image: {
+  {
+    image: {
       src: '/images/why/oem_support.png',
       alt: {
-        th: '',
-        en: ''
+        th: 'รองรับการผลิต OEM',
+        en: 'OEM production support'
       }
     },
-     title: {
-       th: 'พร้อมส่งทั่วไทย',
-       en: 'Nationwide Delivery'
-     },
-     description: {
-       th: 'มีสต็อกสินค้าพร้อมจัดส่ง รวดเร็ว ทันใจแบรนด์ OEM',
-       en: 'Stock ready for fast delivery to OEM brands nationwide.'
-     }
-   },
-   {
-     image: {
+    title: {
+      th: 'รองรับ OEM',
+      en: 'OEM Support'
+    },
+    description: {
+      th: 'ทีมงานเข้าใจความต้องการของแบรนด์ OEM อย่างแท้จริง',
+      en: 'Our team understands the real needs of OEM brands.'
+    }
+  },
+  {
+    image: {
       src: '/images/why/reliable_supply.png',
       alt: {
-        th: '',
-        en: ''
+        th: 'ระบบซัพพลายเชนที่มั่นคง',
+        en: 'Reliable supply chain'
       }
     },
-     title: {
-       th: 'พร้อมส่งทั่วไทย',
-       en: 'Nationwide Delivery'
-     },
-     description: {
-       th: 'มีสต็อกสินค้าพร้อมจัดส่ง รวดเร็ว ทันใจแบรนด์ OEM',
-       en: 'Stock ready for fast delivery to OEM brands nationwide.'
-     }
-   }
+    title: {
+      th: 'ซัพพลายเชนมั่นคง',
+      en: 'Reliable Supply'
+    },
+    description: {
+      th: 'ควบคุมคุณภาพและการจัดส่งอย่างเป็นระบบ เพื่อความต่อเนื่องในการผลิต',
+      en: 'Systematic quality control and logistics for consistent production.'
+    }
+  }
 ]

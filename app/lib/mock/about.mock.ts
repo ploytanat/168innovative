@@ -4,18 +4,18 @@ import { AboutContent } from "../types/content"
 export const aboutMock: AboutContent = {
   hero: {
     title: {
-      th: 'Plastic Packaging Components for Manufacturers & OEM Brands',
-      en: 'Plastic Packaging Components for Manufacturers & OEM Brands',
+      th: 'ผู้นำเข้าและจัดจำหน่ายบรรจุภัณฑ์พลาสติกสำหรับแบรนด์ OEM',
+      en: 'Importer and Distributor of Plastic Packaging for OEM Brands',
     },
     description: {
-      th: '168 Innovative Company Limited เป็นผู้ผลิตชิ้นส่วนบรรจุภัณฑ์พลาสติกสำหรับผู้ผลิตและแบรนด์ OEM โดยมุ่งเน้นคุณภาพ มาตรฐาน และความเข้าใจลูกค้า',
-      en: '168 Innovative Company Limited specializes in plastic packaging components for manufacturers and OEM brands, focusing on quality, standards, and customer understanding.',
+      th: '168 Innovative Company Limited เป็นผู้นำเข้าและจัดจำหน่ายชิ้นส่วนบรรจุภัณฑ์พลาสติกสำหรับผู้ผลิตและแบรนด์ OEM โดยมุ่งเน้นคุณภาพ มาตรฐาน และความน่าเชื่อถือในการจัดส่ง',
+      en: '168 Innovative Company Limited is an importer and distributor of plastic packaging components for manufacturers and OEM brands, focusing on quality, standards, and reliable supply.',
     },
     image: {
       src: '/about/factory.png',
       alt: {
-        th: 'โรงงานผลิตบรรจุภัณฑ์พลาสติก',
-        en: 'Plastic packaging manufacturing factory',
+        th: 'กระบวนการคัดเลือกและตรวจสอบคุณภาพบรรจุภัณฑ์',
+        en: 'Packaging inspection and quality control process',
       },
     },
   },
@@ -26,14 +26,14 @@ export const aboutMock: AboutContent = {
       en: 'Who We Are',
     },
     description: {
-      th: 'เรามีประสบการณ์ในการผลิตชิ้นส่วนบรรจุภัณฑ์พลาสติก รองรับการผลิตทั้งขนาดเล็กและขนาดใหญ่ พร้อมทีมงานที่เข้าใจความต้องการของลูกค้า OEM อย่างแท้จริง',
-      en: 'We have extensive experience in manufacturing plastic packaging components, supporting both small and large-scale production with a team that truly understands OEM needs.',
+      th: 'เรามีความเชี่ยวชาญในการคัดสรรและนำเข้าชิ้นส่วนบรรจุภัณฑ์พลาสติกคุณภาพสูง พร้อมบริหารจัดการซัพพลายเชนและสต็อกสินค้า เพื่อรองรับความต้องการของแบรนด์ OEM อย่างต่อเนื่องและมั่นคง',
+      en: 'We specialize in sourcing and importing high-quality plastic packaging components, managing supply chains and inventory to consistently support OEM brands with stability and reliability.',
     },
     image: {
       src: '/about/warehouse.png',
       alt: {
-        th: 'คลังสินค้าและพื้นที่จัดเก็บบรรจุภัณฑ์',
-        en: 'Warehouse and packaging storage area',
+        th: 'คลังสินค้าและระบบจัดการสต็อกบรรจุภัณฑ์',
+        en: 'Warehouse and packaging inventory management system',
       },
     },
   },

@@ -109,12 +109,19 @@ export interface HomeHeroView {
 export interface AboutHeroView {
   title: string
   description: string
-  image: ImageView
+  eyebrow?: string
+  cta?: {
+    label: string
+    href: string
+  }
+  image?: ImageView
 }
 
 export interface AboutSectionView {
   title: string
   description: string
+  quote?: string
+  image?: ImageView
 }
 
 export interface AboutView {

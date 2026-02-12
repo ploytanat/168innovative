@@ -49,7 +49,9 @@ export default async function CategoryProductsPage({ params }: Props) {
 
   return (
   <main className="bg-[#F8F9FA] pt-12 pb-32">
-     <BackgroundBlobs />
+     <div className="hidden lg:block">
+    <BackgroundBlobs />
+  </div>
   
       <div className="mx-auto container relative px-4 lg:px-8">
         <Breadcrumb />

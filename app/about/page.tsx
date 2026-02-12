@@ -5,7 +5,7 @@ import { getAbout } from "../lib/api/about"
 import { getWhy } from "../lib/api/why"
 
 export default function AboutPage() {
-  const locale: 'th' | 'en' = 'th'
+  const locale = 'th'
 
   const about = getAbout(locale)
   const why = getWhy(locale)

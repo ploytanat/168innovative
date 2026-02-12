@@ -128,7 +128,7 @@ export default async function ProductDetailPage({ params }: Props) {
             {/* Feature Grid */}
             <div className="mt-10 grid grid-cols-2 gap-3">
               {[
-                { icon: Factory, text: 'รับผลิต OEM/ODM' },
+                
                 { icon: CheckCircle2, text: 'Cosmetic Grade' },
                 { icon: Globe, text: 'นำเข้าโดยตรง' },
                 { icon: Truck, text: 'จัดส่งทั่วประเทศ' },
