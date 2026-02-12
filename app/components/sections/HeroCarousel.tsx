@@ -45,7 +45,6 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
 
   const active = slides[current]
 
-  // ✅ แก้: ให้สไลด์แรก (index 0) เป็น Full Background
   const isFullBg = current === 0
 
   return (
@@ -114,12 +113,12 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
 
           {/* --- Content Area --- */}
           <div
-            className={`flex flex-col z-10 transition-all duration-500
-            ${isFullBg
-              ? 'items-center lg:items-start text-center lg:text-left text-white max-w-2xl'
-              : 'lg:col-span-6 text-slate-900 items-center lg:items-start text-center lg:text-left'
-            }`}
-          >
+           className={`flex flex-col z-10 transition-all duration-500
+  ${isFullBg
+    ? 'items-center lg:items-start text-center lg:text-left text-white max-w-2xl'
+    : 'lg:col-span-6 text-slate-900 items-center lg:items-start text-center lg:text-left'
+  }`}
+>
             <motion.span
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -151,38 +150,44 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
               {active.description}
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
-            >
-              <Link
-                href={active.ctaPrimary.href}
-                className={`group/btn flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all active:scale-[0.98] shadow-lg
-                ${isFullBg
-                  ? 'bg-white text-slate-900 hover:bg-blue-50 hover:shadow-white/20'
-                  : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
-                }`}
-              >
-                {active.ctaPrimary.label}
-                <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-              </Link>
+           <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3 }}
+    // แก้ไขตรงนี้: ใช้ flex-row และ gap-2 สำหรับมือถือ
+    className="mt-10 flex flex-row items-center justify-center lg:justify-start gap-2 sm:gap-4 w-full sm:w-auto"
+  >
+    {/* First Button (Primary) */}
+    <Link
+      href={active.ctaPrimary.href}
+      className={`group/btn flex flex-row items-center justify-center gap-2 
+      px-5 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold 
+      text-sm sm:text-lg transition-all active:scale-[0.98] shadow-lg flex-1 sm:flex-none
+      ${isFullBg
+        ? 'bg-white text-slate-900 hover:bg-blue-50 hover:shadow-white/20'
+        : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-200'
+      }`}
+    >
+      <span className="truncate">{active.ctaPrimary.label}</span>
+      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform shrink-0" />
+    </Link>
 
-              <Link
-                href={active.ctaSecondary.href}
-                className={`flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-lg border transition-all active:scale-[0.98]
-                ${isFullBg
-                  ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
-                  : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                {active.ctaSecondary.label}
-              </Link>
-            </motion.div>
-          </div>
+    {/* Second Button (Secondary) */}
+    <Link
+      href={active.ctaSecondary.href}
+      className={`flex items-center justify-center 
+      px-5 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold 
+      text-sm sm:text-lg border transition-all active:scale-[0.98] flex-1 sm:flex-none
+      ${isFullBg
+        ? 'border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
+        : 'border-slate-200 bg-white hover:bg-slate-50 text-slate-700'
+      }`}
+    >
+      <span className="truncate">{active.ctaSecondary.label}</span>
+    </Link>
+  </motion.div>
         </div>
-
+</div>
         {/* --- Navigation Controls --- */}
         {hasMultipleSlides && (
           <>

@@ -3,11 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Facebook, Instagram, Send, Globe } from 'lucide-react'
+import { Menu, X, Facebook, Instagram, Send } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// แยก Menu Items ออกมาเพื่อให้จัดการง่าย
 const NAV_MENU = [
   { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
   { href: '/categories', label: { th: 'สินค้าของเรา', en: 'Products' } },
@@ -24,14 +23,12 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
   const isEN = pathname.startsWith('/en')
   const lang = isEN ? 'en' : 'th'
 
-  // ตรวจสอบการ Scroll เพื่อเปลี่ยน Style ของ Navbar
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // จัดการ Body Scroll เมื่อเปิดเมนูมือถือ
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
   }, [open])
@@ -44,20 +41,26 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
       ? pathname.replace(/^\/en/, '') || '/' 
       : pathname === '/' ? '/en' : `/en${pathname}`
     router.push(nextPath)
-    setOpen(false)
+    // ไม่สั่ง setOpen(false) ที่นี่ เพื่อให้ user เห็นการเปลี่ยนสถานะก่อนเมนูปิด (หรือจะปิดเลยก็ได้ตามสะดวก)
   }
 
   return (
-    <nav className={`fixed top-0 z-[100] w-full transition-all duration-300 ${
-      scrolled ? 'bg-white/90 backdrop-blur-md py-3 shadow-sm' : 'bg-transparent py-5'
+    <nav className={`fixed top-0 z-100 w-full transition-all duration-300 ${
+      scrolled ? 'bg-white/30 backdrop-blur-md py-3 shadow-sm' : 'bg-white py-5'
     }`}>
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">
         
-        {/* Logo Section */}
-        <Link href={withLocale('/')} className="relative z-[110] transition-transform active:scale-95">
+        {/* Logo Section - จะจางหายไปเมื่อเปิดเมนูมือถือเพื่อไม่ให้ซ้อนทับ */}
+        <Link 
+          href={withLocale('/')} 
+          onClick={() => setOpen(false)}
+          className={`relative z-[110] transition-all duration-300 active:scale-95 ${
+            open ? 'opacity-0 pointer-events-none' : 'opacity-100'
+          }`}
+        >
           <Image 
             src={logo.src} 
-            alt={logo.alt} // สำคัญต่อ SEO
+            alt={logo.alt} 
             width={160} 
             height={50} 
             className="h-10 md:h-12 w-auto object-contain"
@@ -72,7 +75,7 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
               <li key={item.href} className="relative group">
                 <Link
                   href={withLocale(item.href)}
-                  className={`text-sm font-semibold transition-colors duration-300 hover:text-[#1e3a5f] ${
+                  className={`text-sm font-medium transition-colors duration-300 hover:text-[#1e3a5f] ${
                     isActive(item.href) ? 'text-[#1e3a5f]' : 'text-slate-600'
                   }`}
                 >
@@ -88,23 +91,52 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
             ))}
           </ul>
 
-          {/* Language Toggle */}
-          <button
+          {/* Desktop Language Toggle */}
+          <div 
             onClick={toggleLanguage}
-            className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all text-[12px] font-bold"
+            className="relative flex h-9 w-[84px] cursor-pointer items-center rounded-full bg-slate-100 p-1 shadow-inner hover:bg-slate-200/50 transition-colors"
           >
-            <Globe size={14} className="text-[#1e3a5f]" />
-            <span>{isEN ? 'TH' : 'EN'}</span>
-          </button>
+            <motion.div
+              className="absolute h-7 w-[38px] rounded-full bg-white shadow-md"
+              initial={false}
+              animate={{ x: isEN ? 40 : 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            />
+            <div className="relative z-10 flex w-full items-center justify-around text-[11px] font-extrabold">
+              <span className={!isEN ? 'text-[#1e3a5f]' : 'text-slate-400'}>TH</span>
+              <span className={isEN ? 'text-[#1e3a5f]' : 'text-slate-400'}>EN</span>
+            </div>
+          </div>
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden relative z-[110] p-2 text-slate-900"
-        >
-          {open ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        {/* Mobile Controls (Toggle + Hamburger) */}
+        <div className="flex items-center gap-3 md:hidden relative z-[110]">
+          {/* Language Toggle on Mobile Header */}
+          {!open && (
+            <div 
+              onClick={toggleLanguage}
+              className="relative flex h-8 w-[70px] cursor-pointer items-center rounded-full bg-slate-100/80 p-1 shadow-inner backdrop-blur-sm"
+            >
+              <motion.div
+                className="absolute h-6 w-[30px] rounded-full bg-white shadow-sm"
+                initial={false}
+                animate={{ x: isEN ? 32 : 0 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+              <div className="relative z-10 flex w-full items-center justify-around text-[10px] font-bold">
+                <span className={!isEN ? 'text-[#1e3a5f]' : 'text-slate-400'}>TH</span>
+                <span className={isEN ? 'text-[#1e3a5f]' : 'text-slate-400'}>EN</span>
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-2 text-slate-900"
+          >
+            {open ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}
@@ -115,7 +147,7 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm md:hidden ิเข"
+              className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm md:hidden"
               onClick={() => setOpen(false)}
             />
             <motion.div
@@ -123,9 +155,14 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 z-[105] h-full w-[85%] max-w-sm bg-white p-10 pt-32 shadow-2xl md:hidden"
+              className="fixed right-0 top-0 z-[105] h-full w-[50%] max-w-sm bg-white p-10 pt-24 shadow-2xl md:hidden flex flex-col"
             >
-              <nav className="flex flex-col gap-6">
+              {/* Logo in Drawer */}
+              <div className="absolute top-8 left-10">
+                <Image src={logo.src} alt={logo.alt} width={120} height={40} className="h-8 w-auto object-contain" />
+              </div>
+
+              <nav className="flex flex-col gap-6 mt-10">
                 {NAV_MENU.map((item, i) => (
                   <motion.div
                     key={item.href}
@@ -136,7 +173,7 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
                     <Link
                       href={withLocale(item.href)}
                       onClick={() => setOpen(false)}
-                      className={`text-4xl font-black tracking-tighter ${
+                      className={`text-md  font-medium tracking-tighter ${
                         isActive(item.href) ? 'text-[#1e3a5f]' : 'text-slate-800'
                       }`}
                     >
@@ -146,12 +183,13 @@ export default function Navigation({ logo }: { logo: { src: string, alt: string 
                 ))}
               </nav>
 
-              <div className="mt-20 border-t pt-10">
+             
+              <div className="mt-auto border-t pt-10 border-slate-100">
                 <p className="mb-6 text-xs font-bold uppercase tracking-widest text-slate-400 text-center">Follow Us</p>
                 <div className="flex justify-center gap-8 text-slate-900">
-                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Facebook /></a>
-                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Instagram /></a>
-                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Send /></a>
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Facebook size={20} /></a>
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Instagram size={20} /></a>
+                  <a href="#" className="hover:text-[#1e3a5f] transition-transform hover:-translate-y-1"><Send size={20} /></a>
                 </div>
               </div>
             </motion.div>
