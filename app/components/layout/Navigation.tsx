@@ -56,7 +56,7 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
           open
             ? 'bg-white py-3 shadow-sm'
             : scrolled
-            ? 'bg-white/70 backdrop-blur-md py-8 shadow-sm'
+            ? 'bg-white/70 backdrop-blur-md py-3 shadow-sm'
             : 'bg-white/70  backdrop-blur-md py-5'
         }`}
       >
