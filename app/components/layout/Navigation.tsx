@@ -56,8 +56,8 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
           open
             ? 'bg-white py-3 shadow-sm'
             : scrolled
-            ? 'bg-white/70 backdrop-blur-md py-3 shadow-sm'
-            : 'bg-white py-5'
+            ? 'bg-white/70 backdrop-blur-md py-8 shadow-sm'
+            : 'bg-white/70  backdrop-blur-md py-5'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">

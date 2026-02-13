@@ -38,12 +38,12 @@
     position: relative;
   }
   .bg-custom-gradient {
-  background: linear-gradient(
-    to right, 
-    #bad5e083, 
-    #fff4f7, 
-    #fffaee
-  );
+ background: linear-gradient(
+  to right, 
+  #e0f2f1, /* Mint Green อ่อนๆ */
+  #fff4f7, /* Sky Blue นุ่มๆ */
+  #f5f5f5  /* Light Grey เพื่อความคลีน */
+);
 }
   .hero-glow {
     background: radial-gradient(circle, rgba(245,227,230,0.6) 0%, rgba(252,246,229,0) 70%);
