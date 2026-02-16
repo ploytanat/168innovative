@@ -4,7 +4,7 @@ import { getCategories } from './lib/api/categories';
 import { getProducts } from './lib/api/products';
 import { getWhy } from './lib/api/why';
 import { getCompany } from './lib/api/company';
-import { getPosts } from "@/lib/api/wp";
+import { getPosts } from "./lib/api/wp";
 import HeroCarousel from './components/sections/HeroCarousel';
 import CategorySection from './components/sections/CategorySection';
 import ProductMarquee from './components/sections/ProductMarquee';
