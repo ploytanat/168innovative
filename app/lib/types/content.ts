@@ -132,3 +132,39 @@ export interface Article {
   category?: string; // เช่น "packaging", "oem", "knowledge"
   publishedAt: string; // ISO date
 }
+
+
+
+/* =====================================================
+   WordPress Raw Types (Headless Layer)
+===================================================== */
+
+export interface WPTerm {
+  id: number;
+  slug: string;
+  name: string;
+  taxonomy: string;
+}
+
+export interface WPFeaturedMedia {
+  source_url: string;
+}
+
+export interface WPProduct {
+  id: number;
+  slug: string;
+  acf?: {
+    name_th?: string;
+    name_en?: string;
+    description_th?: string;
+    description_en?: string;
+    image_alt_th?: string;
+    image_alt_en?: string;
+  };
+  _embedded?: {
+    ["wp:featuredmedia"]?: Array<{
+      source_url: string;
+    }>;
+    ["wp:term"]?: Array<any[]>;
+  };
+}

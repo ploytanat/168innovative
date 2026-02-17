@@ -7,22 +7,22 @@ import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
 
-import { getHomeSEO } from './lib/api/seo'
+//import { getHomeSEO } from './lib/api/seo'
 import { getCompany } from './lib/api/company'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export async function generateMetadata(): Promise<Metadata> {
-  const seo = getHomeSEO('th')
-  return {
-      title: seo.title,
-      description: seo.description,
-      keywords: seo.keywords,
-      formatDetection: {
-        telephone: false,
-      },
-    }
-  }
+// export async function generateMetadata(): Promise<Metadata> {
+ // const seo = getHomeSEO('th')
+ // return {
+ //     title: seo.title,
+ //     description: seo.description,
+ //     keywords: seo.keywords,
+ //     formatDetection: {
+ //       telephone: false,
+ //     },
+ //   }
+ // }
 
 export default async function RootLayout({
   children,

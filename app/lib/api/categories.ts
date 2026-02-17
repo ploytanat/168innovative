@@ -1,56 +1,115 @@
 // lib/api/categories.ts
-import { categoriesMock } from '../mock/categories.mock'
-import { Locale } from '../types/content'
-import { CategoryView } from '../types/view'
 
-export function getCategories(locale: Locale): CategoryView[] {
-  return categoriesMock.map(cat => ({
-    id: cat.id,
-    slug: cat.slug,
-    name: cat.name[locale],
-    description: cat.description[locale],
-    image: cat.image
-      ? {
-          src: cat.image.src,
-          alt: cat.image.alt[locale],
-        }
-      : undefined,
-    // เพิ่มการดึงข้อมูล SEO ออกมาใช้งาน
-    seoTitle: cat.seoTitle ? cat.seoTitle[locale] : undefined,
-    seoDescription: cat.seoDescription ? cat.seoDescription[locale] : undefined,
-  }))
-}
+import { Locale } from "../types/content";
+import { CategoryView } from "../types/view";
 
-export function getCategoryBySlug(
-  slug: string,
-  locale: Locale
-): CategoryView | undefined {
-  const cat = categoriesMock.find(c => c.slug === slug)
-  if (!cat) return undefined
+const BASE = process.env.WP_API_URL;
 
-  return {
-    id: cat.id,
-    slug: cat.slug,
-    name: cat.name[locale],
-    description: cat.description[locale],
-    image: cat.image
-      ? {
-          src: cat.image.src,
-          alt: cat.image.alt[locale],
-        }
-      : undefined,
-    seoTitle: cat.seoTitle ? cat.seoTitle[locale] : undefined,
-    seoDescription: cat.seoDescription ? cat.seoDescription[locale] : undefined,
+/* ================= Media Helper ================= */
+
+async function getMediaUrl(id?: number): Promise<string | null> {
+  if (!id) return null;
+
+  try {
+    const res = await fetch(
+      `${BASE}/wp-json/wp/v2/media/${id}`,
+      { next: { revalidate: 60 } }
+    );
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return data.source_url ?? null;
+  } catch {
+    return null;
   }
 }
 
+/* ================= All Categories ================= */
 
-export function getCategoryFilters(
+export async function getCategories(
   locale: Locale
-): Pick<CategoryView, 'id' | 'slug' | 'name'>[] {
-  return categoriesMock.map(cat => ({
-    id: cat.id,
-    slug: cat.slug,
-    name: cat.name[locale],
-  }))
+): Promise<CategoryView[]> {
+  const res = await fetch(
+    `${BASE}/wp-json/wp/v2/product_category?per_page=100`,
+    { next: { revalidate: 60 } }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+
+  const data = await res.json();
+
+  return Promise.all(
+    data.map(async (wp: any) => {
+      const imageUrl = await getMediaUrl(wp.acf?.image);
+
+      return mapCategory(wp, locale, imageUrl);
+    })
+  );
+}
+
+/* ================= Single Category ================= */
+
+export async function getCategoryBySlug(
+  slug: string,
+  locale: Locale
+): Promise<CategoryView | null> {
+  const res = await fetch(
+    `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`,
+    { next: { revalidate: 60 } }
+  );
+
+  if (!res.ok) return null;
+
+  const data = await res.json();
+
+  if (!data.length) return null;
+
+  const wp = data[0];
+  const imageUrl = await getMediaUrl(wp.acf?.image);
+
+  return mapCategory(wp, locale, imageUrl);
+}
+
+/* ================= Mapper ================= */
+
+function mapCategory(
+  wp: any,
+  locale: Locale,
+  imageUrl?: string | null
+): CategoryView {
+  return {
+    id: String(wp.id),
+
+    slug: wp.slug,
+
+    name:
+      locale === "th"
+        ? wp.name
+        : wp.acf?.name_en ?? wp.name,
+
+    description:
+      locale === "th"
+        ? wp.acf?.description_th ?? ""
+        : wp.acf?.description_en ?? "",
+
+    image: imageUrl
+      ? {
+          src: imageUrl,
+          alt: wp.name,
+        }
+      : undefined,
+
+    seoTitle:
+      locale === "th"
+        ? wp.acf?.seo_title_th ?? wp.name
+        : wp.acf?.seo_title_en ?? wp.name,
+
+    seoDescription:
+      locale === "th"
+        ? wp.acf?.seo_description_th ?? ""
+        : wp.acf?.seo_description_en ?? "",
+  };
 }

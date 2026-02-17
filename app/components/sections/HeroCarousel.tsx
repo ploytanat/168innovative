@@ -78,7 +78,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                 priority={current === 0}
                 className="object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent md:from-black/50" />
+              <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/20 to-transparent md:from-black/50" />
             </motion.div>
           )}
         </AnimatePresence>

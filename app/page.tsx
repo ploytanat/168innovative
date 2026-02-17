@@ -1,47 +1,61 @@
-// app/(site)/page.tsx
-import { getHome } from './lib/api/home';
-import { getCategories } from './lib/api/categories';
-import { getProducts } from './lib/api/products';
-import { getWhy } from './lib/api/why';
-import { getCompany } from './lib/api/company';
-import { getPosts } from "./lib/api/wp";
-import HeroCarousel from './components/sections/HeroCarousel';
-import CategorySection from './components/sections/CategorySection';
-import ProductMarquee from './components/sections/ProductMarquee';
-import WhyChooseUs from './components/sections/WhyChooseUs';
-import ContactSection from './components/sections/ContactSection';
+// app/page.tsx
 
+import type { Metadata } from "next";
 
+import { getCategories } from "./lib/api/categories";
+import { getHeroSlides } from "./lib/api/hero";
+import { getProducts } from "./lib/api/products";
+
+import HeroCarousel from "./components/sections/HeroCarousel";
+import CategorySection from "./components/sections/CategorySection";
+import ProductMarquee from "./components/sections/ProductMarquee";
+
+/* ================= Metadata ================= */
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "168 Innovative | บรรจุภัณฑ์เครื่องสำอาง OEM",
+    description:
+      "ผู้เชี่ยวชาญด้านบรรจุภัณฑ์เครื่องสำอาง นำเข้าและจัดจำหน่ายโดยตรงจากโรงงาน",
+  };
+}
+
+/* ================= Page ================= */
 
 export default async function HomePage() {
-  const posts = await getPosts();
-  const locale = 'th'
+  const locale = "th";
 
-  const home = getHome(locale)
-  const category = getCategories(locale)
-  const products = getProducts(locale)
-  const why = getWhy(locale)
-  const company = getCompany(locale)
+  const [heroSlides, products, categories] =
+    await Promise.all([
+      getHeroSlides(locale),
+      getProducts(locale),
+      getCategories(locale),
+    ]);
 
   return (
-    <>
-     <div>
-      {posts.map((post: any) => (
-        <div key={post.id}>
-          <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-        </div>
-      ))}
-    </div>
-      <HeroCarousel hero={home.hero} locale={locale} />
-      <ProductMarquee
-        items={products}
-        categorySlug="spout"
-        locale={locale}
-      />
+    <main>
 
-      <CategorySection items={category} locale={locale} />
-      <WhyChooseUs items={why} locale={locale} />
-      <ContactSection data={company} locale={locale}  />
-    </>
-  )
+      {/* HERO */}
+      {heroSlides.length > 0 && (
+        <HeroCarousel hero={{ slides: heroSlides }} />
+      )}
+
+      {/* FEATURED PRODUCTS */}
+      {products.length > 0 && (
+        <ProductMarquee
+          items={products}
+          locale={locale}
+        />
+      )}
+
+      {/* CATEGORY GRID */}
+      {categories.length > 0 && (
+        <CategorySection
+          items={categories}
+          locale={locale}
+        />
+      )}
+
+    </main>
+  );
 }

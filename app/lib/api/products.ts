@@ -1,89 +1,143 @@
-// @/app/lib/api/products.ts
-import { productsMock } from '../mock/products.mock'
-import { categoriesMock } from '../mock/categories.mock' // เพิ่มการนำเข้า categories
-import { Locale } from '../types/content'
-import { ProductView } from '../types/view'
+// app/lib/api/products.ts
 
-/* ================= Utils ================= */
-function mapProductToView(
-  product: typeof productsMock[number],
-  locale: Locale
-): ProductView {
-  return {
-    id: product.id,
-    slug: product.slug,
-    name: product.name[locale] ?? product.name.th,
-    description: product.description?.[locale] ?? '',
-    categoryId: product.categoryId,
-    image: {
-      src: product.image.src,
-      alt: product.image.alt?.[locale] ?? product.name.th,
-    },
-    price: product.price,
-  }
+import { Locale, WPProduct } from "../types/content";
+import { ProductView } from "../types/view";
+
+const BASE = process.env.WP_API_URL;
+
+/* ================= Helper ================= */
+
+
+async function fetchJSON<T>(url: string): Promise<T> {
+  const res = await fetch(url, { next: { revalidate: 60 } });
+
+  if (!res.ok) throw new Error("Fetch failed");
+
+  return res.json() as Promise<T>;
 }
 
-export function getProducts(locale: Locale): ProductView[] {
-  return productsMock.map(p => mapProductToView(p, locale))
+/* ================= All Products (Home) ================= */
+
+export async function getProducts(
+  locale: Locale
+): Promise<ProductView[]> {
+
+  const raw = await fetchJSON<WPProduct[]>(
+    `${BASE}/wp-json/wp/v2/products?_embed=wp:featuredmedia,wp:term&per_page=100`
+  );
+
+  const mapped = raw.map((wp) =>
+    mapWPToProductView(wp, locale)
+  );
+
+  // 🔥 สุ่ม
+  const shuffled = mapped.sort(
+    () => 0.5 - Math.random()
+  );
+
+  return shuffled.slice(0, 8);
+}
+
+
+function mapWPToProductView(
+  wp: WPProduct,
+  locale: Locale
+): ProductView {
+  const featured =
+    wp._embedded?.["wp:featuredmedia"]?.[0];
+
+  const term =
+    wp._embedded?.["wp:term"]?.[0]?.[0];
+
+  return {
+    id: wp.id.toString(),
+    slug: wp.slug,
+
+    name:
+      locale === "th"
+        ? wp.acf?.name_th ?? ""
+        : wp.acf?.name_en ?? "",
+
+    description:
+      locale === "th"
+        ? wp.acf?.description_th ?? ""
+        : wp.acf?.description_en ?? "",
+
+    image: {
+      src: featured?.source_url ?? "",
+      alt:
+        locale === "th"
+          ? wp.acf?.image_alt_th ?? ""
+          : wp.acf?.image_alt_en ?? "",
+    },
+
+    categoryId: term?.id?.toString() ?? "",
+    categorySlug: term?.slug ?? "",
+
+    price: undefined,
+  };
 }
 
 /* ================= Products by Category ================= */
-/**
- * ค้นหาสินค้าทั้งหมดในหมวดหมู่ โดยใช้ ID
- * @param categoryId ใช้ id เท่านั้น (เช่น 'cat-01')
- */
-export function getProductsByCategory(
-  categoryId: string,
+
+export async function getProductsByCategory(
+  slug: string,
   locale: Locale
-): ProductView[] {
-  return productsMock
-    .filter(p => p.categoryId === categoryId)
-    .map(p => mapProductToView(p, locale))
+): Promise<ProductView[]> {
+
+  const terms = await fetchJSON<any[]>(
+    `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
+  );
+
+  if (!terms.length) return [];
+
+  const categoryId = terms[0].id;
+
+  const raw = await fetchJSON<WPProduct[]>(
+    `${BASE}/wp-json/wp/v2/products?product_category=${categoryId}&_embed=wp:featuredmedia,wp:term`
+  );
+
+  return raw.map((wp) =>
+    mapWPToProductView(wp, locale)
+  );
 }
 
 /* ================= Single Product ================= */
-/**
- * ค้นหาสินค้าตัวเดียวโดยใช้ Slug จาก URL
- * @param categorySlug slug ของหมวดหมู่จาก URL (เช่น 'spout')
- * @param productSlug slug ของสินค้าจาก URL (เช่น 'spout-hl160d-16mm')
- */
-export function getProductBySlug(
-  categorySlug: string,
-  productSlug: string,
+
+export async function getProductBySlug(
+  slug: string,
   locale: Locale
-): ProductView | undefined {
-  // 1. หาหมวดหมู่ (Category) จาก slug ก่อนเพื่อเอา ID
-  const category = categoriesMock.find(c => c.slug === categorySlug)
-  
-  if (!category) return undefined
+): Promise<ProductView | null> {
 
-  // 2. หาสินค้าที่ categoryId ตรงกับ ID ที่หาได้ และ slug สินค้าตรงกัน
-  const product = productsMock.find(
-    p => p.categoryId === category.id && p.slug === productSlug
-  )
+  const raw = await fetchJSON<WPProduct[]>(
+    `${BASE}/wp-json/wp/v2/products?slug=${slug}&_embed=wp:featuredmedia,wp:term`
+  );
 
-  if (!product) return undefined
+  if (!raw.length) return null;
 
-  return mapProductToView(product, locale)
+  return mapWPToProductView(raw[0], locale);
 }
 
 /* ================= Related Products ================= */
-export function getRelatedProducts(
-  categoryId: string,
-  currentId: string,
+
+export async function getRelatedProducts(
+  categorySlug: string,
+  currentProductId: string,
   locale: Locale
-){
-  return productsMock
-  .filter(p => p.categoryId === categoryId && p.id !== currentId)
-  .slice(0, 4)
-  .map(p => ({
-    id: p.id,
-    slug: p.slug,
-    name: p.name[locale] ?? p.name.th,
-    image: {
-      src: p.image.src,
-      alt: p.image.alt?.[locale] ?? p.name.th,
-    },
-    price: p.price,
-  }))
+): Promise<ProductView[]> {
+
+  const all = await getProductsByCategory(
+    categorySlug,
+    locale
+  );
+
+  const filtered = all.filter(
+    (p) => p.id !== currentProductId
+  );
+
+  const shuffled = filtered.sort(
+    () => 0.5 - Math.random()
+  );
+
+  return shuffled.slice(0, 4);
 }
