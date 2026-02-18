@@ -1,6 +1,6 @@
 // lib/api/seo.ts
-import { seoMock } from '../mock/seo.mock'
-import { Locale } from '../types/content'
+import { seoMock } from './app/lib/mock/seo.mock'
+import { Locale } from './app/lib/types/content'
 
 export function getHomeSEO(locale: Locale) {
   return {

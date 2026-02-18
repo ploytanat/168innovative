@@ -23,12 +23,7 @@ export default function HomeENPage() {
     <>
       <HeroCarousel hero={home.hero} />
 
-      <ProductMarquee
-        items={products}
-        categorySlug="spout"
-        locale={locale}
-      />
-      <CategorySection items={category} locale={locale}  />
+     
       <WhyChooseUs items={why} locale={locale} />
       <ContactSection data={company} locale={locale} />
 
