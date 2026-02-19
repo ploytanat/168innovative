@@ -115,10 +115,10 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
                 className="object-cover object-center"
               />
             </motion.div>
-
+          )}
           </div>
         </div>
-      </div>
+ 
     </section>
   );
 }
