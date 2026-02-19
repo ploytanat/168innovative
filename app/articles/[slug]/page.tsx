@@ -1,187 +1,168 @@
-import { getArticleBySlug } from '@/app/lib/api/articles'
-import { Locale } from '@/app/lib/types/content'
+import { getArticleBySlug, getArticles } from '@/app/lib/api/articles'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Metadata } from 'next'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
-import { CalendarDays, Clock, ChevronLeft } from 'lucide-react'
+import { CalendarDays, Clock, ArrowLeft, BookOpen } from 'lucide-react'
 
-interface Props {
-  params: {
-    locale: Locale
-    slug: string
-  }
-}
-
-/* =====================================================
-   Dynamic Metadata
-===================================================== */
-export async function generateMetadata(
-  { params }: Props
-): Promise<Metadata> {
-
-  const { slug, locale } = params
-  const article = await getArticleBySlug(slug, locale)
-
-  if (!article) {
-    return { title: 'Not Found' }
-  }
-
-  return {
-    title: `${article.title} | 168 Innovative`,
-    description: article.excerpt,
-    openGraph: {
-      title: article.title,
-      description: article.excerpt,
-      images: article.coverImage
-        ? [{ url: article.coverImage.src }]
-        : [],
-    },
-  }
-}
-
-/* =====================================================
-   Page Component
-===================================================== */
-export default async function ArticleDetailPage(
-  { params }: Props
-) {
-  const { slug, locale } = params
-
-  const article = await getArticleBySlug(slug, locale)
-
+export default async function ArticleDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug, 'th')
   if (!article) notFound()
 
   return (
-    <main className="min-h-screen bg-white pb-24 pt-12 scroll-smooth">
-      <div className="container mx-auto px-4 lg:px-8">
+    <main className="min-h-screen bg-[#FAFAF8]">
+
+      {/* ── Thin top accent bar ── */}
+      <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
+
+      <div className="mx-auto max-w-2xl px-6 pb-32 pt-10">
 
         <Breadcrumb />
 
-        {/* Action Bar */}
-        <div className="mt-8 flex items-center justify-between border-b border-gray-100 pb-6">
-          <Link
-            href={`/${locale}/articles`}
-            className="group inline-flex items-center gap-2 text-sm font-semibold text-gray-500 transition-colors hover:text-gray-900"
-          >
-            <ChevronLeft size={18} className="transition-transform group-hover:-translate-x-1" />
-            {locale === 'th' ? 'บทความทั้งหมด' : 'All Articles'}
-          </Link>
+        {/* Back link */}
+        <Link
+          href="/articles"
+          className="mt-6 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-400 transition-colors hover:text-slate-700"
+        >
+          <ArrowLeft size={13} />
+          บทความทั้งหมด
+        </Link>
 
-          <div className="flex items-center gap-4 text-xs font-bold text-gray-400">
+        {/* ── Hero Header ── */}
+        <header className="mt-10">
+          {/* Meta row */}
+          <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-widest text-amber-600">
             <span className="flex items-center gap-1.5">
-              <CalendarDays size={14} />
-              {new Date(article.publishedAt).toLocaleDateString(locale === 'th' ? 'th-TH' : 'en-US')}
+              <CalendarDays size={11} />
+              {new Date(article.publishedAt).toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
             </span>
-
-            <span className="hidden sm:flex items-center gap-1.5">
-              <Clock size={14} />
-              {locale === 'th' ? 'อ่าน 5 นาที' : '5 min read'}
+            <span className="text-slate-300">·</span>
+            <span className="flex items-center gap-1.5">
+              <BookOpen size={11} />
+              อ่าน 5 นาที
             </span>
           </div>
-        </div>
 
-        <div className="mx-auto max-w-3xl">
+          {/* Title */}
+          <h1
+            className="mt-5 font-serif text-[2.15rem] font-bold leading-[1.3] tracking-tight text-slate-900 md:text-[2.6rem]"
+            style={{ fontFamily: "'Noto Serif Thai', 'Sarabun', serif" }}
+          >
+            {article.title}
+          </h1>
 
-          {/* Header */}
-          <header className="mt-12">
-            <h1 className="text-3xl font-extrabold leading-tight text-gray-900 md:text-5xl md:leading-[1.15]">
-              {article.title}
-            </h1>
-
-            {article.excerpt && (
-              <div className="mt-8 rounded-2xl bg-slate-50 p-6 md:p-8 border-l-4 border-blue-600">
-                <p className="text-lg leading-relaxed text-gray-600 italic">
-                  &ldquo;{article.excerpt}&rdquo;
-                </p>
-              </div>
-            )}
-          </header>
-
-          {/* Cover Image */}
-          {article.coverImage && (
-            <div className="relative mt-12 aspect-[16/9] overflow-hidden rounded-[2.5rem] bg-gray-100 shadow-2xl shadow-slate-200">
-              <Image
-                src={article.coverImage.src}
-                alt={article.coverImage.alt || article.title}
-                fill
-                priority
-                className="object-cover transition-transform duration-1000 hover:scale-105"
-              />
-            </div>
+          {/* Excerpt */}
+          {article.excerpt && (
+            <p className="mt-5 text-[1.05rem] leading-[1.8] text-slate-500">
+              {article.excerpt}
+            </p>
           )}
 
-          {/* Article Content */}
-          <article className="mt-16">
-            <div
-              className="prose prose-lg prose-slate max-w-none
-              prose-headings:text-slate-900 prose-headings:font-bold
-              prose-h2:text-2xl prose-h2:md:text-3xl prose-h2:mt-16 prose-h2:mb-8 prose-h2:pb-4 prose-h2:border-b
-              prose-p:text-slate-600 prose-p:leading-[1.9] prose-p:mb-8
-              prose-strong:text-slate-900
-              prose-img:rounded-[2rem]
-              prose-blockquote:border-blue-600 prose-blockquote:bg-blue-50/30 prose-blockquote:rounded-r-2xl
-              prose-li:marker:text-blue-600"
-            >
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {article.content}
-              </ReactMarkdown>
-            </div>
+          {/* Thin divider */}
+          <div className="mt-8 h-px w-16 bg-amber-400" />
+        </header>
 
-            {/* Tags */}
-            {article.tags.length > 0 && (
-              <div className="mt-20 flex flex-wrap gap-2 border-t border-slate-100 pt-10">
-                {article.tags.map(tag => (
-                  <Link
-                    key={tag.id}
-                    href={`/${locale}/articles?tag=${tag.slug}`}
-                    className="rounded-full bg-slate-100 px-4 py-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider hover:bg-slate-200 transition-colors"
-                  >
-                    #{tag.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </article>
+        {/* ── Cover Image ── */}
+        {article.coverImage && (
+          <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-xl shadow-slate-200">
+            <Image
+              src={article.coverImage.src}
+              alt={article.coverImage.alt || article.title}
+              fill
+              priority
+              className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+            />
+            {/* Subtle inner vignette */}
+            <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
+          </div>
+        )}
 
-          {/* Contact CTA */}
-          <section className="relative mt-20 overflow-hidden rounded-[3rem] bg-slate-900 p-8 text-center text-white md:p-16">
-            <div className="relative z-10">
-              <h3 className="text-2xl font-bold md:text-3xl">
-                {locale === 'th'
-                  ? 'ปรึกษาเรื่องการผลิตบรรจุภัณฑ์'
-                  : 'Consult About Your Packaging Production'}
-              </h3>
+        {/* ── Article Body ── */}
+        <article className="mt-12">
+          <div
+            className="
+              prose prose-slate max-w-none
 
-              <p className="mt-4 mx-auto max-w-md text-slate-400">
-                168 Innovative พร้อมช่วยคุณสร้างสรรค์แบรนด์ด้วยบรรจุภัณฑ์คุณภาพสูง
-              </p>
+              /* Paragraphs */
+              prose-p:text-[1rem] prose-p:leading-[2] prose-p:text-slate-600 prose-p:mb-7
 
-              <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-                <Link
-                  href={`/${locale}/contact`}
-                  className="rounded-full bg-white px-10 py-4 text-sm font-bold text-slate-900 transition-all hover:bg-blue-50 hover:shadow-xl active:scale-95"
-                >
-                  {locale === 'th' ? 'คุยกับผู้เชี่ยวชาญ' : 'Talk to Expert'}
-                </Link>
+              /* Headings */
+              prose-h2:mt-16 prose-h2:mb-4
+              prose-h2:text-[1.45rem] prose-h2:font-bold prose-h2:text-slate-900
+              prose-h2:border-l-4 prose-h2:border-amber-400 prose-h2:pl-4
 
-                <a
-                  href="https://line.me"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full border border-white/20 px-10 py-4 text-sm font-bold text-white transition-all hover:bg-white/10"
-                >
-                  Line Official
-                </a>
-              </div>
-            </div>
+              prose-h3:mt-10 prose-h3:mb-3
+              prose-h3:text-[1.1rem] prose-h3:font-semibold prose-h3:text-slate-800
 
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full" />
-          </section>
+              /* Emphasis */
+              prose-strong:text-slate-900 prose-strong:font-semibold
+              prose-em:text-slate-700
 
+              /* Lists */
+              prose-ul:my-6 prose-ul:space-y-1
+              prose-ol:my-6 prose-ol:space-y-1
+              prose-li:text-slate-600 prose-li:leading-[1.85]
+              prose-li:marker:text-amber-400
+
+              /* Blockquote — pull-quote style */
+              prose-blockquote:my-10 prose-blockquote:not-italic
+              prose-blockquote:border-l-0 prose-blockquote:pl-0
+              prose-blockquote:relative
+              prose-blockquote:bg-amber-50 prose-blockquote:rounded-xl
+              prose-blockquote:px-8 prose-blockquote:py-6
+              prose-blockquote:text-[1.08rem] prose-blockquote:leading-[1.85]
+              prose-blockquote:text-slate-700
+
+              /* Code */
+              prose-code:text-[0.88em] prose-code:bg-slate-100
+              prose-code:rounded prose-code:px-1.5 prose-code:py-0.5
+              prose-code:text-rose-600 prose-code:font-normal
+
+              /* Images inside content */
+              prose-img:rounded-xl prose-img:shadow-md
+
+              /* Hide HR */
+              prose-hr:hidden
+            "
+          >
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {article.content}
+            </ReactMarkdown>
+          </div>
+        </article>
+
+        {/* ── Footer Divider ── */}
+        <div className="mt-20 flex items-center gap-4">
+          <div className="h-px flex-1 bg-slate-200" />
+          <span className="text-xs text-slate-300">✦</span>
+          <div className="h-px flex-1 bg-slate-200" />
+        </div>
+
+        {/* ── Bottom Nav ── */}
+        <div className="mt-8 flex items-center justify-between">
+          <Link
+            href="/articles"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
+          >
+            <ArrowLeft size={14} />
+            บทความทั้งหมด
+          </Link>
+
+          <span className="flex items-center gap-1.5 text-xs text-slate-400">
+            <Clock size={12} />
+            อ่าน 5 นาที
+          </span>
         </div>
       </div>
     </main>
