@@ -13,12 +13,9 @@ export default function AboutPage() {
   return (
     <main className="space-y-24 bg-[#eeee]">
       <div className="container mx-auto">
-        <AboutHero
-          hero={about.hero}
-          whoAreWe={about.whoAreWe}
-        />
+       
 
-        <WhyChooseUs items={why} locale={locale} />
+      
       </div>
     </main>
   )

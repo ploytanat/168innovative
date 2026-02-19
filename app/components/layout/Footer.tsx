@@ -76,13 +76,20 @@ export default function Footer({ company, locale }: FooterProps) {
                     transition
                   "
                 >
-                  <Image
+
+                  {
+
+                    /*
+                       <Image
                     src={s.icon.src}
                     alt={s.icon.alt}
                     width={18}
                     height={18}
                     className="opacity-70"
                   />
+                    */
+                  }
+               
                 </a>
               ))}
             </div>

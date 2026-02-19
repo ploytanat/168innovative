@@ -23,10 +23,10 @@ export default function HomeENPage() {
     <>
       <HeroCarousel hero={home.hero} />
 
-     
+     {/*
       <WhyChooseUs items={why} locale={locale} />
       <ContactSection data={company} locale={locale} />
-
+*/}
     </>
   )
 }

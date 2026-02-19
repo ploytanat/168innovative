@@ -7,6 +7,15 @@ import { Menu, X, Facebook, Instagram, Send } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+// เพิ่ม Interface ให้กับ Props
+interface NavigationProps {
+  locale: string;
+  logo: {
+    src: string;
+    alt: string;
+  };
+}
+
 const NAV_MENU = [
   { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
   { href: '/categories', label: { th: 'สินค้าของเรา', en: 'Products' } },
@@ -14,14 +23,15 @@ const NAV_MENU = [
   { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
 ]
 
-export default function Navigation({ logo }: { logo: { src: string; alt: string } }) {
+export default function Navigation({ locale, logo }: NavigationProps) {
   const router = useRouter()
   const pathname = usePathname()
 
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  const isEN = pathname.startsWith('/en')
+  // ใช้ locale จาก props หรือเช็คจาก pathname
+  const isEN = locale === 'en' || pathname.startsWith('/en')
   const lang = isEN ? 'en' : 'th'
 
   useEffect(() => {
@@ -50,34 +60,35 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
 
   return (
     <>
-      {/* ================= NAVBAR ================= */}
       <nav
         className={`fixed top-0 z-50 w-full transition-all duration-300 ${
           open
             ? 'bg-white py-3 shadow-sm'
             : scrolled
             ? 'bg-white/70 backdrop-blur-md py-3 shadow-sm'
-            : 'bg-white/70  backdrop-blur-md py-5'
+            : 'bg-white/70 backdrop-blur-md py-5'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">
-          {/* Logo */}
+          {/* Logo - แก้ไขให้นำข้อมูลจาก props มาแสดง */}
           <Link
             href={withLocale('/')}
             onClick={() => setOpen(false)}
             className="relative z-50 transition active:scale-95"
           >
-            <Image
-              src={logo.src}
-              alt={logo.alt}
-              width={160}
-              height={50}
-              className="h-10 md:h-12 w-auto object-contain"
-              priority
-            />
+            {logo?.src && (
+              <Image
+                src={logo.src}
+                alt={logo.alt || 'Company Logo'}
+                width={160}
+                height={50}
+                className="h-10 md:h-12 w-auto object-contain"
+                priority
+              />
+            )}
           </Link>
 
-          {/* Desktop */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-10">
             <ul className="flex items-center gap-8">
               {NAV_MENU.map((item) => (
@@ -90,7 +101,7 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
                         : 'text-slate-600'
                     }`}
                   >
-                    {item.label[lang]}
+                    {item.label[lang as 'en' | 'th']}
                   </Link>
                 </li>
               ))}
@@ -128,11 +139,10 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
         </div>
       </nav>
 
-      {/* ================= MOBILE OVERLAY SYSTEM ================= */}
+      {/* Mobile Overlay System */}
       <AnimatePresence>
         {open && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -141,7 +151,6 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
               onClick={() => setOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
@@ -149,8 +158,6 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed right-0 top-0 z-50 h-full w-[80%] max-w-sm bg-white p-10 pt-28 shadow-2xl md:hidden flex flex-col"
             >
-
-              {/* Menu */}
               <nav className="flex flex-col gap-8">
                 {NAV_MENU.map((item) => (
                   <Link
@@ -163,20 +170,19 @@ export default function Navigation({ logo }: { logo: { src: string; alt: string 
                         : 'text-slate-800'
                     }`}
                   >
-                    {item.label[lang]}
+                    {item.label[lang as 'en' | 'th']}
                   </Link>
                 ))}
               </nav>
 
-              {/* Footer */}
               <div className="mt-auto pt-8 border-t border-slate-100">
                 <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 text-center">
                   Follow Us
                 </p>
                 <div className="flex justify-center gap-10 text-slate-900">
-                  <Facebook size={22} />
-                  <Instagram size={22} />
-                  <Send size={22} />
+                  <Facebook size={22} className="cursor-pointer hover:text-blue-600 transition-colors" />
+                  <Instagram size={22} className="cursor-pointer hover:text-pink-600 transition-colors" />
+                  <Send size={22} className="cursor-pointer hover:text-sky-500 transition-colors" />
                 </div>
               </div>
             </motion.div>

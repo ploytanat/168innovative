@@ -6,38 +6,53 @@ import './globals.css'
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
-
-//import { getHomeSEO } from './lib/api/seo'
 import { getCompany } from './lib/api/company'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// export async function generateMetadata(): Promise<Metadata> {
- // const seo = getHomeSEO('th')
- // return {
- //     title: seo.title,
- //     description: seo.description,
- //     keywords: seo.keywords,
- //     formatDetection: {
- //       telephone: false,
- //     },
- //   }
- // }
+// --- จัดการ Metadata ให้ดึงชื่อจาก WordPress ---
+export async function generateMetadata(): Promise<Metadata> {
+  const company = await getCompany('th')
+  return {
+    title: {
+      default: company?.name || 'My Company',
+      template: `%s | ${company?.name || 'My Company'}`
+    },
+    description: company?.address || 'รายละเอียดบริษัท',
+  }
+}
 
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const company = await getCompany('th')
+  const locale = 'th'; 
+
+  // ดึงข้อมูลบริษัท
+  const company = await getCompany(locale)
+
+  // เตรียม Logo สำรองหากในระบบไม่มีข้อมูล
+  const displayLogo = company?.logo || { 
+    src: '/fallback-logo.png', 
+    alt: company?.name || 'Logo' 
+  };
+
   return (
-    <html lang="th">
+    <html lang={locale}>
       <body className={inter.className}>
-        <Navigation logo={company.logo} />
-        <main className="pt-16 bg-custom-gradient">
+        {/* ส่งค่าไปให้ Navigation */}
+        <Navigation locale={locale} logo={displayLogo} />
+
+        {/* คำแนะนำ: หาก bg-custom-gradient เป็นสีอ่อน 
+           อย่าลืมเช็คสีตัวอักษรในส่วนของ Navigation ด้วยนะครับ 
+        */}
+        <main className="pt-16 bg-custom-gradient min-h-screen">
           {children}
-          <Footer company={company} locale='th' />
         </main>
+
+        {company && <Footer company={company} locale={locale} />}
+
         <BackToTop />
       </body>
     </html>

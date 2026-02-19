@@ -22,24 +22,33 @@ export interface CategoryView {
 
 // == Social / Company==
 
-export type SocialType = 'facebook' | 'line' | 'instagram' | 'shopee'
+export type SocialType =
+  | 'facebook'
+  | 'line'
+  | 'instagram'
+  | 'shopee'
+  | string   // 🔥 เพิ่มเผื่อ WP ใส่ type อื่นมา
 
 export interface SocialView {
   type: SocialType
   url: string
-  icon: ImageView
+  icon?: ImageView   // 🔥 ทำให้ optional
 }
 
 export interface CompanyView {
-  logo:ImageView
+  logo: ImageView
   name: string
   address: string
+
   phones: {
     number: string
     label: string
   }[]
+
   email: string[]
+
   socials: SocialView[]
+
   lineQrCode?: ImageView
   contactImage?: ImageView
   contactGallery?: ImageView[]
@@ -110,35 +119,30 @@ export interface HomeHeroView {
 export interface AboutHeroView {
   title: string
   description: string
-  eyebrow?: string
-  cta?: {
-    label: string
-    href: string
-  }
-  image?: ImageView
+  // eyebrow?: string // ลบออกถ้าไม่ได้ใช้ใน ACF
+  // cta?: { label: string; href: string } // ลบออกถ้าไม่ได้ใช้ใน ACF
+ image1?: ImageView   // ✅ เพิ่ม image1
+  image2?: ImageView
 }
 
 export interface AboutSectionView {
   title: string
   description: string
-  quote?: string
-  image?: ImageView
+  // quote?: string // ลบออกถ้าไม่ได้ใช้ใน ACF
+  image?: ImageView   // รูปสำหรับส่วน Who Are We
 }
 
 export interface AboutView {
   hero: AboutHeroView
 
-  // Who We Are (รองรับรูปที่ 2)
-  whoAreWe: AboutSectionView & {
-    image?: ImageView
-  }
+  whoAreWe: AboutSectionView
 
-  // Why Choose Us (reuse component)
   why: {
     title: string
-    items: WhyItemView[]
+    items: WhyItemView[] // รองรับ Array ของ Why Choose Us ที่ await มา
   }
 }
+
 // == Article View ==
 
 export interface ArticleView {
