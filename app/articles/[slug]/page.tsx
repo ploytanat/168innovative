@@ -2,8 +2,6 @@ import { getArticleBySlug, getArticles } from '@/app/lib/api/articles'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import { CalendarDays, Clock, ArrowLeft, BookOpen } from 'lucide-react'
 
@@ -83,7 +81,6 @@ export default async function ArticleDetailPage({
               priority
               className="object-cover transition-transform duration-700 hover:scale-[1.02]"
             />
-            {/* Subtle inner vignette */}
             <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
           </div>
         )}
@@ -91,55 +88,9 @@ export default async function ArticleDetailPage({
         {/* ── Article Body ── */}
         <article className="mt-12">
           <div
-            className="
-              prose prose-slate max-w-none
-
-              /* Paragraphs */
-              prose-p:text-[1rem] prose-p:leading-[2] prose-p:text-slate-600 prose-p:mb-7
-
-              /* Headings */
-              prose-h2:mt-16 prose-h2:mb-4
-              prose-h2:text-[1.45rem] prose-h2:font-bold prose-h2:text-slate-900
-              prose-h2:border-l-4 prose-h2:border-amber-400 prose-h2:pl-4
-
-              prose-h3:mt-10 prose-h3:mb-3
-              prose-h3:text-[1.1rem] prose-h3:font-semibold prose-h3:text-slate-800
-
-              /* Emphasis */
-              prose-strong:text-slate-900 prose-strong:font-semibold
-              prose-em:text-slate-700
-
-              /* Lists */
-              prose-ul:my-6 prose-ul:space-y-1
-              prose-ol:my-6 prose-ol:space-y-1
-              prose-li:text-slate-600 prose-li:leading-[1.85]
-              prose-li:marker:text-amber-400
-
-              /* Blockquote — pull-quote style */
-              prose-blockquote:my-10 prose-blockquote:not-italic
-              prose-blockquote:border-l-0 prose-blockquote:pl-0
-              prose-blockquote:relative
-              prose-blockquote:bg-amber-50 prose-blockquote:rounded-xl
-              prose-blockquote:px-8 prose-blockquote:py-6
-              prose-blockquote:text-[1.08rem] prose-blockquote:leading-[1.85]
-              prose-blockquote:text-slate-700
-
-              /* Code */
-              prose-code:text-[0.88em] prose-code:bg-slate-100
-              prose-code:rounded prose-code:px-1.5 prose-code:py-0.5
-              prose-code:text-rose-600 prose-code:font-normal
-
-              /* Images inside content */
-              prose-img:rounded-xl prose-img:shadow-md
-
-              /* Hide HR */
-              prose-hr:hidden
-            "
-          >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {article.content}
-            </ReactMarkdown>
-          </div>
+         
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
         </article>
 
         {/* ── Footer Divider ── */}
