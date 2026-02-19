@@ -51,7 +51,7 @@ export default async function RootLayout({
           {children}
         </main>
 
-        {company && <Footer company={company} locale={locale} />}
+        {company && <Footer company={company}  />}
 
         <BackToTop />
       </body>
