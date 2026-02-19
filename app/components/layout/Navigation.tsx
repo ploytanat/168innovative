@@ -19,6 +19,7 @@ interface NavigationProps {
 const NAV_MENU = [
   { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
   { href: '/categories', label: { th: 'สินค้าของเรา', en: 'Products' } },
+   { href: '/articles', label: { th: 'บทความของเรา', en: 'Articles' } },
   { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About' } },
   { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
 ]

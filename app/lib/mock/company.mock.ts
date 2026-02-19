@@ -10,8 +10,8 @@ export const companyMock: CompanyInfo = {
     }
   },
   name: {
-    th: '168 Innovative',
-    en: '168 Innovative',
+    th: 'บริษัท 168 อินโนเวทีฟ จำกัด',
+    en: '168 INNOVATIVE CO., LTD.',
   },
   address: {
     th: '89/259 แขวงบางบอน เขตบางบอน กรุงเทพฯ 10150',

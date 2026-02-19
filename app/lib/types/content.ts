@@ -1,4 +1,7 @@
 // types/content.ts
+// =====================================================
+// Common Types
+// =====================================================
 
 export type Locale = "th" | "en";
 
@@ -31,7 +34,9 @@ export interface ContactPhone {
   label: LocalizedText;
 }
 
-//== Hero ==
+// =====================================================
+// Hero
+// =====================================================
 
 export interface HeroSection {
   title: LocalizedText;
@@ -41,14 +46,20 @@ export interface HeroSection {
   ctaSecondary: CTA;
 }
 
-//== SEO ==
+// =====================================================
+// SEO
+// =====================================================
+
 export interface SEOContent {
   title: LocalizedText;
   description: LocalizedText;
   keywords?: string[];
 }
 
-// == HomePage ==
+// =====================================================
+// Home
+// =====================================================
+
 export interface HomeContent {
   hero: {
     slides: {
@@ -63,18 +74,24 @@ export interface HomeContent {
   };
 }
 
-//== category ==
+// =====================================================
+// Category
+// =====================================================
+
 export interface Category {
   id: string;
   slug: string;
   name: LocalizedText;
-  description: LocalizedText; 
+  description: LocalizedText;
   image?: ImageAsset;
-  seoTitle?: LocalizedText; // หัวข้อใหญ่ (H1/H2) ด้านล่าง
-  seoDescription?: LocalizedText; // เนื้อหายาวๆ ที่เน้น Keywords
+  seoTitle?: LocalizedText;
+  seoDescription?: LocalizedText;
 }
 
-//== product ==
+// =====================================================
+// Product
+// =====================================================
+
 export interface Product {
   id: string;
   slug: string;
@@ -83,10 +100,12 @@ export interface Product {
   categoryId: string;
   image: ImageAsset;
   price?: string;
- // createdAt?: string
 }
 
-//=== company ===
+// =====================================================
+// Company
+// =====================================================
+
 export interface CompanyInfo {
   logo: ImageAsset;
   name: LocalizedText;
@@ -99,14 +118,16 @@ export interface CompanyInfo {
   contactGallery?: ImageAsset[];
 }
 
-//== about us ==
+// =====================================================
+// About
+// =====================================================
+
 export interface AboutContent {
   hero: {
     title: LocalizedText;
     description: LocalizedText;
     image: ImageAsset;
   };
-
   whoAreWe: {
     title: LocalizedText;
     description: LocalizedText;
@@ -114,45 +135,82 @@ export interface AboutContent {
   };
 }
 
-//== why choose us ==
+// =====================================================
+// Why Choose Us
+// =====================================================
+
 export interface WhyItem {
   image: ImageAsset;
   title: LocalizedText;
   description: LocalizedText;
 }
 
-// == Article / Blog ==
+// =====================================================
+// Article (Internal View Model - CMS Independent)
+// =====================================================
+
 export interface Article {
   id: string;
   slug: string;
   title: LocalizedText;
   excerpt: LocalizedText;
-  content: LocalizedText; // เนื้อหายาว (markdown หรือ html ก็ได้)
+  content: LocalizedText;
   coverImage?: ImageAsset;
-  category?: string; // เช่น "packaging", "oem", "knowledge"
-  publishedAt: string; // ISO date
+  category?: string;
+  publishedAt: string;
 }
 
-
-
-/* =====================================================
-   WordPress Raw Types (Headless Layer)
-===================================================== */
+// =====================================================
+// WordPress Raw Types (Headless Layer)
+// =====================================================
 
 export interface WPTerm {
   id: number;
   slug: string;
   name: string;
-  taxonomy: string;
+  taxonomy: string; // article_tag | article_category
 }
 
 export interface WPFeaturedMedia {
   source_url: string;
 }
 
+export interface WPEmbedded {
+  ["wp:featuredmedia"]?: WPFeaturedMedia[];
+  ["wp:term"]?: WPTerm[][];
+}
+
+// ---------------------------
+// WP Article (CPT: article)
+// ---------------------------
+
+export interface WPArticle {
+  id: number;
+  slug: string;
+  date: string;
+
+  acf?: {
+    title_th?: string;
+    title_en?: string;
+    excerpt_th?: string;
+    excerpt_en?: string;
+    content_th?: string;
+    content_en?: string;
+    image_alt_th?: string;
+    image_alt_en?: string;
+  };
+
+  _embedded?: WPEmbedded;
+}
+
+// ---------------------------
+// WP Product (CPT: product)
+// ---------------------------
+
 export interface WPProduct {
   id: number;
   slug: string;
+
   acf?: {
     name_th?: string;
     name_en?: string;
@@ -161,10 +219,6 @@ export interface WPProduct {
     image_alt_th?: string;
     image_alt_en?: string;
   };
-  _embedded?: {
-    ["wp:featuredmedia"]?: Array<{
-      source_url: string;
-    }>;
-    ["wp:term"]?: Array<any[]>;
-  };
+
+  _embedded?: WPEmbedded;
 }

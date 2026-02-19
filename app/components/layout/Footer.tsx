@@ -25,6 +25,10 @@ export default function Footer({ company, locale }: FooterProps) {
       label: isEN ? 'Products' : 'หมวดหมู่สินค้า',
     },
     {
+        href: '/articles',
+        label: isEN ? 'Articles' : 'บทความของเรา'
+    },
+    {
       href: '/about',
       label: isEN ? 'About Us' : 'เกี่ยวกับเรา',
     },

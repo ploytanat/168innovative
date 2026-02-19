@@ -21,7 +21,6 @@ export interface CategoryView {
 }
 
 // == Social / Company==
-
 export type SocialType =
   | 'facebook'
   | 'line'
@@ -55,7 +54,6 @@ export interface CompanyView {
 }
 
 // ==  Product ==
-
 export interface ProductView {
   id: string
   slug: string
@@ -68,21 +66,14 @@ export interface ProductView {
   //createdAt: string
 }
 
-/* =======================
-   Why Choose Us
-======================= */
-
+// === Why Choose Us === 
 export interface WhyItemView {
   title: string
   description: string
   image?: ImageView
 }
 
-/* =======================
-   Hero (Home)
-======================= */
-
-
+// === Hero (Home)===
 export interface HeroSlideView {
   id: number
   title: string
@@ -99,37 +90,28 @@ export interface HeroSlideView {
   }
 
 }
-/* =======================
-   Home
-======================= */
 
+/* === Home ==== */
 export interface HomeView {
   hero: HomeHeroView
 }
 
-
-
 export interface HomeHeroView {
   slides: HeroSlideView[]
 }
-/* =======================
-   About
-======================= */
 
+/* === About === */
 export interface AboutHeroView {
   title: string
   description: string
-  // eyebrow?: string // ลบออกถ้าไม่ได้ใช้ใน ACF
-  // cta?: { label: string; href: string } // ลบออกถ้าไม่ได้ใช้ใน ACF
- image1?: ImageView   // ✅ เพิ่ม image1
+  image1?: ImageView 
   image2?: ImageView
 }
 
 export interface AboutSectionView {
   title: string
   description: string
-  // quote?: string // ลบออกถ้าไม่ได้ใช้ใน ACF
-  image?: ImageView   // รูปสำหรับส่วน Who Are We
+  image?: ImageView
 }
 
 export interface AboutView {
@@ -139,11 +121,17 @@ export interface AboutView {
 
   why: {
     title: string
-    items: WhyItemView[] // รองรับ Array ของ Why Choose Us ที่ await มา
+    items: WhyItemView[]
   }
 }
 
 // == Article View ==
+
+export interface TagView {
+  id: number
+  slug: string
+  name: string
+}
 
 export interface ArticleView {
   id: string
@@ -155,5 +143,6 @@ export interface ArticleView {
 
   coverImage?: ImageView
   category?: string
+  tags: TagView[]
   publishedAt: string
 }
