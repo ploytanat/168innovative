@@ -24,13 +24,13 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
   const slideNext = useCallback(() => {
     if (!hasMultipleSlides) return
     setDirection(1)
-    setCurrent(i => (i + 1) % slides.length)
+    setCurrent((i) => (i + 1) % slides.length)
   }, [slides.length, hasMultipleSlides])
 
   const slidePrev = useCallback(() => {
     if (!hasMultipleSlides) return
     setDirection(-1)
-    setCurrent(i => (i - 1 + slides.length) % slides.length)
+    setCurrent((i) => (i - 1 + slides.length) % slides.length)
   }, [slides.length, hasMultipleSlides])
 
   useEffect(() => {
@@ -61,14 +61,16 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
           backdropFilter: 'blur(24px) saturate(180%)',
           WebkitBackdropFilter: 'blur(24px) saturate(180%)',
           border: '1px solid rgba(255, 255, 255, 0.6)',
-          boxShadow: '0 32px 64px -16px rgba(180,100,120,0.12), inset 0 1px 0 rgba(255,255,255,0.8)',
+          boxShadow:
+            '0 32px 64px -16px rgba(180,100,120,0.12), inset 0 1px 0 rgba(255,255,255,0.8)',
         }}
       >
         {/* ── Shimmer top edge ── */}
         <div
           className="absolute top-0 inset-x-0 h-[1px] z-20"
           style={{
-            background: 'linear-gradient(to right, transparent 10%, rgba(255,255,255,0.9) 40%, rgba(232,196,184,0.8) 60%, transparent 90%)',
+            background:
+              'linear-gradient(to right, transparent 10%, rgba(255,255,255,0.9) 40%, rgba(232,196,184,0.8) 60%, transparent 90%)',
           }}
         />
 
@@ -77,23 +79,30 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
           <>
             <div
               className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full blur-3xl opacity-50"
-              style={{ background: 'radial-gradient(circle, rgba(255,182,193,0.6), transparent)' }}
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(255,182,193,0.6), transparent)',
+              }}
             />
             <div
               className="pointer-events-none absolute -bottom-24 left-0 h-64 w-64 rounded-full blur-3xl opacity-40"
-              style={{ background: 'radial-gradient(circle, rgba(253,220,235,0.7), transparent)' }}
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(253,220,235,0.7), transparent)',
+              }}
             />
           </>
         )}
 
         {/* ── Full BG slide background ── */}
-        <AnimatePresence initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           {isFullBg && (
             <motion.div
               key={`bg-${current}`}
               initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1, transition: { duration: 0.9 } }}
-              exit={{ opacity: 0, transition: { duration: 0.4 } }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.9 }}
               className="absolute inset-0 z-0"
             >
               <Image
@@ -105,34 +114,49 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
               />
               <div
                 className="absolute inset-0"
-                style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)' }}
+                style={{
+                  background:
+                    'linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)',
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-br from-rose-900/10 to-transparent" />
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* ── Main content wrapper (Fixed Responsive Grid/Flex) ── */}
+        {/* ── Main content wrapper ── */}
         <div
           className={`relative z-10 flex-1 flex flex-col lg:grid items-center
           px-6 sm:px-14 lg:px-20 pt-12 pb-24 lg:pb-12 gap-8 lg:gap-12
           ${isFullBg ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}
         >
-
-          {/* Side image — split layout */}
+          {/* Side image */}
           {!isFullBg && (
             <div className="order-1 lg:order-2 flex justify-center items-center w-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`img-${current}`}
                   initial={{ opacity: 0, scale: 0.88, filter: 'blur(8px)' }}
-                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)', transition: { duration: 0.65 } }}
-                  exit={{ opacity: 0, scale: 0.92, filter: 'blur(4px)', transition: { duration: 0.3 } }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    transition: { duration: 0.65 },
+                  }}
+                  exit={{
+                    opacity: 0,
+                    scale: 0.92,
+                    filter: 'blur(4px)',
+                    transition: { duration: 0.3 },
+                  }}
                   className="relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] lg:w-[440px] lg:h-[440px]"
                 >
                   <div
                     className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-xl opacity-40"
-                    style={{ background: 'radial-gradient(ellipse, rgba(200,100,120,0.4), transparent)' }}
+                    style={{
+                      background:
+                        'radial-gradient(ellipse, rgba(200,100,120,0.4), transparent)',
+                    }}
                   />
                   <Image
                     src={active.image.src}
@@ -150,96 +174,120 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
             <motion.div
               key={`content-${current}`}
               initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } }}
-              exit={{ opacity: 0, y: -16, filter: 'blur(4px)', transition: { duration: 0.3 } }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                filter: 'blur(0px)',
+                transition: { duration: 0.6 },
+              }}
+              exit={{
+                opacity: 0,
+                y: -16,
+                filter: 'blur(4px)',
+                transition: { duration: 0.3 },
+              }}
               className={`flex flex-col order-2 lg:order-1 w-full
-              ${isFullBg
-                ? 'items-center lg:items-start text-center lg:text-left text-white max-w-xl mx-auto lg:mx-0'
-                : 'items-center lg:items-start text-center lg:text-left'
+              ${
+                isFullBg
+                  ? 'items-center lg:items-start text-center lg:text-left text-white max-w-xl mx-auto lg:mx-0'
+                  : 'items-center lg:items-start text-center lg:text-left'
               }`}
             >
-              {/* Subtitle — glass pill */}
+              {/* Subtitle */}
               <span
                 className="text-[10px] font-semibold tracking-[0.35em] uppercase px-4 py-1.5 rounded-full w-fit mb-5"
-                style={isFullBg ? {
-                  background: 'rgba(255,255,255,0.12)',
-                  border: '1px solid rgba(255,255,255,0.25)',
-                  color: 'rgba(255,255,255,0.9)',
-                  backdropFilter: 'blur(8px)',
-                } : {
-                  background: 'rgba(255,220,225,0.5)',
-                  border: '1px solid rgba(232,180,190,0.6)',
-                  color: '#c07080',
-                  backdropFilter: 'blur(8px)',
-                }}
+                style={
+                  isFullBg
+                    ? {
+                        background: 'rgba(255,255,255,0.12)',
+                        border: '1px solid rgba(255,255,255,0.25)',
+                        color: 'rgba(255,255,255,0.9)',
+                        backdropFilter: 'blur(8px)',
+                      }
+                    : {
+                        background: 'rgba(255,220,225,0.5)',
+                        border: '1px solid rgba(232,180,190,0.6)',
+                        color: '#c07080',
+                        backdropFilter: 'blur(8px)',
+                      }
+                }
               >
                 {active.subtitle}
               </span>
 
-              {/* Title */}
               <h1
-                className={`text-3xl sm:text-5xl lg:text-[3.8rem] font-black leading-[1.1] tracking-tight
-                ${isFullBg ? 'text-white' : 'text-slate-800'}`}
-                style={{ fontFamily: "'Cormorant Garamond', 'Noto Serif Thai', serif" }}
+                className={`text-3xl sm:text-5xl lg:text-[3.8rem] font-black leading-[1.1] tracking-tight ${
+                  isFullBg ? 'text-white' : 'text-slate-800'
+                }`}
+                style={{
+                  fontFamily:
+                    "'Cormorant Garamond', 'Noto Serif Thai', serif",
+                }}
               >
                 {active.title}
               </h1>
 
-              {/* Divider */}
-              <div className="mt-5 flex items-center gap-2">
-                <div className="h-px w-10 rounded-full"
-                  style={{ background: isFullBg ? 'rgba(255,255,255,0.4)' : 'rgba(212,160,160,0.6)' }} />
-                <div className="h-1 w-1 rounded-full"
-                  style={{ background: isFullBg ? 'rgba(255,255,255,0.5)' : '#d4a0a0' }} />
-              </div>
-
-              {/* Description */}
               <p
-                className={`mt-5 text-sm sm:text-lg leading-relaxed max-w-md
-                ${isFullBg ? 'text-white/80' : 'text-slate-500'}`}
+                className={`mt-5 text-sm sm:text-lg leading-relaxed max-w-md ${
+                  isFullBg ? 'text-white/80' : 'text-slate-500'
+                }`}
               >
                 {active.description}
               </p>
 
-              {/* ── CTAs Fixed Responsive Stacking ── */}
+              {/* CTAs */}
               <div className="mt-9 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
-                {/* Primary */}
                 <Link
                   href={active.ctaPrimary.href}
                   className="group/btn flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] w-full sm:w-auto"
-                  style={isFullBg ? {
-                    background: 'rgba(255,255,255,0.92)',
-                    color: '#374151',
-                    boxShadow: '0 4px 24px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1)',
-                  } : {
-                    background: 'rgba(210,100,120,0.85)',
-                    backdropFilter: 'blur(12px)',
-                    color: '#fff',
-                    boxShadow: '0 4px 24px rgba(210,100,120,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-                    border: '1px solid rgba(255,255,255,0.2)',
-                  }}
+                  style={
+                    isFullBg
+                      ? {
+                          background: 'rgba(255,255,255,0.92)',
+                          color: '#374151',
+                          boxShadow:
+                            '0 4px 24px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1)',
+                        }
+                      : {
+                          background: 'rgba(210,100,120,0.85)',
+                          backdropFilter: 'blur(12px)',
+                          color: '#fff',
+                          boxShadow:
+                            '0 4px 24px rgba(210,100,120,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                        }
+                  }
                 >
-                  <span className="truncate">{active.ctaPrimary.label}</span>
+                  <span className="truncate">
+                    {active.ctaPrimary.label}
+                  </span>
                   <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform shrink-0" />
                 </Link>
 
-                {/* Secondary */}
                 <Link
                   href={active.ctaSecondary.href}
                   className="flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] w-full sm:w-auto"
-                  style={isFullBg ? {
-                    background: 'rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255,255,255,0.25)',
-                    color: 'rgba(255,255,255,0.9)',
-                  } : {
-                    background: 'rgba(255,255,255,0.65)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(212,160,160,0.4)',
-                    color: '#b07080',
-                  }}
+                  style={
+                    isFullBg
+                      ? {
+                          background: 'rgba(255,255,255,0.1)',
+                          backdropFilter: 'blur(12px)',
+                          border:
+                            '1px solid rgba(255,255,255,0.25)',
+                          color: 'rgba(255,255,255,0.9)',
+                        }
+                      : {
+                          background: 'rgba(255,255,255,0.65)',
+                          backdropFilter: 'blur(12px)',
+                          border:
+                            '1px solid rgba(212,160,160,0.4)',
+                          color: '#b07080',
+                        }
+                  }
                 >
-                  <span className="truncate">{active.ctaSecondary.label}</span>
+                  <span className="truncate">
+                    {active.ctaSecondary.label}
+                  </span>
                 </Link>
               </div>
             </motion.div>
@@ -259,12 +307,19 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.7)',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg ? '#374151' : '#b07080',
+                  border:
+                    '1px solid rgba(255,255,255,0.7)',
+                  boxShadow:
+                    '0 4px 16px rgba(0,0,0,0.08)',
+                  color: isFullBg
+                    ? '#374151'
+                    : '#b07080',
                 }}
               >
-                <ChevronLeft size={24} className="sm:w-7 sm:h-7" strokeWidth={2} />
+                <ChevronLeft
+                  size={24}
+                  strokeWidth={2}
+                />
               </button>
 
               <button
@@ -276,22 +331,30 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.7)',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg ? '#374151' : '#b07080',
+                  border:
+                    '1px solid rgba(255,255,255,0.7)',
+                  boxShadow:
+                    '0 4px 16px rgba(0,0,0,0.08)',
+                  color: isFullBg
+                    ? '#374151'
+                    : '#b07080',
                 }}
               >
-                <ChevronRight size={24} className="sm:w-7 sm:h-7" strokeWidth={2} />
+                <ChevronRight
+                  size={24}
+                  strokeWidth={2}
+                />
               </button>
             </div>
 
-            {/* ── Pagination dots (Positioned at bottom) ── */}
+            {/* ── Pagination dots ── */}
             <div
               className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-30 px-5 py-2.5 rounded-full"
               style={{
                 background: 'rgba(255,255,255,0.35)',
                 backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(255,255,255,0.5)',
+                border:
+                  '1px solid rgba(255,255,255,0.5)',
               }}
             >
               {slides.map((_, i) => (
@@ -305,10 +368,18 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
-                      width: i === current ? '100%' : '6px',
-                      background: i === current
-                        ? isFullBg ? 'rgba(255,255,255,0.9)' : '#d4a0a0'
-                        : isFullBg ? 'rgba(255,255,255,0.3)' : 'rgba(212,160,160,0.35)',
+                      width:
+                        i === current
+                          ? '100%'
+                          : '6px',
+                      background:
+                        i === current
+                          ? isFullBg
+                            ? 'rgba(255,255,255,0.9)'
+                            : '#d4a0a0'
+                          : isFullBg
+                          ? 'rgba(255,255,255,0.3)'
+                          : 'rgba(212,160,160,0.35)',
                     }}
                   />
                 </button>

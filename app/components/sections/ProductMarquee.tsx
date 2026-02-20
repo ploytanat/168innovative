@@ -38,7 +38,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       {/* ── Top border ── */}
       <div
         className="absolute top-0 inset-x-0 h-px"
-        style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
+        style={{ background: 'linear-linear(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
       />
 
       {/* ── Header ── */}
@@ -50,9 +50,9 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
           {uiText.featuredProducts[locale]}
         </h2>
         <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-          <div className="h-px w-8 bg-gradient-to-r from-transparent to-rose-300 md:w-12" />
+          <div className="h-px w-8 bg-rose-300 md:w-12" />
           <div className="h-1 w-1 rounded-full bg-rose-300" />
-          <div className="h-px w-8 bg-gradient-to-l from-transparent to-rose-300 md:w-12" />
+          <div className="h-px w-8  bg-rose-300 md:w-12" />
         </div>
       </div>
 
@@ -89,8 +89,8 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       {/* ================= DESKTOP (Marquee) ================= */}
       {/* ใช้เฉพาะหน้าจอขนาดใหญ่ (Large Desktop) ขึ้นไป */}
       <div className="relative hidden lg:block overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-gradient-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-gradient-to-l from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-linear-to-r from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-linear-to-l from-white to-transparent" />
 
         <motion.div
           ref={marqueeRef}
@@ -109,7 +109,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               className={isDragging ? 'pointer-events-none' : 'group'}
             >
               <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
                   <Image
@@ -125,7 +125,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                 <p className="relative mt-4 text-[12px] font-medium text-center line-clamp-1 text-slate-500 transition-colors duration-300 group-hover:text-rose-500">
                   {item.name}
                 </p>
-                <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-gradient-to-r from-rose-300 to-pink-300 transition-all duration-500 group-hover:w-12" />
+                <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-rose-300 to-pink-300 transition-all duration-500 group-hover:w-12" />
               </div>
             </Link>
           ))}
@@ -146,7 +146,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       {/* ── Bottom border ── */}
       <div
         className="absolute bottom-0 inset-x-0 h-px"
-        style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
+        style={{ background: 'linear-linear(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
       />
     </section>
   )
