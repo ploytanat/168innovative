@@ -1,42 +1,27 @@
 // app/categories/[slug]/page.tsx
 
+import Breadcrumb from "@/app/components/ui/Breadcrumb";
 import { getCategoryBySlug } from "@/app/lib/api/categories";
 import { getProductsByCategory } from "@/app/lib/api/products";
 import { Locale } from "@/app/lib/types/content";
-
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
-/* ================= Metadata ================= */
-
-export async function generateMetadata(
-  { params }: Props
-): Promise<Metadata> {
-
-  const { slug } = await params; // ✅ ต้อง await
-
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
   const locale: Locale = "th";
-
   const category = await getCategoryBySlug(slug, locale);
 
-  if (!category) {
-    return {
-      title: "ไม่พบหมวดหมู่สินค้า",
-    };
-  }
+  if (!category) return { title: "ไม่พบหมวดหมู่สินค้า" };
 
   return {
-    title:
-      category.seoTitle ||
-      `${category.name} | บรรจุภัณฑ์เครื่องสำอาง`,
+    title: category.seoTitle || `${category.name} | บรรจุภัณฑ์เครื่องสำอาง`,
     description:
       category.seoDescription ||
       category.description ||
@@ -44,14 +29,8 @@ export async function generateMetadata(
   };
 }
 
-/* ================= Page ================= */
-
-export default async function CategoryPage(
-  { params }: Props
-) {
-
-  const { slug } = await params; // ✅ ต้อง await
-
+export default async function CategoryPage({ params }: Props) {
+  const { slug } = await params;
   const locale: Locale = "th";
 
   const [category, products] = await Promise.all([
@@ -59,48 +38,111 @@ export default async function CategoryPage(
     getProductsByCategory(slug, locale),
   ]);
 
-  if (!category) {
-    notFound();
-  }
+  if (!category) notFound();
 
   return (
-    <main className="container mx-auto py-20">
+    <main className="min-h-screen bg-[#F8FAFC] pb-32 pt-12">
+      <div className="mx-auto max-w-7xl px-6">
+        <Breadcrumb />
 
-      <h1 className="text-4xl font-bold text-center mb-8">
-        {category.name}
-      </h1>
-
-      {category.description && (
-        <p className="text-center text-gray-600 mb-12">
-          {category.description}
-        </p>
-      )}
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {/* Category header */}
+        <header className="mb-14 mt-10">
           <Link
-            key={product.id}
-            href={`/categories/${slug}/${product.slug}`}
-            className="group"
+            href="/categories"
+            className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
           >
-            <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              {product.image?.src && (
-                <Image
-                  src={product.image.src}
-                  alt={product.image.alt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition"
-                />
+            ← หมวดหมู่ทั้งหมด
+          </Link>
+
+          <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-[#1A2535] md:text-4xl">
+                {category.name}
+              </h1>
+
+              {category.description && (
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#5A6A7E]">
+                  {category.description}
+                </p>
               )}
             </div>
 
-            <h2 className="mt-3 text-center font-semibold">
-              {product.name}
-            </h2>
-          </Link>
-        ))}
-      </div>
+            {/* Product count badge */}
+            <div className="shrink-0 rounded-full border border-[#14B8A6] bg-[#F0FDFA] px-4 py-1.5 text-xs font-semibold text-[#14B8A6]">
+              {products.length} รายการ
+            </div>
+          </div>
 
+          {/* Divider */}
+          <div className="mt-8 h-px w-full bg-gradient-to-r from-[#14B8A655] to-transparent" />
+        </header>
+
+        {/* Empty state */}
+        {products.length === 0 && (
+          <div className="py-32 text-center">
+            <p className="text-sm text-[#94A3B8]">
+              ยังไม่มีสินค้าในหมวดนี้
+            </p>
+          </div>
+        )}
+
+        {/* Product grid */}
+        {products.length > 0 && (
+          <section aria-label={`สินค้าใน${category.name}`}>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {products.map((product) => (
+                <Link
+                  key={product.id}
+                  href={`/categories/${slug}/${product.slug}`}
+                  className="group flex flex-col"
+                >
+                  {/* Image container */}
+                  <div className="relative aspect-square overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F1F5F9]">
+                    {product.image?.src ? (
+                      <Image
+                        src={product.image.src}
+                        alt={product.image.alt}
+                        fill
+                        sizes="(min-width:1280px) 20vw, (min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-xs text-[#94A3B8]">
+                        No Image
+                      </div>
+                    )}
+
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-[#14B8A611] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </div>
+
+                  {/* Product name */}
+                  <div className="mt-3 px-0.5">
+                    <h2 className="text-sm font-semibold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                      {product.name}
+                    </h2>
+
+                    {/* Teal underline */}
+                    <div className="mt-1.5 h-px w-0 rounded-full bg-[#14B8A6] transition-all duration-300 group-hover:w-6" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* SEO description */}
+        {category.seoDescription && (
+          <section className="mt-24 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-8 py-10">
+            <h2 className="text-base font-semibold text-[#1A2535]">
+              {category.seoTitle || category.name}
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#5A6A7E]">
+              {category.seoDescription}
+            </p>
+          </section>
+        )}
+      </div>
     </main>
   );
 }

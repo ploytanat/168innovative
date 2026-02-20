@@ -67,7 +67,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
             ? 'bg-white py-3 shadow-sm'
             : scrolled
             ? 'bg-white/70 backdrop-blur-md py-3 shadow-sm'
-            : 'bg-white/70 backdrop-blur-md py-5'
+            : 'bg-white backdrop-blur-md py-5 shadow-sm'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">

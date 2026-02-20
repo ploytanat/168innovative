@@ -21,11 +21,11 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <section className="relative overflow-hidden bg-white py-4">
+    <section className="relative overflow-hidden bg-white py-12 md:py-20">
 
-      {/* ── Blush glow orbs ── */}
-      <div className="pointer-events-none absolute -top-20 left-1/4 h-64 w-64 rounded-full bg-rose-100/60 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-20 right-1/4 h-64 w-64 rounded-full bg-pink-100/50 blur-3xl" />
+      {/* ── Blush glow orbs (Responsive size) ── */}
+      <div className="pointer-events-none absolute -top-20 left-1/4 h-48 w-48 md:h-96 md:w-96 rounded-full bg-rose-100/60 blur-[80px] md:blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-20 right-1/4 h-48 w-48 md:h-96 md:w-96 rounded-full bg-pink-100/50 blur-[80px] md:blur-[120px]" />
 
       {/* ── Subtle dot texture ── */}
       <div
@@ -35,53 +35,49 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
         }}
       />
 
-      {/* ── Thin rose-gold top border ── */}
+      {/* ── Top border ── */}
       <div
         className="absolute top-0 inset-x-0 h-px"
         style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
       />
 
       {/* ── Header ── */}
-      <div className="relative mb-12 px-6 text-center">
-       
+      <div className="relative mb-8 md:mb-16 px-6 text-center">
         <h2
-          className="mt-3 text-2xl font-bold text-slate-800 sm:text-3xl"
+          className="mt-3 text-2xl font-bold text-slate-800 sm:text-3xl lg:text-4xl"
           style={{ fontFamily: "'Cormorant Garamond', 'Noto Serif Thai', serif", letterSpacing: '0.02em' }}
         >
           {uiText.featuredProducts[locale]}
         </h2>
-        {/* Decorative divider */}
         <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-          <div className="h-px w-8 bg-gradient-to-r from-transparent to-rose-300" />
+          <div className="h-px w-8 bg-gradient-to-r from-transparent to-rose-300 md:w-12" />
           <div className="h-1 w-1 rounded-full bg-rose-300" />
-          <div className="h-px w-8 bg-gradient-to-l from-transparent to-rose-300" />
+          <div className="h-px w-8 bg-gradient-to-l from-transparent to-rose-300 md:w-12" />
         </div>
       </div>
 
-      {/* ================= MOBILE ================= */}
-      <div className="md:hidden w-full overflow-x-auto px-4 scrollbar-hide touch-pan-x">
-        <div className="flex flex-nowrap gap-3 snap-x snap-mandatory pb-4">
+      {/* ================= MOBILE & TABLET (Scroll) ================= */}
+      {/* ปรับให้แสดงผลแบบ Scroll สำหรับมือถือและ Tablet ขนาดเล็ก */}
+      <div className="lg:hidden w-full overflow-x-auto px-6 scrollbar-hide touch-pan-x">
+        <div className="flex flex-nowrap gap-4 pb-6">
           {items.map((item) => (
             <Link
               key={item.id}
-              href={withLocalePath(
-                `/categories/${item.categorySlug}/${item.slug}`,
-                locale
-              )}
-              className="snap-start shrink-0"
+              href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
+              className="shrink-0"
             >
-              <div className="w-36 rounded-2xl bg-white border border-rose-100 p-2.5 shadow-sm active:scale-95 transition-transform">
+              <div className="w-40 md:w-48 rounded-2xl bg-white border border-rose-100 p-3 shadow-sm active:scale-95 transition-transform">
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/50">
                   <Image
                     src={item.image.src}
                     alt={item.image.alt || item.name}
                     fill
-                    sizes="144px"
+                    sizes="(max-width: 768px) 160px, 192px"
                     className="object-cover"
                     draggable={false}
                   />
                 </div>
-                <p className="mt-2.5 text-[11px] font-medium line-clamp-1 text-center text-slate-600">
+                <p className="mt-3 text-xs font-medium line-clamp-1 text-center text-slate-600 px-1">
                   {item.name}
                 </p>
               </div>
@@ -90,54 +86,46 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
         </div>
       </div>
 
-      {/* ================= DESKTOP ================= */}
-      <div className="relative hidden md:block overflow-hidden">
-        {/* Edge fades */}
+      {/* ================= DESKTOP (Marquee) ================= */}
+      {/* ใช้เฉพาะหน้าจอขนาดใหญ่ (Large Desktop) ขึ้นไป */}
+      <div className="relative hidden lg:block overflow-hidden">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-gradient-to-r from-white to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-gradient-to-l from-white to-transparent" />
 
         <motion.div
           ref={marqueeRef}
-          className="flex gap-5 px-8 py-6 cursor-grab active:cursor-grabbing"
+          className="flex gap-6 px-8 py-8 cursor-grab active:cursor-grabbing"
           drag="x"
-          dragConstraints={{ left: -2000, right: 0 }}
-          dragElastic={0.08}
+          dragConstraints={{ left: -2500, right: 0 }}
           onDragStart={() => setIsDragging(true)}
           onDragEnd={() => setIsDragging(false)}
           animate={!isDragging ? { x: ['0%', '-50%'] } : undefined}
-          transition={{ repeat: Infinity, ease: 'linear', duration: 38 }}
+          transition={{ repeat: Infinity, ease: 'linear', duration: 45 }}
         >
           {doubleItems.map((item, i) => (
             <Link
               key={`${item.id}-${i}`}
-              href={withLocalePath(
-                `/categories/${item.categorySlug}/${item.slug}`,
-                locale
-              )}
+              href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
               className={isDragging ? 'pointer-events-none' : 'group'}
             >
-              <div className="relative w-44 shrink-0 rounded-2xl border border-rose-100 bg-white p-3 shadow-sm transition-all duration-300 group-hover:border-rose-200 group-hover:shadow-lg group-hover:-translate-y-1.5">
-
-                {/* Hover blush fill */}
+              <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2">
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
+                
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
                   <Image
                     src={item.image.src}
                     alt={item.image.alt || item.name}
                     fill
-                    sizes="176px"
-                    className="object-cover select-none transition-transform duration-500 group-hover:scale-105"
+                    sizes="192px"
+                    className="object-cover select-none transition-transform duration-700 group-hover:scale-110"
                     draggable={false}
                   />
                 </div>
 
-                <p className="relative mt-3 text-[11px] font-medium text-center line-clamp-1 text-slate-500 transition-colors duration-300 group-hover:text-rose-500">
+                <p className="relative mt-4 text-[12px] font-medium text-center line-clamp-1 text-slate-500 transition-colors duration-300 group-hover:text-rose-500">
                   {item.name}
                 </p>
-
-                {/* Rose gold underline */}
-                <div className="mx-auto mt-2 h-px w-0 rounded-full bg-gradient-to-r from-rose-300 to-pink-300 transition-all duration-300 group-hover:w-10" />
+                <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-gradient-to-r from-rose-300 to-pink-300 transition-all duration-500 group-hover:w-12" />
               </div>
             </Link>
           ))}
@@ -145,17 +133,17 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       </div>
 
       {/* ── CTA ── */}
-      <div className="mt-10 text-center">
+      <div className="mt-8 md:mt-16 text-center">
         <Link
           href={withLocalePath('/categories', locale)}
-          className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md"
+          className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-8 py-3.5 text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md active:scale-95"
         >
-          ดูสินค้าทั้งหมด
-          <span>✦</span>
+          {locale === 'th' ? 'ดูสินค้าทั้งหมด' : 'View All Products'}
+          <span className="text-sm">✦</span>
         </Link>
       </div>
 
-      {/* ── Thin rose-gold bottom border ── */}
+      {/* ── Bottom border ── */}
       <div
         className="absolute bottom-0 inset-x-0 h-px"
         style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}

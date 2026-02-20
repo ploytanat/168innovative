@@ -54,7 +54,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
 
       {/* ── Outer glass card ── */}
       <div
-        className="relative w-full max-w-7xl min-h-[580px] sm:min-h-[640px]
+        className="relative w-full max-w-7xl min-h-[620px] sm:min-h-[640px] flex flex-col
         overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem]"
         style={{
           background: 'rgba(255, 255, 255, 0.45)',
@@ -112,23 +112,23 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
           )}
         </AnimatePresence>
 
-        {/* ── Main grid ── */}
+        {/* ── Main content wrapper (Fixed Responsive Grid/Flex) ── */}
         <div
-          className={`absolute inset-0 z-10 grid items-center
-          px-8 sm:px-14 lg:px-20 py-12
-          ${isFullBg ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2 gap-6'}`}
+          className={`relative z-10 flex-1 flex flex-col lg:grid items-center
+          px-6 sm:px-14 lg:px-20 pt-12 pb-24 lg:pb-12 gap-8 lg:gap-12
+          ${isFullBg ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}
         >
 
           {/* Side image — split layout */}
           {!isFullBg && (
-            <div className="order-1 lg:order-2 flex justify-center items-center">
+            <div className="order-1 lg:order-2 flex justify-center items-center w-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={`img-${current}`}
                   initial={{ opacity: 0, scale: 0.88, filter: 'blur(8px)' }}
                   animate={{ opacity: 1, scale: 1, filter: 'blur(0px)', transition: { duration: 0.65 } }}
                   exit={{ opacity: 0, scale: 0.92, filter: 'blur(4px)', transition: { duration: 0.3 } }}
-                  className="relative w-[260px] h-[260px] lg:w-[440px] lg:h-[440px]"
+                  className="relative w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] lg:w-[440px] lg:h-[440px]"
                 >
                   <div
                     className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-xl opacity-40"
@@ -152,9 +152,9 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
               initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } }}
               exit={{ opacity: 0, y: -16, filter: 'blur(4px)', transition: { duration: 0.3 } }}
-              className={`flex flex-col order-2 lg:order-1
+              className={`flex flex-col order-2 lg:order-1 w-full
               ${isFullBg
-                ? 'items-center lg:items-start text-center lg:text-left text-white max-w-xl'
+                ? 'items-center lg:items-start text-center lg:text-left text-white max-w-xl mx-auto lg:mx-0'
                 : 'items-center lg:items-start text-center lg:text-left'
               }`}
             >
@@ -178,7 +178,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
 
               {/* Title */}
               <h1
-                className={`text-4xl sm:text-5xl lg:text-[3.8rem] font-black leading-[1.07] tracking-tight
+                className={`text-3xl sm:text-5xl lg:text-[3.8rem] font-black leading-[1.1] tracking-tight
                 ${isFullBg ? 'text-white' : 'text-slate-800'}`}
                 style={{ fontFamily: "'Cormorant Garamond', 'Noto Serif Thai', serif" }}
               >
@@ -195,18 +195,18 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
 
               {/* Description */}
               <p
-                className={`mt-5 text-base sm:text-lg leading-relaxed max-w-md
+                className={`mt-5 text-sm sm:text-lg leading-relaxed max-w-md
                 ${isFullBg ? 'text-white/80' : 'text-slate-500'}`}
               >
                 {active.description}
               </p>
 
-              {/* CTAs */}
-              <div className="mt-9 flex flex-row items-center justify-center lg:justify-start gap-3 w-full sm:w-auto">
+              {/* ── CTAs Fixed Responsive Stacking ── */}
+              <div className="mt-9 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
                 {/* Primary */}
                 <Link
                   href={active.ctaPrimary.href}
-                  className="group/btn flex items-center justify-center gap-2 px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] flex-1 sm:flex-none"
+                  className="group/btn flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] w-full sm:w-auto"
                   style={isFullBg ? {
                     background: 'rgba(255,255,255,0.92)',
                     color: '#374151',
@@ -226,7 +226,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                 {/* Secondary */}
                 <Link
                   href={active.ctaSecondary.href}
-                  className="flex items-center justify-center px-6 py-3.5 sm:px-8 sm:py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] flex-1 sm:flex-none"
+                  className="flex items-center justify-center px-8 py-4 rounded-2xl font-bold text-sm sm:text-base transition-all active:scale-[0.97] w-full sm:w-auto"
                   style={isFullBg ? {
                     background: 'rgba(255,255,255,0.1)',
                     backdropFilter: 'blur(12px)',
@@ -254,38 +254,38 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                 onClick={slidePrev}
                 aria-label="Previous slide"
                 title="Previous slide"
-                className="pointer-events-auto cursor-pointer p-3.5 rounded-2xl transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
+                className="pointer-events-auto cursor-pointer p-3 rounded-2xl sm:p-3.5 transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
                 style={{
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                   border: '1px solid rgba(255,255,255,0.7)',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg ? '#fff' : '#b07080',
+                  color: isFullBg ? '#374151' : '#b07080',
                 }}
               >
-                <ChevronLeft size={28} strokeWidth={2} />
+                <ChevronLeft size={24} className="sm:w-7 sm:h-7" strokeWidth={2} />
               </button>
 
               <button
                 onClick={slideNext}
                 aria-label="Next slide"
                 title="Next slide"
-                className="pointer-events-auto cursor-pointer p-3.5 rounded-2xl transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
+                className="pointer-events-auto cursor-pointer p-3 rounded-2xl sm:p-3.5 transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
                 style={{
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                   border: '1px solid rgba(255,255,255,0.7)',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg ? '#fff' : '#b07080',
+                  color: isFullBg ? '#374151' : '#b07080',
                 }}
               >
-                <ChevronRight size={28} strokeWidth={2} />
+                <ChevronRight size={24} className="sm:w-7 sm:h-7" strokeWidth={2} />
               </button>
             </div>
 
-            {/* ── Pagination dots ── */}
+            {/* ── Pagination dots (Positioned at bottom) ── */}
             <div
               className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-30 px-5 py-2.5 rounded-full"
               style={{
@@ -297,15 +297,15 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
               {slides.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i) }}
+                  onClick={() => setCurrent(i)}
                   aria-label={`Go to slide ${i + 1}`}
                   title={`Go to slide ${i + 1}`}
-                  className="relative flex items-center justify-center w-8 h-2"
+                  className="relative flex items-center justify-center w-6 sm:w-8 h-1.5 sm:h-2"
                 >
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
-                      width: i === current ? '100%' : '8px',
+                      width: i === current ? '100%' : '6px',
                       background: i === current
                         ? isFullBg ? 'rgba(255,255,255,0.9)' : '#d4a0a0'
                         : isFullBg ? 'rgba(255,255,255,0.3)' : 'rgba(212,160,160,0.35)',

@@ -16,7 +16,7 @@ export default function WhyChooseUs({
   if (!items.length) return null
 
   return (
-    <section className="bg-transparent py-14 sm:py-16 md:py-24">
+    <section className="bg-transparent py-14 sm:py-16 md:py-24 shadow-sm ">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Title */}
@@ -31,6 +31,7 @@ export default function WhyChooseUs({
             grid-cols-1
             sm:grid-cols-2
             lg:grid-cols-4
+            
           "
         >
           {items.map((item, i) => (
@@ -39,9 +40,9 @@ export default function WhyChooseUs({
               className="
                 group flex flex-col items-center text-center
                 rounded-3xl bg-white
-                border border-gray-50
+                border border-white 
                 px-5 py-6 sm:p-7 lg:p-8
-                shadow-[0_4px_25px_-5px_rgba(0,0,0,0.05)]
+                shadow-md
                 transition-all duration-300
                 lg:hover:-translate-y-2 lg:hover:shadow-xl
               "
