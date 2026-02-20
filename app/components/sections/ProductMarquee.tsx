@@ -21,7 +21,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <section className="relative overflow-hidden bg-white py-12 md:py-20">
+    <section className="relative overflow-hidden bg-white py-12 md:py-4">
 
       {/* ── Blush glow orbs (Responsive size) ── */}
       <div className="pointer-events-none absolute -top-20 left-1/4 h-48 w-48 md:h-96 md:w-96 rounded-full bg-rose-100/60 blur-[80px] md:blur-[120px]" />
@@ -58,7 +58,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
 
       {/* ================= MOBILE & TABLET (Scroll) ================= */}
       {/* ปรับให้แสดงผลแบบ Scroll สำหรับมือถือและ Tablet ขนาดเล็ก */}
-      <div className="lg:hidden w-full overflow-x-auto px-6 scrollbar-hide touch-pan-x">
+      <div className="lg:hidden w-full overflow-x-auto px scrollbar-hide touch-pan-x">
         <div className="flex flex-nowrap gap-4 pb-6">
           {items.map((item) => (
             <Link
@@ -94,7 +94,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
 
         <motion.div
           ref={marqueeRef}
-          className="flex gap-6 px-8 py-8 cursor-grab active:cursor-grabbing"
+          className="flex gap-6 px-8 py-1 cursor-grab active:cursor-grabbing"
           drag="x"
           dragConstraints={{ left: -2500, right: 0 }}
           onDragStart={() => setIsDragging(true)}
@@ -133,10 +133,10 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       </div>
 
       {/* ── CTA ── */}
-      <div className="mt-8 md:mt-16 text-center">
+      <div className="mt-8 md:mt-6 text-center">
         <Link
           href={withLocalePath('/categories', locale)}
-          className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-8 py-3.5 text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md active:scale-95"
+          className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-8 py-3 text-[11px] md:text-xs font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md active:scale-95"
         >
           {locale === 'th' ? 'ดูสินค้าทั้งหมด' : 'View All Products'}
           <span className="text-sm">✦</span>

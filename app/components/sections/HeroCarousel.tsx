@@ -52,7 +52,6 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
     >
       <BackgroundBlobs />
 
-      {/* ── Outer glass card ── */}
       <div
         className="relative w-full max-w-7xl min-h-[620px] sm:min-h-[640px] flex flex-col
         overflow-hidden rounded-[2.5rem] md:rounded-[3.5rem]"
@@ -65,7 +64,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
             '0 32px 64px -16px rgba(180,100,120,0.12), inset 0 1px 0 rgba(255,255,255,0.8)',
         }}
       >
-        {/* ── Shimmer top edge ── */}
+        {/* Shimmer */}
         <div
           className="absolute top-0 inset-x-0 h-[1px] z-20"
           style={{
@@ -74,63 +73,41 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
           }}
         />
 
-        {/* ── Ambient blush orbs — split layout only ── */}
-        {!isFullBg && (
-          <>
-            <div
-              className="pointer-events-none absolute -top-24 right-0 h-72 w-72 rounded-full blur-3xl opacity-50"
+        {/* LCP SAFE BACKGROUND */}
+        {isFullBg && (
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={active.image.src}
+              alt={active.image.alt}
+              fill
+              priority
+              fetchPriority="high"
+              sizes="(max-width:1024px) 100vw, 1280px"
+              className="object-cover object-center"
+            />
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9 }}
+              className="absolute inset-0"
               style={{
                 background:
-                  'radial-gradient(circle, rgba(255,182,193,0.6), transparent)',
+                  'linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)',
               }}
             />
-            <div
-              className="pointer-events-none absolute -bottom-24 left-0 h-64 w-64 rounded-full blur-3xl opacity-40"
-              style={{
-                background:
-                  'radial-gradient(circle, rgba(253,220,235,0.7), transparent)',
-              }}
-            />
-          </>
+
+            <div className="absolute inset-0 bg-gradient-to-br from-rose-900/10 to-transparent" />
+          </div>
         )}
 
-        {/* ── Full BG slide background ── */}
-        <AnimatePresence mode="wait" initial={false}>
-          {isFullBg && (
-            <motion.div
-              key={`bg-${current}`}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.9 }}
-              className="absolute inset-0 z-0"
-            >
-              <Image
-                src={active.image.src}
-                alt={active.image.alt}
-                fill
-                priority={current === 0}
-                className="object-cover object-center"
-              />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)',
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-900/10 to-transparent" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── Main content wrapper ── */}
+        {/* CONTENT */}
         <div
           className={`relative z-10 flex-1 flex flex-col lg:grid items-center
           px-6 sm:px-14 lg:px-20 pt-12 pb-24 lg:pb-12 gap-8 lg:gap-12
           ${isFullBg ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-2'}`}
         >
-          {/* Side image */}
+          {/* Side Image */}
           {!isFullBg && (
             <div className="order-1 lg:order-2 flex justify-center items-center w-full">
               <AnimatePresence mode="wait">
@@ -169,7 +146,7 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
             </div>
           )}
 
-          {/* Content */}
+          {/* TEXT + CTA */}
           <AnimatePresence mode="wait">
             <motion.div
               key={`content-${current}`}
@@ -193,7 +170,6 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                   : 'items-center lg:items-start text-center lg:text-left'
               }`}
             >
-              {/* Subtitle */}
               <span
                 className="text-[10px] font-semibold tracking-[0.35em] uppercase px-4 py-1.5 rounded-full w-fit mb-5"
                 style={
@@ -235,7 +211,6 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
                 {active.description}
               </p>
 
-              {/* CTAs */}
               <div className="mt-9 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
                 <Link
                   href={active.ctaPrimary.href}
@@ -294,84 +269,64 @@ export default function HeroCarousel({ hero }: HeroCarouselProps) {
           </AnimatePresence>
         </div>
 
-        {/* ── Nav arrows ── */}
+        {/* NAV + DOTS */}
         {hasMultipleSlides && (
           <>
             <div className="absolute inset-x-4 top-1/2 -translate-y-1/2 flex justify-between pointer-events-none z-30">
               <button
-                onClick={slidePrev}
-                aria-label="Previous slide"
-                title="Previous slide"
-                className="pointer-events-auto cursor-pointer p-3 rounded-2xl sm:p-3.5 transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
+               onClick={slidePrev}
+  aria-label="Previous slide"
+  title="Previous slide"
+                className="pointer-events-auto p-3 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
                 style={{
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border:
-                    '1px solid rgba(255,255,255,0.7)',
-                  boxShadow:
-                    '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg
-                    ? '#374151'
-                    : '#b07080',
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  color: isFullBg ? '#374151' : '#b07080',
                 }}
               >
-                <ChevronLeft
-                  size={24}
-                  strokeWidth={2}
-                />
+                <ChevronLeft size={24} strokeWidth={2} />
               </button>
 
               <button
                 onClick={slideNext}
-                aria-label="Next slide"
-                title="Next slide"
-                className="pointer-events-auto cursor-pointer p-3 rounded-2xl sm:p-3.5 transition-all duration-300 active:scale-90 opacity-0 group-hover:opacity-100"
+  aria-label="Next slide"
+  title="Next slide"
+                className="pointer-events-auto p-3 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
                 style={{
                   background: 'rgba(255,255,255,0.55)',
                   backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border:
-                    '1px solid rgba(255,255,255,0.7)',
-                  boxShadow:
-                    '0 4px 16px rgba(0,0,0,0.08)',
-                  color: isFullBg
-                    ? '#374151'
-                    : '#b07080',
+                  border: '1px solid rgba(255,255,255,0.7)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                  color: isFullBg ? '#374151' : '#b07080',
                 }}
               >
-                <ChevronRight
-                  size={24}
-                  strokeWidth={2}
-                />
+                <ChevronRight size={24} strokeWidth={2} />
               </button>
             </div>
 
-            {/* ── Pagination dots ── */}
             <div
               className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-30 px-5 py-2.5 rounded-full"
               style={{
                 background: 'rgba(255,255,255,0.35)',
                 backdropFilter: 'blur(12px)',
-                border:
-                  '1px solid rgba(255,255,255,0.5)',
+                border: '1px solid rgba(255,255,255,0.5)',
               }}
             >
               {slides.map((_, i) => (
                 <button
+        
+  aria-label="Current slide"
+  title="Current slide"
                   key={i}
                   onClick={() => setCurrent(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  title={`Go to slide ${i + 1}`}
                   className="relative flex items-center justify-center w-6 sm:w-8 h-1.5 sm:h-2"
                 >
                   <div
                     className="h-full rounded-full transition-all duration-300"
                     style={{
-                      width:
-                        i === current
-                          ? '100%'
-                          : '6px',
+                      width: i === current ? '100%' : '6px',
                       background:
                         i === current
                           ? isFullBg
