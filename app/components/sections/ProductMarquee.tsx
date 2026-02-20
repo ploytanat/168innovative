@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useAnimationControls } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { ProductView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
@@ -17,13 +17,32 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   if (!items.length) return null
 
   const doubleItems = [...items, ...items]
-  const marqueeRef = useRef<HTMLDivElement>(null)
   const [isDragging, setIsDragging] = useState(false)
+  const controls = useAnimationControls()
+
+  function startMarquee() {
+    controls.start({
+      x: ['0%', '-50%'],
+      transition: { repeat: Infinity, ease: 'linear', duration: 45 },
+    })
+  }
+
+  function handleDragStart() {
+    setIsDragging(true)
+    controls.stop()
+  }
+
+  function handleDragEnd() {
+    setIsDragging(false)
+    // reset x=0 แล้ววิ่งใหม่ทันที ไม่ค้าง
+    controls.set({ x: 0 })
+    startMarquee()
+  }
 
   return (
     <section className="relative overflow-hidden bg-white py-12 md:py-4">
 
-      {/* ── Blush glow orbs (Responsive size) ── */}
+      {/* ── Blush glow orbs ── */}
       <div className="pointer-events-none absolute -top-20 left-1/4 h-48 w-48 md:h-96 md:w-96 rounded-full bg-rose-100/60 blur-[80px] md:blur-[120px]" />
       <div className="pointer-events-none absolute -bottom-20 right-1/4 h-48 w-48 md:h-96 md:w-96 rounded-full bg-pink-100/50 blur-[80px] md:blur-[120px]" />
 
@@ -38,7 +57,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       {/* ── Top border ── */}
       <div
         className="absolute top-0 inset-x-0 h-px"
-        style={{ background: 'linear-linear(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
+        style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
       />
 
       {/* ── Header ── */}
@@ -52,15 +71,14 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
         <div className="mx-auto mt-4 flex items-center justify-center gap-2">
           <div className="h-px w-8 bg-rose-300 md:w-12" />
           <div className="h-1 w-1 rounded-full bg-rose-300" />
-          <div className="h-px w-8  bg-rose-300 md:w-12" />
+          <div className="h-px w-8 bg-rose-300 md:w-12" />
         </div>
       </div>
 
       {/* ================= MOBILE & TABLET (Scroll) ================= */}
-      {/* ปรับให้แสดงผลแบบ Scroll สำหรับมือถือและ Tablet ขนาดเล็ก */}
-      <div className="lg:hidden w-full overflow-x-auto px scrollbar-hide touch-pan-x">
+      <div className="lg:hidden w-full overflow-x-auto px-4 scrollbar-hide touch-pan-x">
         <div className="flex flex-nowrap gap-4 pb-6">
-          {items.map((item) => (
+          {items.map((item, i) => (
             <Link
               key={item.id}
               href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
@@ -75,6 +93,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                     sizes="(max-width: 768px) 160px, 192px"
                     className="object-cover"
                     draggable={false}
+                    priority={i < 3}
                   />
                 </div>
                 <p className="mt-3 text-xs font-medium line-clamp-1 text-center text-slate-600 px-1">
@@ -87,48 +106,53 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       </div>
 
       {/* ================= DESKTOP (Marquee) ================= */}
-      {/* ใช้เฉพาะหน้าจอขนาดใหญ่ (Large Desktop) ขึ้นไป */}
       <div className="relative hidden lg:block overflow-hidden">
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-linear-to-r from-white to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-linear-to-l from-white to-transparent" />
 
+        {/* ✅ drag layer แยกจาก animate layer */}
         <motion.div
-          ref={marqueeRef}
           className="flex gap-6 px-8 py-1 cursor-grab active:cursor-grabbing"
           drag="x"
           dragConstraints={{ left: -2500, right: 0 }}
-          onDragStart={() => setIsDragging(true)}
-          onDragEnd={() => setIsDragging(false)}
-          animate={!isDragging ? { x: ['0%', '-50%'] } : undefined}
-          transition={{ repeat: Infinity, ease: 'linear', duration: 45 }}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
         >
-          {doubleItems.map((item, i) => (
-            <Link
-              key={`${item.id}-${i}`}
-              href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-              className={isDragging ? 'pointer-events-none' : 'group'}
-            >
-              <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2">
-                <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
-                  <Image
-                    src={item.image.src}
-                    alt={item.image.alt || item.name}
-                    fill
-                    sizes="192px"
-                    className="object-cover select-none transition-transform duration-700 group-hover:scale-110"
-                    draggable={false}
-                  />
-                </div>
+          {/* ✅ animate layer วิ่งอิสระ ไม่ถูก drag interrupt */}
+          <motion.div
+            className="flex gap-6"
+            animate={controls}
+            onViewportEnter={startMarquee}
+          >
+            {doubleItems.map((item, i) => (
+              <Link
+                key={`${item.id}-${i}`}
+                href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
+                className={isDragging ? 'pointer-events-none' : 'group'}
+              >
+                <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2">
+                  <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                <p className="relative mt-4 text-[12px] font-medium text-center line-clamp-1 text-slate-500 transition-colors duration-300 group-hover:text-rose-500">
-                  {item.name}
-                </p>
-                <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-rose-300 to-pink-300 transition-all duration-500 group-hover:w-12" />
-              </div>
-            </Link>
-          ))}
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt || item.name}
+                      fill
+                      sizes="192px"
+                      className="object-cover select-none transition-transform duration-700 group-hover:scale-110"
+                      draggable={false}
+                      priority={i < 4}
+                    />
+                  </div>
+
+                  <p className="relative mt-4 text-[12px] font-medium text-center line-clamp-1 text-slate-500 transition-colors duration-300 group-hover:text-rose-500">
+                    {item.name}
+                  </p>
+                  <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-rose-300 to-pink-300 transition-all duration-500 group-hover:w-12" />
+                </div>
+              </Link>
+            ))}
+          </motion.div>
         </motion.div>
       </div>
 
@@ -146,7 +170,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       {/* ── Bottom border ── */}
       <div
         className="absolute bottom-0 inset-x-0 h-px"
-        style={{ background: 'linear-linear(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
+        style={{ background: 'linear-gradient(to right, transparent, #d4a0a0, #e8c4b8, #d4a0a0, transparent)' }}
       />
     </section>
   )

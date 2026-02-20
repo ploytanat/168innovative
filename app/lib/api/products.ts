@@ -11,9 +11,10 @@ if (!BASE) {
 
 /* ================= Helper ================= */
 
-async function fetchJSON<T>(url: string): Promise<T> {
+async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
+    ...options,
   });
 
   if (!res.ok) {
@@ -44,13 +45,14 @@ async function getCategoryMap() {
 
 /* ================= Mapper ================= */
 
-async function mapWPToProductView(
+// ✅ รับ categoryMap มาจากภายนอก ไม่ต้อง await ซ้ำทุก product
+function mapWPToProductView(
   wp: WPProduct,
-  locale: Locale
-): Promise<ProductView> {
+  locale: Locale,
+  catMap: Record<string, string>
+): ProductView {
 
   /* ===== Parse specs_json ===== */
-
   let specs: ProductSpecView[] = [];
 
   if (wp.acf?.specs_json) {
@@ -65,9 +67,7 @@ async function mapWPToProductView(
       } else if (typeof parsed === "object" && parsed !== null) {
         specs = Object.entries(parsed).map(([key, value]) => ({
           label: key,
-          value: Array.isArray(value)
-            ? value.join(", ")
-            : String(value),
+          value: Array.isArray(value) ? value.join(", ") : String(value),
         }));
       }
     } catch {
@@ -76,21 +76,11 @@ async function mapWPToProductView(
   }
 
   /* ===== Category Slug Resolve ===== */
-
   const categoryId = wp.product_category?.[0]?.toString() ?? "";
-
-  let categorySlug = "";
-
-  if (categoryId) {
-    const map = await getCategoryMap();
-    categorySlug = map[Number(categoryId)] ?? "";
-  }
+  const categorySlug = categoryId ? (catMap[Number(categoryId)] ?? "") : "";
 
   /* ===== Image ===== */
-
-  const imageSrc =
-    wp.featured_image_url ?? "/images/placeholder.webp";
-
+  const imageSrc = wp.featured_image_url ?? "/images/placeholder.webp";
   const imageAlt =
     locale === "th"
       ? wp.acf?.image_alt_th ?? wp.title.rendered
@@ -99,25 +89,14 @@ async function mapWPToProductView(
   return {
     id: wp.id.toString(),
     slug: wp.slug,
-
-    name:
-      locale === "th"
-        ? wp.acf?.name_th ?? ""
-        : wp.acf?.name_en ?? "",
-
+    name: locale === "th" ? wp.acf?.name_th ?? "" : wp.acf?.name_en ?? "",
     description:
       locale === "th"
         ? wp.acf?.description_th ?? ""
         : wp.acf?.description_en ?? "",
-
-    image: {
-      src: imageSrc,
-      alt: imageAlt,
-    },
-
+    image: { src: imageSrc, alt: imageAlt },
     categoryId,
     categorySlug,
-
     specs,
     price: undefined,
   };
@@ -125,23 +104,16 @@ async function mapWPToProductView(
 
 /* ================= All Products ================= */
 
-export async function getProducts(
-  locale: Locale
-): Promise<ProductView[]> {
+export async function getProducts(locale: Locale): Promise<ProductView[]> {
+  // ✅ fetch แค่ 8 รายการ ไม่ต้องดึง 100 แล้วตัดทิ้ง
+  // ✅ fetch categoryMap และ products พร้อมกัน
+  const [raw, catMap] = await Promise.all([
+    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?per_page=8`),
+    getCategoryMap(),
+  ]);
 
-  const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/product?per_page=100`
-  );
-
-  const mapped = await Promise.all(
-    raw.map((wp) => mapWPToProductView(wp, locale))
-  );
-
-  const shuffled = mapped.sort(
-    () => 0.5 - Math.random()
-  );
-
-  return shuffled.slice(0, 8);
+  // ✅ map แบบ sync ไม่ต้อง await แต่ละตัวแล้ว
+  return raw.map((wp) => mapWPToProductView(wp, locale, catMap));
 }
 
 /* ================= Products by Category ================= */
@@ -150,22 +122,20 @@ export async function getProductsByCategory(
   slug: string,
   locale: Locale
 ): Promise<ProductView[]> {
-
-  const terms = await fetchJSON<any[]>(
-    `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
-  );
+  const [terms, catMap] = await Promise.all([
+    fetchJSON<any[]>(`${BASE}/wp-json/wp/v2/product_category?slug=${slug}`),
+    getCategoryMap(),
+  ]);
 
   if (!terms.length) return [];
 
   const categoryId = terms[0].id;
 
-const raw = await fetchJSON<WPProduct[]>(
-  `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
-);
-
-  return Promise.all(
-    raw.map((wp) => mapWPToProductView(wp, locale))
+  const raw = await fetchJSON<WPProduct[]>(
+    `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
   );
+
+  return raw.map((wp) => mapWPToProductView(wp, locale, catMap));
 }
 
 /* ================= Single Product ================= */
@@ -174,14 +144,14 @@ export async function getProductBySlug(
   slug: string,
   locale: Locale
 ): Promise<ProductView | null> {
-
-  const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/product?slug=${slug}`
-  );
+  const [raw, catMap] = await Promise.all([
+    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?slug=${slug}`),
+    getCategoryMap(),
+  ]);
 
   if (!raw.length) return null;
 
-  return mapWPToProductView(raw[0], locale);
+  return mapWPToProductView(raw[0], locale, catMap);
 }
 
 /* ================= Related ================= */
@@ -191,15 +161,7 @@ export async function getRelatedProducts(
   currentProductId: string,
   locale: Locale
 ): Promise<ProductView[]> {
+  const all = await getProductsByCategory(categorySlug, locale);
 
-  const all = await getProductsByCategory(
-    categorySlug,
-    locale
-  );
-
-  const filtered = all.filter(
-    (p) => p.id !== currentProductId
-  );
-
-  return filtered.slice(0, 4);
+  return all.filter((p) => p.id !== currentProductId).slice(0, 4);
 }

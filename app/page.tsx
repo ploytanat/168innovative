@@ -28,23 +28,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const locale = "th";
 
-  const [
-    heroSlides,
-    products,
-    categories,
-    whys,
-    company
-  ] = await Promise.all([
+  const [heroSlides, products, categories, whys, company] = await Promise.all([
     getHeroSlides(locale),
     getProducts(locale),
     getCategories(locale),
     getWhy(locale),
-    getCompany(locale)
+    getCompany(locale),
   ]);
-console.log("Company result:", company)
+
   return (
     <main>
-
       {heroSlides?.length > 0 && (
         <HeroCarousel hero={{ slides: heroSlides }} />
       )}
@@ -62,12 +55,8 @@ console.log("Company result:", company)
       )}
 
       {company && (
-        <ContactSection
-          locale={locale}
-          data={company}
-        />
+        <ContactSection locale={locale} data={company} />
       )}
-
     </main>
   );
 }
