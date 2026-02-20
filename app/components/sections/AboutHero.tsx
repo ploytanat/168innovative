@@ -21,14 +21,13 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
     offset: ["start start", "end start"],
   });
 
-  // ❗ Parallax เบาลง + ปิดบน mobile
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
 
   return (
     <section ref={containerRef} className="bg-[#eeeeee] overflow-hidden">
       {/* ================= HERO ================= */}
       <div className="relative min-h-[70vh] md:min-h-[80vh] lg:min-h-[90vh] flex flex-col">
-        
+
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 sm:px-6 pt-6 mt-6 relative z-30">
           <Breadcrumb />
@@ -36,9 +35,10 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
 
         {/* Background Image */}
         <div className="absolute right-0 top-0 w-full lg:w-[55%] h-full z-0 overflow-hidden">
+          {/* ✅ เพิ่ม will-change-transform ให้ browser จอง GPU layer ไว้ล่วงหน้า */}
           <motion.div
             style={{ y }}
-            className="relative w-full h-full hidden sm:block"
+            className="relative w-full h-full hidden sm:block will-change-transform"
           >
             <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#eeeeee] via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#eeeeee] lg:via-[#eeeeee]/30 lg:to-transparent" />
             {hero.image1 && (
@@ -46,6 +46,8 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
                 src={hero.image1.src}
                 alt={hero.image1.alt}
                 fill
+                // ✅ บอก Next.js ว่ารูปนี้กว้างแค่ไหนในแต่ละ breakpoint → ดาวน์โหลดรูปขนาดที่เหมาะสม
+                sizes="(max-width: 1024px) 100vw, 55vw"
                 className="object-cover object-center"
                 priority
               />
@@ -59,6 +61,7 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
                 src={hero.image1.src}
                 alt={hero.image1.alt}
                 fill
+                sizes="100vw"
                 className="object-cover object-center opacity-20"
                 priority
               />
@@ -105,7 +108,7 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
 
       {/* ================= WHO WE ARE ================= */}
       <div className="relative w-full min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden border-t border-white/50 shadow-inner">
-        
+
         {/* Background */}
         <div className="absolute inset-0 z-0">
           {hero.image2 && (
@@ -113,6 +116,8 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
               src={hero.image2.src}
               alt={hero.image2.alt}
               fill
+              // ✅ รูป background เต็มหน้าจอ
+              sizes="100vw"
               className="object-cover object-center grayscale-[15%]"
             />
           )}
@@ -121,7 +126,7 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-12 relative z-10 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-28 items-center">
-            
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

@@ -1,7 +1,6 @@
 // lib/api/about.ts
 import { Locale } from '../types/content'
 import { AboutView } from '../types/view'
-import { getWhy } from './why'
 
 const BASE = process.env.WP_API_URL!
 
@@ -28,12 +27,12 @@ async function getMediaMap(ids: number[]) {
   }
 }
 
-export async function getAbout(locale: Locale): Promise<AboutView | null> {
-  const whyItems = await getWhy(locale)
-
+// ✅ รับ whyItems จากภายนอกแทน เพื่อไม่ให้ fetch ซ้ำกับ page.tsx
+export async function getAbout(locale: Locale): Promise<Omit<AboutView, 'why'> | null> {
+  // ✅ cache 1 ชั่วโมง แทน no-store
   const res = await fetch(
     `${BASE}/wp-json/wp/v2/about?per_page=1`,
-    { cache: 'no-store' }
+    { next: { revalidate: 3600 } }
   )
 
   if (!res.ok) return null
@@ -42,12 +41,11 @@ export async function getAbout(locale: Locale): Promise<AboutView | null> {
 
   const acf = data[0].acf
 
-  // 1. รวบรวม ID ทั้งหมด รวมถึง hero_image_2 ด้วย
   const imageIds = [
-    acf.hero_image_1, 
-    acf.hero_image_2, 
-    acf.who_image
-  ].filter(id => id && typeof id === 'number')
+    acf.hero_image_1,
+    acf.hero_image_2,
+    acf.who_image,
+  ].filter((id): id is number => typeof id === 'number' && id > 0)
 
   const mediaMap = await getMediaMap(imageIds)
   const getUrl = (id: number) => mediaMap[id]
@@ -56,7 +54,6 @@ export async function getAbout(locale: Locale): Promise<AboutView | null> {
     hero: {
       title: locale === 'th' ? acf.hero_title_th : acf.hero_title_en || acf.hero_title_th,
       description: locale === 'th' ? acf.hero_description_th : acf.hero_description_en || acf.hero_description_th,
-      // 2. ส่งออกไปทั้ง image1 และ image2
       image1: acf.hero_image_1 && getUrl(acf.hero_image_1)
         ? {
             src: getUrl(acf.hero_image_1)!,
@@ -79,10 +76,6 @@ export async function getAbout(locale: Locale): Promise<AboutView | null> {
             alt: locale === 'th' ? acf.who_image_alt_th || '' : acf.who_image_alt_en || '',
           }
         : undefined,
-    },
-    why: {
-      title: locale === 'th' ? 'ทำไมต้องเลือก 168 Innovative' : 'Why Choose 168 Innovative',
-      items: whyItems,
     },
   }
 }

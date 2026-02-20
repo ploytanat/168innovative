@@ -159,9 +159,9 @@ export async function getProductsByCategory(
 
   const categoryId = terms[0].id;
 
-  const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}`
-  );
+const raw = await fetchJSON<WPProduct[]>(
+  `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
+);
 
   return Promise.all(
     raw.map((wp) => mapWPToProductView(wp, locale))
