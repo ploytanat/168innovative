@@ -54,16 +54,33 @@ export interface CompanyView {
 }
 
 // ==  Product ==
-export interface ProductView {
+/* ================= Product Spec ================= */
+
+export type ProductSpecView = {
+  label: string
+  value: string
+}
+
+/* ================= Product View ================= */
+
+export type ProductView = {
   id: string
   slug: string
+
   name: string
   description: string
+
+  image: {
+    src: string
+    alt: string
+  }
+
   categoryId: string
-  image: ImageView
-  price?: string
   categorySlug: string
-  //createdAt: string
+
+  specs: ProductSpecView[]   // ไม่ optional
+
+  price?: number
 }
 
 // === Why Choose Us === 

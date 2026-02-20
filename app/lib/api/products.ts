@@ -2,7 +2,7 @@
 
 import { Locale, WPProduct } from "../types/content";
 import { ProductView } from "../types/view";
-
+import { ProductSpecView } from "../types/view";
 const BASE = process.env.WP_API_URL;
 
 /* ================= Helper ================= */
@@ -43,11 +43,35 @@ function mapWPToProductView(
   wp: WPProduct,
   locale: Locale
 ): ProductView {
+
   const featured =
     wp._embedded?.["wp:featuredmedia"]?.[0];
 
   const term =
     wp._embedded?.["wp:term"]?.[0]?.[0];
+
+  /* ================= Parse specs_json ================= */
+
+  let specs: ProductSpecView[] = [];
+
+  const rawSpecs = wp.acf?.specs_json;
+
+  if (rawSpecs && rawSpecs.trim() !== "") {
+    try {
+      const parsed = JSON.parse(rawSpecs);
+
+      if (Array.isArray(parsed)) {
+        specs = parsed.map((s) => ({
+          label: s.label ?? "",
+          value: s.value ?? "",
+        }));
+      }
+    } catch {
+      specs = [];
+    }
+  }
+
+  /* ================= Return ================= */
 
   return {
     id: wp.id.toString(),
@@ -71,13 +95,19 @@ function mapWPToProductView(
           : wp.acf?.image_alt_en ?? "",
     },
 
-    categoryId: term?.id?.toString() ?? "",
-    categorySlug: term?.slug ?? "",
+    categoryId:
+      term?.id?.toString() ??
+      wp.product_category?.[0]?.toString() ??
+      "",
+
+    categorySlug:
+      term?.slug ?? "",
+
+    specs,
 
     price: undefined,
   };
 }
-
 /* ================= Products by Category ================= */
 
 export async function getProductsByCategory(

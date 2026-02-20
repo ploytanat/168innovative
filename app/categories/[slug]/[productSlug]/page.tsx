@@ -77,6 +77,36 @@ export default async function ProductDetailPage({ params }: Props) {
               {product.description}
             </p>
 
+
+    {/* Specifications */}
+{product.specs.length > 0 && (
+  <div className="mt-10">
+
+    <h2 className="text-sm font-semibold uppercase tracking-widest text-[#14B8A6]">
+      Specifications
+    </h2>
+
+    <div className="mt-4 overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white">
+
+      {product.specs.map((spec, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between px-5 py-4 text-sm"
+        >
+          <span className="font-medium text-[#5A6A7E]">
+            {spec.label}
+          </span>
+
+          <span className="font-semibold text-[#1A2535]">
+            {spec.value}
+          </span>
+        </div>
+      ))}
+
+    </div>
+  </div>
+)}
+
             {/* CTAs */}
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
 
@@ -87,14 +117,16 @@ export default async function ProductDetailPage({ params }: Props) {
                 <Send className="h-4 w-4" />
                 ขอใบเสนอราคา
               </Link>
-
+{
+  /* 
               <button
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#14B8A6] bg-white px-8 py-4 text-sm font-bold text-[#14B8A6] transition-all hover:bg-[#F0FDFA] active:scale-[0.98]"
+                className=" inline-flex items-center justify-center gap-2 rounded-2xl border border-[#14B8A6] bg-white px-8 py-4 text-sm font-bold text-[#14B8A6] transition-all hover:bg-[#F0FDFA] active:scale-[0.98]"
               >
                 <FileText className="h-4 w-4" />
                 ดาวน์โหลด Catalog
               </button>
-
+*/
+}
             </div>
 
             {/* Trust badges */}

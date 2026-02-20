@@ -46,7 +46,7 @@ export default async function ContactPage() {
                   {company.phones?.map((p, i) => (
                     <div key={i} className="mb-4 last:mb-0">
                       <p className="text-2xl font-bold text-gray-800">{p.number}</p>
-                      <p className="text-sm font-medium text-gray-500">คุณ {p.label}</p>
+                      <p className="text-sm font-medium text-gray-500">{p.label}</p>
                     </div>
                   ))}
                 </ContactSection>

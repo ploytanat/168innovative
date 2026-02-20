@@ -207,18 +207,56 @@ export interface WPArticle {
 // WP Product (CPT: product)
 // ---------------------------
 
-export interface WPProduct {
-  id: number;
-  slug: string;
+export type WPSpec = {
+  spec_label?: string
+  spec_value?: string
+}
+
+export type WPProduct = {
+  id: number
+  slug: string
+  featured_media: number
+  product_category: number[]
 
   acf?: {
-    name_th?: string;
-    name_en?: string;
-    description_th?: string;
-    description_en?: string;
-    image_alt_th?: string;
-    image_alt_en?: string;
-  };
+    name_th?: string
+    name_en?: string
+    description_th?: string
+    description_en?: string
+    image_alt_th?: string
+    image_alt_en?: string
+    specs_json?: string
+  }
 
-  _embedded?: WPEmbedded;
+  _embedded?: {
+    "wp:featuredmedia"?: {
+      source_url?: string
+    }[]
+
+    "wp:term"?: {
+      id: number
+      slug: string
+    }[][]
+  }
+}
+
+
+export type ProductContent = {
+  id: string
+  slug: string
+  name: string
+  itemCode: string
+  categorySlug: string
+
+  description?: string
+  images: {
+    src: string
+    alt?: string
+  }[]
+
+  // dynamic specifications
+  specs?: {
+    key: string
+    value: string
+  }[]
 }
