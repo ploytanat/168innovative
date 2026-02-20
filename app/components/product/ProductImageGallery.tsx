@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ZoomIn } from 'lucide-react'
 
@@ -12,48 +12,67 @@ interface Props {
 export default function ProductImageGallery({ src, alt }: Props) {
   const [isOpen, setIsOpen] = useState(false)
 
+  // ปิด Modal เมื่อกดปุ่ม Escape
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') setIsOpen(false)
+  }, [])
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden' // ป้องกันการ scroll พื้นหลัง
+      window.addEventListener('keydown', handleKeyDown)
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, handleKeyDown])
+
   return (
     <>
-      {/* 1:1 Product Image */}
-      <div className="lg:col-span-6 lg:sticky lg:top-32 flex justify-center">
-        <div
+      {/* Container หลัก */}
+      <div className="lg:col-span-6 lg:sticky lg:top-32 flex justify-center h-fit">
+        <button
           onClick={() => setIsOpen(true)}
-          className="group relative w-full max-w-md aspect-square overflow-hidden rounded-[2.5rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in"
+          aria-label="ขยายรูปภาพสินค้า"
+          className="group relative w-full max-w-md aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in active:scale-[0.98]"
         >
           <Image
             src={src}
             alt={alt}
             fill
             priority
-            sizes="(max-width:768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition duration-500" />
-
-          {/* Zoom Icon */}
-          <div className="absolute bottom-6 right-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 shadow-md backdrop-blur-md transition duration-300 group-hover:scale-110">
+          {/* Overlay & Icon */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+          
+          <div className="absolute bottom-6 right-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 shadow-lg backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
             <ZoomIn className="w-6 h-6 text-gray-800" />
           </div>
-        </div>
+        </button>
       </div>
 
-      {/* Modal */}
+      {/* Modal - ใช้ Portal จะดีที่สุด แต่ในเบื้องต้นปรับปรุง Logic เดิมก่อน */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-in fade-in duration-300"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-in fade-in duration-300"
           onClick={() => setIsOpen(false)}
+          role="dialog"
+          aria-modal="true"
         >
+          {/* ปุ่มปิด (ปรับให้กดง่ายขึ้นและลบ text 'x' ส่วนเกินออก) */}
           <button
-            className="absolute top-6 right-6 text-white/70 hover:text-white transition z-[110]"
+            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-[110]"
             onClick={() => setIsOpen(false)}
-          >x
-            <X size={40} />
+            aria-label="ปิดหน้าต่างขยายรูป"
+          >
+            <X size={32} />
           </button>
 
           <div
-            className="relative w-full max-w-5xl aspect-square"
+            className="relative w-full h-[80vh] max-w-6xl transition-all"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
@@ -61,7 +80,8 @@ export default function ProductImageGallery({ src, alt }: Props) {
               alt={alt}
               fill
               quality={100}
-              className="object-contain cursor-zoom-out"
+              className="object-contain cursor-zoom-out selection:bg-none"
+              onClick={() => setIsOpen(false)}
             />
           </div>
         </div>

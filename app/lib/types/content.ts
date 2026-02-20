@@ -212,32 +212,34 @@ export type WPSpec = {
   spec_value?: string
 }
 
-export type WPProduct = {
-  id: number
-  slug: string
-  featured_media: number
-  product_category: number[]
+export interface WPProduct {
+  id: number;
+  slug: string;
+
+  title: {
+    rendered: string;
+  };
+
+  content: {
+    rendered: string;
+  };
+
+  featured_media: number;
+
+  // ✅ ตัวใหม่จาก plugin
+  featured_image_url?: string;
+
+  product_category?: number[];
 
   acf?: {
-    name_th?: string
-    name_en?: string
-    description_th?: string
-    description_en?: string
-    image_alt_th?: string
-    image_alt_en?: string
-    specs_json?: string
-  }
-
-  _embedded?: {
-    "wp:featuredmedia"?: {
-      source_url?: string
-    }[]
-
-    "wp:term"?: {
-      id: number
-      slug: string
-    }[][]
-  }
+    name_th?: string;
+    name_en?: string;
+    description_th?: string;
+    description_en?: string;
+    image_alt_th?: string;
+    image_alt_en?: string;
+    specs_json?: string;
+  };
 }
 
 
@@ -260,3 +262,4 @@ export type ProductContent = {
     value: string
   }[]
 }
+

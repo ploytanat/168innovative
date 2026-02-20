@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Send, FileText } from 'lucide-react'
+import { Send, FileText, ChevronRight, CheckCircle2 } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
@@ -36,172 +36,158 @@ export default async function ProductDetailPage({ params }: Props) {
   ])
 
   if (!category || !product) notFound()
-  if (product.categorySlug !== slug) notFound()
+  if (product.categoryId !== category.id) notFound()
 
   const relatedAll = await getProductsByCategory(slug, locale)
   const related = relatedAll.filter((p) => p.id !== product.id).slice(0, 5)
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pb-32 pt-12">
+    <main className="min-h-screen bg-[#FDFDFD] pb-32 pt-8">
       <div className="mx-auto max-w-7xl px-6">
-        <Breadcrumb />
+        <div className="mb-8">
+          <Breadcrumb />
+        </div>
 
-        {/* Product detail */}
-        <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-2">
-
-          {/* Image */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <ProductImageGallery
-              src={product.image.src}
-              alt={product.image.alt}
-            />
+        {/* Product Section */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          
+          {/* Left: Sticky Image Gallery */}
+          <div className="lg:col-span-6">
+            <div className="lg:sticky lg:top-32">
+              <ProductImageGallery
+                src={product.image.src}
+                alt={product.image.alt}
+              />
+            </div>
           </div>
 
-          {/* Info */}
-          <div className="flex flex-col">
-
+          {/* Right: Product Content */}
+          <div className="flex flex-col lg:col-span-6 lg:pl-4">
+            {/* Category Tag */}
             <Link
               href={`/categories/${slug}`}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
+              className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#14B8A6]"
             >
-              ← {category.name}
+              <span className="h-px w-8 bg-[#14B8A6] transition-all group-hover:w-12" />
+              {category.name}
             </Link>
 
-            <h1 className="mt-4 font-serif text-3xl font-bold leading-snug text-[#1A2535] md:text-4xl">
+            <h1 className="mt-6 font-serif text-3xl font-bold leading-[1.2] text-[#1A2535] md:text-5xl">
               {product.name}
             </h1>
 
-            <div className="mt-5 h-px w-12 bg-gradient-to-r from-[#14B8A6] to-transparent" />
-
-            <p className="mt-6 text-base leading-relaxed text-[#5A6A7E]">
+            <p className="mt-8 text-lg font-light leading-relaxed text-[#5A6A7E]">
               {product.description}
             </p>
 
+            {/* Specifications Table */}
+            {product.specs && product.specs.length > 0 && (
+              <div className="mt-12">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-8 w-[2px] bg-[#14B8A6]" />
+                  <h2 className="text-sm font-bold uppercase tracking-widest text-[#1A2535]">
+                    Specifications
+                  </h2>
+                </div>
 
-    {/* Specifications */}
-{product.specs.length > 0 && (
-  <div className="mt-10">
+                <div className="divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white px-8 py-2 shadow-sm">
+                  {product.specs.map((spec, index) => (
+                    <div key={index} className="flex justify-between py-5 text-sm">
+                      <span className="font-medium text-[#8492A6]">{spec.label}</span>
+                      <span className="font-bold text-[#1A2535]">{spec.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-    <h2 className="text-sm font-semibold uppercase tracking-widest text-[#14B8A6]">
-      Specifications
-    </h2>
-
-    <div className="mt-4 overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white">
-
-      {product.specs.map((spec, index) => (
-        <div
-          key={index}
-          className="flex items-center justify-between px-5 py-4 text-sm"
-        >
-          <span className="font-medium text-[#5A6A7E]">
-            {spec.label}
-          </span>
-
-          <span className="font-semibold text-[#1A2535]">
-            {spec.value}
-          </span>
-        </div>
-      ))}
-
-    </div>
-  </div>
-)}
-
-            {/* CTAs */}
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-
+            {/* Action Buttons */}
+            <div className="mt-12 flex flex-col gap-4 sm:flex-row">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#1E3A5F] px-8 py-4 text-sm font-bold text-white shadow-[0_8px_24px_#1E3A5F33] transition-all hover:bg-[#162B45] active:scale-[0.98]"
+                className="group flex flex-1 items-center justify-center gap-3 rounded-2xl bg-[#1E3A5F] px-8 py-5 text-sm font-bold text-white shadow-xl shadow-blue-900/10 transition-all hover:bg-[#142B45] hover:shadow-2xl active:scale-[0.98]"
               >
-                <Send className="h-4 w-4" />
-                ขอใบเสนอราคา
+                <Send className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                ขอใบเสนอราคาออนไลน์
               </Link>
-{
-  /* 
-              <button
-                className=" inline-flex items-center justify-center gap-2 rounded-2xl border border-[#14B8A6] bg-white px-8 py-4 text-sm font-bold text-[#14B8A6] transition-all hover:bg-[#F0FDFA] active:scale-[0.98]"
-              >
+              
+              {/* Optional: Catalog Button (Uncomment to use) */}
+              {/* <button className="flex items-center justify-center gap-3 rounded-2xl border-2 border-[#E2E8F0] bg-white px-8 py-5 text-sm font-bold text-[#1A2535] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]">
                 <FileText className="h-4 w-4" />
-                ดาวน์โหลด Catalog
-              </button>
-*/
-}
+                Catalog (PDF)
+              </button> 
+              */}
             </div>
 
-            {/* Trust badges */}
-            <div className="mt-10 flex flex-wrap gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-5">
+            {/* Trust Badges Grid */}
+            <div className="mt-12 grid grid-cols-2 gap-3">
               {[
-                { icon: '🏭', text: 'ผลิต OEM / ODM' },
-                { icon: '✅', text: 'Food & Cosmetic Grade' },
-                { icon: '🚚', text: 'จัดส่งทั่วประเทศ' },
-                { icon: '🌏', text: 'นำเข้าตรงจากโรงงาน' },
+                { icon: '🏭', text: 'โรงงานผลิตมาตรฐาน' },
+                { icon: '🛡️', text: 'Food & Cosmetic Grade' },
+                { icon: '📦', text: 'บรรจุภัณฑ์กันกระแทก' },
+                { icon: '🚚', text: 'จัดส่งด่วนทั่วประเทศ' },
               ].map((b) => (
                 <div
                   key={b.text}
-                  className="flex items-center gap-2 rounded-xl border border-[#E5E7EB] bg-[#F8FAFC] px-3 py-2 text-xs font-medium text-[#5A6A7E]"
+                  className="flex items-center gap-3 rounded-2xl border border-gray-50 bg-[#F8FAFC] p-4 transition-colors hover:bg-white hover:border-[#14B8A644]"
                 >
-                  <span>{b.icon}</span>
-                  {b.text}
+                  <span className="text-xl">{b.icon}</span>
+                  <span className="text-[13px] font-semibold text-[#5A6A7E]">{b.text}</span>
                 </div>
               ))}
             </div>
-
           </div>
         </div>
 
-        {/* Related products */}
+        {/* Related Products Section */}
         {related.length > 0 && (
-          <section className="mt-28" aria-label="สินค้าใกล้เคียง">
-
-            <div className="mb-8 flex items-center justify-between">
+          <section className="mt-32 border-t border-gray-100 pt-24" aria-label="สินค้าใกล้เคียง">
+            <div className="flex items-end justify-between">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#14B8A6]">
-                  Related
-                </p>
-                <h2 className="mt-1 font-serif text-xl font-bold text-[#1A2535]">
-                  สินค้าในหมวดเดียวกัน
+                <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#14B8A6]">
+                  Discover More
+                </span>
+                <h2 className="mt-3 font-serif text-3xl font-bold text-[#1A2535]">
+                  สินค้าที่คุณอาจสนใจ
                 </h2>
               </div>
-
               <Link
                 href={`/categories/${slug}`}
-                className="text-xs font-semibold text-[#1A2535] transition-colors hover:text-[#14B8A6]"
+                className="hidden items-center gap-2 text-sm font-bold text-[#1A2535] hover:text-[#14B8A6] md:flex"
               >
-                ดูทั้งหมด →
+                ดูหมวดหมู่ทั้งหมด <ChevronRight size={16} />
               </Link>
             </div>
 
-            <div className="mb-8 h-px w-full bg-gradient-to-r from-[#14B8A655] to-transparent" />
-
-            <div className="grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
               {related.map((item) => (
                 <Link
                   key={item.id}
                   href={`/categories/${slug}/${item.slug}`}
-                  className="group flex flex-col"
+                  className="group"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F1F5F9]">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#F1F5F9]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt}
                       fill
-                      sizes="(min-width:1024px) 20vw, (min-width:640px) 25vw, 50vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(min-width:1024px) 20vw, (min-width:640px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-[#14B8A611] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </div>
 
-                  <div className="mt-3 px-0.5">
-                    <h3 className="text-sm font-semibold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                  <div className="mt-5 space-y-1">
+                    <h3 className="line-clamp-1 text-sm font-bold text-[#1A2535] group-hover:text-[#14B8A6] transition-colors">
                       {item.name}
                     </h3>
-                    <div className="mt-1.5 h-px w-0 rounded-full bg-[#14B8A6] transition-all duration-300 group-hover:w-6" />
+                    <p className="text-xs font-medium text-[#8492A6]">
+                      168 Innovative
+                    </p>
                   </div>
                 </Link>
               ))}
             </div>
-
           </section>
         )}
       </div>

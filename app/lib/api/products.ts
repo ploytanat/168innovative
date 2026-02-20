@@ -1,69 +1,73 @@
 // app/lib/api/products.ts
 
 import { Locale, WPProduct } from "../types/content";
-import { ProductView } from "../types/view";
-import { ProductSpecView } from "../types/view";
+import { ProductView, ProductSpecView } from "../types/view";
+
 const BASE = process.env.WP_API_URL;
+
+if (!BASE) {
+  throw new Error("WP_API_URL is not defined");
+}
 
 /* ================= Helper ================= */
 
-
 async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: 60 } });
+  const res = await fetch(url, {
+    next: { revalidate: 60 },
+  });
 
-  if (!res.ok) throw new Error("Fetch failed");
+  if (!res.ok) {
+    throw new Error(`Fetch failed: ${url}`);
+  }
 
   return res.json() as Promise<T>;
 }
 
-/* ================= All Products (Home) ================= */
+/* ================= Category Slug Cache ================= */
 
-export async function getProducts(
-  locale: Locale
-): Promise<ProductView[]> {
+let categoryMap: Record<string, string> | null = null;
 
-  const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/products?_embed=wp:featuredmedia,wp:term&per_page=100`
+async function getCategoryMap() {
+  if (categoryMap) return categoryMap;
+
+  const terms = await fetchJSON<any[]>(
+    `${BASE}/wp-json/wp/v2/product_category?per_page=100`
   );
 
-  const mapped = raw.map((wp) =>
-    mapWPToProductView(wp, locale)
-  );
+  categoryMap = {};
+  terms.forEach((term) => {
+    categoryMap![term.id] = term.slug;
+  });
 
-  // 🔥 สุ่ม
-  const shuffled = mapped.sort(
-    () => 0.5 - Math.random()
-  );
-
-  return shuffled.slice(0, 8);
+  return categoryMap;
 }
 
+/* ================= Mapper ================= */
 
-function mapWPToProductView(
+async function mapWPToProductView(
   wp: WPProduct,
   locale: Locale
-): ProductView {
+): Promise<ProductView> {
 
-  const featured =
-    wp._embedded?.["wp:featuredmedia"]?.[0];
-
-  const term =
-    wp._embedded?.["wp:term"]?.[0]?.[0];
-
-  /* ================= Parse specs_json ================= */
+  /* ===== Parse specs_json ===== */
 
   let specs: ProductSpecView[] = [];
 
-  const rawSpecs = wp.acf?.specs_json;
-
-  if (rawSpecs && rawSpecs.trim() !== "") {
+  if (wp.acf?.specs_json) {
     try {
-      const parsed = JSON.parse(rawSpecs);
+      const parsed = JSON.parse(wp.acf.specs_json);
 
       if (Array.isArray(parsed)) {
         specs = parsed.map((s) => ({
           label: s.label ?? "",
           value: s.value ?? "",
+        }));
+      } else if (typeof parsed === "object" && parsed !== null) {
+        specs = Object.entries(parsed).map(([key, value]) => ({
+          label: key,
+          value: Array.isArray(value)
+            ? value.join(", ")
+            : String(value),
         }));
       }
     } catch {
@@ -71,7 +75,26 @@ function mapWPToProductView(
     }
   }
 
-  /* ================= Return ================= */
+  /* ===== Category Slug Resolve ===== */
+
+  const categoryId = wp.product_category?.[0]?.toString() ?? "";
+
+  let categorySlug = "";
+
+  if (categoryId) {
+    const map = await getCategoryMap();
+    categorySlug = map[Number(categoryId)] ?? "";
+  }
+
+  /* ===== Image ===== */
+
+  const imageSrc =
+    wp.featured_image_url ?? "/images/placeholder.webp";
+
+  const imageAlt =
+    locale === "th"
+      ? wp.acf?.image_alt_th ?? wp.title.rendered
+      : wp.acf?.image_alt_en ?? wp.title.rendered;
 
   return {
     id: wp.id.toString(),
@@ -88,26 +111,39 @@ function mapWPToProductView(
         : wp.acf?.description_en ?? "",
 
     image: {
-      src: featured?.source_url ?? "",
-      alt:
-        locale === "th"
-          ? wp.acf?.image_alt_th ?? ""
-          : wp.acf?.image_alt_en ?? "",
+      src: imageSrc,
+      alt: imageAlt,
     },
 
-    categoryId:
-      term?.id?.toString() ??
-      wp.product_category?.[0]?.toString() ??
-      "",
-
-    categorySlug:
-      term?.slug ?? "",
+    categoryId,
+    categorySlug,
 
     specs,
-
     price: undefined,
   };
 }
+
+/* ================= All Products ================= */
+
+export async function getProducts(
+  locale: Locale
+): Promise<ProductView[]> {
+
+  const raw = await fetchJSON<WPProduct[]>(
+    `${BASE}/wp-json/wp/v2/product?per_page=100`
+  );
+
+  const mapped = await Promise.all(
+    raw.map((wp) => mapWPToProductView(wp, locale))
+  );
+
+  const shuffled = mapped.sort(
+    () => 0.5 - Math.random()
+  );
+
+  return shuffled.slice(0, 8);
+}
+
 /* ================= Products by Category ================= */
 
 export async function getProductsByCategory(
@@ -124,11 +160,11 @@ export async function getProductsByCategory(
   const categoryId = terms[0].id;
 
   const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/products?product_category=${categoryId}&_embed=wp:featuredmedia,wp:term`
+    `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}`
   );
 
-  return raw.map((wp) =>
-    mapWPToProductView(wp, locale)
+  return Promise.all(
+    raw.map((wp) => mapWPToProductView(wp, locale))
   );
 }
 
@@ -140,7 +176,7 @@ export async function getProductBySlug(
 ): Promise<ProductView | null> {
 
   const raw = await fetchJSON<WPProduct[]>(
-    `${BASE}/wp-json/wp/v2/products?slug=${slug}&_embed=wp:featuredmedia,wp:term`
+    `${BASE}/wp-json/wp/v2/product?slug=${slug}`
   );
 
   if (!raw.length) return null;
@@ -148,7 +184,7 @@ export async function getProductBySlug(
   return mapWPToProductView(raw[0], locale);
 }
 
-/* ================= Related Products ================= */
+/* ================= Related ================= */
 
 export async function getRelatedProducts(
   categorySlug: string,
@@ -165,9 +201,5 @@ export async function getRelatedProducts(
     (p) => p.id !== currentProductId
   );
 
-  const shuffled = filtered.sort(
-    () => 0.5 - Math.random()
-  );
-
-  return shuffled.slice(0, 4);
+  return filtered.slice(0, 4);
 }
