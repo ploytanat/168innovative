@@ -104,7 +104,7 @@ export async function getCompany(
         { number: acf.phone_3_number, label: locale === 'th' ? acf.phone_3_label_th : acf.phone_3_label_en },
       ].filter((p) => p.number),
 
-      email: [acf.email_1, acf.email_2].filter(Boolean),
+      email: [acf.email_1, acf.email_2, acf.email_3].filter(Boolean),
       
       socials,
 
