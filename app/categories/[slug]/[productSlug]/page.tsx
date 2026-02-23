@@ -7,7 +7,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Send, ChevronRight, ArrowUpRight } from 'lucide-react'
+import { Send, ChevronRight, ArrowUpRight, ChevronLeft } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
@@ -17,7 +17,7 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { productSlug } = await params
+  const { slug, productSlug } = await params
   const product = await getProductBySlug(productSlug, 'th')
   if (!product) return { title: 'ไม่พบสินค้า' }
 
@@ -25,10 +25,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${product.name} | 168 Innovative`,
     description: product.description.slice(0, 155),
     alternates: {
-      canonical: `/categories/${(await params).slug}/${productSlug}`,
-      languages: {
-        'en': `/en/categories/${(await params).slug}/${productSlug}`,
-      },
+      canonical: `/categories/${slug}/${productSlug}`,
+      languages: { en: `/en/categories/${slug}/${productSlug}` },
     },
   }
 }
@@ -37,6 +35,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
   const locale = 'th'
 
+  // All 3 are cached — no waterfall
   const [category, product] = await Promise.all([
     getCategoryBySlug(slug, locale),
     getProductBySlug(productSlug, locale),
@@ -51,31 +50,30 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-[#F7F9FC]">
       {/* Top accent bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#4c7e78] via-[#0EA5E9] to-[#6366F1]"  />
+      <div className="h-1 w-full bg-gradient-to-r from-[#14B8A6] via-[#0EA5E9] to-[#6366F1]" />
 
-      <div className="mx-auto max-w-7xl px-4 pb-32  sm:px-6 lg:px-8">
-        
+      <div className="mx-auto max-w-7xl px-4 pb-32 pt-6 sm:px-6 lg:px-8">
+
         {/* Breadcrumb */}
-        <div className="mb-10 pt-12">
+        <div className="mb-10">
           <Breadcrumb />
         </div>
 
         {/* ═══════════════ PRODUCT HERO ═══════════════ */}
-        <div className="border border-gray-200 grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-lg shadow-slate-200/60 lg:grid-cols-2">
-          
+        <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-2">
+
           {/* LEFT — Image Panel */}
-          <div className="relative bg-gradient-to-br from-[#ffffff] to-[#effafe] p-8 lg:p-12">
-            {/* Decorative blobs */}
+          <div className="relative bg-gradient-to-br from-[#EEF2F7] to-[#E2EAF4] p-8 lg:p-12">
             <div className="pointer-events-none absolute -left-12 -top-12 h-64 w-64 rounded-full bg-[#14B8A6]/10 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-[#6366F1]/10 blur-2xl" />
-            
+
             {/* Category pill */}
             <Link
               href={`/categories/${slug}`}
               className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-[#14B8A6]/30 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#14B8A6] backdrop-blur-sm transition-all hover:bg-[#14B8A6] hover:text-white"
             >
+              <ChevronLeft className="h-3 w-3" />
               {category.name}
-              <ArrowUpRight className="h-3 w-3" />
             </Link>
 
             <div className="relative">
@@ -97,24 +95,21 @@ export default async function ProductDetailPage({ params }: Props) {
 
           {/* RIGHT — Content Panel */}
           <div className="flex flex-col justify-center p-8 lg:p-12">
-            
-            {/* Product Name */}
+
             <h1 className="font-serif text-3xl font-bold leading-tight text-[#0F1E33] md:text-4xl lg:text-[2.6rem]">
               {product.name}
             </h1>
 
-            {/* Divider */}
             <div className="my-6 flex items-center gap-3">
               <div className="h-[3px] w-10 rounded-full bg-[#14B8A6]" />
               <div className="h-[3px] w-4 rounded-full bg-[#14B8A6]/30" />
             </div>
 
-            {/* Description */}
             <p className="text-base font-light leading-relaxed text-[#4A5568] lg:text-[1.05rem]">
               {product.description}
             </p>
 
-            {/* ── Specifications ── */}
+            {/* Specifications */}
             {product.specs && product.specs.length > 0 && (
               <div className="mt-10">
                 <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#94A3B8]">
@@ -125,9 +120,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     <div
                       key={index}
                       className={`flex items-center justify-between px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] ${
-                        index !== product.specs.length - 1
-                          ? 'border-b border-slate-100'
-                          : ''
+                        index !== product.specs.length - 1 ? 'border-b border-slate-100' : ''
                       }`}
                     >
                       <span className="font-medium text-[#94A3B8]">{spec.label}</span>
@@ -140,23 +133,21 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             )}
 
-            {/* ── CTA ── */}
+            {/* CTA */}
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
                 className="group relative flex flex-1 items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#0F1E33] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl active:scale-[0.98]"
               >
-                {/* shimmer */}
                 <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 ขอใบเสนอราคาออนไลน์
               </Link>
 
-              {/* EN link */}
-         
+            
             </div>
 
-            {/* ── Trust badges ── */}
+            {/* Trust badges */}
             <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
                 { icon: '🏭', text: 'มาตรฐานโรงงาน' },
