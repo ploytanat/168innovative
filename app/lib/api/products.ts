@@ -32,49 +32,27 @@ function formatSpecValue(key: string, value: unknown): string {
 }
 
 /* ─────────────────────────────────────────────
-   Parse specs_json safely
-   
-   WordPress ACF (textarea field) escapes quotes
-   when serializing to REST API, producing:
-     {\"model\":\"HL020\",\"inner_diameter_mm\":2}
-   
-   JSON.parse() fails on this because the
-   backslash-escaped quotes are invalid JSON.
-   
-   Fix: replace \" with " before parsing.
-   Also handles: already-parsed objects (ACF
-   sometimes returns the object directly),
-   and double-wrapped strings.
+   Parse specs_json
+   WordPress ACF escapes quotes: {\"model\":...}
    ───────────────────────────────────────────── */
 function parseSpecsJson(raw: unknown): Record<string, unknown> | null {
-  // Already an object (ACF returned parsed value)
   if (typeof raw === 'object' && raw !== null && !Array.isArray(raw)) {
     return raw as Record<string, unknown>
   }
-
   if (typeof raw !== 'string' || !raw.trim()) return null
 
   let str = raw.trim()
-
-  // WP escaped: {\"key\":\"value\"} → {"key":"value"}
   if (str.includes('\\"')) {
     str = str.replace(/\\"/g, '"')
-    // Sometimes WP also wraps in outer quotes: "{\"key\":...}"
-    if (str.startsWith('"') && str.endsWith('"')) {
-      str = str.slice(1, -1)
-    }
+    if (str.startsWith('"') && str.endsWith('"')) str = str.slice(1, -1)
   }
 
   try {
     const parsed = JSON.parse(str)
-    if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
-      return parsed as Record<string, unknown>
-    }
-    return null
+    return typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : null
   } catch {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('[specs_json parse failed] str:', str)
-    }
     return null
   }
 }
@@ -89,9 +67,17 @@ async function fetchJSON<T>(url: string): Promise<T> {
 }
 
 /* ─────────────────────────────────────────────
-   Category map  { id → slug }
+   Cached fetchers
+   
+   ✅ unstable_cache ต้องอยู่ระดับ module
+      ไม่ใช่สร้างใหม่ทุกครั้งที่ call function
+      
+   Pattern: cachedFn = unstable_cache(fn, key, opts)
+            แล้วค่อย export function ที่ call cachedFn
    ───────────────────────────────────────────── */
-const getCategoryMap = unstable_cache(
+
+// Category map { id → slug }
+const _getCategoryMap = unstable_cache(
   async (): Promise<Record<number, string>> => {
     const terms = await fetchJSON<{ id: number; slug: string }[]>(
       `${BASE}/wp-json/wp/v2/product_category?per_page=100`
@@ -102,10 +88,8 @@ const getCategoryMap = unstable_cache(
   { revalidate: 3600, tags: ['categories'] }
 )
 
-/* ─────────────────────────────────────────────
-   Category ID by slug
-   ───────────────────────────────────────────── */
-const getCategoryIdBySlug = unstable_cache(
+// Category ID by slug
+const _getCategoryIdBySlug = unstable_cache(
   async (slug: string): Promise<number | null> => {
     const terms = await fetchJSON<{ id: number }[]>(
       `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
@@ -116,30 +100,53 @@ const getCategoryIdBySlug = unstable_cache(
   { revalidate: 3600, tags: ['categories'] }
 )
 
+// Products list (homepage)
+const _getProductsRaw = unstable_cache(
+  async (): Promise<WPProduct[]> =>
+    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?per_page=8`),
+  ['products-raw-list'],
+  { revalidate: 3600, tags: ['products'] }
+)
+
+// Products by category ID
+const _getProductsByCategoryId = unstable_cache(
+  async (categoryId: number): Promise<WPProduct[]> =>
+    fetchJSON<WPProduct[]>(
+      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
+    ),
+  ['products-raw-by-category'],
+  { revalidate: 3600, tags: ['products'] }
+)
+
+// Single product by slug
+const _getProductRaw = unstable_cache(
+  async (slug: string): Promise<WPProduct[]> =>
+    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?slug=${slug}`),
+  ['product-raw-by-slug'],
+  { revalidate: 3600, tags: ['products'] }
+)
+
 /* ─────────────────────────────────────────────
-   Mapper: WPProduct → ProductView
+   Mapper
    ───────────────────────────────────────────── */
 function mapWPToProductView(
   wp: WPProduct,
   locale: Locale,
   catMap: Record<number, string>
 ): ProductView {
-  let specs: ProductSpecView[] = []
-
   const parsedSpecs = parseSpecsJson(wp.acf?.specs_json)
-  if (parsedSpecs) {
-    specs = Object.entries(parsedSpecs)
-      .filter(([key]) => !SPEC_EXCLUDE.has(key))
-      .map(([key, value]) => ({
-        label:
-          SPEC_LABELS[key]?.[locale] ??
-          key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-        value: formatSpecValue(key, value),
-      }))
-  }
+  const specs: ProductSpecView[] = parsedSpecs
+    ? Object.entries(parsedSpecs)
+        .filter(([key]) => !SPEC_EXCLUDE.has(key))
+        .map(([key, value]) => ({
+          label:
+            SPEC_LABELS[key]?.[locale] ??
+            key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+          value: formatSpecValue(key, value),
+        }))
+    : []
 
   const categoryId = wp.product_category?.[0] ?? 0
-  const categorySlug = catMap[categoryId] ?? ''
 
   return {
     id: wp.id.toString(),
@@ -160,7 +167,7 @@ function mapWPToProductView(
           : (wp.acf?.image_alt_en ?? wp.title.rendered),
     },
     categoryId: categoryId.toString(),
-    categorySlug,
+    categorySlug: catMap[categoryId] ?? '',
     specs,
     price: undefined,
   }
@@ -170,58 +177,38 @@ function mapWPToProductView(
    Public API
    ───────────────────────────────────────────── */
 
-export function getProducts(locale: Locale): Promise<ProductView[]> {
-  return unstable_cache(
-    async () => {
-      const [raw, catMap] = await Promise.all([
-        fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?per_page=8`),
-        getCategoryMap(),
-      ])
-      return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
-    },
-    ['products-list', locale],
-    { revalidate: 3600, tags: ['products'] }
-  )()
+export async function getProducts(locale: Locale): Promise<ProductView[]> {
+  const [raw, catMap] = await Promise.all([
+    _getProductsRaw(),
+    _getCategoryMap(),
+  ])
+  return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
-export function getProductsByCategory(
+export async function getProductsByCategory(
   slug: string,
   locale: Locale
 ): Promise<ProductView[]> {
-  return unstable_cache(
-    async () => {
-      const [categoryId, catMap] = await Promise.all([
-        getCategoryIdBySlug(slug),
-        getCategoryMap(),
-      ])
-      if (!categoryId) return []
+  const [categoryId, catMap] = await Promise.all([
+    _getCategoryIdBySlug(slug),
+    _getCategoryMap(),
+  ])
+  if (!categoryId) return []
 
-      const raw = await fetchJSON<WPProduct[]>(
-        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
-      )
-      return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
-    },
-    ['products-by-category', slug, locale],
-    { revalidate: 3600, tags: ['products'] }
-  )()
+  const raw = await _getProductsByCategoryId(categoryId)
+  return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
-export function getProductBySlug(
+export async function getProductBySlug(
   slug: string,
   locale: Locale
 ): Promise<ProductView | null> {
-  return unstable_cache(
-    async () => {
-      const [raw, catMap] = await Promise.all([
-        fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?slug=${slug}`),
-        getCategoryMap(),
-      ])
-      if (!raw.length) return null
-      return mapWPToProductView(raw[0], locale, catMap)
-    },
-    ['product-by-slug', slug, locale],
-    { revalidate: 3600, tags: ['products'] }
-  )()
+  const [raw, catMap] = await Promise.all([
+    _getProductRaw(slug),
+    _getCategoryMap(),
+  ])
+  if (!raw.length) return null
+  return mapWPToProductView(raw[0], locale, catMap)
 }
 
 export async function getRelatedProducts(
