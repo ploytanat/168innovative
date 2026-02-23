@@ -13,8 +13,8 @@ if (!BASE) {
 
 async function fetchJSON<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
-  //  next: { revalidate: 3600 },
-  next: { revalidate: 0 }, // ไม
+  //  next: { revalidate: 3600 }, //ใช้ตอนข้อมูลนิ่งแล้ว
+  next: { revalidate: 60 }, // ช่วงพัฒนาใชอันนี้
     ...options,
   });
 
