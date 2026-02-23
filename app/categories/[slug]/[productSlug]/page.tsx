@@ -2,7 +2,7 @@
 // Thai locale — /categories/[slug]/[productSlug]
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
-import { getProductBySlug, getProductsByCategory } from '@/app/lib/api/products'
+import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -36,16 +36,19 @@ export default async function ProductDetailPage({ params }: Props) {
   const locale = 'th'
 
   // All 3 are cached — no waterfall
-  const [category, product] = await Promise.all([
-    getCategoryBySlug(slug, locale),
-    getProductBySlug(productSlug, locale),
-  ])
+ const [category, product] = await Promise.all([
+  getCategoryBySlug(slug, locale),
+  getProductBySlug(productSlug, locale),
+])
 
-  if (!category || !product) notFound()
-  if (product.categoryId !== category.id) notFound()
+if (!category || !product) notFound()
+if (product.categoryId !== category.id) notFound()
 
-  const relatedAll = await getProductsByCategory(slug, locale)
-  const related = relatedAll.filter((p) => p.id !== product.id).slice(0, 5)
+const related = await getRelatedProducts(
+  slug,
+  product.id,
+  locale
+)
 
   return (
     <main className="min-h-screen bg-[#F7F9FC]">

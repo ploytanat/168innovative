@@ -7,143 +7,114 @@ import { ProductView, ProductSpecView } from '../types/view'
 const BASE = process.env.WP_API_URL
 if (!BASE) throw new Error('WP_API_URL is not defined')
 
-/* ─────────────────────────────────────────────
-   Spec label i18n map
-   ───────────────────────────────────────────── */
-const SPEC_LABELS: Record<string, { th: string; en: string }> = {
-  model:             { th: 'รุ่น',              en: 'Model' },
-  inner_diameter_mm: { th: 'เส้นผ่านศูนย์กลาง', en: 'Inner Diameter' },
-  material:          { th: 'วัสดุ',             en: 'Material' },
-  application:       { th: 'การใช้งาน',         en: 'Application' },
-  valve_type:        { th: 'ประเภทวาล์ว',       en: 'Valve Type' },
-  size_mm:           { th: 'ขนาด',             en: 'Size' },
-  size:              { th: 'ขนาด',             en: 'Size' },
-  length_mm:         { th: 'ความยาว',           en: 'Length' },
-  set_includes:      { th: 'ชุดประกอบด้วย',     en: 'Set Includes' },
-  alternate_model:   { th: 'รุ่นอื่นที่รู้จัก', en: 'Also Known As' },
-}
-const SPEC_EXCLUDE = new Set(['application'])
+/* ─────────────────────────────
+   Shared fields (ลด payload)
+   ───────────────────────────── */
 
-function formatSpecValue(key: string, value: unknown): string {
-  if (Array.isArray(value)) return value.join(', ')
-  if (['inner_diameter_mm', 'size_mm', 'length_mm'].includes(key))
-    return `${value} mm`
-  return String(value)
-}
+const PRODUCT_FIELDS =
+  'id,slug,title,acf,featured_image_url,product_category'
 
-/* ─────────────────────────────────────────────
-   Parse specs_json
-   WordPress ACF escapes quotes: {\"model\":...}
-   ───────────────────────────────────────────── */
-function parseSpecsJson(raw: unknown): Record<string, unknown> | null {
-  if (typeof raw === 'object' && raw !== null && !Array.isArray(raw)) {
-    return raw as Record<string, unknown>
-  }
-  if (typeof raw !== 'string' || !raw.trim()) return null
+/* ─────────────────────────────
+   Utils
+   ───────────────────────────── */
 
-  let str = raw.trim()
-  if (str.includes('\\"')) {
-    str = str.replace(/\\"/g, '"')
-    if (str.startsWith('"') && str.endsWith('"')) str = str.slice(1, -1)
-  }
-
-  try {
-    const parsed = JSON.parse(str)
-    return typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)
-      ? (parsed as Record<string, unknown>)
-      : null
-  } catch {
-    return null
-  }
-}
-
-/* ─────────────────────────────────────────────
-   Core fetch
-   ───────────────────────────────────────────── */
 async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: 3600 } })
+  const res = await fetch(url, {
+    next: { revalidate: 3600 },
+  })
   if (!res.ok) throw new Error(`Fetch failed: ${url}`)
   return res.json() as Promise<T>
 }
 
-/* ─────────────────────────────────────────────
-   Cached fetchers
-   
-   ✅ unstable_cache ต้องอยู่ระดับ module
-      ไม่ใช่สร้างใหม่ทุกครั้งที่ call function
-      
-   Pattern: cachedFn = unstable_cache(fn, key, opts)
-            แล้วค่อย export function ที่ call cachedFn
-   ───────────────────────────────────────────── */
+/* ─────────────────────────────
+   Category Map (cached)
+   ───────────────────────────── */
 
-// Category map { id → slug }
 const _getCategoryMap = unstable_cache(
   async (): Promise<Record<number, string>> => {
     const terms = await fetchJSON<{ id: number; slug: string }[]>(
-      `${BASE}/wp-json/wp/v2/product_category?per_page=100`
+      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`
     )
     return Object.fromEntries(terms.map((t) => [t.id, t.slug]))
   },
-  ['category-map'],
+  ['category-map-v2'],
   { revalidate: 3600, tags: ['categories'] }
 )
 
-// Category ID by slug
 const _getCategoryIdBySlug = unstable_cache(
   async (slug: string): Promise<number | null> => {
     const terms = await fetchJSON<{ id: number }[]>(
-      `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
+      `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&_fields=id`
     )
     return terms[0]?.id ?? null
   },
-  ['category-id-by-slug'],
+  ['category-id-v2'],
   { revalidate: 3600, tags: ['categories'] }
 )
 
-// Products list (homepage)
+/* ─────────────────────────────
+   Products Fetchers (optimized)
+   ───────────────────────────── */
+
+// Homepage products (limit small)
 const _getProductsRaw = unstable_cache(
   async (): Promise<WPProduct[]> =>
-    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?per_page=8`),
-  ['products-raw-list'],
+    fetchJSON<WPProduct[]>(
+      `${BASE}/wp-json/wp/v2/product?per_page=8&_fields=${PRODUCT_FIELDS}`
+    ),
+  ['products-home-v2'],
   { revalidate: 3600, tags: ['products'] }
 )
 
-// Products by category ID
+// Products by category (limit only needed)
 const _getProductsByCategoryId = unstable_cache(
   async (categoryId: number): Promise<WPProduct[]> =>
     fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=100`
+      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=24&_fields=${PRODUCT_FIELDS}`
     ),
-  ['products-raw-by-category'],
+  ['products-category-v2'],
   { revalidate: 3600, tags: ['products'] }
 )
 
-// Single product by slug
+// Single product
 const _getProductRaw = unstable_cache(
   async (slug: string): Promise<WPProduct[]> =>
-    fetchJSON<WPProduct[]>(`${BASE}/wp-json/wp/v2/product?slug=${slug}`),
-  ['product-raw-by-slug'],
+    fetchJSON<WPProduct[]>(
+      `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`
+    ),
+  ['product-single-v2'],
   { revalidate: 3600, tags: ['products'] }
 )
 
-/* ─────────────────────────────────────────────
+// Related (ดึงแค่ 4 ตัว ไม่โหลดทั้งหมวด)
+const _getRelatedRaw = unstable_cache(
+  async (categoryId: number): Promise<WPProduct[]> =>
+    fetchJSON<WPProduct[]>(
+      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`
+    ),
+  ['products-related-v2'],
+  { revalidate: 3600, tags: ['products'] }
+)
+
+/* ─────────────────────────────
    Mapper
-   ───────────────────────────────────────────── */
+   ───────────────────────────── */
+
 function mapWPToProductView(
   wp: WPProduct,
   locale: Locale,
   catMap: Record<number, string>
 ): ProductView {
-  const parsedSpecs = parseSpecsJson(wp.acf?.specs_json)
+  const parsedSpecs =
+    typeof wp.acf?.specs_json === 'string'
+      ? JSON.parse(wp.acf.specs_json.replace(/\\"/g, '"'))
+      : wp.acf?.specs_json ?? null
+
   const specs: ProductSpecView[] = parsedSpecs
-    ? Object.entries(parsedSpecs)
-        .filter(([key]) => !SPEC_EXCLUDE.has(key))
-        .map(([key, value]) => ({
-          label:
-            SPEC_LABELS[key]?.[locale] ??
-            key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-          value: formatSpecValue(key, value),
-        }))
+    ? Object.entries(parsedSpecs).map(([key, value]) => ({
+        label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
+        value: Array.isArray(value) ? value.join(', ') : String(value),
+      }))
     : []
 
   const categoryId = wp.product_category?.[0] ?? 0
@@ -153,18 +124,15 @@ function mapWPToProductView(
     slug: wp.slug,
     name:
       locale === 'th'
-        ? (wp.acf?.name_th ?? wp.title.rendered)
-        : (wp.acf?.name_en ?? wp.title.rendered),
+        ? wp.acf?.name_th ?? wp.title.rendered
+        : wp.acf?.name_en ?? wp.title.rendered,
     description:
       locale === 'th'
-        ? (wp.acf?.description_th ?? '')
-        : (wp.acf?.description_en ?? ''),
+        ? wp.acf?.description_th ?? ''
+        : wp.acf?.description_en ?? '',
     image: {
       src: wp.featured_image_url ?? '/images/placeholder.webp',
-      alt:
-        locale === 'th'
-          ? (wp.acf?.image_alt_th ?? wp.title.rendered)
-          : (wp.acf?.image_alt_en ?? wp.title.rendered),
+      alt: wp.title.rendered,
     },
     categoryId: categoryId.toString(),
     categorySlug: catMap[categoryId] ?? '',
@@ -173,11 +141,11 @@ function mapWPToProductView(
   }
 }
 
-/* ─────────────────────────────────────────────
+/* ─────────────────────────────
    Public API
-   ───────────────────────────────────────────── */
+   ───────────────────────────── */
 
-export async function getProducts(locale: Locale): Promise<ProductView[]> {
+export async function getProducts(locale: Locale) {
   const [raw, catMap] = await Promise.all([
     _getProductsRaw(),
     _getCategoryMap(),
@@ -188,26 +156,26 @@ export async function getProducts(locale: Locale): Promise<ProductView[]> {
 export async function getProductsByCategory(
   slug: string,
   locale: Locale
-): Promise<ProductView[]> {
-  const [categoryId, catMap] = await Promise.all([
-    _getCategoryIdBySlug(slug),
-    _getCategoryMap(),
-  ])
+) {
+  const categoryId = await _getCategoryIdBySlug(slug)
   if (!categoryId) return []
 
-  const raw = await _getProductsByCategoryId(categoryId)
+  const [raw, catMap] = await Promise.all([
+    _getProductsByCategoryId(categoryId),
+    _getCategoryMap(),
+  ])
+
   return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
 export async function getProductBySlug(
   slug: string,
   locale: Locale
-): Promise<ProductView | null> {
-  const [raw, catMap] = await Promise.all([
-    _getProductRaw(slug),
-    _getCategoryMap(),
-  ])
+) {
+  const raw = await _getProductRaw(slug)
   if (!raw.length) return null
+
+  const catMap = await _getCategoryMap()
   return mapWPToProductView(raw[0], locale, catMap)
 }
 
@@ -215,7 +183,15 @@ export async function getRelatedProducts(
   categorySlug: string,
   currentProductId: string,
   locale: Locale
-): Promise<ProductView[]> {
-  const all = await getProductsByCategory(categorySlug, locale)
-  return all.filter((p) => p.id !== currentProductId).slice(0, 4)
+) {
+  const categoryId = await _getCategoryIdBySlug(categorySlug)
+  if (!categoryId) return []
+
+  const raw = await _getRelatedRaw(categoryId)
+  const catMap = await _getCategoryMap()
+
+  return raw
+    .filter((p) => p.id.toString() !== currentProductId)
+    .slice(0, 4)
+    .map((wp) => mapWPToProductView(wp, locale, catMap))
 }
