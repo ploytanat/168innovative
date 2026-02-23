@@ -1,4 +1,5 @@
 // app/categories/[slug]/[productSlug]/page.tsx
+// Thai locale — /categories/[slug]/[productSlug]
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getProductsByCategory } from '@/app/lib/api/products'
@@ -6,7 +7,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Send, FileText, ChevronRight, CheckCircle2 } from 'lucide-react'
+import { Send, ChevronRight, ArrowUpRight } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
@@ -23,6 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${product.name} | 168 Innovative`,
     description: product.description.slice(0, 155),
+    alternates: {
+      canonical: `/categories/${(await params).slug}/${productSlug}`,
+      languages: {
+        'en': `/en/categories/${(await params).slug}/${productSlug}`,
+      },
+    },
   }
 }
 
@@ -42,148 +49,176 @@ export default async function ProductDetailPage({ params }: Props) {
   const related = relatedAll.filter((p) => p.id !== product.id).slice(0, 5)
 
   return (
-    <main className="min-h-screen bg-[#FDFDFD] pb-32 pt-8">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-8">
+    <main className="min-h-screen bg-[#F7F9FC]">
+      {/* Top accent bar */}
+      <div className="h-1 w-full bg-gradient-to-r from-[#14B8A6] via-[#0EA5E9] to-[#6366F1]" />
+
+      <div className="mx-auto max-w-7xl px-4 pb-32 pt-6 sm:px-6 lg:px-8">
+        
+        {/* Breadcrumb */}
+        <div className="mb-10">
           <Breadcrumb />
         </div>
 
-        {/* Product Section */}
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+        {/* ═══════════════ PRODUCT HERO ═══════════════ */}
+        <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-2">
           
-          {/* Left: Sticky Image Gallery */}
-          <div className="lg:col-span-6">
-            <div className="lg:sticky lg:top-32">
+          {/* LEFT — Image Panel */}
+          <div className="relative bg-gradient-to-br from-[#EEF2F7] to-[#E2EAF4] p-8 lg:p-12">
+            {/* Decorative blobs */}
+            <div className="pointer-events-none absolute -left-12 -top-12 h-64 w-64 rounded-full bg-[#14B8A6]/10 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-[#6366F1]/10 blur-2xl" />
+            
+            {/* Category pill */}
+            <Link
+              href={`/categories/${slug}`}
+              className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-[#14B8A6]/30 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#14B8A6] backdrop-blur-sm transition-all hover:bg-[#14B8A6] hover:text-white"
+            >
+              {category.name}
+              <ArrowUpRight className="h-3 w-3" />
+            </Link>
+
+            <div className="relative">
               <ProductImageGallery
                 src={product.image.src}
                 alt={product.image.alt}
               />
             </div>
+
+            {/* Model badge */}
+            <div className="mt-6 flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-[#14B8A6]/40 to-transparent" />
+              <span className="rounded-full bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#64748B] shadow-sm">
+                {product.slug.toUpperCase()}
+              </span>
+              <div className="h-px flex-1 bg-gradient-to-l from-[#14B8A6]/40 to-transparent" />
+            </div>
           </div>
 
-          {/* Right: Product Content */}
-          <div className="flex flex-col lg:col-span-6 lg:pl-4">
-            {/* Category Tag */}
-            <Link
-              href={`/categories/${slug}`}
-              className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#14B8A6]"
-            >
-              <span className="h-px w-8 bg-[#14B8A6] transition-all group-hover:w-12" />
-              {category.name}
-            </Link>
-
-            <h1 className="mt-6 font-serif text-3xl font-bold leading-[1.2] text-[#1A2535] md:text-5xl">
+          {/* RIGHT — Content Panel */}
+          <div className="flex flex-col justify-center p-8 lg:p-12">
+            
+            {/* Product Name */}
+            <h1 className="font-serif text-3xl font-bold leading-tight text-[#0F1E33] md:text-4xl lg:text-[2.6rem]">
               {product.name}
             </h1>
 
-            <p className="mt-8 text-lg font-light leading-relaxed text-[#5A6A7E]">
+            {/* Divider */}
+            <div className="my-6 flex items-center gap-3">
+              <div className="h-[3px] w-10 rounded-full bg-[#14B8A6]" />
+              <div className="h-[3px] w-4 rounded-full bg-[#14B8A6]/30" />
+            </div>
+
+            {/* Description */}
+            <p className="text-base font-light leading-relaxed text-[#4A5568] lg:text-[1.05rem]">
               {product.description}
             </p>
 
-            {/* Specifications Table */}
+            {/* ── Specifications ── */}
             {product.specs && product.specs.length > 0 && (
-              <div className="mt-12">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-8 w-[2px] bg-[#14B8A6]" />
-                  <h2 className="text-sm font-bold uppercase tracking-widest text-[#1A2535]">
-                    Specifications
-                  </h2>
-                </div>
-
-                <div className="divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white px-8 py-2 shadow-sm">
+              <div className="mt-10">
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#94A3B8]">
+                  ข้อมูลจำเพาะ
+                </p>
+                <div className="overflow-hidden rounded-2xl border border-slate-100 bg-[#F8FAFC]">
                   {product.specs.map((spec, index) => (
-                    <div key={index} className="flex justify-between py-5 text-sm">
-                      <span className="font-medium text-[#8492A6]">{spec.label}</span>
-                      <span className="font-bold text-[#1A2535]">{spec.value}</span>
+                    <div
+                      key={index}
+                      className={`flex items-center justify-between px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] ${
+                        index !== product.specs.length - 1
+                          ? 'border-b border-slate-100'
+                          : ''
+                      }`}
+                    >
+                      <span className="font-medium text-[#94A3B8]">{spec.label}</span>
+                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm">
+                        {spec.value}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Action Buttons */}
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+            {/* ── CTA ── */}
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
-                className="group flex flex-1 items-center justify-center gap-3 rounded-2xl bg-[#1E3A5F] px-8 py-5 text-sm font-bold text-white shadow-xl shadow-blue-900/10 transition-all hover:bg-[#142B45] hover:shadow-2xl active:scale-[0.98]"
+                className="group relative flex flex-1 items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#0F1E33] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl active:scale-[0.98]"
               >
-                <Send className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                {/* shimmer */}
+                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 ขอใบเสนอราคาออนไลน์
               </Link>
-              
-              {/* Optional: Catalog Button (Uncomment to use) */}
-              {/* <button className="flex items-center justify-center gap-3 rounded-2xl border-2 border-[#E2E8F0] bg-white px-8 py-5 text-sm font-bold text-[#1A2535] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]">
-                <FileText className="h-4 w-4" />
-                Catalog (PDF)
-              </button> 
-              */}
+
+              {/* EN link */}
+         
             </div>
 
-            {/* Trust Badges Grid */}
-            <div className="mt-12 grid grid-cols-2 gap-3">
+            {/* ── Trust badges ── */}
+            <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
-                { icon: '🏭', text: 'โรงงานผลิตมาตรฐาน' },
-                { icon: '🛡️', text: 'Food & Cosmetic Grade' },
-                { icon: '📦', text: 'บรรจุภัณฑ์กันกระแทก' },
-                { icon: '🚚', text: 'จัดส่งด่วนทั่วประเทศ' },
+                { icon: '🏭', text: 'มาตรฐานโรงงาน' },
+                { icon: '🛡️', text: 'Food Grade' },
+                { icon: '📦', text: 'บรรจุกันกระแทก' },
+                { icon: '🚚', text: 'จัดส่งทั่วไทย' },
               ].map((b) => (
                 <div
                   key={b.text}
-                  className="flex items-center gap-3 rounded-2xl border border-gray-50 bg-[#F8FAFC] p-4 transition-colors hover:bg-white hover:border-[#14B8A644]"
+                  className="flex flex-col items-center gap-1.5 rounded-xl bg-[#F8FAFC] p-3 text-center transition-colors hover:bg-[#EEF6F5]"
                 >
-                  <span className="text-xl">{b.icon}</span>
-                  <span className="text-[13px] font-semibold text-[#5A6A7E]">{b.text}</span>
+                  <span className="text-lg">{b.icon}</span>
+                  <span className="text-[11px] font-semibold leading-tight text-[#64748B]">
+                    {b.text}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Related Products Section */}
+        {/* ═══════════════ RELATED PRODUCTS ═══════════════ */}
         {related.length > 0 && (
-          <section className="mt-32 border-t border-gray-100 pt-24" aria-label="สินค้าใกล้เคียง">
-            <div className="flex items-end justify-between">
+          <section className="mt-24" aria-label="สินค้าใกล้เคียง">
+            <div className="mb-10 flex items-end justify-between">
               <div>
-                <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#14B8A6]">
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#14B8A6]">
                   Discover More
                 </span>
-                <h2 className="mt-3 font-serif text-3xl font-bold text-[#1A2535]">
+                <h2 className="mt-2 font-serif text-2xl font-bold text-[#0F1E33] md:text-3xl">
                   สินค้าที่คุณอาจสนใจ
                 </h2>
               </div>
               <Link
                 href={`/categories/${slug}`}
-                className="hidden items-center gap-2 text-sm font-bold text-[#1A2535] hover:text-[#14B8A6] md:flex"
+                className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-[#0F1E33] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
               >
-                ดูหมวดหมู่ทั้งหมด <ChevronRight size={16} />
+                ดูทั้งหมด <ChevronRight size={14} />
               </Link>
             </div>
 
-            <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {related.map((item) => (
                 <Link
                   key={item.id}
                   href={`/categories/${slug}/${item.slug}`}
-                  className="group"
+                  className="group rounded-3xl bg-white p-4 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
                 >
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#F1F5F9]">
+                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt}
                       fill
                       sizes="(min-width:1024px) 20vw, (min-width:640px) 33vw, 50vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </div>
-
-                  <div className="mt-5 space-y-1">
-                    <h3 className="line-clamp-1 text-sm font-bold text-[#1A2535] group-hover:text-[#14B8A6] transition-colors">
+                  <div className="mt-3 space-y-0.5 px-1">
+                    <h3 className="line-clamp-2 text-xs font-bold leading-snug text-[#0F1E33] transition-colors group-hover:text-[#14B8A6]">
                       {item.name}
                     </h3>
-                    <p className="text-xs font-medium text-[#8492A6]">
-                      168 Innovative
-                    </p>
+                    <p className="text-[11px] font-medium text-[#94A3B8]">168 Innovative</p>
                   </div>
                 </Link>
               ))}
