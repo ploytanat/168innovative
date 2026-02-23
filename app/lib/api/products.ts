@@ -30,6 +30,7 @@ async function fetchJSON<T>(url: string): Promise<T> {
    Category Map (cached)
    ───────────────────────────── */
 
+// ✅ Global cache map — key ไม่ขึ้นกับ param จึงใช้ key คงที่ได้
 const _getCategoryMap = unstable_cache(
   async (): Promise<Record<number, string>> => {
     const terms = await fetchJSON<{ id: number; slug: string }[]>(
@@ -41,22 +42,25 @@ const _getCategoryMap = unstable_cache(
   { revalidate: 3600, tags: ['categories'] }
 )
 
-const _getCategoryIdBySlug = unstable_cache(
-  async (slug: string): Promise<number | null> => {
-    const terms = await fetchJSON<{ id: number }[]>(
-      `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&_fields=id`
-    )
-    return terms[0]?.id ?? null
-  },
-  ['category-id-v2'],
-  { revalidate: 3600, tags: ['categories'] }
-)
+// ✅ แก้: key รวม slug เพื่อ cache แยกกันแต่ละ slug
+function _getCategoryIdBySlug(slug: string): Promise<number | null> {
+  return unstable_cache(
+    async () => {
+      const terms = await fetchJSON<{ id: number }[]>(
+        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&_fields=id`
+      )
+      return terms[0]?.id ?? null
+    },
+    [`category-id-${slug}`],
+    { revalidate: 3600, tags: ['categories'] }
+  )()
+}
 
 /* ─────────────────────────────
    Products Fetchers (optimized)
    ───────────────────────────── */
 
-// Homepage products (limit small)
+// Homepage products (limit small) — key คงที่ได้เพราะไม่มี param
 const _getProductsRaw = unstable_cache(
   async (): Promise<WPProduct[]> =>
     fetchJSON<WPProduct[]>(
@@ -66,35 +70,41 @@ const _getProductsRaw = unstable_cache(
   { revalidate: 3600, tags: ['products'] }
 )
 
-// Products by category (limit only needed)
-const _getProductsByCategoryId = unstable_cache(
-  async (categoryId: number): Promise<WPProduct[]> =>
-    fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=24&_fields=${PRODUCT_FIELDS}`
-    ),
-  ['products-category-v2'],
-  { revalidate: 3600, tags: ['products'] }
-)
+// ✅ แก้: key รวม categoryId
+function _getProductsByCategoryId(categoryId: number): Promise<WPProduct[]> {
+  return unstable_cache(
+    async () =>
+      fetchJSON<WPProduct[]>(
+        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=24&_fields=${PRODUCT_FIELDS}`
+      ),
+    [`products-category-${categoryId}`],
+    { revalidate: 3600, tags: ['products'] }
+  )()
+}
 
-// Single product
-const _getProductRaw = unstable_cache(
-  async (slug: string): Promise<WPProduct[]> =>
-    fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`
-    ),
-  ['product-single-v2'],
-  { revalidate: 3600, tags: ['products'] }
-)
+// ✅ แก้: key รวม slug
+function _getProductRaw(slug: string): Promise<WPProduct[]> {
+  return unstable_cache(
+    async () =>
+      fetchJSON<WPProduct[]>(
+        `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`
+      ),
+    [`product-single-${slug}`],
+    { revalidate: 3600, tags: ['products'] }
+  )()
+}
 
-// Related (ดึงแค่ 4 ตัว ไม่โหลดทั้งหมวด)
-const _getRelatedRaw = unstable_cache(
-  async (categoryId: number): Promise<WPProduct[]> =>
-    fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`
-    ),
-  ['products-related-v2'],
-  { revalidate: 3600, tags: ['products'] }
-)
+// ✅ แก้: key รวม categoryId
+function _getRelatedRaw(categoryId: number): Promise<WPProduct[]> {
+  return unstable_cache(
+    async () =>
+      fetchJSON<WPProduct[]>(
+        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`
+      ),
+    [`products-related-${categoryId}`],
+    { revalidate: 3600, tags: ['products'] }
+  )()
+}
 
 /* ─────────────────────────────
    Mapper
@@ -110,11 +120,73 @@ function mapWPToProductView(
       ? JSON.parse(wp.acf.specs_json.replace(/\\"/g, '"'))
       : wp.acf?.specs_json ?? null
 
+  const SPEC_LABEL_TH: Record<string, string> = {
+    model: 'รุ่น',
+    material: 'วัสดุ',
+    color: 'สี',
+    size: 'ขนาด',
+    weight: 'น้ำหนัก',
+    capacity: 'ความจุ',
+    application: 'การใช้งาน',
+    inner_diameter_mm: 'เส้นผ่านศูนย์กลางใน (มม.)',
+    outer_diameter_mm: 'เส้นผ่านศูนย์กลางนอก (มม.)',
+    height_mm: 'ความสูง (มม.)',
+    width_mm: 'ความกว้าง (มม.)',
+    length_mm: 'ความยาว (มม.)',
+    diameter_mm: 'เส้นผ่านศูนย์กลาง (มม.)',
+    thickness_mm: 'ความหนา (มม.)',
+    neck_size: 'ขนาดคอ',
+    thread: 'เกลียว',
+    finish: 'ชนิดปาก',
+    closure: 'ฝาปิด',
+    pump_type: 'ประเภทปั๊ม',
+    dispense_volume_ml: 'ปริมาณต่อกด (มล.)',
+    volume_ml: 'ปริมาตร (มล.)',
+    moq: 'จำนวนขั้นต่ำ (MOQ)',
+    surface: 'ผิวสัมผัส',
+    shape: 'รูปทรง',
+  }
+
+  const SPEC_LABEL_EN: Record<string, string> = {
+    model: 'Model',
+    material: 'Material',
+    color: 'Color',
+    size: 'Size',
+    weight: 'Weight',
+    capacity: 'Capacity',
+    application: 'Application',
+    inner_diameter_mm: 'Inner Diameter (mm)',
+    outer_diameter_mm: 'Outer Diameter (mm)',
+    height_mm: 'Height (mm)',
+    width_mm: 'Width (mm)',
+    length_mm: 'Length (mm)',
+    diameter_mm: 'Diameter (mm)',
+    thickness_mm: 'Thickness (mm)',
+    neck_size: 'Neck Size',
+    thread: 'Thread',
+    finish: 'Finish',
+    closure: 'Closure',
+    pump_type: 'Pump Type',
+    dispense_volume_ml: 'Dispense Volume (ml)',
+    volume_ml: 'Volume (ml)',
+    moq: 'MOQ',
+    surface: 'Surface',
+    shape: 'Shape',
+  }
+
+  const SPEC_LABEL_MAP = locale === 'th' ? SPEC_LABEL_TH : SPEC_LABEL_EN
+
   const specs: ProductSpecView[] = parsedSpecs
-    ? Object.entries(parsedSpecs).map(([key, value]) => ({
-        label: key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()),
-        value: Array.isArray(value) ? value.join(', ') : String(value),
-      }))
+    ? Object.entries(parsedSpecs).map(([key, value]) => {
+        const normalizedKey = key.toLowerCase().replace(/\s+/g, '_')
+        const label =
+          SPEC_LABEL_MAP[normalizedKey] ??
+          key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+        return {
+          label,
+          value: Array.isArray(value) ? value.join(', ') : String(value),
+        }
+      })
     : []
 
   const categoryId = wp.product_category?.[0] ?? 0
@@ -153,29 +225,25 @@ export async function getProducts(locale: Locale) {
   return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
-export async function getProductsByCategory(
-  slug: string,
-  locale: Locale
-) {
-  const categoryId = await _getCategoryIdBySlug(slug)
-  if (!categoryId) return []
-
-  const [raw, catMap] = await Promise.all([
-    _getProductsByCategoryId(categoryId),
+export async function getProductsByCategory(slug: string, locale: Locale) {
+  // ✅ แก้: รัน categoryId และ catMap พร้อมกัน ไม่ต้องรอ sequential
+  const [categoryId, catMap] = await Promise.all([
+    _getCategoryIdBySlug(slug),
     _getCategoryMap(),
   ])
+  if (!categoryId) return []
 
+  const raw = await _getProductsByCategoryId(categoryId)
   return raw.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
-export async function getProductBySlug(
-  slug: string,
-  locale: Locale
-) {
-  const raw = await _getProductRaw(slug)
+export async function getProductBySlug(slug: string, locale: Locale) {
+  // ✅ แก้: รัน productRaw และ catMap พร้อมกัน
+  const [raw, catMap] = await Promise.all([
+    _getProductRaw(slug),
+    _getCategoryMap(),
+  ])
   if (!raw.length) return null
-
-  const catMap = await _getCategoryMap()
   return mapWPToProductView(raw[0], locale, catMap)
 }
 
@@ -184,11 +252,14 @@ export async function getRelatedProducts(
   currentProductId: string,
   locale: Locale
 ) {
-  const categoryId = await _getCategoryIdBySlug(categorySlug)
+  // ✅ แก้: รัน categoryId และ catMap พร้อมกัน
+  const [categoryId, catMap] = await Promise.all([
+    _getCategoryIdBySlug(categorySlug),
+    _getCategoryMap(),
+  ])
   if (!categoryId) return []
 
   const raw = await _getRelatedRaw(categoryId)
-  const catMap = await _getCategoryMap()
 
   return raw
     .filter((p) => p.id.toString() !== currentProductId)

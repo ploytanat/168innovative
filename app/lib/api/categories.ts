@@ -1,5 +1,6 @@
 // lib/api/categories.ts
 
+import { unstable_cache } from "next/cache";
 import { Locale } from "../types/content";
 import { CategoryView } from "../types/view";
 
@@ -13,7 +14,7 @@ if (!BASE) {
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, {
-    next: { revalidate: 300 }, // 5 นาที (production friendly)
+    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
@@ -25,42 +26,41 @@ async function fetchJSON<T>(url: string): Promise<T> {
 
 /* ================= All Categories ================= */
 
-export async function getCategories(
-  locale: Locale
-): Promise<CategoryView[]> {
-
-  const data = await fetchJSON<any[]>(
-    `${BASE}/wp-json/wp/v2/product_category?per_page=100`
-  );
-
-  return data.map((wp) =>
-    mapCategory(wp, locale)
-  );
+export function getCategories(locale: Locale): Promise<CategoryView[]> {
+  return unstable_cache(
+    async () => {
+      const data = await fetchJSON<any[]>(
+        `${BASE}/wp-json/wp/v2/product_category?per_page=100`
+      );
+      return data.map((wp) => mapCategory(wp, locale));
+    },
+    [`categories-${locale}`],
+    { revalidate: 300, tags: ["categories"] }
+  )();
 }
 
 /* ================= Single Category ================= */
 
-export async function getCategoryBySlug(
+export function getCategoryBySlug(
   slug: string,
   locale: Locale
 ): Promise<CategoryView | null> {
-
-  const data = await fetchJSON<any[]>(
-    `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
-  );
-
-  if (!data.length) return null;
-
-  return mapCategory(data[0], locale);
+  return unstable_cache(
+    async () => {
+      const data = await fetchJSON<any[]>(
+        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
+      );
+      if (!data.length) return null;
+      return mapCategory(data[0], locale);
+    },
+    [`category-${slug}-${locale}`],
+    { revalidate: 300, tags: ["categories"] }
+  )();
 }
 
 /* ================= Mapper ================= */
 
-function mapCategory(
-  wp: any,
-  locale: Locale
-): CategoryView {
-
+function mapCategory(wp: any, locale: Locale): CategoryView {
   return {
     id: String(wp.id),
     slug: wp.slug,

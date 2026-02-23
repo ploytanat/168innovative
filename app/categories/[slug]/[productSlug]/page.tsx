@@ -1,23 +1,62 @@
 // app/categories/[slug]/[productSlug]/page.tsx
 // Thai locale — /categories/[slug]/[productSlug]
 
+export const revalidate = 3600
+
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Send, ChevronRight, ArrowUpRight, ChevronLeft } from 'lucide-react'
+import { Send, ChevronRight, ChevronLeft } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
+
+const BASE = process.env.WP_API_URL
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
 }
 
+/* ─────────────────────────────────────────────
+   Static Generation — build ทุก product
+   ───────────────────────────────────────────── */
+export async function generateStaticParams() {
+  const [productsRes, catsRes] = await Promise.all([
+    fetch(
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,product_category`,
+      { cache: 'force-cache' }
+    ),
+    fetch(
+      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`,
+      { cache: 'force-cache' }
+    ),
+  ])
+
+  const [products, cats] = await Promise.all([
+    productsRes.json(),
+    catsRes.json(),
+  ])
+
+  const catMap: Record<number, string> = Object.fromEntries(
+    cats.map((c: any) => [c.id, c.slug])
+  )
+
+  return products
+    .map((p: any) => ({
+      slug: catMap[p.product_category?.[0]] ?? null,
+      productSlug: p.slug,
+    }))
+    .filter((p: any) => p.slug !== null)
+}
+
+/* ─────────────────────────────────────────────
+   Metadata
+   ───────────────────────────────────────────── */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, productSlug } = await params
+  const { productSlug, slug } = await params
   const product = await getProductBySlug(productSlug, 'th')
   if (!product) return { title: 'ไม่พบสินค้า' }
 
@@ -31,24 +70,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
+/* ─────────────────────────────────────────────
+   Page
+   ───────────────────────────────────────────── */
 export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
   const locale = 'th'
 
-  // All 3 are cached — no waterfall
- const [category, product] = await Promise.all([
-  getCategoryBySlug(slug, locale),
-  getProductBySlug(productSlug, locale),
-])
+  // ✅ แก้: fetch ทั้ง 3 พร้อมกันเลย ไม่ต้องรอ sequential
+  const [category, product, related] = await Promise.all([
+    getCategoryBySlug(slug, locale),
+    getProductBySlug(productSlug, locale),
+    getRelatedProducts(slug, productSlug, locale),
+  ])
 
-if (!category || !product) notFound()
-if (product.categoryId !== category.id) notFound()
-
-const related = await getRelatedProducts(
-  slug,
-  product.id,
-  locale
-)
+  if (!category || !product) notFound()
+  if (product.categoryId !== category.id) notFound()
 
   return (
     <main className="min-h-screen bg-[#F7F9FC]">
@@ -122,12 +159,12 @@ const related = await getRelatedProducts(
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
-                      className={`flex items-center justify-between px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] ${
+                      className={`flex flex-col gap-1.5 px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] sm:flex-row sm:items-center sm:justify-between ${
                         index !== product.specs.length - 1 ? 'border-b border-slate-100' : ''
                       }`}
                     >
-                      <span className="font-medium text-[#94A3B8]">{spec.label}</span>
-                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm">
+                      <span className="shrink-0 font-medium text-[#94A3B8]">{spec.label}</span>
+                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm sm:max-w-[60%] sm:text-right">
                         {spec.value}
                       </span>
                     </div>
@@ -146,8 +183,6 @@ const related = await getRelatedProducts(
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 ขอใบเสนอราคาออนไลน์
               </Link>
-
-            
             </div>
 
             {/* Trust badges */}

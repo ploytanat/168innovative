@@ -1,23 +1,62 @@
-// app/en/categories/[slug]/[productSlug]/page.tsx
-// English locale — /en/categories/[slug]/[productSlug]
+// en/categories/[slug]/[productSlug]/page.tsx
+
+export const revalidate = 3600
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
-import { getProductBySlug, getProductsByCategory } from '@/app/lib/api/products'
+import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Send, ChevronRight, ArrowUpRight } from 'lucide-react'
+import { Send, ChevronRight, ChevronLeft } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
+
+const BASE = process.env.WP_API_URL
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
 }
 
+/* ─────────────────────────────────────────────
+   Static Generation
+   ───────────────────────────────────────────── */
+export async function generateStaticParams() {
+  const [productsRes, catsRes] = await Promise.all([
+    fetch(
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,product_category`,
+      { cache: 'force-cache' }
+    ),
+    fetch(
+      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`,
+      { cache: 'force-cache' }
+    ),
+  ])
+
+  const [products, cats] = await Promise.all([
+    productsRes.json(),
+    catsRes.json(),
+  ])
+
+  const catMap: Record<number, string> = Object.fromEntries(
+    cats.map((c: any) => [c.id, c.slug])
+  )
+
+  return products
+    .map((p: any) => ({
+      slug: catMap[p.product_category?.[0]] ?? null,
+      productSlug: p.slug,
+    }))
+    .filter((p: any) => p.slug !== null)
+}
+
+/* ─────────────────────────────────────────────
+   Metadata
+   ───────────────────────────────────────────── */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, productSlug } = await params
+  const { productSlug, slug } = await params
+  // ✅ แก้: ใช้ locale 'en'
   const product = await getProductBySlug(productSlug, 'en')
   if (!product) return { title: 'Product not found' }
 
@@ -26,27 +65,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: product.description.slice(0, 155),
     alternates: {
       canonical: `/en/categories/${slug}/${productSlug}`,
-      languages: {
-        'th': `/categories/${slug}/${productSlug}`,
-      },
+      languages: { th: `/categories/${slug}/${productSlug}` },
     },
   }
 }
 
-export default async function ProductDetailPageEN({ params }: Props) {
+/* ─────────────────────────────────────────────
+   Page
+   ───────────────────────────────────────────── */
+export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
+  // ✅ แก้: locale เป็น 'en'
   const locale = 'en'
 
-  const [category, product] = await Promise.all([
+  const [category, product, related] = await Promise.all([
     getCategoryBySlug(slug, locale),
     getProductBySlug(productSlug, locale),
+    getRelatedProducts(slug, productSlug, locale),
   ])
 
   if (!category || !product) notFound()
   if (product.categoryId !== category.id) notFound()
-
-  const relatedAll = await getProductsByCategory(slug, locale)
-  const related = relatedAll.filter((p) => p.id !== product.id).slice(0, 5)
 
   return (
     <main className="min-h-screen bg-[#F7F9FC]">
@@ -69,12 +108,13 @@ export default async function ProductDetailPageEN({ params }: Props) {
             <div className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-[#6366F1]/10 blur-2xl" />
 
             {/* Category pill */}
+            {/* ✅ แก้: link ไปหน้า en/categories */}
             <Link
               href={`/en/categories/${slug}`}
               className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-[#14B8A6]/30 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#14B8A6] backdrop-blur-sm transition-all hover:bg-[#14B8A6] hover:text-white"
             >
+              <ChevronLeft className="h-3 w-3" />
               {category.name}
-              <ArrowUpRight className="h-3 w-3" />
             </Link>
 
             <div className="relative">
@@ -97,25 +137,23 @@ export default async function ProductDetailPageEN({ params }: Props) {
           {/* RIGHT — Content Panel */}
           <div className="flex flex-col justify-center p-8 lg:p-12">
 
-            {/* Product Name */}
             <h1 className="font-serif text-3xl font-bold leading-tight text-[#0F1E33] md:text-4xl lg:text-[2.6rem]">
               {product.name}
             </h1>
 
-            {/* Divider */}
             <div className="my-6 flex items-center gap-3">
               <div className="h-[3px] w-10 rounded-full bg-[#14B8A6]" />
               <div className="h-[3px] w-4 rounded-full bg-[#14B8A6]/30" />
             </div>
 
-            {/* Description */}
             <p className="text-base font-light leading-relaxed text-[#4A5568] lg:text-[1.05rem]">
               {product.description}
             </p>
 
-            {/* ── Specifications ── */}
+            {/* Specifications */}
             {product.specs && product.specs.length > 0 && (
               <div className="mt-10">
+                {/* ✅ แก้: หัวข้อภาษาอังกฤษ */}
                 <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#94A3B8]">
                   Specifications
                 </p>
@@ -123,14 +161,12 @@ export default async function ProductDetailPageEN({ params }: Props) {
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
-                      className={`flex items-center justify-between px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] ${
-                        index !== product.specs.length - 1
-                          ? 'border-b border-slate-100'
-                          : ''
+                      className={`flex flex-col gap-1.5 px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] sm:flex-row sm:items-center sm:justify-between ${
+                        index !== product.specs.length - 1 ? 'border-b border-slate-100' : ''
                       }`}
                     >
-                      <span className="font-medium text-[#94A3B8]">{spec.label}</span>
-                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm">
+                      <span className="shrink-0 font-medium text-[#94A3B8]">{spec.label}</span>
+                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm sm:max-w-[60%] sm:text-right">
                         {spec.value}
                       </span>
                     </div>
@@ -139,8 +175,9 @@ export default async function ProductDetailPageEN({ params }: Props) {
               </div>
             )}
 
-            {/* ── CTA ── */}
+            {/* CTA */}
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              {/* ✅ แก้: ข้อความปุ่มภาษาอังกฤษ */}
               <Link
                 href={`/en/contact?product=${encodeURIComponent(product.name)}`}
                 className="group relative flex flex-1 items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#0F1E33] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl active:scale-[0.98]"
@@ -149,18 +186,16 @@ export default async function ProductDetailPageEN({ params }: Props) {
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 Request a Quote
               </Link>
-
-              {/* TH link */}
-             
             </div>
 
-            {/* ── Trust badges ── */}
+            {/* Trust badges */}
+            {/* ✅ แก้: ข้อความ badge ภาษาอังกฤษ */}
             <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {[
                 { icon: '🏭', text: 'Factory Standard' },
                 { icon: '🛡️', text: 'Food Grade' },
-                { icon: '📦', text: 'Safe Packaging' },
-                { icon: '🚚', text: 'Nationwide Delivery' },
+                { icon: '📦', text: 'Secure Packaging' },
+                { icon: '🚚', text: 'Nationwide Shipping' },
               ].map((b) => (
                 <div
                   key={b.text}
@@ -178,20 +213,23 @@ export default async function ProductDetailPageEN({ params }: Props) {
 
         {/* ═══════════════ RELATED PRODUCTS ═══════════════ */}
         {related.length > 0 && (
-          <section className="mt-24" aria-label="Related products">
+          // ✅ แก้: aria-label ภาษาอังกฤษ
+          <section className="mt-24" aria-label="Related Products">
             <div className="mb-10 flex items-end justify-between">
               <div>
                 <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#14B8A6]">
                   Discover More
                 </span>
+                {/* ✅ แก้: หัวข้อภาษาอังกฤษ */}
                 <h2 className="mt-2 font-serif text-2xl font-bold text-[#0F1E33] md:text-3xl">
-                  You Might Also Like
+                  You May Also Like
                 </h2>
               </div>
               <Link
                 href={`/en/categories/${slug}`}
                 className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-[#0F1E33] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
               >
+                {/* ✅ แก้: ข้อความภาษาอังกฤษ */}
                 View All <ChevronRight size={14} />
               </Link>
             </div>
