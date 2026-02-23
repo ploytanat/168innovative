@@ -51,20 +51,20 @@ export default async function ProductDetailPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-[#F7F9FC]">
       {/* Top accent bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#14B8A6] via-[#0EA5E9] to-[#6366F1]" />
+      <div className="h-1 w-full bg-gradient-to-r from-[#4c7e78] via-[#0EA5E9] to-[#6366F1]"  />
 
-      <div className="mx-auto max-w-7xl px-4 pb-32 pt-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pb-32  sm:px-6 lg:px-8">
         
         {/* Breadcrumb */}
-        <div className="mb-10">
+        <div className="mb-10 pt-12">
           <Breadcrumb />
         </div>
 
         {/* ═══════════════ PRODUCT HERO ═══════════════ */}
-        <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-2">
+        <div className="border border-gray-200 grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-lg shadow-slate-200/60 lg:grid-cols-2">
           
           {/* LEFT — Image Panel */}
-          <div className="relative bg-gradient-to-br from-[#EEF2F7] to-[#E2EAF4] p-8 lg:p-12">
+          <div className="relative bg-gradient-to-br from-[#ffffff] to-[#effafe] p-8 lg:p-12">
             {/* Decorative blobs */}
             <div className="pointer-events-none absolute -left-12 -top-12 h-64 w-64 rounded-full bg-[#14B8A6]/10 blur-3xl" />
             <div className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-[#6366F1]/10 blur-2xl" />
