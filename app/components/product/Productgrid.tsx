@@ -98,7 +98,7 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
       {/* ── Empty state ── */}
       {filtered.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-32 text-center">
+        <div className="flex flex-col items-center justify-center py-32 text-center border border-gray-300 rounded-2xl">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F1F5F9]">
             <Search className="h-7 w-7 text-[#94A3B8]" />
           </div>
@@ -117,12 +117,12 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
       {/* ── Product grid ── */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t p-4 ">
           {filtered.map((product) => (
             <Link
               key={product.id}
               href={`/categories/${categorySlug}/${product.slug}`}
-              className="group rounded-3xl bg-white p-4 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
+              className="group rounded-3xl bg-[#ffffffb4] border border-[#ffffff] p-2 shadow-sm  shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
                 {product.image?.src ? (
@@ -142,7 +142,7 @@ export default function ProductGrid({ products, categorySlug }: Props) {
               </div>
 
               <div className="mt-3 px-1">
-                <h2 className="text-sm font-bold leading-snug text-[#0F1E33] transition-colors group-hover:text-[#14B8A6]">
+                <h2 className="text-sm font-medium leading-snug text-[#4a4a4a] transition-colors group-hover:text-[#14B8A6]">
                   {product.name}
                 </h2>
                 <div className="mt-1.5 h-[2px] w-0 rounded-full bg-[#14B8A6] transition-all duration-300 group-hover:w-6" />

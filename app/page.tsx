@@ -1,62 +1,80 @@
 // app/page.tsx
 
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 
-import { getCategories } from "./lib/api/categories";
-import { getHeroSlides } from "./lib/api/hero";
-import { getProducts } from "./lib/api/products";
-import { getWhy } from "./lib/api/why";
-import { getCompany } from "./lib/api/company";
+import { getCategories } from "./lib/api/categories"
+import { getHeroSlides } from "./lib/api/hero"
+import { getProducts } from "./lib/api/products"
+import { getWhy } from "./lib/api/why"
+import { getCompany } from "./lib/api/company"
 
-import HeroCarousel from "./components/sections/HeroCarousel";
-import CategorySection from "./components/sections/CategorySection";
-import ProductMarquee from "./components/sections/ProductMarquee";
-import WhyChooseUs from "./components/sections/WhyChooseUs";
-import ContactSection from "./components/sections/ContactSection";
+import HeroCarousel from "./components/sections/HeroCarousel"
+import CategorySection from "./components/sections/CategorySection"
+import ProductMarquee from "./components/sections/ProductMarquee"
+import WhyChooseUs from "./components/sections/WhyChooseUs"
+import ContactSection from "./components/sections/ContactSection"
 
-/* ================= Metadata ================= */
+/* ─────────────────────────────
+   Metadata (SEO)
+───────────────────────────── */
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "168 Innovative | บรรจุภัณฑ์เครื่องสำอาง OEM",
     description:
       "ผู้เชี่ยวชาญด้านบรรจุภัณฑ์เครื่องสำอาง นำเข้าและจัดจำหน่ายโดยตรงจากโรงงาน",
-  };
+    openGraph: {
+      title: "168 Innovative | บรรจุภัณฑ์เครื่องสำอาง OEM",
+      description:
+        "ผู้เชี่ยวชาญด้านบรรจุภัณฑ์เครื่องสำอาง นำเข้าและจัดจำหน่ายโดยตรงจากโรงงาน",
+      type: "website",
+      locale: "th_TH",
+    },
+  }
 }
 
-/* ================= Page ================= */
-export default async function HomePage() {
-  const locale = "th";
+/* ─────────────────────────────
+   Home Page
+───────────────────────────── */
 
-  const [heroSlides, products, categories, whys, company] = await Promise.all([
-    getHeroSlides(locale),
-    getProducts(locale),
-    getCategories(locale),
-    getWhy(locale),
-    getCompany(locale),
-  ]);
+export default async function HomePage() {
+  const locale = "th"
+
+  const [heroSlides, products, categories, whys, company] =
+    await Promise.all([
+      getHeroSlides(locale),
+      getProducts(locale), // ✅ ดึง 8 รายการ (ไม่ pagination)
+      getCategories(locale),
+      getWhy(locale),
+      getCompany(locale),
+    ])
 
   return (
     <main>
+      {/* Hero */}
       {heroSlides?.length > 0 && (
         <HeroCarousel hero={{ slides: heroSlides }} />
       )}
 
+      {/* Product Marquee (8 items) */}
       {products?.length > 0 && (
         <ProductMarquee items={products} locale={locale} />
       )}
 
+      {/* Categories */}
       {categories?.length > 0 && (
         <CategorySection items={categories} locale={locale} />
       )}
 
+      {/* Why Choose Us */}
       {whys?.length > 0 && (
         <WhyChooseUs items={whys} locale={locale} />
       )}
 
+      {/* Contact / Company */}
       {company && (
         <ContactSection locale={locale} data={company} />
       )}
     </main>
-  );
+  )
 }

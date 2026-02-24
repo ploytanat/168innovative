@@ -151,30 +151,44 @@ lg:w-[600px] lg:h-[680px]"
               </span>
             </div>
           )}
-
-          {/* Dots — ใช้ padding เพิ่ม hit area ให้กดง่ายทั้ง desktop และ mobile */}
-          {hasMultiple && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex cursor-pointer">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setCurrent(i)}
-                  aria-label={`Go to slide ${i + 1}`}
-                  title={`Go to slide ${i + 1}`}
-                  className="group flex items-center justify-center px-2 py-4"
-                >
-                  <span
-                    className={`block h-[2px] rounded-full transition-all duration-300 ${
-                      i === current
-                        ? 'w-8 bg-black'
-                        : 'w-3 bg-neutral-300 group-hover:bg-neutral-500'
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
+{/* Nav buttons + Dots */}
+{/* Glass Dots */}
+{hasMultiple && (
+  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2">
+    {slides.map((_, i) => (
+      <button
+        key={i}
+        type="button"
+        onClick={() => setCurrent(i)}
+        aria-label={`Go to slide ${i + 1}`}
+        className={`
+          relative flex items-center justify-center
+          h-8 rounded-full
+          backdrop-blur-md
+          border border-white/40
+          shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_2px_8px_rgba(0,0,0,0.08)]
+          transition-all duration-300
+          hover:scale-105 active:scale-95
+          overflow-hidden
+          ${i === current
+            ? 'w-10 bg-white/40'
+            : 'w-8 bg-white/20 hover:bg-white/30'
+          }
+        `}
+      >
+        {/* แสงสะท้อนด้านบน */}
+        <span className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/40 to-transparent rounded-t-full pointer-events-none" />
+        {/* dot ข้างใน */}
+        <span
+          className={`block rounded-full bg-neutral-700 transition-all duration-300 ${
+            i === current ? 'w-3 h-[3px]' : 'w-[6px] h-[6px]'
+          }`}
+        />
+      </button>
+    ))}
+  </div>
+)}
+    
 
         </div>
       </div>

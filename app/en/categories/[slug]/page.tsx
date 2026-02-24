@@ -1,4 +1,4 @@
-// app/categories/[slug]/page.tsx
+// app/en/categories/[slug]/page.tsx
 
 import { getCategoryBySlug } from "@/app/lib/api/categories";
 import { getProductsByCategory } from "@/app/lib/api/products";
@@ -6,9 +6,9 @@ import { Locale } from "@/app/lib/types/content";
 
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import LocalizedLink from "@/app/components/ui/LocalizedLink";
+
 interface Props {
   params: Promise<{
     slug: string;
@@ -21,7 +21,7 @@ export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
 
-  const { slug } = await params; // ✅ ต้อง await
+  const { slug } = await params;
 
   const locale: Locale = "en";
 
@@ -29,18 +29,18 @@ export async function generateMetadata(
 
   if (!category) {
     return {
-      title: "ไม่พบหมวดหมู่สินค้า",
+      title: "Category not found",
     };
   }
 
   return {
     title:
       category.seoTitle ||
-      `${category.name} | บรรจุภัณฑ์เครื่องสำอาง`,
+      `${category.name} | Cosmetic Packaging`,
     description:
       category.seoDescription ||
       category.description ||
-      `สินค้าในหมวด ${category.name}`,
+      `Products in category ${category.name}`,
   };
 }
 
@@ -50,18 +50,20 @@ export default async function CategoryPage(
   { params }: Props
 ) {
 
-  const { slug } = await params; // ✅ ต้อง await
+  const { slug } = await params;
 
   const locale: Locale = "en";
 
-  const [category, products] = await Promise.all([
+  const [category, result] = await Promise.all([
     getCategoryBySlug(slug, locale),
-    getProductsByCategory(slug, locale),
+    getProductsByCategory(slug, locale, 1), // default page
   ]);
 
   if (!category) {
     notFound();
   }
+
+  const { products } = result;
 
   return (
     <main className="container mx-auto py-20">
