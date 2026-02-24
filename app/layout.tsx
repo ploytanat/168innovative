@@ -8,7 +8,7 @@ import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
 import { getCompany } from './lib/api/company'
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 const inter = Inter({ subsets: ['latin'] })
 
 /* ================= Metadata ================= */
@@ -92,7 +92,7 @@ export default async function RootLayout({
 
         <Navigation locale={locale} logo={displayLogo} />
 
-        <main className="pt-16 bg-custom-gradient min-h-screen">
+        <main className="   min-h-screen">
           {children}
         </main>
 

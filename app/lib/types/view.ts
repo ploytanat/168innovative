@@ -91,23 +91,44 @@ export interface WhyItemView {
 }
 
 // === Hero (Home)===
-export interface HeroSlideView {
-  id: number
-  title: string
-  subtitle: string
-  description: string
-  image: ImageView
-  ctaPrimary: {
-    href: string
-    label: string
-  }
-  ctaSecondary: {
-    href: string
-    label: string
-  }
+// === Hero (Home) ===
 
+export type HeroLayoutType = 'split' | 'fullBg'
+
+export interface HeroStatView {
+  label: string
+  value: string
 }
 
+export interface HeroCTAView {
+  href: string
+  label: string
+}
+
+export interface HeroSlideView {
+  id: number
+
+  // Layout control (default = split)
+  layout?: HeroLayoutType
+
+  // Content
+  title: string
+  subtitle?: string
+  description: string
+
+  image: ImageView
+
+  // CTA
+  ctaPrimary: HeroCTAView
+  ctaSecondary?: HeroCTAView
+
+  // Bottom stats (optional)
+  stats?: HeroStatView[]
+}
+
+export interface HomeHeroView {
+  slides: HeroSlideView[]
+}
 /* === Home ==== */
 export interface HomeView {
   hero: HomeHeroView
