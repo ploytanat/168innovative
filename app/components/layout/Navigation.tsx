@@ -26,6 +26,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
   const pathname = usePathname()
 
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   const isEN = locale === 'en' || pathname.startsWith('/en')
   const lang = isEN ? 'en' : 'th'
@@ -42,16 +43,50 @@ export default function Navigation({ locale, logo }: NavigationProps) {
     router.push(nextPath)
   }, [isEN, pathname, router])
 
+  // ✅ ตรวจจับ scroll
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
   }, [open])
 
   return (
-    <header className="w-full bg-white border-b border-neutral-200">
-      <nav className="flex items-center justify-between px-8 lg:px-16 py-6">
-
-        {/* Logo — Serif Luxury */}
-      {/* Logo */} <Link href={withLocale('/')} className="relative z-[70] transition-transform active:scale-95" onClick={() => setOpen(false)} > <Image src={logo.src} alt={logo.alt || 'Company logo'} width={160} height={50} priority className="h-10 md:h-11 w-auto object-contain" /> </Link>
+    <header
+      className={`sticky top-0 z-[60] w-full bg-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+        scrolled
+          ? 'border-b border-neutral-200'
+          : ''
+      }`}
+    >
+      <nav
+        className={`flex items-center justify-between px-8 lg:px-16 transition-all duration-500 ${
+          scrolled ? 'py-4' : 'py-6'
+        }`}
+      >
+        {/* Logo */}
+        <Link
+          href={withLocale('/')}
+          onClick={() => setOpen(false)}
+          className="relative transition-transform active:scale-95"
+        >
+          <Image
+            src={logo.src}
+            alt={logo.alt || 'Company logo'}
+            width={160}
+            height={50}
+            priority
+            className={`w-auto object-contain transition-all duration-500 ${
+              scrolled ? 'h-9 md:h-10' : 'h-10 md:h-11'
+            }`}
+          />
+        </Link>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-10">
@@ -73,15 +108,19 @@ export default function Navigation({ locale, logo }: NavigationProps) {
 
         {/* Language Button */}
         <button
+          type="button"
           onClick={toggleLanguage}
           className="hidden md:block text-[11px] tracking-[0.12em] uppercase text-neutral-500 border border-neutral-200 px-3 py-1.5 hover:border-black hover:text-black transition-colors"
         >
-          {isEN ? 'TH / EN' : 'TH / EN'}
+          TH / EN
         </button>
 
         {/* Mobile Toggle */}
         <button
+          type="button"
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={open ? 'Close menu' : 'Open menu'}
           className="md:hidden text-sm tracking-[0.12em] uppercase text-neutral-700"
         >
           {open ? 'Close' : 'Menu'}
@@ -107,6 +146,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
           ))}
 
           <button
+            type="button"
             onClick={toggleLanguage}
             className="mt-6 text-xs tracking-[0.12em] uppercase border border-neutral-200 px-4 py-2 text-neutral-500"
           >

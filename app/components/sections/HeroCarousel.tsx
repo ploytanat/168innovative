@@ -127,7 +127,9 @@ export default function HeroCarousel({ hero }: Props) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative z-10 w-[300px] h-[380px] lg:w-[380px] lg:h-[460px]"
+              className="relative z-10 
+w-[420px] h-[520px] 
+lg:w-[600px] lg:h-[680px]"
             >
               <Image
                 src={active.image.src}
@@ -155,16 +157,16 @@ export default function HeroCarousel({ hero }: Props) {
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
               {slides.map((_, i) => (
                <button
-  key={i}
-  type="button"
-  onClick={() => setCurrent(i)}
-  aria-label={`Go to slide ${i + 1}`}
-  title={`Go to slide ${i + 1}`}
-  className={`h-[2px] transition-all ${
-    i === current
-      ? 'w-8 bg-black'
-      : 'w-3 bg-neutral-300'
-  }`}
+              key={i}
+              type="button"
+              onClick={() => setCurrent(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              title={`Go to slide ${i + 1}`}
+              className={`h-[2px] transition-all ${
+                i === current
+                  ? 'w-8 bg-black'
+                  : 'w-3 bg-neutral-300'
+              }`}
 />
               ))}
             </div>
