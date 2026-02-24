@@ -119,8 +119,8 @@ export default function Navigation({ locale, logo }: NavigationProps) {
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          aria-expanded={open}
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          
+          aria-label='menu'
           className="md:hidden text-sm tracking-[0.12em] uppercase text-neutral-700"
         >
           {open ? 'Close' : 'Menu'}

@@ -152,22 +152,26 @@ lg:w-[600px] lg:h-[680px]"
             </div>
           )}
 
-          {/* Dots */}
+          {/* Dots — ใช้ padding เพิ่ม hit area ให้กดง่ายทั้ง desktop และ mobile */}
           {hasMultiple && (
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex cursor-pointer">
               {slides.map((_, i) => (
-               <button
-              key={i}
-              type="button"
-              onClick={() => setCurrent(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              title={`Go to slide ${i + 1}`}
-              className={`h-[2px] transition-all ${
-                i === current
-                  ? 'w-8 bg-black'
-                  : 'w-3 bg-neutral-300'
-              }`}
-/>
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setCurrent(i)}
+                  aria-label={`Go to slide ${i + 1}`}
+                  title={`Go to slide ${i + 1}`}
+                  className="group flex items-center justify-center px-2 py-4"
+                >
+                  <span
+                    className={`block h-[2px] rounded-full transition-all duration-300 ${
+                      i === current
+                        ? 'w-8 bg-black'
+                        : 'w-3 bg-neutral-300 group-hover:bg-neutral-500'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           )}
