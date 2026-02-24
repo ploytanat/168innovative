@@ -78,7 +78,7 @@ export default function ProductGrid({ products, categorySlug }: Props) {
           {/* Sort button */}
           <button
             onClick={cycleSort}
-            className={`flex items-center gap-2 rounded-2xl border px-4 py-3 text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 rounded-2xl border   px-4 py-3 text-xs font-bold transition-all ${
               sort !== 'default'
                 ? 'border-[#14B8A6] bg-[#F0FDFA] text-[#14B8A6]'
                 : 'border-slate-200 bg-white text-[#64748B] hover:border-[#14B8A6] hover:text-[#14B8A6]'
@@ -117,7 +117,7 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
       {/* ── Product grid ── */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t p-4 ">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t border-gray-300 py-4 ">
           {filtered.map((product) => (
             <Link
               key={product.id}
