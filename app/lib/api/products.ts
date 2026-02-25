@@ -20,16 +20,6 @@ async function fetchJSON<T>(url: string): Promise<T> {
   return res.json()
 }
 
-async function fetchWithPagination<T>(url: string) {
-  const res = await fetch(url, { next: { revalidate: 3600 } })
-  if (!res.ok) throw new Error(`Fetch failed: ${url}`)
-
-  const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
-  const data = (await res.json()) as T
-
-  return { data, totalPages }
-}
-
 /* ─────────────────────────────
    Category Map
 ───────────────────────────── */
@@ -72,19 +62,33 @@ const _getProductsRaw = unstable_cache(
 )
 
 /* ─────────────────────────────
-   Category products (pagination)
+   Category products (pagination + prefetch)
 ───────────────────────────── */
 
 function _getProductsByCategoryId(
   categoryId: number,
   page: number
-): Promise<{ data: WPProduct[]; totalPages: number }> {
+): Promise<{ data: WPProduct[]; totalPages: number; totalCount: number }> {
   return unstable_cache(
-    async () =>
-      fetchWithPagination<WPProduct[]>(
-        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`
-      ),
-    [`products-category-${categoryId}-page-${page}`],
+    async () => {
+      const res = await fetch(
+        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
+        { next: { revalidate: 3600 } }
+      )
+      if (!res.ok) throw new Error(`Fetch failed: category ${categoryId} page ${page}`)
+
+      const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
+      const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
+
+
+      // เพิ่มชั่วคราว
+console.log('headers X-WP-Total:', res.headers.get("X-WP-Total"))
+console.log('headers X-WP-TotalPages:', res.headers.get("X-WP-TotalPages"))
+      const data = (await res.json()) as WPProduct[]
+
+      return { data, totalPages, totalCount }
+    },
+    [`products-category-${categoryId}-p${page}`],
     { revalidate: 3600, tags: ["products"] }
   )()
 }
@@ -188,26 +192,26 @@ export async function getProductsByCategory(
   ])
 
   if (!categoryId) {
-    return { products: [], totalPages: 1 }
+    return { products: [], totalPages: 1, totalCount: 0 }
   }
 
-  const { data, totalPages } = await _getProductsByCategoryId(
-    categoryId,
-    page
-  )
+  const { data, totalPages, totalCount } = await _getProductsByCategoryId(categoryId, page)
 
+  // 🔥 Prefetch หน้าถัดไปใน background — user กดปุ๊บได้เลย
+  if (page < totalPages) {
+    _getProductsByCategoryId(categoryId, page + 1).catch(() => {})
+  }
+    console.log('จำนวนสินค้าทั้งหมด : ', totalCount)
   return {
-    products: data.map((wp) =>
-      mapWPToProductView(wp, locale, catMap)
-    ),
+    products: data.map((wp) => mapWPToProductView(wp, locale, catMap)),
     totalPages,
+    totalCount,
+
   }
+  
 }
 
-export async function getProductBySlug(
-  slug: string,
-  locale: Locale
-) {
+export async function getProductBySlug(slug: string, locale: Locale) {
   const [raw, catMap] = await Promise.all([
     _getProductRaw(slug),
     _getCategoryMap(),

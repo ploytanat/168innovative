@@ -1,4 +1,3 @@
-// app/components/product/ProductGrid.tsx
 'use client'
 
 import { useState, useMemo } from 'react'
@@ -10,18 +9,19 @@ import { ProductView } from '@/app/lib/types/view'
 interface Props {
   products: ProductView[]
   categorySlug: string
+  totalCount: number  // จำนวนสินค้าทั้งหมดทุกหน้า
 }
 
 type SortOrder = 'default' | 'asc' | 'desc'
 
-export default function ProductGrid({ products, categorySlug }: Props) {
-  const [query, setQuery]       = useState('')
-  const [sort, setSort]         = useState<SortOrder>('default')
+export default function ProductGrid({ products, categorySlug, totalCount }: Props) {
+  console.log('totalCount:', totalCount)
+  const [query, setQuery] = useState('')
+  const [sort, setSort]   = useState<SortOrder>('default')
 
   const filtered = useMemo(() => {
     let result = [...products]
 
-    // Search
     if (query.trim()) {
       const q = query.trim().toLowerCase()
       result = result.filter((p) =>
@@ -30,7 +30,6 @@ export default function ProductGrid({ products, categorySlug }: Props) {
       )
     }
 
-    // Sort
     if (sort === 'asc') {
       result.sort((a, b) => a.name.localeCompare(b.name, 'th'))
     } else if (sort === 'desc') {
@@ -46,6 +45,11 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
   const sortLabel = sort === 'asc' ? 'ก → ฮ' : sort === 'desc' ? 'ฮ → ก' : 'เรียงชื่อ'
   const SortIcon  = sort === 'desc' ? ArrowUpAZ : ArrowDownAZ
+
+  // ถ้ากำลัง search ให้แสดงจำนวนที่ filter ได้ในหน้านี้
+  // ถ้าไม่ได้ search ให้แสดงจำนวนทั้งหมดจาก server
+  const isSearching = query.trim().length > 0
+  const displayCount = isSearching ? filtered.length : totalCount
 
   return (
     <div>
@@ -75,10 +79,9 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
         {/* Right: sort + count */}
         <div className="flex items-center gap-3">
-          {/* Sort button */}
           <button
             onClick={cycleSort}
-            className={`flex items-center gap-2 rounded-2xl border   px-4 py-3 text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 rounded-2xl border px-4 py-3 text-xs font-bold transition-all ${
               sort !== 'default'
                 ? 'border-[#14B8A6] bg-[#F0FDFA] text-[#14B8A6]'
                 : 'border-slate-200 bg-white text-[#64748B] hover:border-[#14B8A6] hover:text-[#14B8A6]'
@@ -90,8 +93,11 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
           {/* Count */}
           <div className="rounded-2xl border border-slate-100 bg-white px-4 py-3 text-xs font-bold text-[#94A3B8]">
-            {filtered.length}
-            <span className="ml-1 font-normal">รายการ</span>
+            {displayCount}
+            
+            <span className="ml-1 font-normal">
+              {isSearching ? 'ผลลัพธ์' : 'รายการ'}
+            </span>
           </div>
         </div>
       </div>
@@ -117,12 +123,12 @@ export default function ProductGrid({ products, categorySlug }: Props) {
 
       {/* ── Product grid ── */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t border-gray-300 py-4 ">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t border-gray-300 py-4">
           {filtered.map((product) => (
             <Link
               key={product.id}
               href={`/categories/${categorySlug}/${product.slug}`}
-              className="group rounded-3xl bg-[#ffffffb4] border border-[#ffffff] p-2 shadow-sm  shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
+              className="group rounded-3xl bg-[#ffffffb4] border border-[#ffffff] p-2 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
                 {product.image?.src ? (

@@ -27,7 +27,7 @@ export async function generateMetadata({
   const { slug } = await params
   const sp = await searchParams
 
-  const page = Number(sp?.page ?? 1)
+  const page = Math.max(1, Number(sp?.page ?? 1))
   const locale: Locale = "th"
 
   const category = await getCategoryBySlug(slug, locale)
@@ -57,7 +57,8 @@ export default async function CategoryPage({
   const sp = await searchParams
 
   const locale: Locale = "th"
-  const page = Number(sp?.page ?? 1)
+  // ป้องกัน ?page=0 หรือ ?page=-1
+  const page = Math.max(1, Number(sp?.page ?? 1))
 
   const [category, result] = await Promise.all([
     getCategoryBySlug(slug, locale),
@@ -66,7 +67,10 @@ export default async function CategoryPage({
 
   if (!category) notFound()
 
-  const { products, totalPages } = result
+  const { products, totalPages, totalCount } = result
+
+  // ป้องกัน ?page=999 เกิน totalPages จริง
+  if (page > totalPages && totalPages > 0) notFound()
 
   return (
     <main className="min-h-screen bg-[#F7F9FC]">
@@ -83,7 +87,11 @@ export default async function CategoryPage({
           </Link>
         </header>
 
-        <ProductGrid products={products} categorySlug={slug} />
+        <ProductGrid
+          products={products}
+          categorySlug={slug}
+          totalCount={totalCount}
+        />
 
         <Pagination
           currentPage={page}

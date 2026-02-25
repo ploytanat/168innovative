@@ -57,7 +57,9 @@
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-20px); }
   }
-
+/* globals.css */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 
 }
