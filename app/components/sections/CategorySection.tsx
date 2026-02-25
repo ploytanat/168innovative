@@ -1,3 +1,4 @@
+//app/components/sections/CategorySection.tsx
 'use client'
 
 import Image from 'next/image'
@@ -137,7 +138,7 @@ export default function CategorySection({
               group relative inline-flex items-center gap-3
               rounded-full bg-gray-900 px-8 sm:px-10 py-3.5 sm:py-4
               text-sm font-semibold text-white
-              transition-all hover:bg-blue-500 hover:shadow-xl
+              transition-all hover:bg-[#14B8A6] hover:shadow-xl
               active:scale-95
             "
           >

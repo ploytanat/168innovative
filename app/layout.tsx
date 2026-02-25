@@ -8,8 +8,42 @@ import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
 import { getCompany } from './lib/api/company'
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+
+import {
+  Cormorant_Garamond,
+  Manrope,
+  Noto_Serif_Thai,
+  Sarabun,
+} from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
+const headingEn = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-heading-en',
+  display: 'swap',
+})
+
+const headingTh = Noto_Serif_Thai({
+  subsets: ['thai'],
+  weight: ['400'],
+  variable: '--font-heading-th',
+  display: 'swap',
+})
+
+const bodyEn = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-body-en',
+  display: 'swap',
+})
+
+const bodyTh = Sarabun({
+  subsets: ['thai'],
+  weight: ['400', '500'],
+  variable: '--font-body-th',
+  display: 'swap',
+})
 
 /* ================= Metadata ================= */
 
@@ -68,7 +102,14 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={inter.className}>
+      <body 
+        className={`
+          ${headingEn.variable}
+          ${headingTh.variable}
+          ${bodyEn.variable}
+          ${bodyTh.variable}
+        `}
+      >
 
         {/* Organization Schema */}
         <script

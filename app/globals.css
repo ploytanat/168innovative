@@ -61,5 +61,30 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
+  body {
+    font-family:
+      var(--font-body-en),
+      var(--font-body-th),
+      sans-serif;
+  }
+}
+
+.font-heading {
+  font-family:
+    var(--font-heading-en),
+    var(--font-heading-th),
+    serif;
+}
+
+.font-body {
+  font-family:
+    var(--font-body-en),
+    var(--font-body-th),
+    sans-serif;
+}
 }
