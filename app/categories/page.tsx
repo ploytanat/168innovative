@@ -20,7 +20,7 @@ export default async function CategoriesPage() {
 
   if (!categories.length) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-24">
+      <main className="min-h-screen bg-white py-24">
         <div className="container mx-auto px-6 text-center">
           <Breadcrumb />
           <p className="mt-16 text-sm text-[#94A3B8]">
@@ -34,34 +34,21 @@ export default async function CategoriesPage() {
   const seoCategories = categories.filter((c) => c.seoDescription).slice(0, 6);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] relative">
-
-      {/* Ambient top gradient */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-gradient-to-b from-[#14B8A611] to-transparent" />
-
-      <div className="relative mx-auto max-w-7xl px-6 pb-32 pt-12">
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-10">
         <Breadcrumb />
 
-        {/* Hero header */}
-        <header className="mb-16 mt-14 text-center">
+        {/* Header — minimal */}
+        <header className="mb-14 mt-10 border-b border-[#E5E7EB] pb-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-[#14B8A6]">
             OEM / ODM
           </p>
-
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#1A2535] md:text-5xl">
+          <h1 className="mt-3 text-3xl font-bold text-[#1A2535] md:text-4xl">
             หมวดหมู่บรรจุภัณฑ์เครื่องสำอาง
           </h1>
-
-          <p className="mx-auto mt-4 max-w-xl text-base text-[#5A6A7E]">
+          <p className="mt-3 max-w-lg text-sm text-[#5A6A7E] leading-relaxed">
             เลือกบรรจุภัณฑ์ให้เหมาะกับแบรนด์ของคุณ พร้อมบริการ OEM / ODM ครบวงจร
           </p>
-
-          {/* Divider */}
-          <div className="mx-auto mt-6 flex items-center justify-center gap-2">
-            <div className="h-px w-10 bg-gradient-to-r from-transparent to-[#14B8A6]" />
-            <div className="h-1 w-1 rounded-full bg-[#14B8A6]" />
-            <div className="h-px w-10 bg-gradient-to-l from-transparent to-[#14B8A6]" />
-          </div>
         </header>
 
         {/* Category grid */}
@@ -73,8 +60,7 @@ export default async function CategoriesPage() {
                 href={`/categories/${category.slug}`}
                 className="group flex flex-col"
               >
-                {/* Image */}
-                <div className="relative aspect-square overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F1F5F9]">
+                <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#F1F5F9]">
                   {category.image?.src ? (
                     <Image
                       src={category.image.src}
@@ -88,26 +74,15 @@ export default async function CategoriesPage() {
                       No Image
                     </div>
                   )}
-
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-[#14B8A611] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-0 bg-[#14B8A6]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
-                {/* Label */}
                 <div className="mt-3 px-1">
-                  <h2 className="text-sm font-semibold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                  <h2 className="text-sm font-medium leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
                     {category.name}
                   </h2>
-
-                  {category.description && (
-                    <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#5A6A7E]">
-                      {category.description}
-                    </p>
-                  )}
+                  <div className="mt-1.5 h-px w-0 bg-[#14B8A6] transition-all duration-300 group-hover:w-8" />
                 </div>
-
-                {/* Teal underline */}
-                <div className="ml-1 mt-2 h-px w-0 rounded-full bg-[#14B8A6] transition-all duration-300 group-hover:w-8" />
               </Link>
             ))}
           </div>
@@ -116,40 +91,29 @@ export default async function CategoriesPage() {
         {/* SEO section */}
         {seoCategories.length > 0 && (
           <section
-            className="mt-28 rounded-3xl border border-[#E2E8F0] bg-[#F8FAFC] px-8 py-16 md:px-16"
+            className="mt-24 border-t border-[#E5E7EB] pt-16"
             aria-label="ข้อมูลเชิงลึก"
           >
-            <header className="mb-12 text-center">
+            <header className="mb-10">
               <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-[#14B8A6]">
                 Product Knowledge
               </p>
-
-              <h2 className="mt-2 text-2xl font-bold text-[#1A2535] md:text-3xl">
+              <h2 className="mt-2 text-xl font-bold text-[#1A2535] md:text-2xl">
                 เจาะลึกประเภทบรรจุภัณฑ์
               </h2>
-
-              <p className="mt-2 text-sm text-[#5A6A7E]">
-                ข้อมูลเชิงลึกเพื่อช่วยให้คุณเลือกสินค้าได้เหมาะสม
-              </p>
             </header>
 
-            <div className="grid gap-8 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2">
               {seoCategories.map((cat) => (
-                <article
-                  key={cat.id}
-                  className="group flex gap-4 rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-shadow hover:shadow-md"
-                >
-                  {/* Accent dot */}
-                  <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#14B8A6]" />
-
+                <article key={cat.id} className="group flex gap-4">
+                  <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#14B8A6]" />
                   <div>
                     <Link href={`/categories/${cat.slug}`}>
-                      <h3 className="text-base font-semibold text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                      <h3 className="text-sm font-semibold text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
                         {cat.seoTitle || cat.name}
                       </h3>
                     </Link>
-
-                    <p className="mt-2 text-sm leading-relaxed text-[#5A6A7E]">
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#5A6A7E]">
                       {cat.seoDescription}
                     </p>
                   </div>

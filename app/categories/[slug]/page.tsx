@@ -20,10 +20,7 @@ interface Props {
    Metadata
 ───────────────────────────── */
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params
   const sp = await searchParams
 
@@ -49,15 +46,11 @@ export async function generateMetadata({
    Page
 ───────────────────────────── */
 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
 
   const locale: Locale = "th"
-  // ป้องกัน ?page=0 หรือ ?page=-1
   const page = Math.max(1, Number(sp?.page ?? 1))
 
   const [category, result] = await Promise.all([
@@ -69,22 +62,32 @@ export default async function CategoryPage({
 
   const { products, totalPages, totalCount } = result
 
-  // ป้องกัน ?page=999 เกิน totalPages จริง
   if (page > totalPages && totalPages > 0) notFound()
 
   return (
-    <main className="min-h-screen bg-[#F7F9FC]">
-      <div className="mx-auto max-w-7xl px-4 pb-32 pt-8">
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-10">
         <Breadcrumb />
 
-        <header className="mb-10 mt-10">
+        {/* Header */}
+        <header className="mb-14 mt-10 border-b border-[#E5E7EB] pb-10">
           <Link
             href="/categories"
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
+            className="mb-5 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
           >
-            <ChevronLeft className="h-3.5 w-3.5" />
+            <ChevronLeft className="h-3 w-3" />
             หมวดหมู่ทั้งหมด
           </Link>
+
+          <h1 className="mt-4 text-3xl font-bold text-[#1A2535] md:text-4xl">
+            {category.name}
+          </h1>
+
+          {category.description && (
+            <p className="mt-3 max-w-lg text-sm leading-relaxed text-[#5A6A7E]">
+              {category.description}
+            </p>
+          )}
         </header>
 
         <ProductGrid
