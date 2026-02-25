@@ -96,7 +96,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
                 className={`text-[13px] tracking-[0.14em] uppercase transition-colors ${
                   isActive(item.href)
                     ? 'text-neutral-900'
-                    : 'text-neutral-400 hover:text-neutral-900'
+                    : 'text-neutral-500 hover:text-neutral-900'
                 }`}
               >
                 {item.label[lang]}
