@@ -52,11 +52,6 @@ export default function Footer({ company }: FooterProps) {
     description: 'บริการรับนำเข้าและจำหน่ายบรรจุภัณฑ์ OEM ครบวงจร',
   }
 
-  const activeLang =
-    "bg-[#F0FDFA] text-[#14B8A6] border border-[#14B8A6]"
-  const inactiveLang =
-    "text-[#94A3B8] border border-transparent"
-
   return (
     <>
       <script
@@ -65,73 +60,70 @@ export default function Footer({ company }: FooterProps) {
       />
 
       <footer
-        className="relative w-full overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-t border-[#E5E7EB]"
+        className="w-full bg-[#ffffff] border-t border-[#E8E4DF]"
         aria-label="Site footer"
       >
-        {/* Accent top line */}
-        <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#d5effd] to-transparent" />
+        <div className="mx-auto max-w-7xl px-8 pt-16 pb-10">
 
-        {/* Ambient glow */}
-        <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#14B8A611] blur-3xl" />
-
-        <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-20">
-
-          <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
+          {/* Top section */}
+          <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-8">
 
             {/* Brand */}
             <div className="flex flex-col gap-5 lg:col-span-4">
-              <Link href={withLocale('/')} className="inline-block transition hover:opacity-75">
+              <Link href={withLocale('/')} className="inline-block w-fit transition-opacity hover:opacity-60">
                 <Image
                   src={company.logo.src}
                   alt={company.logo.alt}
-                  width={150}
-                  height={50}
+                  width={130}
+                  height={44}
                   className="object-contain"
                 />
               </Link>
 
-              <address className="not-italic text-sm leading-relaxed text-[#5A6A7E]">
+              <p className="text-xs leading-relaxed text-[#A89F96] max-w-[240px]">
                 {isEN
                   ? '89/269 Soi Thian Thale 20, Samae Dam, Bang Khun Thian, Bangkok 10150'
                   : '89/269 ซอย เทียนทะเล 20 แขวงแสมดำ เขตบางขุนเทียน กรุงเทพมหานคร 10150'}
-              </address>
+              </p>
 
               {/* Language switch */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3 mt-1">
                 <Link
                   href={toTH}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${!isEN ? activeLang : inactiveLang}`}
                   hrefLang="th"
+                  className={`text-xs font-medium tracking-widest transition-colors ${
+                    !isEN ? 'text-[#14B8A6]' : 'text-[#C4BCB4] hover:text-[#8C7F76]'
+                  }`}
                 >
                   TH
                 </Link>
-
-                <span className="text-[#CBD5E1] text-xs">|</span>
-
+                <span className="text-[#D8D2CC] text-xs">·</span>
                 <Link
                   href={toEN}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${isEN ? activeLang : inactiveLang}`}
                   hrefLang="en"
+                  className={`text-xs font-medium tracking-widest transition-colors ${
+                    isEN ? 'text-[#14B8A6]' : 'text-[#C4BCB4] hover:text-[#8C7F76]'
+                  }`}
                 >
                   EN
                 </Link>
               </div>
             </div>
 
-            {/* Nav / Phone / Email */}
-            <div className="grid grid-cols-1 gap-12 md:grid-cols-3 lg:col-span-8">
+            {/* Links */}
+            <div className="grid grid-cols-1 gap-12 sm:grid-cols-3 lg:col-span-8">
 
               {/* Navigation */}
               <nav aria-label="Footer navigation">
-                <h4 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
-                  {isEN ? 'Navigation' : 'เมนูหลัก'}
-                </h4>
-                <ul className="space-y-3.5">
+                <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
+                  {isEN ? 'Navigation' : 'เมนู'}
+                </p>
+                <ul className="space-y-3">
                   {navigation.map((item) => (
                     <li key={item.href}>
                       <Link
                         href={withLocale(item.href)}
-                        className="text-sm text-[#5A6A7E] transition-colors hover:text-[#14B8A6]"
+                        className="text-sm text-[#7A6F68] transition-colors hover:text-[#14B8A6]"
                       >
                         {item.label[locale]}
                       </Link>
@@ -142,60 +134,60 @@ export default function Footer({ company }: FooterProps) {
 
               {/* Phone */}
               <div>
-                <h4 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
-                  {isEN ? 'Phone' : 'เบอร์โทรศัพท์'}
-                </h4>
-                <address className="not-italic space-y-4">
+                <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
+                  {isEN ? 'Phone' : 'โทรศัพท์'}
+                </p>
+                <ul className="space-y-3">
                   {company.phones.map((p) => (
-                    <a
-                      key={p.number}
-                      href={`tel:${p.number}`}
-                      className="block text-sm text-[#5A6A7E] transition-colors hover:text-[#14B8A6]"
-                    >
-                      {p.label && (
-                        <span className="mb-0.5 block text-[10px] uppercase text-[#94A3B8]">
-                          {p.label}
-                        </span>
-                      )}
-                      {p.number}
-                    </a>
+                    <li key={p.number}>
+                      <a
+                        href={`tel:${p.number}`}
+                        className="block text-sm text-[#7A6F68] transition-colors hover:text-[#14B8A6]"
+                      >
+                        {p.label && (
+                          <span className="mb-0.5 block text-[10px] uppercase tracking-wider text-[#B8AFA8]">
+                            {p.label}
+                          </span>
+                        )}
+                        {p.number}
+                      </a>
+                    </li>
                   ))}
-                </address>
+                </ul>
               </div>
 
               {/* Email */}
               <div>
-                <h4 className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[#14B8A6]">
+                <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
                   Email
-                </h4>
-                <address className="not-italic space-y-4">
+                </p>
+                <ul className="space-y-3">
                   {company.email.map((e, i) => (
-                    <a
-                      key={i}
-                      href={`mailto:${e}`}
-                      className="block break-all text-sm text-[#5A6A7E] transition-colors hover:text-[#14B8A6]"
-                    >
-                      {e}
-                    </a>
+                    <li key={i}>
+                      <a
+                        href={`mailto:${e}`}
+                        className="block break-all text-sm text-[#7A6F68] transition-colors hover:text-[#14B8A6]"
+                      >
+                        {e}
+                      </a>
+                    </li>
                   ))}
-                </address>
+                </ul>
               </div>
             </div>
           </div>
 
+          {/* Divider */}
+          <div className="mt-14 h-px bg-[#E8E4DF]" />
+
           {/* Bottom bar */}
-          <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-[#E5E7EB] pt-8 md:flex-row">
-            <p className="text-xs text-[#94A3B8]">
+          <div className="mt-6 flex flex-col items-center justify-between gap-3 md:flex-row">
+            <p className="text-xs text-[#C4BCB4]">
               © {new Date().getFullYear()} {company.name}. All rights reserved.
             </p>
-
-            <Link
-              href="#top"
-              className="text-xs font-semibold text-[#94A3B8] transition-colors hover:text-[#14B8A6]"
-            >
-              {isEN ? 'Back to top ↑' : 'กลับขึ้นด้านบน ↑'}
-            </Link>
+           
           </div>
+
         </div>
       </footer>
     </>
