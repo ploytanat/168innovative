@@ -73,6 +73,9 @@ export default function HeroCarousel({ hero }: Props) {
           {hasMultiple && (
             <>
               <button
+                type="button"
+                aria-label="Previous slide"
+                title="Previous slide"
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
@@ -82,6 +85,9 @@ export default function HeroCarousel({ hero }: Props) {
               </button>
 
               <button
+              type="button"
+                aria-label="Next slide"
+                title="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-neutral-200 shadow-sm flex items-center justify-center"
               >
@@ -95,6 +101,9 @@ export default function HeroCarousel({ hero }: Props) {
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
               {slides.map((_, i) => (
                 <button
+                type="button"
+                aria-label="Next slide"
+                title="Next slide"
                   key={i}
                   onClick={() => setCurrent(i)}
                   className="p-2"
@@ -274,6 +283,9 @@ export default function HeroCarousel({ hero }: Props) {
           {hasMultiple && (
             <>
               <button
+                  type="button"
+                aria-label="Next slide"
+                title="Next slide"
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
@@ -283,6 +295,9 @@ export default function HeroCarousel({ hero }: Props) {
               </button>
 
               <button
+                type="button"
+                aria-label="Next slide"
+                title="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
                 className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 border border-neutral-200 shadow-md flex items-center justify-center"
               >
@@ -298,6 +313,9 @@ export default function HeroCarousel({ hero }: Props) {
                 <div className="flex items-center gap-2">
                   {slides.map((_, i) => (
                     <button
+                        type="button"
+                        aria-label="Previous slide"
+                        title="Previous slide"
                       key={i}
                       onClick={() => setCurrent(i)}
                       className="p-2"

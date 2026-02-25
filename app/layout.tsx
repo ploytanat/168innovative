@@ -1,7 +1,4 @@
-// app/layout.tsx
-
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 
 import Navigation from './components/layout/Navigation'
@@ -9,38 +6,39 @@ import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
 import { getCompany } from './lib/api/company'
 
-
 import {
   Cormorant_Garamond,
   Manrope,
   Noto_Serif_Thai,
   Sarabun,
 } from 'next/font/google'
-const inter = Inter({ subsets: ['latin'] })
+
+/* ================= Fonts ================= */
+
 const headingEn = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['300', '400', '600', '700'],  // เพิ่ม weight ให้ใช้ bold heading ได้
   variable: '--font-heading-en',
   display: 'swap',
 })
 
 const headingTh = Noto_Serif_Thai({
   subsets: ['thai'],
-  weight: ['400'],
+  weight: ['300', '400', '600', '700'],
   variable: '--font-heading-th',
   display: 'swap',
 })
 
 const bodyEn = Manrope({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700'],  // เพิ่ม 600/700 สำหรับ label, button
   variable: '--font-body-en',
   display: 'swap',
 })
 
 const bodyTh = Sarabun({
-  subsets: ['thai'],
-  weight: ['400', '500'],
+  subsets: ['thai', 'latin'],  // เพิ่ม latin ให้ Sarabun cover ตัวเลขและสัญลักษณ์ได้ด้วย
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-body-th',
   display: 'swap',
 })
@@ -51,20 +49,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const company = await getCompany('th')
 
   const companyName = company?.name || '168 Innovative'
-  const description =
-    company?.address || 'Packaging & Cosmetic Solutions'
+  const description = company?.address || 'Packaging & Cosmetic Solutions'
   const baseUrl = 'https://168innovative.co.th'
 
   return {
     metadataBase: new URL(baseUrl),
-
     title: {
       default: companyName,
       template: `%s | ${companyName}`,
     },
-
     description,
-
     openGraph: {
       type: 'website',
       url: baseUrl,
@@ -78,7 +72,6 @@ export async function generateMetadata(): Promise<Metadata> {
         },
       ],
     },
-
     icons: {
       icon: '/favicon.png',
     },
@@ -102,15 +95,16 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body 
-        className={`
-          ${headingEn.variable}
-          ${headingTh.variable}
-          ${bodyEn.variable}
-          ${bodyTh.variable}
-        `}
+      <body
+        className={[
+          headingEn.variable,
+          headingTh.variable,
+          bodyEn.variable,
+          bodyTh.variable,
+          'font-body',           // default font ทั้งหน้า
+          'antialiased',         // text rendering ดีขึ้นชัดเจน
+        ].join(' ')}
       >
-
         {/* Organization Schema */}
         <script
           type="application/ld+json"
@@ -133,7 +127,7 @@ export default async function RootLayout({
 
         <Navigation locale={locale} logo={displayLogo} />
 
-        <main className="   min-h-screen">
+        <main className="min-h-screen">
           {children}
         </main>
 

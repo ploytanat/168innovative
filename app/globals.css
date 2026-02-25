@@ -1,66 +1,8 @@
 @import "tailwindcss";
 
-/* tailwind.config.ts (หรือใส่ใน globals.css ก็ได้) */
-@layer utilities {
-  .animate-marquee {
-    display: flex;
-    width: max-content;
-    animation: marquee 40s linear infinite;
-  }
-
-
-  /* globals.css */
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-  /* ถ้าเอาเมาส์วางให้หยุดวิ่ง (Optional) */
-  .group:hover .animate-marquee {
-    animation-play-state: paused;
-  }
-
-  @keyframes marquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      /* เลื่อนไปครึ่งหนึ่งของความกว้างทั้งหมดเพื่อให้ลูปเนียน */
-      transform: translateX(-50%);
-    }
-  }
-}
-
-@layer components {
-  .hero-gradient-card {
-    /* ใช้สีที่ล้อไปกับ Footer แต่ปรับให้สว่างและดูแพง */
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    position: relative;
-  }
-  .bg-custom-gradient {
- background: linear-gradient(
-  to right, 
-  #e0f2f1, /* Mint Green อ่อนๆ */
-  #ffe9f8, /* Sky Blue นุ่มๆ */
-  #f5f5f5  /* Light Grey เพื่อความคลีน */
-);
-}
-  .hero-glow {
-    background: radial-gradient(circle, rgba(245,227,230,0.6) 0%, rgba(252,246,229,0) 70%);
-  }
-
-  .floating-animation {
-    animation: floating 6s ease-in-out infinite;
-  }
-
-  @keyframes floating {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-/* globals.css */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
+/* ─────────────────────────────
+   Base
+───────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -74,17 +16,86 @@
   }
 }
 
-.font-heading {
-  font-family:
-    var(--font-heading-en),
-    var(--font-heading-th),
-    serif;
+/* ─────────────────────────────
+   Components
+───────────────────────────── */
+@layer components {
+  .font-heading {
+    font-family:
+      var(--font-heading-en),
+      var(--font-heading-th),
+      serif;
+  }
+
+  .font-body {
+    font-family:
+      var(--font-body-en),
+      var(--font-body-th),
+      sans-serif;
+  }
+
+  .hero-gradient-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+  }
+
+  .bg-custom-gradient {
+    background: linear-gradient(
+      to right,
+      #e0f2f1,
+      #ffe9f8,
+      #f5f5f5
+    );
+  }
+
+  .hero-glow {
+    background: radial-gradient(
+      circle,
+      rgba(245, 227, 230, 0.6) 0%,
+      rgba(252, 246, 229, 0) 70%
+    );
+  }
+
+  .floating-animation {
+    animation: floating 6s ease-in-out infinite;
+  }
 }
 
-.font-body {
-  font-family:
-    var(--font-body-en),
-    var(--font-body-th),
-    sans-serif;
+/* ─────────────────────────────
+   Utilities
+───────────────────────────── */
+@layer utilities {
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* หยุด marquee เมื่อ hover ที่ parent .group */
+  .group:hover .animate-marquee {
+    animation-play-state: paused;
+  }
 }
+
+/* ─────────────────────────────
+   Keyframes — ต้องอยู่นอก @layer
+   เพราะ browser ต้องการ global scope
+───────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-20px); }
 }

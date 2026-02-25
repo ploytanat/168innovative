@@ -22,39 +22,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     categories.map((c: any) => [c.id, c.slug])
   )
 
-  const staticPages = [
-    {
-      url: BASE,
-      lastModified: new Date(),
-    },
-    {
-      url: `${BASE}/about`,
-      lastModified: new Date(),
-    },
-        {
-      url: `${BASE}/contact`,
-      lastModified: new Date(),
-    },
-        {
-      url: `${BASE}/articles`,
-      lastModified: new Date(),
-    },
-    {
-      url: `${BASE}/products`,
-      lastModified: new Date(),
-    },
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE,                  priority: 1.0, changeFrequency: 'weekly'  },
+    { url: `${BASE}/categories`,  priority: 0.9, changeFrequency: 'weekly'  },
+    { url: `${BASE}/about`,       priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${BASE}/contact`,     priority: 0.7, changeFrequency: 'monthly' },
+    { url: `${BASE}/articles`,    priority: 0.6, changeFrequency: 'weekly'  },
   ]
 
-  const categoryUrls = categories.map((cat: any) => ({
+  const categoryUrls: MetadataRoute.Sitemap = categories.map((cat: any) => ({
     url: `${BASE}/categories/${cat.slug}`,
-    lastModified: new Date(),
+    priority: 0.8,
+    changeFrequency: 'weekly' as const,
   }))
 
-  const productUrls = products
+  const productUrls: MetadataRoute.Sitemap = products
     .filter((p: any) => p.product_category?.length)
     .map((p: any) => ({
       url: `${BASE}/categories/${categoryMap[p.product_category[0]]}/${p.slug}`,
-      lastModified: new Date(),
+      priority: 0.6,
+      changeFrequency: 'monthly' as const,
     }))
 
   return [

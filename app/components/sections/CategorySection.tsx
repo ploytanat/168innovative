@@ -1,4 +1,3 @@
-//app/components/sections/CategorySection.tsx
 'use client'
 
 import Image from 'next/image'
@@ -27,7 +26,7 @@ export default function CategorySection({
 
         {/* Header */}
         <div className="mb-10 md:mb-14 flex flex-col items-center text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl tracking-tight text-gray-900">
             {uiText.categories.title[locale]}
           </h2>
           <div className="mt-4 h-1.5 w-16 sm:w-20 md:w-24 rounded-full bg-[#29415B]" />
@@ -47,6 +46,7 @@ export default function CategorySection({
             <Link
               key={item.id}
               href={withLocalePath(`/categories/${item.slug}`, locale)}
+              aria-label={`${uiText.categories.exploreMore[locale]} ${item.name}`}
               className="
                 group relative overflow-hidden rounded-3xl bg-white
                 shadow-sm transition-all duration-500
@@ -55,24 +55,23 @@ export default function CategorySection({
             >
               {/* Image */}
               <div className="relative aspect-square w-full">
-              {item.image?.src ? (
-  <Image
-    src={item.image.src}
-    alt={item.image.alt || item.name}
-    fill
-    sizes="
-      (max-width: 640px) 100vw,
-      (max-width: 1024px) 50vw,
-      33vw
-    "
-    className="object-cover transition-transform duration-700 group-hover:scale-110"
-  />
-) : (
-  <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400 text-sm font-medium">
-    {uiText.categories.noImage[locale]}
-  </div>
-)}
-
+                {item.image?.src ? (
+                  <Image
+                    src={item.image.src}
+                    alt={item.image.alt || item.name}
+                    fill
+                    sizes="
+                      (max-width: 640px) 100vw,
+                      (max-width: 1024px) 50vw,
+                      33vw
+                    "
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400 text-sm font-body">
+                    {uiText.categories.noImage[locale]}
+                  </div>
+                )}
 
                 {/* Overlay */}
                 <div
@@ -84,8 +83,9 @@ export default function CategorySection({
                 >
                   <h3
                     className="
+                      font-heading
                       text-base sm:text-lg md:text-xl
-                      font-bold text-white
+                      text-white
                       transition-transform duration-500
                       group-hover:-translate-y-1
                     "
@@ -96,6 +96,7 @@ export default function CategorySection({
                   {item.description && (
                     <p
                       className="
+                        font-body
                         mt-2 text-xs sm:text-sm text-gray-200
                         line-clamp-2
                         opacity-100
@@ -111,9 +112,10 @@ export default function CategorySection({
 
                   <div
                     className="
+                      font-body
                       mt-3 flex items-center gap-1
                       text-[10px] sm:text-xs
-                      font-bold uppercase tracking-widest text-blue-400
+                      font-semibold uppercase tracking-widest text-blue-400
                       opacity-100
                       sm:opacity-0
                       sm:group-hover:opacity-100
@@ -121,7 +123,6 @@ export default function CategorySection({
                     "
                   >
                     {uiText.categories.exploreMore[locale]}
-
                     <ArrowRight className="h-3 w-3" />
                   </div>
                 </div>
@@ -135,6 +136,7 @@ export default function CategorySection({
           <Link
             href={withLocalePath('/categories', locale)}
             className="
+              font-body
               group relative inline-flex items-center gap-3
               rounded-full bg-gray-900 px-8 sm:px-10 py-3.5 sm:py-4
               text-sm font-semibold text-white
