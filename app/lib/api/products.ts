@@ -15,7 +15,7 @@ const PRODUCT_FIELDS =
 ───────────────────────────── */
 
 async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: 3600 } })
+  const res = await fetch(url, { next: { revalidate: 0 } })
   if (!res.ok) throw new Error(`Fetch failed: ${url}`)
   return res.json()
 }
