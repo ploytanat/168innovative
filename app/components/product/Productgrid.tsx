@@ -9,15 +9,14 @@ import { ProductView } from '@/app/lib/types/view'
 interface Props {
   products: ProductView[]
   categorySlug: string
-  totalCount: number  // จำนวนสินค้าทั้งหมดทุกหน้า
+  totalCount: number
 }
 
 type SortOrder = 'default' | 'asc' | 'desc'
 
 export default function ProductGrid({ products, categorySlug, totalCount }: Props) {
-  console.log('totalCount:', totalCount)
   const [query, setQuery] = useState('')
-  const [sort, setSort]   = useState<SortOrder>('default')
+  const [sort, setSort] = useState<SortOrder>('default')
 
   const filtered = useMemo(() => {
     let result = [...products]
@@ -44,10 +43,8 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
   }
 
   const sortLabel = sort === 'asc' ? 'ก → ฮ' : sort === 'desc' ? 'ฮ → ก' : 'เรียงชื่อ'
-  const SortIcon  = sort === 'desc' ? ArrowUpAZ : ArrowDownAZ
+  const SortIcon = sort === 'desc' ? ArrowUpAZ : ArrowDownAZ
 
-  // ถ้ากำลัง search ให้แสดงจำนวนที่ filter ได้ในหน้านี้
-  // ถ้าไม่ได้ search ให้แสดงจำนวนทั้งหมดจาก server
   const isSearching = query.trim().length > 0
   const displayCount = isSearching ? filtered.length : totalCount
 
@@ -58,18 +55,18 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
 
         {/* Search */}
         <div className="relative flex-1 max-w-sm">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="ค้นหาสินค้า..."
-            className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-10 text-sm text-[#0F1E33] placeholder-[#94A3B8] shadow-sm outline-none transition-all focus:border-[#14B8A6] focus:ring-2 focus:ring-[#14B8A6]/20"
+            className="w-full rounded-2xl border border-slate-300 bg-white py-3 pl-11 pr-10 text-sm text-slate-900 placeholder-slate-500 shadow-sm outline-none transition-all focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[#94A3B8] hover:bg-slate-100 hover:text-[#0F1E33] transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
               aria-label="ล้างคำค้นหา"
             >
               <X className="h-3.5 w-3.5" />
@@ -77,43 +74,41 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
           )}
         </div>
 
-        {/* Right: sort + count */}
+        {/* Sort + Count */}
         <div className="flex items-center gap-3">
           <button
             onClick={cycleSort}
             className={`flex items-center gap-2 rounded-2xl border px-4 py-3 text-xs font-bold transition-all ${
               sort !== 'default'
-                ? 'border-[#14B8A6] bg-[#F0FDFA] text-[#14B8A6]'
-                : 'border-slate-200 bg-white text-[#64748B] hover:border-[#14B8A6] hover:text-[#14B8A6]'
+                ? 'border-teal-500 bg-teal-50 text-teal-600'
+                : 'border-slate-300 bg-white text-slate-700 hover:border-teal-500 hover:text-teal-600'
             }`}
           >
             <SortIcon className="h-4 w-4" />
             {sortLabel}
           </button>
 
-          {/* Count */}
-          <div className="rounded-2xl border border-slate-100 bg-white px-4 py-3 text-xs font-bold text-[#94A3B8]">
+          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700">
             {displayCount}
-            
-            <span className="ml-1 font-normal">
+            <span className="ml-1 font-normal text-slate-600">
               {isSearching ? 'ผลลัพธ์' : 'รายการ'}
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Empty state ── */}
+      {/* Empty */}
       {filtered.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-32 text-center border border-gray-300 rounded-2xl">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F1F5F9]">
-            <Search className="h-7 w-7 text-[#94A3B8]" />
+        <div className="flex flex-col items-center justify-center py-32 text-center border border-slate-300 rounded-2xl">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-100">
+            <Search className="h-7 w-7 text-slate-600" />
           </div>
-          <p className="text-sm font-semibold text-[#0F1E33]">ไม่พบสินค้า</p>
-          <p className="mt-1 text-xs text-[#94A3B8]">
+          <p className="text-sm font-semibold text-slate-900">ไม่พบสินค้า</p>
+          <p className="mt-1 text-sm text-slate-600">
             ลองค้นหาด้วยคำอื่น หรือ{' '}
             <button
               onClick={() => { setQuery(''); setSort('default') }}
-              className="text-[#14B8A6] underline underline-offset-2"
+              className="text-teal-600 underline underline-offset-2"
             >
               ล้างตัวกรอง
             </button>
@@ -121,16 +116,16 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
         </div>
       )}
 
-      {/* ── Product grid ── */}
+      {/* Product grid */}
       {filtered.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t border-gray-300 py-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 border-t border-slate-300 py-4">
           {filtered.map((product) => (
             <Link
               key={product.id}
               href={`/categories/${categorySlug}/${product.slug}`}
-              className="group rounded-3xl bg-[#ffffffb4] border border-[#ffffff] p-2 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
+              className="group rounded-3xl bg-white border border-slate-200 p-2 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
+              <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
                 {product.image?.src ? (
                   <Image
                     src={product.image.src}
@@ -140,18 +135,18 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-xs text-[#94A3B8]">
+                  <div className="flex h-full items-center justify-center text-xs text-slate-600">
                     No Image
                   </div>
                 )}
-                <div className="absolute inset-0 bg-[#14B8A6]/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-teal-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </div>
 
               <div className="mt-3 px-1">
-                <h2 className="text-sm font-medium leading-snug text-[#4a4a4a] transition-colors group-hover:text-[#14B8A6]">
+                <h2 className="text-sm font-medium leading-snug text-slate-800 transition-colors group-hover:text-teal-600">
                   {product.name}
                 </h2>
-                <div className="mt-1.5 h-[2px] w-0 rounded-full bg-[#14B8A6] transition-all duration-300 group-hover:w-6" />
+                <div className="mt-1.5 h-[2px] w-0 rounded-full bg-teal-500 transition-all duration-300 group-hover:w-6" />
               </div>
             </Link>
           ))}

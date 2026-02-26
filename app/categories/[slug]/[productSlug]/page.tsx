@@ -4,103 +4,27 @@ export const revalidate = 3600
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
-import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import Script from 'next/script'
 import Link from 'next/link'
-import { Send, ChevronRight, ChevronLeft, Factory, ShieldCheck, Package, Truck } from 'lucide-react'
+import {
+  Send,
+  ChevronRight,
+  ChevronLeft,
+  Factory,
+  ShieldCheck,
+  Package,
+  Truck,
+} from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
-
-const BASE = process.env.WP_API_URL
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
 }
 
-/* ─────────────────────────────────────────────
-   Static Generation
-───────────────────────────────────────────── */
-export async function generateStaticParams() {
-  const [productsRes, catsRes] = await Promise.all([
-    fetch(
-      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,product_category`,
-      { cache: 'force-cache' }
-    ),
-    fetch(
-      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`,
-      { cache: 'force-cache' }
-    ),
-  ])
-
-  const [products, cats] = await Promise.all([
-    productsRes.json(),
-    catsRes.json(),
-  ])
-
-  const catMap: Record<number, string> = Object.fromEntries(
-    cats.map((c: any) => [c.id, c.slug])
-  )
-
-  return products
-    .map((p: any) => ({
-      slug: catMap[p.product_category?.[0]] ?? null,
-      productSlug: p.slug,
-    }))
-    .filter((p: any) => p.slug !== null)
-}
-
-/* ─────────────────────────────────────────────
-   Metadata
-───────────────────────────────────────────── */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { productSlug, slug } = await params
-  const product = await getProductBySlug(productSlug, 'th')
-  if (!product) return { title: 'ไม่พบสินค้า' }
-
-  const canonicalUrl = `/categories/${slug}/${productSlug}`
-
-  return {
-    title: `${product.name} | 168 Innovative`,
-    description: product.description.slice(0, 155),
-    keywords: [product.name, product.categorySlug, 'บรรจุภัณฑ์', '168 Innovative'],
-    alternates: {
-      canonical: canonicalUrl,
-      languages: { en: `/en/categories/${slug}/${productSlug}` },
-    },
-    openGraph: {
-      title: product.name,
-      description: product.description.slice(0, 155),
-      url: canonicalUrl,
-      images: [
-        {
-          url: product.image.src,
-          width: 1200,
-          height: 630,
-          alt: product.image.alt,
-        },
-      ],
-    },
-    other: {
-      'og:type': 'product',
-    }
-  }
-}
-
-/* ─────────────────────────────────────────────
-   Trust badges — lucide icons แทน emoji
-───────────────────────────────────────────── */
-const TRUST_BADGES = [
-  { icon: Factory,    text: 'มาตรฐานโรงงาน' },
-  { icon: ShieldCheck, text: 'Food Grade'    },
-  { icon: Package,    text: 'บรรจุกันกระแทก' },
-  { icon: Truck,      text: 'จัดส่งทั่วไทย'  },
-]
-
-/* ─────────────────────────────────────────────
-   Page
-───────────────────────────────────────────── */
 export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
   const locale = 'th'
@@ -114,7 +38,6 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!category || !product) notFound()
   if (product.categoryId !== category.id) notFound()
 
-  // Product Structured Data
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -122,10 +45,7 @@ export default async function ProductDetailPage({ params }: Props) {
     image: product.image.src,
     description: product.description,
     sku: product.slug,
-    brand: {
-      '@type': 'Brand',
-      name: '168 Innovative',
-    },
+    brand: { '@type': 'Brand', name: '168 Innovative' },
     offers: {
       '@type': 'Offer',
       availability: 'https://schema.org/InStock',
@@ -134,29 +54,33 @@ export default async function ProductDetailPage({ params }: Props) {
     },
   }
 
+  const TRUST_BADGES = [
+    { icon: Factory, text: 'มาตรฐานโรงงาน' },
+    { icon: ShieldCheck, text: 'Food Grade' },
+    { icon: Package, text: 'บรรจุกันกระแทก' },
+    { icon: Truck, text: 'จัดส่งทั่วไทย' },
+  ]
+
   return (
     <main className="min-h-screen bg-white">
-      <script
+      <Script
+        id="product-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Top accent — single color, minimal */}
-      <div className="h-px w-full " />
-
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-28 lg:px-8">
         <Breadcrumb />
 
-        {/* ── PRODUCT HERO ── */}
-        <div className="mt-10 grid grid-cols-1 gap-0 overflow-hidden rounded-2xl border border-[#E5E7EB] lg:grid-cols-2">
+        {/* HERO */}
+        <div className="mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 lg:grid-cols-2">
 
-          {/* LEFT — Image */}
-          <div className="relative bg-[#F8FAFC] p-8 lg:p-12">
+          {/* LEFT */}
+          <div className="bg-slate-50 p-8 lg:p-12">
 
-            {/* Back to category */}
             <Link
               href={`/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
+              className="mb-8 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-widest text-teal-600 hover:text-teal-700"
             >
               <ChevronLeft className="h-3 w-3" />
               {category.name}
@@ -167,39 +91,46 @@ export default async function ProductDetailPage({ params }: Props) {
               alt={product.image.alt}
             />
 
-            {/* Model slug */}
-            <p className="mt-8 text-center text-[10px] tracking-[0.3em] uppercase text-[#94A3B8]">
+            <p className="mt-8 text-center text-xs tracking-[0.25em] uppercase text-slate-600 break-words">
               {product.slug}
             </p>
           </div>
 
-          {/* RIGHT — Content */}
-          <div className="flex flex-col justify-center border-t border-[#E5E7EB] p-8 lg:border-l lg:border-t-0 lg:p-12">
+          {/* RIGHT */}
+          <div className="flex flex-col justify-center border-t border-slate-200 p-8 lg:border-l lg:border-t-0 lg:p-12">
 
-           <h1 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight text-neutral-900">
+            <h1 className="font-heading text-3xl md:text-4xl font-semibold tracking-tight text-slate-900 break-words">
               {product.name}
             </h1>
 
-            <div className="my-6 h-px w-12 bg-[#14B8A6]" />
+            <div className="my-6 h-px w-12 bg-teal-500" />
 
-            <p className="text-sm leading-relaxed text-[#5A6A7E]">
+            <p className="text-sm leading-relaxed text-slate-700 break-words">
               {product.description}
             </p>
 
-            {/* Specifications */}
+            {/* SPECIFICATIONS */}
             {product.specs && product.specs.length > 0 && (
               <div className="mt-10">
-                <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#94A3B8]">
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
                   ข้อมูลจำเพาะ
                 </p>
-                <div className="divide-y divide-[#F1F5F9] rounded-xl border border-[#E5E7EB]">
+
+                <div className="rounded-xl border border-slate-200 divide-y divide-slate-100">
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between px-5 py-3 text-sm"
+                      className="grid grid-cols-2 gap-4 px-5 py-4 text-sm"
                     >
-                      <span className="text-[#94A3B8]">{spec.label}</span>
-                      <span className="font-medium text-[#1A2535]">{spec.value}</span>
+                      {/* LABEL */}
+                      <div className="text-slate-600 break-words">
+                        {spec.label}
+                      </div>
+
+                      {/* VALUE */}
+                      <div className="text-right font-medium text-slate-900 break-words">
+                        {spec.value}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -210,10 +141,10 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-10 flex justify-center">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
-                className="group inline-flex  items-center justify-center gap-2 rounded-2xl
-                           border border-[#1A2535] bg-[#1A2535]
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl
+                           border border-slate-900 bg-slate-900
                            px-8 py-4 text-sm font-medium tracking-wide text-white
-                           transition-all hover:bg-white hover:text-[#1A2535]
+                           transition-all hover:bg-white hover:text-slate-900
                            active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -221,38 +152,41 @@ export default async function ProductDetailPage({ params }: Props) {
               </Link>
             </div>
 
-            {/* Trust badges — lucide icons */}
-            <div className="mt-6 grid grid-cols-4 gap-2">
+            {/* TRUST BADGES */}
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {TRUST_BADGES.map(({ icon: Icon, text }) => (
                 <div
                   key={text}
-                  className="flex flex-col items-center gap-1.5 rounded-xl bg-[#F8FAFC] p-3 text-center"
+                  className="flex flex-col items-center gap-1.5 rounded-xl bg-slate-50 p-3 text-center"
                 >
-                  <Icon className="h-4 w-4 text-[#14B8A6]" strokeWidth={1.5} />
-                  <span className="text-[10px] leading-tight text-[#64748B]">{text}</span>
+                  <Icon className="h-4 w-4 text-teal-600" strokeWidth={1.5} />
+                  <span className="text-xs text-slate-600 break-words">
+                    {text}
+                  </span>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
 
-        {/* ── RELATED PRODUCTS ── */}
+        {/* RELATED */}
         {related.length > 0 && (
           <section className="mt-24" aria-label="สินค้าใกล้เคียง">
 
-            <div className="mb-10 flex items-end justify-between border-b border-[#E5E7EB] pb-6">
+            <div className="mb-10 flex items-end justify-between border-b border-slate-200 pb-6">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#14B8A6]">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-600">
                   Discover More
                 </p>
-                <h2 className="mt-2 font-heading text-2xl font-bold text-[#1A2535]">
+                <h2 className="mt-2 font-heading text-2xl font-bold text-slate-900">
                   สินค้าที่คุณอาจสนใจ
                 </h2>
               </div>
+
               <Link
                 href={`/categories/${slug}`}
-                className="hidden items-center gap-1 text-xs uppercase tracking-widest text-[#5A6A7E]
-                           transition-colors hover:text-[#1A2535] md:flex"
+                className="hidden items-center gap-1 text-xs uppercase tracking-widest text-slate-600 hover:text-slate-900 md:flex"
               >
                 ดูทั้งหมด <ChevronRight size={13} />
               </Link>
@@ -265,7 +199,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   href={`/categories/${slug}/${item.slug}`}
                   className="group flex flex-col"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-[#F1F5F9]">
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-100">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt}
@@ -273,13 +207,13 @@ export default async function ProductDetailPage({ params }: Props) {
                       sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-[#14B8A6]/5 opacity-0 transition-opacity group-hover:opacity-100" />
                   </div>
+
                   <div className="mt-3 px-1">
-                    <h3 className="text-sm font-medium leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                    <h3 className="text-sm font-medium leading-snug text-slate-900 break-words group-hover:text-teal-600">
                       {item.name}
                     </h3>
-                    <div className="mt-1.5 h-px w-0 bg-[#14B8A6] transition-all duration-300 group-hover:w-8" />
+                    <div className="mt-1.5 h-px w-0 bg-teal-500 transition-all duration-300 group-hover:w-8" />
                   </div>
                 </Link>
               ))}
