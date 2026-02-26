@@ -1,29 +1,20 @@
-// app/product/[slug]/page.tsx
-
-import { redirect, notFound } from 'next/navigation'
+import { permanentRedirect, notFound } from 'next/navigation'
 import { getProductBySlug } from '@/app/lib/api/products'
-import { getCategoryBySlug } from '@/app/lib/api/categories'
 
 interface Props {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
 export default async function LegacyProductRedirect({ params }: Props) {
-  const slug = params.slug
-  const locale = 'th'
+  const { slug } = await params   // ✅ ต้อง await
 
-  // ดึงข้อมูล product
+  const locale = 'th'
   const product = await getProductBySlug(slug, locale)
 
   if (!product) notFound()
 
-  // ดึง category จาก product
-  const category = await getCategoryBySlug(product.categorySlug, locale)
-
-  if (!category) notFound()
-
-  // 🔥 ทำ 301 redirect
-  redirect(`/categories/${category.slug}/${slug}`)
+  // 🔥 redirect แบบถาวร (SEO-safe)
+  permanentRedirect(
+    `/categories/${product.categorySlug}/${slug}`
+  )
 }
