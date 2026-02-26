@@ -66,11 +66,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
   useEffect(() => { setOpen(false) }, [pathname])
 
   return (
-    <header
-      className={`sticky top-0 z-[60] w-full bg-white transition-all duration-500 ${
-        scrolled ? 'border-b border-neutral-200 shadow-[0_1px_12px_rgba(0,0,0,0.04)]' : ''
-      }`}
-    >
+    <header className="sticky top-0 z-[60] w-full bg-white transition-all duration-500">
       <nav className="flex h-16 items-center justify-between px-6 lg:px-16">
         {/* Logo */}
         <Link
@@ -90,21 +86,18 @@ export default function Navigation({ locale, logo }: NavigationProps) {
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-8">
           {NAV_MENU.map((item) => (
-            <li key={item.href} className="relative">
+            <li key={item.href} className="relative pb-1">
               <Link
                 href={withLocale(item.href)}
                 className={`text-[13px] tracking-[0.14em] uppercase transition-colors ${
                   isActive(item.href)
-                    ? 'text-neutral-900'
+                    ? 'text-neutral-900 border-b-2 border-neutral-900'
                     : 'text-neutral-500 hover:text-neutral-900'
                 }`}
               >
                 {item.label[lang]}
               </Link>
-              {/* Active underline indicator */}
-              {isActive(item.href) && (
-                <span className="absolute -bottom-1 left-0 right-0 h-px bg-neutral-900" />
-              )}
+
             </li>
           ))}
         </ul>
@@ -116,8 +109,8 @@ export default function Navigation({ locale, logo }: NavigationProps) {
             type="button"
             onClick={toggleLanguage}
             className="hidden md:block text-[10px] tracking-[0.14em] uppercase text-neutral-400
-                       border border-neutral-200 px-3 py-1.5
-                       hover:border-neutral-100 hover:text-neutral-900
+                       px-3 py-1.5
+                       hover:text-neutral-900
                        transition-colors"
           >
             {isEN ? 'TH' : 'EN'}
@@ -138,19 +131,18 @@ export default function Navigation({ locale, logo }: NavigationProps) {
       </nav>
 
       {/* Mobile Menu — slide down */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          open ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <div className="border-t border-neutral-200 bg-white px-6 py-8 space-y-1">
+        <div className="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+             style={{
+               maxHeight: open ? '500px' : '0',
+               opacity: open ? 1 : 0,
+             }}>
+        <div className="bg-white px-6 py-8 space-y-1">
           {NAV_MENU.map((item) => (
             <Link
               key={item.href}
               href={withLocale(item.href)}
               className={`flex items-center justify-between py-3
                           text-sm tracking-[0.1em] uppercase
-                          border-b border-neutral-100
                           transition-colors ${
                 isActive(item.href)
                   ? 'text-neutral-900 font-medium'
@@ -169,8 +161,8 @@ export default function Navigation({ locale, logo }: NavigationProps) {
               type="button"
               onClick={toggleLanguage}
               className="text-[11px] tracking-[0.14em] uppercase
-                         border border-neutral-200 px-4 py-2
-                         text-neutral-500 hover:border-neutral-900 hover:text-neutral-900
+                         px-4 py-2
+                         text-neutral-500 hover:text-neutral-900
                          transition-colors"
             >
               {isEN ? 'เปลี่ยนเป็นภาษาไทย' : 'Switch to English'}
