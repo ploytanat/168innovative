@@ -169,6 +169,33 @@ function mapWPToProductView(
 }
 
 /* ─────────────────────────────
+   Sitemap Helper
+───────────────────────────── */
+
+export async function getAllProductsForSitemap() {
+  const [products, catMap] = await Promise.all([
+    fetchJSON<{ slug: string; modified: string; product_category: number[] }[]>(
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,modified,product_category`
+    ),
+    _getCategoryMap(),
+  ])
+
+  return products
+    .map((p) => {
+      const catId = p.product_category?.[0]
+      const catSlug = catId ? catMap[catId] : null
+      if (!catSlug) return null
+
+      return {
+        slug: p.slug,
+        modified: p.modified,
+        categorySlug: catSlug,
+      }
+    })
+    .filter((p): p is { slug: string; modified: string; categorySlug: string } => p !== null)
+}
+
+/* ─────────────────────────────
    Public API
 ───────────────────────────── */
 

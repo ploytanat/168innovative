@@ -1,8 +1,20 @@
 // app/about/page.tsx
-import AboutHero from "../components/sections/AboutHero"
-import WhyChooseUs from "../components/sections/WhyChooseUs"
-import { getAbout } from "../lib/api/about"
-import { getWhy } from "../lib/api/why"
+import { Metadata } from 'next'
+import AboutHero from '../components/sections/AboutHero'
+import WhyChooseUs from '../components/sections/WhyChooseUs'
+import { getAbout } from '../lib/api/about'
+import { getAboutSEO } from '../lib/api/seo'
+import { getWhy } from '../lib/api/why'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = 'th'
+  const seo = getAboutSEO(locale)
+  return {
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords,
+  }
+}
 
 export default async function AboutPage() {
   const locale = 'th'

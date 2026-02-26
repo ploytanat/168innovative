@@ -59,6 +59,18 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${companyName}`,
     },
     description,
+    keywords: [
+      'บรรจุภัณฑ์',
+      'ผลิตภัณฑ์พลาสติก',
+      'นำเข้าบรรจุภัณฑ์',
+      'บรรจุภัณฑ์เครื่องสำอาง',
+      'ขวดปั๊ม',
+      'ขวดสเปรย์',
+      'ขายส่งบรรจุภัณฑ์',
+      'โรงงานผลิตบรรจุภัณฑ์',
+      'OEM',
+      '168 Innovative',
+    ],
     openGraph: {
       type: 'website',
       url: baseUrl,
