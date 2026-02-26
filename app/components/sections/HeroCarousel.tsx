@@ -62,6 +62,7 @@ export default function HeroCarousel({ hero }: Props) {
                   src={active.image.src}
                   alt={active.image.alt}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 100vw"
                   className="object-contain"
                   priority={current === 0}
                 />
@@ -136,9 +137,9 @@ export default function HeroCarousel({ hero }: Props) {
           </div>
 
           {/* TITLE */}
-          <h1 className="font-heading text-3xl leading-tight tracking-tight text-neutral-900">
+          <h2 className="font-heading text-3xl leading-tight tracking-tight text-neutral-900">
             {active.title}
-          </h1>
+          </h2>
 
           <div className="w-8 h-px bg-neutral-900 my-6" />
 
@@ -203,9 +204,9 @@ export default function HeroCarousel({ hero }: Props) {
               </span>
             </div>
 
-            <h1 className="font-heading text-[clamp(2.8rem,5vw,5.5rem)] leading-[1.05] tracking-tight text-neutral-900">
+            <h2 className="font-heading text-[clamp(2.8rem,5vw,5.5rem)] leading-[1.05] tracking-tight text-neutral-900">
               {active.title}
-            </h1>
+            </h2>
 
             <div className="w-10 h-px bg-neutral-900 my-10" />
 
@@ -268,12 +269,13 @@ export default function HeroCarousel({ hero }: Props) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="absolute inset-0 z-10"
+              className="absolute inset-0 z-10 will-change-transform"
             >
               <Image
                 src={active.image.src}
                 alt={active.image.alt}
                 fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-10"
                 priority={current === 0}
               />

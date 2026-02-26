@@ -32,33 +32,9 @@ export default function Footer({ company }: FooterProps) {
     { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About Us' } },
     { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
   ]
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    name: company.name,
-    image: company.logo.src,
-    url: 'https://168innovative.co.th',
-    telephone: company.phones.map(p => p.number),
-    email: company.email,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '89/269 ซอย เทียนทะเล 20',
-      addressLocality: 'แขวงแสมดำ เขตบางขุนเทียน',
-      addressRegion: 'กรุงเทพมหานคร',
-      postalCode: '10150',
-      addressCountry: 'TH',
-    },
-    description: 'บริการรับนำเข้าและจำหน่ายบรรจุภัณฑ์ OEM ครบวงจร',
-  }
-
+  
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
-
       <footer
         className="w-full bg-[#ffffff] border-t border-[#E8E4DF]"
         aria-label="Site footer"

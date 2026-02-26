@@ -59,13 +59,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(productSlug, 'th')
   if (!product) return { title: 'ไม่พบสินค้า' }
 
+  const canonicalUrl = `/categories/${slug}/${productSlug}`
+
   return {
     title: `${product.name} | 168 Innovative`,
     description: product.description.slice(0, 155),
+    keywords: [product.name, product.categorySlug, 'บรรจุภัณฑ์', '168 Innovative'],
     alternates: {
-      canonical: `/categories/${slug}/${productSlug}`,
+      canonical: canonicalUrl,
       languages: { en: `/en/categories/${slug}/${productSlug}` },
     },
+    openGraph: {
+      title: product.name,
+      description: product.description.slice(0, 155),
+      url: canonicalUrl,
+      images: [
+        {
+          url: product.image.src,
+          width: 1200,
+          height: 630,
+          alt: product.image.alt,
+        },
+      ],
+    },
+    other: {
+      'og:type': 'product',
+    }
   }
 }
 
@@ -95,8 +114,32 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!category || !product) notFound()
   if (product.categoryId !== category.id) notFound()
 
+  // Product Structured Data
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image.src,
+    description: product.description,
+    sku: product.slug,
+    brand: {
+      '@type': 'Brand',
+      name: '168 Innovative',
+    },
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      url: `https://168innovative.co.th/categories/${slug}/${productSlug}`,
+      priceCurrency: 'THB',
+    },
+  }
+
   return (
     <main className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Top accent — single color, minimal */}
       <div className="h-px w-full " />

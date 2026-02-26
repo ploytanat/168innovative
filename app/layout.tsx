@@ -117,21 +117,25 @@ export default async function RootLayout({
           'antialiased',         // text rendering ดีขึ้นชัดเจน
         ].join(' ')}
       >
-        {/* Organization Schema */}
+        {/* LocalBusiness Schema (Global) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Organization',
+              '@type': 'LocalBusiness',
               name: company?.name || '168 Innovative',
               url: 'https://168innovative.co.th',
               logo: displayLogo.src,
-              contactPoint: {
-                '@type': 'ContactPoint',
-                contactType: 'customer service',
-                areaServed: 'TH',
-                availableLanguage: ['Thai', 'English'],
+              image: displayLogo.src,
+              telephone: company?.phones?.[0]?.number,
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: '89/269 ซอย เทียนทะเล 20',
+                addressLocality: 'บางขุนเทียน',
+                addressRegion: 'กรุงเทพมหานคร',
+                postalCode: '10150',
+                addressCountry: 'TH',
               },
             }),
           }}
