@@ -5,7 +5,13 @@ import Link from 'next/link'
 import { CategoryView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
 import { withLocalePath } from '@/app/lib/utils/withLocalePath'
-import { ArrowRight } from 'lucide-react'
+
+// Inline SVG to avoid lucide import
+const ArrowRightIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5 transition-transform group-hover:translate-x-1">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+  </svg>
+)
 
 interface CategorySectionProps {
   items: CategoryView[]
@@ -123,7 +129,7 @@ export default function CategorySection({
                     "
                   >
                     {uiText.categories.exploreMore[locale]}
-                    <ArrowRight className="h-3 w-3" />
+                    <ArrowRightIcon />
                   </div>
                 </div>
               </div>
@@ -145,7 +151,7 @@ export default function CategorySection({
             "
           >
             <span>{uiText.categories.viewAll[locale]}</span>
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRightIcon />
           </Link>
         </div>
 

@@ -2,10 +2,28 @@
 
 import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
-import { Phone, Mail, ArrowUpRight } from 'lucide-react'
 import { CompanyView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
 import BackgroundBlobs from '../ui/BackgroundBlobs'
+
+// Inline SVG icons to reduce bundle
+const PhoneIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+)
+
+const MailIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+  </svg>
+)
+
+const ArrowUpRightIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l10 10" />
+  </svg>
+)
 
 /* =======================
     Motion Variants
@@ -94,7 +112,7 @@ export default function ContactSection({
                         >
                           <div className="flex items-center gap-4 text-left">
                             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                              <Phone size={20} />
+                              <PhoneIcon />
                             </div>
                             <div>
                               <span className="block text-[10px] font-bold uppercase text-gray-400">
@@ -105,7 +123,7 @@ export default function ContactSection({
                               </span>
                             </div>
                           </div>
-                          <ArrowUpRight size={18} className="text-gray-300 group-hover:text-blue-600 transition-colors" />
+                          <ArrowUpRightIcon />
                         </a>
                       ))}
                     </div>
@@ -124,7 +142,7 @@ export default function ContactSection({
                           className="group flex items-center gap-4"
                         >
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-400 group-hover:bg-gray-900 group-hover:text-white transition-all duration-300">
-                            <Mail size={16} />
+                            <MailIcon />
                           </div>
                           <span className="text-sm md:text-base font-bold text-gray-700 break-all">
                             {e}

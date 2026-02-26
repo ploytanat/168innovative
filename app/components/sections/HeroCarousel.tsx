@@ -3,9 +3,26 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import { HomeHeroView } from '@/app/lib/types/view'
+
+// Replace lucide icons with inline SVG
+const ChevronLeft = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+)
+
+const ChevronRight = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+)
+
+const ArrowRight = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+  </svg>
+)
 
 const AUTOPLAY_MS = 6000
 
@@ -48,27 +65,19 @@ export default function HeroCarousel({ hero }: Props) {
             }}
           />
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="absolute inset-0 flex items-center justify-center p-8"
-            >
-              <div className="relative w-full h-full">
-                <Image
-                  src={active.image.src}
-                  alt={active.image.alt}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 100vw"
-                  className="object-contain"
-                  priority={current === 0}
-                />
-              </div>
-            </motion.div>
-          </AnimatePresence>
+          {/* CSS-based crossfade instead of Framer Motion */}
+          <div className="absolute inset-0 flex items-center justify-center p-8 transition-opacity duration-300">
+            <div className="relative w-full h-full">
+              <Image
+                src={active.image.src}
+                alt={active.image.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 100vw"
+                className="object-contain"
+                priority={current === 0}
+              />
+            </div>
+          </div>
 
           {/* ARROWS */}
           {hasMultiple && (
@@ -76,23 +85,21 @@ export default function HeroCarousel({ hero }: Props) {
               <button
                 type="button"
                 aria-label="Previous slide"
-                title="Previous slide"
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-neutral-200 shadow-sm flex items-center justify-center"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-neutral-200 shadow-sm flex items-center justify-center transition hover:bg-white"
               >
-                <ChevronLeft size={18} />
+                <ChevronLeft />
               </button>
 
               <button
-              type="button"
+                type="button"
                 aria-label="Next slide"
-                title="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-neutral-200 shadow-sm flex items-center justify-center"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 border border-neutral-200 shadow-sm flex items-center justify-center transition hover:bg-white"
               >
-                <ChevronRight size={18} />
+                <ChevronRight />
               </button>
             </>
           )}
@@ -102,12 +109,11 @@ export default function HeroCarousel({ hero }: Props) {
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
               {slides.map((_, i) => (
                 <button
-                type="button"
-                aria-label="Next slide"
-                title="Next slide"
+                  type="button"
                   key={i}
                   onClick={() => setCurrent(i)}
-                  className="p-2"
+                  className="p-2 transition-all duration-300"
+                  aria-label={`Go to slide ${i + 1}`}
                 >
                   <span
                     className={`block rounded-full transition-all duration-300 ${
@@ -155,7 +161,7 @@ export default function HeroCarousel({ hero }: Props) {
               className="font-body font-medium tracking-[0.14em] text-xs uppercase px-6 py-3 bg-black text-white border border-black transition hover:bg-white hover:text-black flex items-center gap-2"
             >
               {active.ctaPrimary.label}
-              <ArrowRight size={14} />
+              <ArrowRight />
             </Link>
 
             {active.ctaSecondary?.label && (
@@ -220,7 +226,7 @@ export default function HeroCarousel({ hero }: Props) {
                 className="font-body font-medium tracking-[0.14em] text-xs uppercase px-8 py-4 bg-black text-white border border-black transition hover:bg-white hover:text-black flex items-center gap-2"
               >
                 {active.ctaPrimary.label}
-                <ArrowRight size={16} />
+                <ArrowRight />
               </Link>
 
               {active.ctaSecondary?.label && (
@@ -250,7 +256,7 @@ export default function HeroCarousel({ hero }: Props) {
           )}
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT - CSS fade instead of Framer Motion */}
         <div className="relative bg-neutral-50 overflow-hidden">
 
           <div
@@ -262,48 +268,38 @@ export default function HeroCarousel({ hero }: Props) {
             }}
           />
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 z-10 will-change-transform"
-            >
-              <Image
-                src={active.image.src}
-                alt={active.image.alt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain p-10"
-                priority={current === 0}
-              />
-            </motion.div>
-          </AnimatePresence>
+          {/* Simple CSS-based image transition */}
+          <div className="absolute inset-0 z-10 transition-opacity duration-300">
+            <Image
+              src={active.image.src}
+              alt={active.image.alt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-contain p-10"
+              priority={current === 0}
+            />
+          </div>
 
           {hasMultiple && (
             <>
               <button
-                  type="button"
-                aria-label="Next slide"
-                title="Next slide"
+                type="button"
+                aria-label="Previous slide"
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
-                className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 border border-neutral-200 shadow-md flex items-center justify-center"
+                className="absolute left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 border border-neutral-200 shadow-md flex items-center justify-center transition hover:bg-white"
               >
-                <ChevronLeft size={20} />
+                <ChevronLeft />
               </button>
 
               <button
                 type="button"
                 aria-label="Next slide"
-                title="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 border border-neutral-200 shadow-md flex items-center justify-center"
+                className="absolute right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/90 border border-neutral-200 shadow-md flex items-center justify-center transition hover:bg-white"
               >
-                <ChevronRight size={20} />
+                <ChevronRight />
               </button>
 
               <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5 bg-gradient-to-t from-white/70 to-transparent">
@@ -315,12 +311,11 @@ export default function HeroCarousel({ hero }: Props) {
                 <div className="flex items-center gap-2">
                   {slides.map((_, i) => (
                     <button
-                        type="button"
-                        aria-label="Previous slide"
-                        title="Previous slide"
+                      type="button"
                       key={i}
                       onClick={() => setCurrent(i)}
-                      className="p-2"
+                      className="p-2 transition-all duration-300"
+                      aria-label={`Go to slide ${i + 1}`}
                     >
                       <span
                         className={`block rounded-full transition-all duration-300 ${

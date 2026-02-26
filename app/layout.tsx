@@ -107,6 +107,13 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        {/* Preconnect to WordPress API and CDN */}
+        <link rel="preconnect" href="https://wb.168innovative.co.th" />
+        <link rel="dns-prefetch" href="https://wb.168innovative.co.th" />
+        {/* Preload key fonts */}
+        <link rel="preload" as="font" href="/fonts/heading.woff2" crossOrigin="anonymous" />
+      </head>
       <body
         className={[
           headingEn.variable,

@@ -2,7 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ChevronRight } from 'lucide-react'
+
+// Inline SVG to avoid lucide import
+const ChevronRightIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="mx-2 h-4 w-4 text-gray-400">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+)
 
 const TH_LABELS: Record<string, string> = {
   categories: 'หมวดหมู่สินค้า',
@@ -48,7 +54,7 @@ export default function Breadcrumb() {
 
           return (
             <li key={segment} className="flex items-center">
-              <ChevronRight className="mx-2 h-4 w-4 text-gray-400" />
+              <ChevronRightIcon />
 
               {isLast ? (
                 <span

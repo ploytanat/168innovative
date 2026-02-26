@@ -1,6 +1,7 @@
 // app/page.tsx
 
 import type { Metadata } from "next"
+import dynamic from "next/dynamic"
 
 import { getCategories } from "./lib/api/categories"
 import { getHeroSlides } from "./lib/api/hero"
@@ -12,7 +13,12 @@ import HeroCarousel from "./components/sections/HeroCarousel"
 import CategorySection from "./components/sections/CategorySection"
 import ProductMarquee from "./components/sections/ProductMarquee"
 import WhyChooseUs from "./components/sections/WhyChooseUs"
-import ContactSection from "./components/sections/ContactSection"
+
+// Lazy-load below-the-fold sections
+const ContactSection = dynamic(
+  () => import("./components/sections/ContactSection"),
+  { loading: () => <div className="h-96" /> }
+)
 
 /* ─────────────────────────────
    Metadata (SEO)
