@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
 import Breadcrumb from "@/app/components/ui/Breadcrumb";
 import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs";
+import LazyMap from "@/app/components/ui/LazyMap";
 
 export default async function ContactPage() {
   const locale: Locale = "en";
@@ -122,16 +123,8 @@ export default async function ContactPage() {
           </div>
         </div>
 
-        {/* Google Maps Embed (แนะนำให้ใช้ URL เต็มจาก Google Maps) */}
-        <div className="w-full h-[450px] relative grayscale-[0.2] hover:grayscale-0 transition-all duration-700 bg-gray-200">
-           <iframe
-            title="Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5536486253416!2d100.523186!3d13.736717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ0JzEyLjIiTiAxMDDCsDMxJzIzLjUiRQ!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth"
-            className="w-full h-full border-none"
-            loading="lazy"
-            allowFullScreen
-          />
-        </div>
+        {/* Google Maps - Lazy load with Intersection Observer */}
+        <LazyMap src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5536486253416!2d100.523186!3d13.736717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ0JzEyLjIiTiAxMDDCsDMxJzIzLjUiRQ!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth" title="168 Innovative Location" />
       </section>
     </main>
   );

@@ -17,28 +17,28 @@ import {
 
 const headingEn = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['300', '400', '600', '700'],  // เพิ่ม weight ให้ใช้ bold heading ได้
+  weight: ['400', '700'],
   variable: '--font-heading-en',
   display: 'swap',
 })
 
 const headingTh = Noto_Serif_Thai({
   subsets: ['thai'],
-  weight: ['300', '400', '600', '700'],
+  weight: ['400', '700'],
   variable: '--font-heading-th',
   display: 'swap',
 })
 
 const bodyEn = Manrope({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],  // เพิ่ม 600/700 สำหรับ label, button
+  weight: ['400', '600'],
   variable: '--font-body-en',
   display: 'swap',
 })
 
 const bodyTh = Sarabun({
-  subsets: ['thai', 'latin'],  // เพิ่ม latin ให้ Sarabun cover ตัวเลขและสัญลักษณ์ได้ด้วย
-  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['thai', 'latin'],
+  weight: ['400', '600'],
   variable: '--font-body-th',
   display: 'swap',
 })
