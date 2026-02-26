@@ -1,5 +1,6 @@
-import { permanentRedirect } from 'next/navigation'
-import { NextResponse } from 'next/server'
+// app/product/[slug]/page.tsx
+
+import { permanentRedirect, notFound } from 'next/navigation'
 import { getProductBySlug } from '@/app/lib/api/products'
 
 interface Props {
@@ -12,13 +13,13 @@ export default async function LegacyProductRedirect({ params }: Props) {
 
   const product = await getProductBySlug(slug, locale)
 
-  // 🟢 ถ้ายังมีสินค้า → redirect ไปโครงสร้างใหม่
+  // 🟢 ถ้ามีสินค้า → redirect
   if (product) {
     permanentRedirect(
       `/categories/${product.categorySlug}/${slug}`
     )
   }
 
-  // 🔴 ถ้าไม่มีสินค้าแล้ว → 410 Gone
-  return new NextResponse('Gone', { status: 410 })
+  // 🔴 ถ้าไม่มี → ใช้ notFound()
+  notFound()
 }
