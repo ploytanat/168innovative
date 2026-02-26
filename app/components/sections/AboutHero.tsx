@@ -1,11 +1,6 @@
-import dynamic from "next/dynamic";
 import { AboutHeroView, AboutSectionView, ImageView } from "@/app/lib/types/view";
 import Breadcrumb from "../ui/Breadcrumb";
-
-// these chunks only load on the client when the user visits the about page
-const AnimatedHeroBg = dynamic(() => import("./_AnimatedHeroBg"), { ssr: false });
-const HeroContent = dynamic(() => import("./_HeroContent"), { ssr: false });
-const WhoWeAreSection = dynamic(() => import("./_WhoWeAreSection"), { ssr: false });
+import DynamicSections from "./_DynamicSections";
 
 interface AboutHeroProps {
   hero: AboutHeroView;
@@ -25,15 +20,9 @@ export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
           <Breadcrumb />
         </div>
 
-        {/* Background Image (parallax handled in client-only chunk) */}
-        <AnimatedHeroBg image={hero.image1} />
-
-        {/* Content (animated in client chunk) */}
-        <HeroContent title={hero.title} description={hero.description} />
+        {/* Dynamic animated sections (client-only) */}
+        <DynamicSections hero={hero} whoAreWe={whoAreWe} />
       </div>
-
-      {/* ================= WHO WE ARE ================= */}
-      <WhoWeAreSection whoAreWe={whoAreWe} background={hero.image2} />
     </section>
   );
 }
