@@ -2,6 +2,7 @@
 
 import { getCategoryBySlug } from "@/app/lib/api/categories";
 import { getProductsByCategory } from "@/app/lib/api/products";
+import type { Metadata } from "next";
 import { Locale } from "@/app/lib/types/content";
 import { notFound } from "next/navigation";
 import LocalizedLink from "@/app/components/ui/LocalizedLink";
