@@ -2,7 +2,6 @@
 
 import { getCategories } from "@/app/lib/api/categories";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import Breadcrumb from "@/app/components/ui/Breadcrumb";
 import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs";
@@ -72,13 +71,10 @@ export default async function CategoriesPage() {
             >
               <div className="relative aspect-square overflow-hidden bg-gray-100">
                 {category.image?.src ? (
-                  <Image
+                  <img
                     src={category.image.src}
                     alt={category.image.alt || category.name}
-                    fill
-                    sizes="(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw"
-                    quality={75}
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gray-200 text-gray-400 text-sm">

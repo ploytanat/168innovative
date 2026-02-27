@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { motion, Variants } from 'framer-motion'
 import { CompanyView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
@@ -163,11 +162,10 @@ export default function ContactSection({
                     "
                   >
                     <div className="relative h-16 w-16 rounded-xl bg-white overflow-hidden border border-emerald-600 shrink-0">
-                      <Image
+                      <img
                         src={data.lineQrCode.src}
                         alt={data.lineQrCode.alt}
-                        fill
-                        className="object-contain p-1"
+                        className="w-full h-full object-contain p-1"
                       />
                     </div>
                     <div className="text-left">
@@ -210,13 +208,11 @@ export default function ContactSection({
                       `}
                     >
                       <div className="relative h-[220px] sm:h-[260px] lg:h-[300px] w-full">
-                        <Image
+                        <img
                           src={img.src}
                           alt={img.alt || 'Product'}
-                          fill
-                          sizes="(max-width: 768px) 50vw, 400px"
                           className="
-                            object-cover object-center
+                            w-full h-full object-cover object-center
                             transition-transform duration-700 ease-out
                             hover:scale-[1.05]
                           "

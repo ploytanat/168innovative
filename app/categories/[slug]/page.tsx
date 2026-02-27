@@ -1,5 +1,3 @@
-export const revalidate = 3600
-
 import Breadcrumb from "@/app/components/ui/Breadcrumb"
 import { getCategoryBySlug } from "@/app/lib/api/categories"
 import { getProductsByCategory } from "@/app/lib/api/products"

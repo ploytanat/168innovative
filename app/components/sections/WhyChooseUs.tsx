@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { WhyItemView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
 
@@ -48,7 +47,7 @@ export default function WhyChooseUs({
               {/* Icon */}
               <div className="mb-4 sm:mb-5 flex h-16 w-16 sm:h-18 sm:w-18 items-center justify-center">
                 {item.image?.src ? (
-                  <Image
+                  <img
                     src={item.image.src}
                     alt={item.image.alt || item.title}
                     width={72}

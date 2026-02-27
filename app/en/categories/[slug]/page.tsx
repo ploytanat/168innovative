@@ -3,9 +3,6 @@
 import { getCategoryBySlug } from "@/app/lib/api/categories";
 import { getProductsByCategory } from "@/app/lib/api/products";
 import { Locale } from "@/app/lib/types/content";
-
-import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import LocalizedLink from "@/app/components/ui/LocalizedLink";
 import Breadcrumb from "@/app/components/ui/Breadcrumb";
@@ -93,11 +90,10 @@ export default async function CategoryPage(
             >
               <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 {product.image?.src && (
-                  <Image
+                  <img
                     src={product.image.src}
                     alt={product.image.alt}
-                    fill
-                    className="object-cover group-hover:scale-105 transition"
+                    className="object-cover w-full h-full group-hover:scale-105 transition"
                   />
                 )}
               </div>

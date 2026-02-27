@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ImageView } from "@/app/lib/types/view";
@@ -31,23 +30,18 @@ export default function AnimatedHeroBg({ image }: AnimatedHeroBgProps) {
         className="relative w-full h-full hidden sm:block will-change-transform"
       >
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#eeeeee] via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#eeeeee] lg:via-[#eeeeee]/30 lg:to-transparent" />
-        <Image
+        <img
           src={image.src}
           alt={image.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 55vw"
-          className="object-cover object-center"
-          priority
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
       </motion.div>
 
       <div className="sm:hidden relative w-full h-full">
-        <Image
+        <img
           src={image.src}
           alt={image.alt}
-          fill
-          sizes="100vw"
-          className="object-cover object-center opacity-20"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-20"
         />
       </div>
     </div>

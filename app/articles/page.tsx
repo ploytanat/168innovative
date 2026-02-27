@@ -1,6 +1,5 @@
 import { getArticles } from '@/app/lib/api/articles'
 import Link from 'next/link'
-import Image from 'next/image'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import { CalendarDays, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -64,13 +63,11 @@ export default async function ArticlesPage() {
               className="group relative grid overflow-hidden rounded-3xl bg-white shadow-md transition-shadow hover:shadow-2xl lg:grid-cols-[1.1fr_1fr]"
             >
               {/* Image side */}
-              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[420px]">
-                <Image
+              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[420px] block">
+                <img
                   src={featured.coverImage?.src || '/placeholder.jpg'}
                   alt={featured.coverImage?.alt || featured.title}
-                  fill
-                  priority
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-[1.03]"
                 />
                 {/* Gradient overlay at bottom on mobile */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent lg:hidden" />
@@ -138,11 +135,10 @@ export default async function ArticlesPage() {
               {/* Thumbnail */}
               <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100 shadow-sm">
                 {article.coverImage ? (
-                  <Image
+                  <img
                     src={article.coverImage.src}
                     alt={article.coverImage.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-[1.05]"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-100" />

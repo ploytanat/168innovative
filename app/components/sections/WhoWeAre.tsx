@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 export default function WhoWeAre({ data }: {
   data: {
     title: string
@@ -14,11 +12,10 @@ export default function WhoWeAre({ data }: {
         {/* IMAGE */}
         <div className="lg:col-span-6">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100">
-            <Image
+            <img
               src={data.image.src}
               alt={data.image.alt}
-              fill
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>

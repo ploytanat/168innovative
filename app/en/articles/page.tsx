@@ -1,6 +1,5 @@
 import { getArticles } from '@/app/lib/api/articles'
 import LocalizedLink from '@/app/components/ui/LocalizedLink'
-import Image from 'next/image'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import { CalendarDays, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -60,13 +59,11 @@ export default async function ArticlesPage() {
                          transition-shadow hover:shadow-md lg:grid-cols-[1.1fr_1fr]"
             >
               {/* Image */}
-              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px]">
-                <Image
+              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px] block">
+                <img
                   src={featured.coverImage?.src || '/placeholder.jpg'}
                   alt={featured.coverImage?.alt || featured.title}
-                  fill
-                  priority
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-[1.03]"
                 />
               </div>
 
@@ -127,11 +124,10 @@ export default async function ArticlesPage() {
               {/* Thumbnail */}
               <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#F1F5F9]">
                 {article.coverImage ? (
-                  <Image
+                  <img
                     src={article.coverImage.src}
                     alt={article.coverImage.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-[1.05]"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-[#EEF2F7]" />

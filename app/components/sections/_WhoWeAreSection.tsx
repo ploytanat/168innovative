@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { AboutSectionView, ImageView } from "@/app/lib/types/view";
 
@@ -15,12 +14,10 @@ export default function WhoWeAreSection({ whoAreWe, background }: WhoWeAreSectio
       {/* Background */}
       <div className="absolute inset-0 z-0">
         {background && (
-          <Image
+          <img
             src={background.src}
             alt={background.alt}
-            fill
-            sizes="100vw"
-            className="object-cover object-center grayscale-[15%]"
+            className="absolute inset-0 w-full h-full object-cover object-center grayscale-[15%]"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-white/80 lg:bg-gradient-to-r lg:from-white lg:via-white/95 lg:to-white/30" />

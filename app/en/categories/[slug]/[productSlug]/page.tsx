@@ -6,7 +6,6 @@ import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Send, ChevronRight, ChevronLeft } from 'lucide-react'
 
@@ -242,12 +241,10 @@ export default async function ProductDetailPage({ params }: Props) {
                   className="group rounded-3xl bg-white p-4 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
-                    <Image
+                    <img
                       src={item.image.src}
                       alt={item.image.alt}
-                      fill
-                      sizes="(min-width:1024px) 20vw, (min-width:640px) 33vw, 50vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                   <div className="mt-3 space-y-0.5 px-1">

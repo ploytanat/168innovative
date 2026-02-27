@@ -2,7 +2,6 @@
 
 import { getCategories } from "@/app/lib/api/categories";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import Breadcrumb from "@/app/components/ui/Breadcrumb";
 
@@ -62,13 +61,10 @@ export default async function CategoriesPage() {
               >
                 <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#F1F5F9]">
                   {category.image?.src ? (
-                    <Image
+                    <img
                       src={category.image.src}
                       alt={category.image.alt || category.name}
-                      fill
-                      sizes="(min-width:1280px) 20vw, (min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
-                      quality={75}
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-[#94A3B8]">

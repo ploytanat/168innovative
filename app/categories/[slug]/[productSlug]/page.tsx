@@ -5,7 +5,6 @@ export const revalidate = 3600
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Script from 'next/script'
 import Link from 'next/link'
 import {
@@ -200,12 +199,10 @@ export default async function ProductDetailPage({ params }: Props) {
                   className="group flex flex-col"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-100">
-                    <Image
+                    <img
                       src={item.image.src}
                       alt={item.image.alt}
-                      fill
-                      sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
 

@@ -1,6 +1,5 @@
 import { getArticleBySlug, getArticles } from '@/app/lib/api/articles'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import Link from 'next/link'
 import LocalizedLink from '@/app/components/ui/LocalizedLink'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
@@ -75,12 +74,10 @@ export default async function ArticleDetailPage({
         {/* ── Cover Image ── */}
         {article.coverImage && (
           <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-xl shadow-slate-200">
-            <Image
+            <img
               src={article.coverImage.src}
               alt={article.coverImage.alt || article.title}
-              fill
-              priority
-              className="object-cover transition-transform duration-700 hover:scale-[1.02]"
+              className="object-cover w-full h-full transition-transform duration-700 hover:scale-[1.02]"
             />
             <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-black/5" />
           </div>

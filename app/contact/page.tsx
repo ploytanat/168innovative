@@ -1,6 +1,5 @@
 import { getCompany } from "@/app/lib/api/company";
 import { Locale } from "@/app/lib/types/content";
-import Image from "next/image";
 import { Phone, Mail, MapPin } from "lucide-react";
 import Breadcrumb from "../components/ui/Breadcrumb";
 import BackgroundBlobs from "../components/ui/BackgroundBlobs";
@@ -67,12 +66,11 @@ export default async function ContactPage() {
               {company.lineQrCode && (
                 <div className="mb-8">
                   <div className="bg-white p-3 rounded-3xl shadow-xl inline-block">
-                    <div className="relative h-40 w-40">
-                      <Image
+                    <div className="relative h-40 w-40 block">
+                      <img
                         src={company.lineQrCode.src}
                         alt={company.lineQrCode.alt}
-                        fill
-                        className="object-contain"
+                        className="object-contain w-full h-full"
                       />
                     </div>
                   </div>
@@ -92,7 +90,7 @@ export default async function ContactPage() {
                       rel="noopener noreferrer"
                       className="hover:scale-110 active:scale-95 transition-transform"
                     >
-                      <Image
+                      <img
                         src={social.icon.src}
                         alt={social.icon.alt || social.type}
                         width={48}

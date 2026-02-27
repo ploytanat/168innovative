@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { CategoryView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
@@ -62,16 +61,10 @@ export default function CategorySection({
               {/* Image */}
               <div className="relative aspect-square w-full">
                 {item.image?.src ? (
-                  <Image
+                  <img
                     src={item.image.src}
                     alt={item.image.alt || item.name}
-                    fill
-                    sizes="
-                      (max-width: 640px) 100vw,
-                      (max-width: 1024px) 50vw,
-                      33vw
-                    "
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-400 text-sm font-body">
