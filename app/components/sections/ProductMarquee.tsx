@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useAnimationControls } from 'framer-motion'
-import { useRef, useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { ProductView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
 import { withLocalePath } from '@/app/lib/utils/withLocalePath'
@@ -19,23 +19,26 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   const doubleItems = useMemo(() => [...items, ...items], [items])
   const [isDragging, setIsDragging] = useState(false)
   const controls = useAnimationControls()
-  const containerRef = useRef<HTMLDivElement>(null)
 
-  const startMarquee = useCallback(async () => {
-    await controls.start({
+  const startMarquee = useCallback(() => {
+    controls.start({
       x: ['0%', '-50%'],
       transition: { repeat: Infinity, ease: 'linear', duration: 45 },
     })
   }, [controls])
+
+  useEffect(() => {
+    startMarquee()
+  }, [startMarquee])
 
   const handleDragStart = useCallback(() => {
     setIsDragging(true)
     controls.stop()
   }, [controls])
 
-  const handleDragEnd = useCallback(async () => {
+  const handleDragEnd = useCallback(() => {
     setIsDragging(false)
-    await controls.set({ x: 0 })
+    controls.set({ x: 0 })
     startMarquee()
   }, [controls, startMarquee])
 
@@ -106,9 +109,9 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       </div>
 
       {/* ================= DESKTOP (Marquee) ================= */}
-      <div className="relative hidden lg:block overflow-hidden" ref={containerRef}>
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-linear-to-r from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-linear-to-l from-white to-transparent" />
+      <div className="relative hidden lg:block overflow-hidden">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40" style={{ backgroundImage: 'linear-gradient(to right, white, transparent)' }} />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40" style={{ backgroundImage: 'linear-gradient(to left, white, transparent)' }} />
 
         {/* ✅ drag layer แยกจาก animate layer */}
         <motion.div
@@ -118,17 +121,12 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
           dragConstraints={{ left: -2500, right: 0 }}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
-          dragElastic={0.2}
-          dragTransition={{ power: 0.3, restDelta: 0.001 }}
         >
           {/* ✅ animate layer วิ่งอิสระ ไม่ถูก drag interrupt */}
           <motion.div
             className="flex gap-6"
             style={{ willChange: 'transform' }}
             animate={controls}
-            onViewportEnter={() => {
-              if (!isDragging) startMarquee()
-            }}
           >
             {doubleItems.map((item, i) => (
               <Link
