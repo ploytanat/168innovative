@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useAnimationControls } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo, useCallback } from 'react'
 import { ProductView } from '@/app/lib/types/view'
 import { uiText } from '@/app/lib/i18n/ui'
 import { withLocalePath } from '@/app/lib/utils/withLocalePath'
@@ -16,28 +16,28 @@ interface ProductMarqueeProps {
 export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   if (!items.length) return null
 
-  const doubleItems = [...items, ...items]
+  const doubleItems = useMemo(() => [...items, ...items], [items])
   const [isDragging, setIsDragging] = useState(false)
   const controls = useAnimationControls()
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  function startMarquee() {
-    controls.start({
+  const startMarquee = useCallback(async () => {
+    await controls.start({
       x: ['0%', '-50%'],
       transition: { repeat: Infinity, ease: 'linear', duration: 45 },
     })
-  }
+  }, [controls])
 
-  function handleDragStart() {
+  const handleDragStart = useCallback(() => {
     setIsDragging(true)
     controls.stop()
-  }
+  }, [controls])
 
-  function handleDragEnd() {
+  const handleDragEnd = useCallback(async () => {
     setIsDragging(false)
-    // reset x=0 แล้ววิ่งใหม่ทันที ไม่ค้าง
-    controls.set({ x: 0 })
+    await controls.set({ x: 0 })
     startMarquee()
-  }
+  }, [controls, startMarquee])
 
   return (
     <section className="relative overflow-hidden bg-white py-12 md:py-4">
@@ -106,23 +106,29 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
       </div>
 
       {/* ================= DESKTOP (Marquee) ================= */}
-      <div className="relative hidden lg:block overflow-hidden">
+      <div className="relative hidden lg:block overflow-hidden" ref={containerRef}>
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40 bg-linear-to-r from-white to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40 bg-linear-to-l from-white to-transparent" />
 
         {/* ✅ drag layer แยกจาก animate layer */}
         <motion.div
           className="flex gap-6 px-8 py-1 cursor-grab active:cursor-grabbing"
+          style={{ willChange: 'transform' }}
           drag="x"
           dragConstraints={{ left: -2500, right: 0 }}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          dragElastic={0.2}
+          dragTransition={{ power: 0.3, restDelta: 0.001 }}
         >
           {/* ✅ animate layer วิ่งอิสระ ไม่ถูก drag interrupt */}
           <motion.div
             className="flex gap-6"
+            style={{ willChange: 'transform' }}
             animate={controls}
-            onViewportEnter={startMarquee}
+            onViewportEnter={() => {
+              if (!isDragging) startMarquee()
+            }}
           >
             {doubleItems.map((item, i) => (
               <Link
@@ -130,7 +136,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                 href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
                 className={isDragging ? 'pointer-events-none' : 'group'}
               >
-                <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2">
+                <div className="relative w-48 shrink-0 rounded-2xl border border-rose-100 bg-white p-3.5 shadow-sm transition-all duration-500 group-hover:border-rose-200 group-hover:shadow-xl group-hover:-translate-y-2" style={{ willChange: 'transform, box-shadow' }}>
                   <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
