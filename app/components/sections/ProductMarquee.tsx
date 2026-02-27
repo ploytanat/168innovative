@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useAnimationControls } from 'framer-motion'
 import { useState, useMemo, useCallback, useEffect } from 'react'
@@ -89,14 +88,11 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
             >
               <div className="w-40 md:w-48 rounded-2xl bg-white border border-rose-100 p-3 shadow-sm active:scale-95 transition-transform">
                 <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/50">
-                  <Image
+                  <img
                     src={item.image.src}
                     alt={item.image.alt || item.name}
-                    fill
-                    sizes="(max-width: 768px) 160px, 192px"
-                    className="object-cover"
+                    className="object-cover w-full h-full"
                     draggable={false}
-                    priority={i < 3}
                   />
                 </div>
                 <p className="mt-3 text-xs font-medium line-clamp-1 text-center text-slate-600 px-1">
@@ -138,14 +134,11 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                   <div className="absolute inset-0 rounded-2xl bg-linear-to-b from-rose-50/0 to-rose-50/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-rose-50/40">
-                    <Image
+                    <img
                       src={item.image.src}
                       alt={item.image.alt || item.name}
-                      fill
-                      sizes="192px"
-                      className="object-cover select-none transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover w-full h-full select-none transition-transform duration-700 group-hover:scale-110"
                       draggable={false}
-                      priority={i < 4}
                     />
                   </div>
 

@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CompanyView } from '@/app/lib/types/view'
@@ -47,7 +46,7 @@ export default function Footer({ company }: FooterProps) {
             {/* Brand */}
             <div className="flex flex-col gap-5 lg:col-span-4">
               <Link href={withLocale('/')} className="inline-block w-fit transition-opacity hover:opacity-60">
-                <Image
+                <img
                   src={company.logo.src}
                   alt={company.logo.alt}
                   width={130}

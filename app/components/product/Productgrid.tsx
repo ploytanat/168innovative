@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Search, ArrowDownAZ, ArrowUpAZ, X } from 'lucide-react'
 import { ProductView } from '@/app/lib/types/view'
@@ -127,13 +126,10 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
                 {product.image?.src ? (
-                  <Image
+                  <img
                     src={product.image.src}
                     alt={product.image.alt}
-                    fill
-                    sizes="(min-width:1280px) 20vw, (min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
-                    quality={75}
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-xs text-slate-600">
