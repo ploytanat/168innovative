@@ -6,9 +6,9 @@ import { CalendarDays, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'บทความและข้อมูลเชิงลึก | 168 Innovative',
+  title: 'Articles & In-Depth Insights | 168 Innovative',
   description:
-    'บทความเกี่ยวกับบรรจุภัณฑ์ OEM เทรนด์อุตสาหกรรม และแนวทางสร้างแบรนด์อย่างมืออาชีพ',
+    'Articles about OEM cosmetic packaging, industry trends, and brand building strategies for modern businesses.',
 }
 
 export default async function ArticlesPage() {
@@ -19,9 +19,9 @@ export default async function ArticlesPage() {
     return (
       <main className="min-h-screen bg-white">
         <div className="h-px w-full bg-[#14B8A6]" />
-        <div className="mx-auto max-w-5xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-6 py-24">
           <Breadcrumb />
-          <p className="mt-12 text-center text-sm text-[#94A3B8]">ยังไม่มีบทความในขณะนี้</p>
+          <p className="mt-12 text-center text-sm text-[#94A3B8]">No articles at this time</p>
         </div>
       </main>
     )
@@ -35,19 +35,19 @@ export default async function ArticlesPage() {
       {/* Accent bar — consistent กับทุกหน้า */}
       <div className="h-px w-full bg-[#14B8A6]" />
 
-      <div className="mx-auto max-w-6xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-6xl px-6 pb-32 pt-6">
         <Breadcrumb />
 
         {/* Header */}
-        <header className="mb-14 mt-10 border-b border-[#E5E7EB] pb-10">
+        <header className="mb-14 mt-6 border-b border-[#E5E7EB] pb-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-[#14B8A6]">
-            บทความ &amp; ข้อมูลเชิงลึก
+            Articles &amp; Insights
           </p>
           <h1 className="mt-3 font-heading text-3xl font-bold text-[#1A2535] md:text-4xl">
-            เรียนรู้และเติบโตไปด้วยกัน
+            Learn and Grow Together
           </h1>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#5A6A7E]">
-            อัปเดตเทรนด์บรรจุภัณฑ์ แนวทางการผลิต OEM และกลยุทธ์สร้างแบรนด์สำหรับธุรกิจยุคใหม่
+            Stay updated on packaging trends, OEM manufacturing best practices, and brand building strategies for modern businesses.
           </p>
         </header>
 
@@ -75,7 +75,7 @@ export default async function ArticlesPage() {
                 <span className="inline-flex w-fit items-center rounded-full border border-[#14B8A6]/30
                                  bg-[#F0FDFA] px-3 py-1 text-[10px] font-semibold uppercase
                                  tracking-widest text-[#14B8A6]">
-                  บทความแนะนำ
+                  Featured Article
                 </span>
 
                 <h2 className="mt-5 font-heading text-2xl font-bold leading-snug text-[#1A2535] md:text-3xl">
@@ -89,7 +89,7 @@ export default async function ArticlesPage() {
                 {featured.publishedAt && (
                   <p className="mt-6 flex items-center gap-1.5 text-xs text-[#94A3B8]">
                     <CalendarDays size={12} />
-                    {new Date(featured.publishedAt).toLocaleDateString('th-TH', {
+                    {new Date(featured.publishedAt).toLocaleDateString('en-US', {
                       year: 'numeric', month: 'long', day: 'numeric',
                     })}
                   </p>
@@ -97,7 +97,7 @@ export default async function ArticlesPage() {
 
                 <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[#14B8A6]
                                 transition-all group-hover:gap-3">
-                  อ่านต่อ
+                  Read More
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default async function ArticlesPage() {
           <div className="mb-12 flex items-center gap-4">
             <div className="h-px flex-1 bg-[#E5E7EB]" />
             <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#94A3B8]">
-              บทความอื่นๆ
+              Other Articles
             </span>
             <div className="h-px flex-1 bg-[#E5E7EB]" />
           </div>
@@ -143,7 +143,7 @@ export default async function ArticlesPage() {
               {article.publishedAt && (
                 <p className="mt-4 flex items-center gap-1.5 text-[11px] text-[#94A3B8]">
                   <CalendarDays size={11} />
-                  {new Date(article.publishedAt).toLocaleDateString('th-TH', {
+                  {new Date(article.publishedAt).toLocaleDateString('en-US', {
                     year: 'numeric', month: 'short', day: 'numeric',
                   })}
                 </p>

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 import Navigation from './components/layout/Navigation'
@@ -43,6 +43,17 @@ const bodyTh = Sarabun({
   display: 'swap',
 })
 
+/* ================= Viewport ================= */
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  minimumScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+}
+
 /* ================= Metadata ================= */
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -71,14 +82,6 @@ export async function generateMetadata(): Promise<Metadata> {
       'OEM',
       '168 Innovative',
     ],
-    viewport: {
-      width: 'device-width',
-      initialScale: 1,
-      viewportFit: 'cover',
-      minimumScale: 1,
-      maximumScale: 5,
-      userScalable: true,
-    },
     openGraph: {
       type: 'website',
       url: baseUrl,

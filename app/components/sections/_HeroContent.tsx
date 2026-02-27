@@ -30,9 +30,6 @@ export default function HeroContent({ title, description }: HeroContentProps) {
             {description}
           </p>
 
-          <button className="bg-[#1e3a5f] text-white px-8 sm:px-10 py-4 rounded-full text-base sm:text-lg font-semibold shadow-xl hover:bg-[#152a45] transition">
-            View Our Products
-          </button>
         </motion.div>
       </div>
 

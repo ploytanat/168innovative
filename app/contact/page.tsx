@@ -20,14 +20,14 @@ export default async function ContactPage() {
   }
 
   return (
-    <main className="pt-12 bg-[#ebebeb5c] font-sans overflow-x-hidden">
+    <main className="bg-[#ebebeb5c] font-sans overflow-x-hidden">
       <BackgroundBlobs />
 
-      <div className="mx-auto container relative px-4 lg:px-8">
+      <div className="mx-auto max-w-7xl relative px-6 pt-6 lg:px-8">
         <Breadcrumb />
 
         {/* ===== HEADER ===== */}
-        <header className="mb-12">
+        <header className="mt-6 mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-black text-center">
             {locale === "th" ? "ติดต่อเรา" : "Contact Us"}
           </h1>

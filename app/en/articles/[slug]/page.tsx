@@ -21,7 +21,7 @@ export default async function ArticleDetailPage({
       {/* ── Thin top accent bar ── */}
       <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
 
-      <div className="mx-auto max-w-2xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
 
         <Breadcrumb />
 
@@ -31,16 +31,16 @@ export default async function ArticleDetailPage({
           className="mt-6 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-400 transition-colors hover:text-slate-700"
         >
           <ArrowLeft size={13} />
-          บทความทั้งหมด
+          All Articles
         </LocalizedLink>
 
         {/* ── Hero Header ── */}
-        <header className="mt-10">
+        <header className="mt-6">
           {/* Meta row */}
           <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-widest text-amber-600">
             <span className="flex items-center gap-1.5">
               <CalendarDays size={11} />
-              {new Date(article.publishedAt).toLocaleDateString('en-EN', {
+              {new Date(article.publishedAt).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
@@ -49,7 +49,7 @@ export default async function ArticleDetailPage({
             <span className="text-slate-300">·</span>
             <span className="flex items-center gap-1.5">
               <BookOpen size={11} />
-              อ่าน 5 นาที
+              5 min read
             </span>
           </div>
 
@@ -108,12 +108,12 @@ export default async function ArticleDetailPage({
             className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:shadow-md"
           >
             <ArrowLeft size={14} />
-            บทความทั้งหมด
+            All Articles
           </LocalizedLink>
 
           <span className="flex items-center gap-1.5 text-xs text-slate-400">
             <Clock size={12} />
-            อ่าน 5 นาที
+            5 min read
           </span>
         </div>
       </div>

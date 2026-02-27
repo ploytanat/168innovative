@@ -66,11 +66,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
         <Breadcrumb />
 
         {/* Header */}
-        <header className="mb-14 mt-10 border-b border-[#E5E7EB] pb-10">
+        <header className="mb-14 mt-6 border-b border-[#E5E7EB] pb-10">
           <Link
             href="/categories"
             className="mb-5 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"

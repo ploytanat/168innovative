@@ -20,7 +20,7 @@ export default async function ArticleDetailPage({
       {/* ── Thin top accent bar ── */}
       <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
 
-      <div className="mx-auto max-w-2xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
 
         <Breadcrumb />
 

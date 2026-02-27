@@ -10,9 +10,9 @@ import LocalizedLink from "@/app/components/ui/LocalizedLink";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "หมวดหมู่บรรจุภัณฑ์เครื่องสำอาง | OEM / ODM",
+    title: "Product Categories | Cosmetic Packaging & OEM Solutions",
     description:
-      "รวมหมวดหมู่บรรจุภัณฑ์เครื่องสำอางทุกประเภท พร้อมบริการ OEM / ODM ครบวงจร",
+      "Explore all cosmetic packaging categories with complete OEM/ODM services available.",
   };
 }
 
@@ -24,10 +24,10 @@ export default async function CategoriesPage() {
   if (!categories.length) {
     return (
       <main className="bg-gray-50 pt-12 pb-20">
-        <div className="container mx-auto text-center">
+        <div className="mx-auto max-w-7xl px-6 text-center">
           <Breadcrumb />
           <p className="mt-10 text-gray-500">
-            ยังไม่มีหมวดหมู่สินค้าในระบบ
+            No product categories available at this time
           </p>
         </div>
       </main>
@@ -39,23 +39,23 @@ export default async function CategoriesPage() {
     .slice(0, 6);
 
   return (
-    <main className="bg-[#F8F9FA] pt-12 pb-32">
+    <main className="bg-[#F8F9FA] pb-32">
       <div className="hidden lg:block">
         <BackgroundBlobs />
       </div>
 
-      <div className="mx-auto container relative px-4 lg:px-8">
+      <div className="mx-auto max-w-7xl relative px-6 pt-6 lg:px-8">
         <Breadcrumb />
 
         {/* ================= HERO ================= */}
-        <header className="mx-auto mt-12 max-w-4xl text-center">
+        <header className="mx-auto mt-6 max-w-4xl text-center">
           <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
-            หมวดหมู่บรรจุภัณฑ์เครื่องสำอาง
+            Cosmetic Packaging Categories
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 md:text-xl">
-            เลือกบรรจุภัณฑ์ให้เหมาะกับแบรนด์ของคุณ
-            พร้อมบริการ OEM / ODM ครบวงจร
+            Find the perfect packaging solution for your brand.
+            Complete OEM and ODM services available.
           </p>
         </header>
 
@@ -108,10 +108,10 @@ export default async function CategoriesPage() {
             <div className="mx-auto max-w-5xl">
               <header className="mb-16 text-center">
                 <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
-                  เจาะลึกประเภทบรรจุภัณฑ์
+                  Explore Packaging Types In Detail
                 </h2>
                 <p className="mt-4 text-gray-500">
-                  ข้อมูลเชิงลึกเพื่อช่วยให้คุณเลือกสินค้าได้เหมาะสม
+                  In-depth insights to help you choose the right solution
                 </p>
               </header>
 

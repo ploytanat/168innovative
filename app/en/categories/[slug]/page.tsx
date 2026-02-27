@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import LocalizedLink from "@/app/components/ui/LocalizedLink";
+import Breadcrumb from "@/app/components/ui/Breadcrumb";
 
 interface Props {
   params: Promise<{
@@ -66,43 +67,48 @@ export default async function CategoryPage(
   const { products } = result;
 
   return (
-    <main className="container mx-auto py-20">
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
+        <Breadcrumb />
 
-      <h1 className="text-4xl font-bold text-center mb-8">
-        {category.name}
-      </h1>
+        {/* Header */}
+        <header className="mb-14 mt-6">
+          <h1 className="text-4xl font-bold text-center mb-8">
+            {category.name}
+          </h1>
 
-      {category.description && (
-        <p className="text-center text-gray-600 mb-12">
-          {category.description}
-        </p>
-      )}
+          {category.description && (
+            <p className="text-center text-gray-600 mb-12">
+              {category.description}
+            </p>
+          )}
+        </header>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <LocalizedLink
-            key={product.id}
-            href={`/categories/${slug}/${product.slug}`}
-            className="group"
-          >
-            <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-              {product.image?.src && (
-                <Image
-                  src={product.image.src}
-                  alt={product.image.alt}
-                  fill
-                  className="object-cover group-hover:scale-105 transition"
-                />
-              )}
-            </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {products.map((product) => (
+            <LocalizedLink
+              key={product.id}
+              href={`/categories/${slug}/${product.slug}`}
+              className="group"
+            >
+              <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                {product.image?.src && (
+                  <Image
+                    src={product.image.src}
+                    alt={product.image.alt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition"
+                  />
+                )}
+              </div>
 
-            <h2 className="mt-3 text-center font-semibold">
-              {product.name}
-            </h2>
-          </LocalizedLink>
-        ))}
+              <h2 className="mt-3 text-center font-semibold">
+                {product.name}
+              </h2>
+            </LocalizedLink>
+          ))}
+        </div>
       </div>
-
     </main>
   );
 }

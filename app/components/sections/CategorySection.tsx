@@ -28,7 +28,7 @@ export default function CategorySection({
 
   return (
     <section className="bg-[#F8F9FA] py-14 sm:py-16 md:py-24 border border-white shadow-sm">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6">
 
         {/* Header */}
         <div className="mb-10 md:mb-14 flex flex-col items-center text-center">

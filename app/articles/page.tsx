@@ -19,7 +19,7 @@ export default async function ArticlesPage() {
     return (
       <main className="min-h-screen bg-[#FAFAF8]">
         <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
-        <div className="mx-auto max-w-5xl px-6 py-24">
+        <div className="mx-auto max-w-7xl px-6 py-24">
           <Breadcrumb />
           <p className="mt-12 text-center text-slate-400">ยังไม่มีบทความในขณะนี้</p>
         </div>
@@ -35,12 +35,12 @@ export default async function ArticlesPage() {
       {/* ── Accent bar (matches detail page) ── */}
       <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
 
-      <div className="mx-auto max-w-6xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
 
         <Breadcrumb />
 
         {/* ── Page Header ── */}
-        <header className="mt-10 mb-16">
+        <header className="mt-6 mb-16">
           <p className="text-[11px] font-medium uppercase tracking-widest text-amber-600">
             บทความ &amp; ข้อมูลเชิงลึก
           </p>

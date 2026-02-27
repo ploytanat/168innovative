@@ -21,7 +21,7 @@ export default async function CategoriesPage() {
   if (!categories.length) {
     return (
       <main className="min-h-screen bg-white py-24">
-        <div className="container mx-auto px-6 text-center">
+        <div className="mx-auto max-w-7xl px-6 text-center">
           <Breadcrumb />
           <p className="mt-16 text-sm text-[#94A3B8]">
             ยังไม่มีหมวดหมู่สินค้าในระบบ
@@ -35,11 +35,11 @@ export default async function CategoriesPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-6 pb-32 pt-10">
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
         <Breadcrumb />
 
         {/* Header — minimal */}
-        <header className="mb-14 mt-10 border-b border-[#E5E7EB] pb-10">
+        <header className="mb-14 mt-6 border-b border-[#E5E7EB] pb-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-[#14B8A6]">
             OEM / ODM
           </p>

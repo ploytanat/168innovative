@@ -69,11 +69,11 @@ export default async function ProductDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="mx-auto max-w-7xl px-6 pt-16 pb-28 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pt-6 pb-28 lg:px-8">
         <Breadcrumb />
 
         {/* HERO */}
-        <div className="mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 lg:grid-cols-2">
 
           {/* LEFT */}
           <div className="bg-slate-50 p-8 lg:p-12">

@@ -18,9 +18,9 @@ import ContactSection from "../components/sections/ContactSection";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "168 Innovative | บรรจุภัณฑ์เครื่องสำอาง OEM",
+    title: "168 Innovative | Premium Cosmetic Packaging & OEM Solutions",
     description:
-      "ผู้เชี่ยวชาญด้านบรรจุภัณฑ์เครื่องสำอาง นำเข้าและจัดจำหน่ายโดยตรงจากโรงงาน",
+      "Expert cosmetic packaging manufacturer. Import and distribute directly from factory with premium quality OEM solutions.",
   };
 }
 

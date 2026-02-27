@@ -10,26 +10,26 @@ export default async function ContactPage() {
   const locale: Locale = "en";
   const company = await getCompany(locale);
 
-  // กรณีหาข้อมูลบริษัทไม่เจอ
+  // If company data is not found
   if (!company) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>ไม่พบข้อมูลติดต่อ</p>
+        <p>Contact information not found</p>
       </div>
     );
   }
 
   return (
-    <main className="pt-12 bg-[#ebebeb5c] font-sans overflow-x-hidden">
+    <main className="bg-[#ebebeb5c] font-sans overflow-x-hidden">
       <BackgroundBlobs />
 
-      <div className="mx-auto container relative px-4 lg:px-8">
+      <div className="mx-auto max-w-7xl relative px-6 pt-6 lg:px-8">
         <Breadcrumb />
 
         {/* ===== HEADER ===== */}
-        <header className="mb-12">
+        <header className="mt-6 mb-12">
           <h1 className="text-4xl md:text-6xl font-bold text-black text-center">
-            {locale === "en" ? "ติดต่อเรา" : "Contact Us"}
+            Contact Us
           </h1>
         </header>
 
@@ -77,7 +77,7 @@ export default async function ContactPage() {
                     </div>
                   </div>
                   <p className="mt-4 font-bold text-gray-600 tracking-widest uppercase text-sm">
-                    {locale === "en" ? "สแกนเพื่อเพิ่มเพื่อน" : "Scan to Add Line"}
+                    Scan to Add Line
                   </p>
                 </div>
               )}
