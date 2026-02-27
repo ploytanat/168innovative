@@ -30,19 +30,21 @@ export default function ProductImageGallery({ src, alt }: Props) {
   return (
     <>
       {/* Container หลัก */}
-      <div className="lg:col-span-6 lg:sticky lg:top-32 flex justify-center h-fit">
+      <div className="lg:col-span-6 lg:sticky lg:top-32 flex justify-center h-fit mx-auto w-full px-2 sm:px-4">
         <button
           onClick={() => setIsOpen(true)}
           aria-label="ขยายรูปภาพสินค้า"
-          className="group relative w-full max-w-md aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in active:scale-[0.98]"
+          className="group relative w-full aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in active:scale-[0.98]"
+          style={{ maxWidth: 'min(100%, 28rem)' }}
         >
           <Image
             src={src}
             alt={alt}
             fill
-            priority
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={true}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, (max-width: 1280px) 45vw, 28rem"
             className="object-cover transition-transform duration-700 group-hover:scale-110"
+            quality={85}
           />
 
           {/* Overlay & Icon */}
@@ -61,10 +63,11 @@ export default function ProductImageGallery({ src, alt }: Props) {
           onClick={() => setIsOpen(false)}
           role="dialog"
           aria-modal="true"
+          style={{ width: '100dvw', height: '100dvh' }}
         >
           {/* ปุ่มปิด (ปรับให้กดง่ายขึ้นและลบ text 'x' ส่วนเกินออก) */}
           <button
-            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-[110]"
+            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-[110] min-w-[48px] min-h-[48px] flex items-center justify-center"
             onClick={() => setIsOpen(false)}
             aria-label="ปิดหน้าต่างขยายรูป"
           >
@@ -72,16 +75,18 @@ export default function ProductImageGallery({ src, alt }: Props) {
           </button>
 
           <div
-            className="relative w-full h-[80vh] max-w-6xl transition-all"
+            className="relative w-[calc(100dvw-2rem)] h-[calc(100dvh-2rem)] max-w-6xl transition-all"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
               src={src}
               alt={alt}
               fill
-              quality={100}
+              quality={90}
+              priority={false}
               className="object-contain cursor-zoom-out selection:bg-none"
               onClick={() => setIsOpen(false)}
+              sizes="100vw"
             />
           </div>
         </div>

@@ -11,6 +11,26 @@
   body {
     font-family: var(--font-body-th), sans-serif;
   }
+
+  /* Safari/iPad Fix */
+  /* Prevent image scaling issues on iOS/iPad */
+  img {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Fix aspect-ratio on Safari */
+  [style*="aspect-square"] {
+    aspect-ratio: 1;
+  }
+
+  /* Universal image fix for iOS */
+  picture,
+  img {
+    -webkit-touch-callout: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
 }
 
 /* ─────────────────────────────

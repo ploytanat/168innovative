@@ -71,6 +71,14 @@ export async function generateMetadata(): Promise<Metadata> {
       'OEM',
       '168 Innovative',
     ],
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      viewportFit: 'cover',
+      minimumScale: 1,
+      maximumScale: 5,
+      userScalable: true,
+    },
     openGraph: {
       type: 'website',
       url: baseUrl,

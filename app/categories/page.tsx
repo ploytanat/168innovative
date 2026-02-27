@@ -67,6 +67,7 @@ export default async function CategoriesPage() {
                       alt={category.image.alt || category.name}
                       fill
                       sizes="(min-width:1280px) 20vw, (min-width:1024px) 25vw, (min-width:640px) 33vw, 50vw"
+                      quality={75}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
