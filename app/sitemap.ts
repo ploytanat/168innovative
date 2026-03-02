@@ -3,8 +3,8 @@ import { getCategories } from './lib/api/categories'
 import { getArticles } from './lib/api/articles'
 import { getAllProductsForSitemap } from './lib/api/products'
 
-function formatDate(date: string | Date) {
-  return new Date(date).toISOString().split('T')[0]
+function formatDate(date: string | Date): Date {
+  return new Date(date)
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes = ['', '/about', '/contact', '/articles', '/categories'].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: formatDate(new Date()),
+    lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 1.0,
   }))
@@ -20,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categories = await getCategories('th')
   const categoryUrls = categories.map((cat) => ({
     url: `${baseUrl}/categories/${cat.slug}`,
-    lastModified: formatDate(new Date()),
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }))
