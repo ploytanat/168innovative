@@ -183,4 +183,9 @@ export interface ArticleView {
   category?: string
   tags: TagView[]
   publishedAt: string
+
+  seoTitle?: string
+  metaDescription?: string
+  canonicalUrl?: string
+  focusKeyword?: string
 }

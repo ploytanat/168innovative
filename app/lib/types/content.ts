@@ -198,6 +198,13 @@ export interface WPArticle {
     content_en?: string;
     image_alt_th?: string;
     image_alt_en?: string;
+        seo_title_th?: string
+    seo_title_en?: string
+    meta_description_th?: string
+    meta_description_en?: string
+    canonical_url_th?: string
+    canonical_url_en?: string
+    focus_keyword?: string
   };
 
   _embedded?: WPEmbedded;

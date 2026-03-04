@@ -1,8 +1,32 @@
+// [slug]/page.tsx
+
 import { getArticleBySlug, getArticles } from '@/app/lib/api/articles'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import { CalendarDays, Clock, ArrowLeft, BookOpen } from 'lucide-react'
+import type { Metadata } from 'next'
+import ArticleBody from '@/app/components/ui/ArticleBody'
+
+// ── SEO Metadata ดึงจาก ACF ──────────────────────────────────
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const article = await getArticleBySlug(slug, 'th')
+  if (!article) return {}
+
+  return {
+    title: article.seoTitle ?? article.title,
+    description: article.metaDescription ?? article.excerpt,
+    alternates: {
+      canonical: article.canonicalUrl,
+    },
+    keywords: article.focusKeyword,
+  }
+}
 
 export default async function ArticleDetailPage({
   params,
@@ -15,15 +39,11 @@ export default async function ArticleDetailPage({
 
   return (
     <main className="min-h-screen bg-[#FAFAF8]">
-
-      {/* ── Thin top accent bar ── */}
       <div className="h-1 w-full bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400" />
 
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
-
         <Breadcrumb />
 
-        {/* Back link */}
         <Link
           href="/articles"
           className="mt-6 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-slate-400 transition-colors hover:text-slate-700"
@@ -32,16 +52,12 @@ export default async function ArticleDetailPage({
           บทความทั้งหมด
         </Link>
 
-        {/* ── Hero Header ── */}
         <header className="mt-10">
-          {/* Meta row */}
           <div className="flex items-center gap-4 text-[11px] font-medium uppercase tracking-widest text-amber-600">
             <span className="flex items-center gap-1.5">
               <CalendarDays size={11} />
               {new Date(article.publishedAt).toLocaleDateString('th-TH', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
+                year: 'numeric', month: 'long', day: 'numeric',
               })}
             </span>
             <span className="text-slate-300">·</span>
@@ -51,7 +67,6 @@ export default async function ArticleDetailPage({
             </span>
           </div>
 
-          {/* Title */}
           <h1
             className="mt-5 font-serif text-[2.15rem] font-bold leading-[1.3] tracking-tight text-slate-900 md:text-[2.6rem]"
             style={{ fontFamily: "'Noto Serif Thai', 'Sarabun', serif" }}
@@ -59,18 +74,15 @@ export default async function ArticleDetailPage({
             {article.title}
           </h1>
 
-          {/* Excerpt */}
           {article.excerpt && (
             <p className="mt-5 text-[1.05rem] leading-[1.8] text-slate-500">
               {article.excerpt}
             </p>
           )}
 
-          {/* Thin divider */}
           <div className="mt-8 h-px w-16 bg-amber-400" />
         </header>
 
-        {/* ── Cover Image ── */}
         {article.coverImage && (
           <div className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-xl shadow-slate-200">
             <img
@@ -82,22 +94,15 @@ export default async function ArticleDetailPage({
           </div>
         )}
 
-        {/* ── Article Body ── */}
-        <article className="mt-12">
-          <div
-         
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
-        </article>
+        {/* ── Article Body — ref กำกับ div เพื่อ scoped JS access ── */}
+        <ArticleBody html={article.content} />
 
-        {/* ── Footer Divider ── */}
         <div className="mt-20 flex items-center gap-4">
           <div className="h-px flex-1 bg-slate-200" />
           <span className="text-xs text-slate-300">✦</span>
           <div className="h-px flex-1 bg-slate-200" />
         </div>
 
-        {/* ── Bottom Nav ── */}
         <div className="mt-8 flex items-center justify-between">
           <Link
             href="/articles"
@@ -106,7 +111,6 @@ export default async function ArticleDetailPage({
             <ArrowLeft size={14} />
             บทความทั้งหมด
           </Link>
-
           <span className="flex items-center gap-1.5 text-xs text-slate-400">
             <Clock size={12} />
             อ่าน 5 นาที

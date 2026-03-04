@@ -7,20 +7,11 @@ if (!WP_URL) {
   throw new Error("WP_API_URL is not defined")
 }
 
-/* =====================================================
-   Shared Fetch Config (Better Performance)
-===================================================== */
-
 const fetchConfig: RequestInit = {
-  next: { revalidate: 120 }, // cache 2 นาที
-  headers: {
-    "Content-Type": "application/json",
-  },
+  next: { revalidate: 120 },
+  headers: { "Content-Type": "application/json" },
 }
 
-/* =====================================================
-   Image Mapper
-===================================================== */
 function mapWPImage(
   media: any | undefined,
   altTh?: string,
@@ -28,7 +19,6 @@ function mapWPImage(
   locale?: Locale
 ) {
   if (!media?.source_url) return undefined
-
   return {
     src: media.source_url,
     alt:
@@ -38,117 +28,67 @@ function mapWPImage(
   }
 }
 
-/* =====================================================
-   Article Mapper (WP → ViewModel)
-===================================================== */
-function mapWPArticleToView(
-  wp: WPArticle,
-  locale: Locale
-): ArticleView {
-
+function mapWPArticleToView(wp: WPArticle, locale: Locale): ArticleView {
   const acf = wp.acf ?? {}
-
-  const featured =
-    wp._embedded?.["wp:featuredmedia"]?.[0]
-
-  const terms =
-    wp._embedded?.["wp:term"]?.flat() ?? []
+  const featured = wp._embedded?.["wp:featuredmedia"]?.[0]
+  const terms = wp._embedded?.["wp:term"]?.flat() ?? []
 
   const tags = terms
-    .filter(t => t.taxonomy === "article_tag")
-    .map(t => ({
-      id: t.id,
-      slug: t.slug,
-      name: t.name,
-    }))
+    .filter((t) => t.taxonomy === "article_tag")
+    .map((t) => ({ id: t.id, slug: t.slug, name: t.name }))
 
   const category =
-    terms.find(t => t.taxonomy === "article_category")
-      ?.name ?? undefined
+    terms.find((t) => t.taxonomy === "article_category")?.name ?? undefined
 
   return {
     id: String(wp.id),
     slug: wp.slug,
 
-    title:
-      locale === "th"
-        ? acf.title_th ?? ""
-        : acf.title_en ?? "",
+    title: locale === "th" ? acf.title_th ?? "" : acf.title_en ?? "",
+    excerpt: locale === "th" ? acf.excerpt_th ?? "" : acf.excerpt_en ?? "",
+    content: locale === "th" ? acf.content_th ?? "" : acf.content_en ?? "",
 
-    excerpt:
-      locale === "th"
-        ? acf.excerpt_th ?? ""
-        : acf.excerpt_en ?? "",
-
-    content:
-      locale === "th"
-        ? acf.content_th ?? ""
-        : acf.content_en ?? "",
-
-    coverImage: mapWPImage(
-      featured,
-      acf.image_alt_th,
-      acf.image_alt_en,
-      locale
-    ),
+    coverImage: mapWPImage(featured, acf.image_alt_th, acf.image_alt_en, locale),
 
     category,
     tags,
     publishedAt: wp.date,
+
+    // ── Fields ใหม่ ──
+    seoTitle: locale === "th" ? acf.seo_title_th : acf.seo_title_en,
+    metaDescription:
+      locale === "th" ? acf.meta_description_th : acf.meta_description_en,
+    canonicalUrl:
+      locale === "th" ? acf.canonical_url_th : acf.canonical_url_en,
+    focusKeyword: acf.focus_keyword,
   }
 }
-
-/* =====================================================
-   Helpers
-===================================================== */
 
 async function fetchArticlesFromWP(
   params: Record<string, string>
 ): Promise<WPArticle[]> {
-
-  const url = new URL(
-    "/wp-json/wp/v2/article",
-    WP_URL
-  )
-
+  const url = new URL("/wp-json/wp/v2/article", WP_URL)
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.set(key, value)
   )
-
   const res = await fetch(url.toString(), fetchConfig)
-
   if (!res.ok) {
     console.error("WP fetch failed:", res.status)
     return []
   }
-
   return res.json()
 }
 
-/* =====================================================
-   Public API
-===================================================== */
-
-/**
- * Get All Articles
- * - sorted by date DESC
- * - embedded media + terms
- */
-export async function getArticles(
-  locale: Locale
-): Promise<ArticleView[]> {
-
+export async function getArticles(locale: Locale): Promise<ArticleView[]> {
   const data = await fetchArticlesFromWP({
     _embed: "1",
     per_page: "100",
     orderby: "date",
     order: "desc",
   })
-
-  return data.map(a =>
-    mapWPArticleToView(a, locale)
-  )
+  return data.map((a) => mapWPArticleToView(a, locale))
 }
+
 
 /**
  * Get Single Article by Slug
