@@ -172,7 +172,8 @@ export interface WPTerm {
 }
 
 export interface WPFeaturedMedia {
-  source_url: string;
+  source_url?: string;
+  alt_text?: string; // <--- เพิ่มบรรทัดนี้
 }
 
 export interface WPEmbedded {
@@ -190,6 +191,7 @@ export interface WPArticle {
   date: string;
 
   acf?: {
+    image?: number
     title_th?: string;
     title_en?: string;
     excerpt_th?: string;

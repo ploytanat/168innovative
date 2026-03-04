@@ -16,7 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CategoriesPage() {
   const locale = "th";
   const categories = await getCategories(locale);
-
   if (!categories.length) {
     return (
       <main className="min-h-screen bg-white py-24">
