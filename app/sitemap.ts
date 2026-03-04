@@ -1,43 +1,50 @@
-import { MetadataRoute } from 'next'
-import { getCategories } from './lib/api/categories'
-import { getArticles } from './lib/api/articles'
-import { getAllProductsForSitemap } from './lib/api/products'
+import { MetadataRoute } from "next"
 
-function formatDate(date: string | Date): Date {
+import { getCategories } from "./lib/api/categories"
+import { getArticles } from "./lib/api/articles"
+import { getAllProductsForSitemap } from "./lib/api/products"
+
+function formatDate(date: string | Date) {
   return new Date(date)
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://168innovative.co.th'
+  const baseUrl = "https://168innovative.co.th"
 
-  const staticRoutes = ['', '/about', '/contact', '/articles', '/categories'].map((route) => ({
-    url: `${baseUrl}${route}`,
+  const staticRoutes = [
+    { route: "", priority: 1.0 },
+    { route: "/about", priority: 0.8 },
+    { route: "/contact", priority: 0.7 },
+    { route: "/articles", priority: 0.8 },
+    { route: "/categories", priority: 0.9 },
+  ].map((item) => ({
+    url: `${baseUrl}${item.route}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 1.0,
+    changeFrequency: "monthly" as const,
+    priority: item.priority,
   }))
 
-  const categories = await getCategories('th')
+  const categories = (await getCategories("th")) || []
   const categoryUrls = categories.map((cat) => ({
     url: `${baseUrl}/categories/${cat.slug}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+    changeFrequency: "weekly" as const,
     priority: 0.8,
   }))
 
-  const articles = await getArticles('th')
+  const articles = (await getArticles("th")) || []
   const articleUrls = articles.map((article) => ({
     url: `${baseUrl}/articles/${article.slug}`,
     lastModified: formatDate(article.publishedAt),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: "monthly" as const,
     priority: 0.7,
   }))
 
-  const products = await getAllProductsForSitemap()
+  const products = (await getAllProductsForSitemap()) || []
   const productUrls = products.map((product) => ({
     url: `${baseUrl}/categories/${product.categorySlug}/${product.slug}`,
     lastModified: formatDate(product.modified),
-    changeFrequency: 'weekly' as const,
+    changeFrequency: "weekly" as const,
     priority: 0.9,
   }))
 
