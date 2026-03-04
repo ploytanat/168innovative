@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import BackToTop from './components/ui/BackToTop'
@@ -166,6 +167,8 @@ export default async function RootLayout({
         {company && <Footer company={company} />}
 
         <BackToTop />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
