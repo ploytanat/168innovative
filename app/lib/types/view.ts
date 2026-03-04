@@ -161,6 +161,10 @@ export interface AboutView {
     title: string
     items: WhyItemView[]
   }
+
+  // ✅ เพิ่ม SEO
+  seoTitle?: string
+  seoDescription?: string
 }
 
 // == Article View ==

@@ -22,7 +22,7 @@ export default function HeroContent({ title, description }: HeroContentProps) {
             Established Excellence
           </span>
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#1e3a5f] leading-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#1e3a5f] leading-tight mb-6">
             {title}
           </h1>
 
