@@ -1,6 +1,6 @@
 // app/categories/[slug]/[productSlug]/page.tsx
 
-export const revalidate = 3600
+export const revalidate = 60
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
