@@ -21,6 +21,32 @@ async function fetchJSON<T>(url: string): Promise<T> {
 }
 
 /* ─────────────────────────────
+   Safe JSON Parser
+───────────────────────────── */
+
+function safeParseJSON(value: unknown): Record<string, unknown> | null {
+  if (!value) return null
+
+  if (typeof value === "object") {
+    return value as Record<string, unknown>
+  }
+
+  if (typeof value === "string") {
+    const cleaned = value.trim()
+    if (!cleaned) return null
+
+    try {
+      return JSON.parse(cleaned)
+    } catch (err) {
+      console.warn("Invalid specs_json:", cleaned)
+      return null
+    }
+  }
+
+  return null
+}
+
+/* ─────────────────────────────
    Category Map
 ───────────────────────────── */
 
@@ -75,15 +101,14 @@ function _getProductsByCategoryId(
         `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
         { next: { revalidate: 3600 } }
       )
-      if (!res.ok) throw new Error(`Fetch failed: category ${categoryId} page ${page}`)
+
+      if (!res.ok) {
+        throw new Error(`Fetch failed: category ${categoryId} page ${page}`)
+      }
 
       const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
       const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
 
-
-      // เพิ่มชั่วคราว
-console.log('headers X-WP-Total:', res.headers.get("X-WP-Total"))
-console.log('headers X-WP-TotalPages:', res.headers.get("X-WP-TotalPages"))
       const data = (await res.json()) as WPProduct[]
 
       return { data, totalPages, totalCount }
@@ -132,10 +157,7 @@ function mapWPToProductView(
   locale: Locale,
   catMap: Record<number, string>
 ): ProductView {
-  const parsedSpecs =
-    typeof wp.acf?.specs_json === "string"
-      ? JSON.parse(wp.acf.specs_json.replace(/\\"/g, '"'))
-      : wp.acf?.specs_json ?? null
+  const parsedSpecs = safeParseJSON(wp.acf?.specs_json)
 
   const specs: ProductSpecView[] = parsedSpecs
     ? Object.entries(parsedSpecs).map(([key, value]) => ({
@@ -192,7 +214,10 @@ export async function getAllProductsForSitemap() {
         categorySlug: catSlug,
       }
     })
-    .filter((p): p is { slug: string; modified: string; categorySlug: string } => p !== null)
+    .filter(
+      (p): p is { slug: string; modified: string; categorySlug: string } =>
+        p !== null
+    )
 }
 
 /* ─────────────────────────────
@@ -222,20 +247,18 @@ export async function getProductsByCategory(
     return { products: [], totalPages: 1, totalCount: 0 }
   }
 
-  const { data, totalPages, totalCount } = await _getProductsByCategoryId(categoryId, page)
+  const { data, totalPages, totalCount } =
+    await _getProductsByCategoryId(categoryId, page)
 
-  // 🔥 Prefetch หน้าถัดไปใน background — user กดปุ๊บได้เลย
   if (page < totalPages) {
     _getProductsByCategoryId(categoryId, page + 1).catch(() => {})
   }
-    console.log('จำนวนสินค้าทั้งหมด : ', totalCount)
+
   return {
     products: data.map((wp) => mapWPToProductView(wp, locale, catMap)),
     totalPages,
     totalCount,
-
   }
-  
 }
 
 export async function getProductBySlug(slug: string, locale: Locale) {
