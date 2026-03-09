@@ -1,8 +1,7 @@
-// app/components/ui/Pagination.tsx
-
 'use client'
 
-import Link from "next/link"
+import Link from 'next/link'
+import type { ReactNode } from 'react'
 
 interface Props {
   currentPage: number
@@ -10,26 +9,50 @@ interface Props {
   basePath: string
 }
 
-function generatePages(current: number, total: number): (number | "...")[] {
+function generatePages(current: number, total: number): (number | '...')[] {
   const delta = 2
-  const pages: (number | "...")[] = []
+  const pages: (number | '...')[] = []
 
   const start = Math.max(2, current - delta)
   const end = Math.min(total - 1, current + delta)
 
   pages.push(1)
 
-  if (start > 2) pages.push("...")
+  if (start > 2) pages.push('...')
 
-  for (let i = start; i <= end; i++) {
+  for (let i = start; i <= end; i += 1) {
     pages.push(i)
   }
 
-  if (end < total - 1) pages.push("...")
+  if (end < total - 1) pages.push('...')
 
   if (total > 1) pages.push(total)
 
   return pages
+}
+
+function PageLink({
+  href,
+  label,
+  active = false,
+}: {
+  href: string
+  label: ReactNode
+  active?: boolean
+}) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? 'page' : undefined}
+      className={`inline-flex min-w-10 items-center justify-center rounded-full border px-3.5 py-2 text-xs font-semibold transition-all ${
+        active
+          ? 'border-[#1A2535] bg-[#1A2535] text-white shadow-[0_10px_24px_rgba(26,37,53,0.14)]'
+          : 'border-[#E1D8CF] bg-white text-[#6B625C] hover:border-[#14B8A6] hover:text-[#1A2535]'
+      }`}
+    >
+      {label}
+    </Link>
+  )
 }
 
 export default function Pagination({ currentPage, totalPages, basePath }: Props) {
@@ -39,53 +62,42 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
 
   return (
     <nav
-      className="mt-16 flex flex-wrap items-center justify-center gap-2"
-      aria-label="การแบ่งหน้า"
+      className="mt-14 flex flex-wrap items-center justify-center gap-2.5"
+      aria-label="Pagination"
     >
       {currentPage > 1 ? (
-        <Link
-          href={`${basePath}?page=${currentPage - 1}`}
-          className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]"
-        >
-          ← ก่อนหน้า
-        </Link>
+        <PageLink href={`${basePath}?page=${currentPage - 1}`} label="Previous" />
       ) : (
-        <span className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-300 cursor-not-allowed">
-          ← ก่อนหน้า
+        <span className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full border border-[#EEE7E0] bg-[#F7F3EE] px-3.5 py-2 text-xs font-semibold text-[#B8ADA2]">
+          Previous
         </span>
       )}
 
-      {pages.map((p, i) =>
-        p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-sm text-slate-400">
-            …
-          </span>
-        ) : (
-          <Link
-            key={p}
-            href={`${basePath}?page=${p}`}
-            className={`rounded-xl border px-4 py-2.5 text-sm font-medium shadow-sm transition-all ${
-              p === currentPage
-                ? "border-[#14B8A6] bg-[#14B8A6] text-white shadow-[#14B8A6]/20"
-                : "border-slate-200 bg-white text-slate-700 hover:border-[#14B8A6] hover:text-[#14B8A6]"
-            }`}
-            aria-current={p === currentPage ? "page" : undefined}
-          >
-            {p}
-          </Link>
-        )
-      )}
+      <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-[#E8E0D8] bg-white/80 px-2 py-2 shadow-sm backdrop-blur">
+        {pages.map((page, index) =>
+          page === '...' ? (
+            <span
+              key={`ellipsis-${index}`}
+              className="px-2 text-xs font-semibold text-[#BAAEA3]"
+            >
+              ...
+            </span>
+          ) : (
+            <PageLink
+              key={page}
+              href={`${basePath}?page=${page}`}
+              label={page}
+              active={page === currentPage}
+            />
+          )
+        )}
+      </div>
 
       {currentPage < totalPages ? (
-        <Link
-          href={`${basePath}?page=${currentPage + 1}`}
-          className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]"
-        >
-          ถัดไป →
-        </Link>
+        <PageLink href={`${basePath}?page=${currentPage + 1}`} label="Next" />
       ) : (
-        <span className="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-300 cursor-not-allowed">
-          ถัดไป →
+        <span className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full border border-[#EEE7E0] bg-[#F7F3EE] px-3.5 py-2 text-xs font-semibold text-[#B8ADA2]">
+          Next
         </span>
       )}
     </nav>
