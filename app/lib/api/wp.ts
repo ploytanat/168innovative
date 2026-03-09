@@ -16,7 +16,6 @@ export async function getPosts() {
   return res.json();
   
 }
-console.log("WP_API_URL:", process.env.WP_API_URL);
 export interface WPPost {
   id: number;
   slug: string;

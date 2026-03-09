@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { HomeHeroView } from '@/app/lib/types/view'
@@ -67,10 +68,13 @@ export default function HeroCarousel({ hero }: Props) {
           {/* CSS-based crossfade instead of Framer Motion */}
           <div className="absolute inset-0 flex items-center justify-center p-8 transition-opacity duration-300">
             <div className="relative w-full h-full">
-              <img
+              <Image
                 src={active.image.src}
                 alt={active.image.alt}
-                className="w-full h-full object-contain"
+                fill
+                priority
+                sizes="100vw"
+                className="object-contain"
               />
             </div>
           </div>
@@ -266,10 +270,13 @@ export default function HeroCarousel({ hero }: Props) {
 
           {/* Simple CSS-based image transition */}
           <div className="absolute inset-0 z-10 transition-opacity duration-300">
-            <img
+            <Image
               src={active.image.src}
               alt={active.image.alt}
-              className="w-full h-full object-contain p-10"
+              fill
+              priority
+              sizes="50vw"
+              className="object-contain p-10"
             />
           </div>
 

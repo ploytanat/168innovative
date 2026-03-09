@@ -53,9 +53,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
   const router   = useRouter()
   const pathname = usePathname()
 
-  const [open,     setOpen]     = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [mounted,  setMounted]  = useState(false)
+  const [open, setOpen] = useState(false)
 
   const isEN = locale === 'en' || pathname.startsWith('/en')
   const lang = isEN ? 'en' : 'th'
@@ -75,13 +73,6 @@ export default function Navigation({ locale, logo }: NavigationProps) {
       : pathname === '/' ? '/en' : `/en${pathname}`
     router.push(nextPath)
   }, [isEN, pathname, router])
-
-  useEffect(() => {
-    setMounted(true)
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''

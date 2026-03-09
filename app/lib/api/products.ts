@@ -250,10 +250,6 @@ export async function getProductsByCategory(
   const { data, totalPages, totalCount } =
     await _getProductsByCategoryId(categoryId, page)
 
-  if (page < totalPages) {
-    _getProductsByCategoryId(categoryId, page + 1).catch(() => {})
-  }
-
   return {
     products: data.map((wp) => mapWPToProductView(wp, locale, catMap)),
     totalPages,

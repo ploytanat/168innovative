@@ -39,6 +39,21 @@ export function getCategories(locale: Locale): Promise<CategoryView[]> {
   )();
 }
 
+export function getAllCategorySlugs(): Promise<string[]> {
+  return unstable_cache(
+    async () => {
+      const data = await fetchJSON<Array<{ slug?: string }>>(
+        `${BASE}/wp-json/wp/v2/product_category?_fields=slug&per_page=100`
+      );
+      return data
+        .map((item) => item.slug)
+        .filter((slug): slug is string => Boolean(slug));
+    },
+    ["category-slugs-v1"],
+    { revalidate: 300, tags: ["categories"] }
+  )();
+}
+
 /* ================= Single Category ================= */
 
 export function getCategoryBySlug(

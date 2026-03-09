@@ -3,7 +3,11 @@
 export const revalidate = 3600
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
-import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
+import {
+  getAllProductsForSitemap,
+  getProductBySlug,
+  getRelatedProducts,
+} from '@/app/lib/api/products'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -11,8 +15,6 @@ import { Send, ChevronRight, ChevronLeft } from 'lucide-react'
 
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
-
-const BASE = process.env.WP_API_URL
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
@@ -22,32 +24,12 @@ interface Props {
    Static Generation
    ───────────────────────────────────────────── */
 export async function generateStaticParams() {
-  const [productsRes, catsRes] = await Promise.all([
-    fetch(
-      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,product_category`,
-      { cache: 'force-cache' }
-    ),
-    fetch(
-      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`,
-      { cache: 'force-cache' }
-    ),
-  ])
+  const products = await getAllProductsForSitemap()
 
-  const [products, cats] = await Promise.all([
-    productsRes.json(),
-    catsRes.json(),
-  ])
-
-  const catMap: Record<number, string> = Object.fromEntries(
-    cats.map((c: any) => [c.id, c.slug])
-  )
-
-  return products
-    .map((p: any) => ({
-      slug: catMap[p.product_category?.[0]] ?? null,
-      productSlug: p.slug,
-    }))
-    .filter((p: any) => p.slug !== null)
+  return products.map((product) => ({
+    slug: product.categorySlug,
+    productSlug: product.slug,
+  }))
 }
 
 /* ─────────────────────────────────────────────

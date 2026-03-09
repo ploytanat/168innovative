@@ -8,7 +8,7 @@
 //   POST to: https://your-domain.com/api/revalidate
 //   Body: { "secret": "YOUR_SECRET", "tag": "products" }
 //
-// Available tags: "products" | "categories"
+// Available tags: "products" | "categories" | "company"
 
 import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
@@ -24,11 +24,11 @@ export async function POST(req: NextRequest) {
     }
 
     const tag = body.tag as string
-    if (!['products', 'categories'].includes(tag)) {
+    if (!["products", "categories", "company"].includes(tag)) {
       return NextResponse.json({ error: 'Invalid tag' }, { status: 400 })
     }
 
-    revalidateTag(tag,'defaul')
+    revalidateTag(tag, "max")
 
     return NextResponse.json({
       revalidated: true,

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 import { X, ZoomIn } from 'lucide-react'
 
@@ -36,10 +37,12 @@ export default function ProductImageGallery({ src, alt }: Props) {
           className="group relative w-full aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in active:scale-[0.98]"
           style={{ maxWidth: 'min(100%, 28rem)' }}
         >
-          <img
+          <Image
             src={src}
             alt={alt}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            fill
+            sizes="(max-width: 1024px) 100vw, 28rem"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
 
           {/* Overlay & Icon */}
@@ -73,10 +76,12 @@ export default function ProductImageGallery({ src, alt }: Props) {
             className="relative w-[calc(100dvw-2rem)] h-[calc(100dvh-2rem)] max-w-6xl transition-all"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
+            <Image
               src={src}
               alt={alt}
-              className="w-full h-full object-contain cursor-zoom-out selection:bg-none"
+              fill
+              sizes="100vw"
+              className="cursor-zoom-out object-contain selection:bg-none"
               onClick={() => setIsOpen(false)}
             />
           </div>

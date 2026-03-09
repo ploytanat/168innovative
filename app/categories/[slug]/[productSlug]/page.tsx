@@ -3,7 +3,11 @@
 export const revalidate = 60
 
 import { getCategoryBySlug } from '@/app/lib/api/categories'
-import { getProductBySlug, getRelatedProducts } from '@/app/lib/api/products'
+import {
+  getAllProductsForSitemap,
+  getProductBySlug,
+  getRelatedProducts,
+} from '@/app/lib/api/products'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import Link from 'next/link'
@@ -22,6 +26,15 @@ import ProductImageGallery from '@/app/components/product/ProductImageGallery'
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
+}
+
+export async function generateStaticParams() {
+  const products = await getAllProductsForSitemap()
+
+  return products.map((product) => ({
+    slug: product.categorySlug,
+    productSlug: product.slug,
+  }))
 }
 
 export default async function ProductDetailPage({ params }: Props) {

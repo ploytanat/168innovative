@@ -1,59 +1,40 @@
-import { WhyItemView } from '@/app/lib/types/view'
-import { uiText } from '@/app/lib/i18n/ui'
+import Image from "next/image"
+
+import { uiText } from "@/app/lib/i18n/ui"
+import { WhyItemView } from "@/app/lib/types/view"
 
 interface WhyChooseUsProps {
   items: WhyItemView[]
-  locale: 'th' | 'en'
+  locale: "th" | "en"
 }
 
-export default function WhyChooseUs({
-  items,
-  locale,
-}: WhyChooseUsProps) {
+export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   if (!items.length) return null
 
   return (
-    <section className="bg-transparent py-14 sm:py-16 md:py-24 shadow-sm ">
+    <section className="bg-transparent py-14 shadow-sm sm:py-16 md:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Title */}
-        <h2 className="mb-10 sm:mb-12 text-center text-xl sm:text-2xl md:text-3xl font-bold text-[#1e3a5f]">
+        <h2 className="mb-10 text-center text-xl font-bold text-[#1e3a5f] sm:mb-12 sm:text-2xl md:text-3xl">
           {uiText.whyChooseUs.title[locale]}
         </h2>
 
-        {/* Grid */}
-        <div
-          className="
-            grid gap-4 sm:gap-6 lg:gap-8
-            grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-4
-            
-          "
-        >
-          {items.map((item, i) => (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
+          {items.map((item, index) => (
             <div
-              key={i}
-              className="
-                group flex flex-col items-center text-center
-                rounded-3xl bg-white
-                border border-white 
-                px-5 py-6 sm:p-7 lg:p-8
-                shadow-md
-                transition-all duration-300
-                lg:hover:-translate-y-2 lg:hover:shadow-xl
-              "
+              key={index}
+              className="group flex flex-col items-center rounded-3xl border border-white bg-white px-5 py-6 text-center shadow-md transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-xl"
             >
-              {/* Icon */}
-              <div className="mb-4 sm:mb-5 flex h-16 w-16 sm:h-18 sm:w-18 items-center justify-center">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center sm:mb-5 sm:h-18 sm:w-18">
                 {item.image?.src ? (
-                  <img
-                    src={item.image.src}
-                    alt={item.image.alt || item.title}
-                    width={72}
-                    height={72}
-                    className="object-contain transition-transform duration-300 lg:group-hover:scale-110"
-                  />
+                  <div className="relative h-[72px] w-[72px]">
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt || item.title}
+                      fill
+                      sizes="72px"
+                      className="object-contain transition-transform duration-300 lg:group-hover:scale-110"
+                    />
+                  </div>
                 ) : (
                   <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gray-50 text-gray-300">
                     <svg
@@ -73,19 +54,16 @@ export default function WhyChooseUs({
                 )}
               </div>
 
-              {/* Title */}
-              <h3 className="mb-2 text-sm sm:text-base md:text-lg font-bold text-gray-900">
+              <h3 className="mb-2 text-sm font-bold text-gray-900 sm:text-base md:text-lg">
                 {item.title}
               </h3>
 
-              {/* Description */}
-              <p className="text-xs sm:text-sm leading-relaxed text-gray-500">
+              <p className="text-xs leading-relaxed text-gray-500 sm:text-sm">
                 {item.description}
               </p>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   )

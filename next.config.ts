@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Keep Next/Image layout/lazy-loading behavior without using Vercel Image Optimization quota.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
