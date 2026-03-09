@@ -9,13 +9,40 @@ interface Props {
   products: ProductView[]
   categorySlug: string
   totalCount: number
+  locale?: 'th' | 'en'
 }
 
 type SortOrder = 'default' | 'asc' | 'desc'
 
-export default function ProductGrid({ products, categorySlug, totalCount }: Props) {
+const i18n = {
+  th: {
+    searchPlaceholder: 'ค้นหาสินค้า...',
+    clearSearch: 'ล้างคำค้นหา',
+    sortLabel: 'เรียงชื่อ',
+    sortAsc: 'ก → ฮ',
+    sortDesc: 'ฮ → ก',
+    results: 'ผลลัพธ์',
+    items: 'รายการ',
+    noProducts: 'ไม่พบสินค้า',
+    clearFilters: 'ล้างตัวกรอง',
+  },
+  en: {
+    searchPlaceholder: 'Search products...',
+    clearSearch: 'Clear search',
+    sortLabel: 'Sort name',
+    sortAsc: 'A → Z',
+    sortDesc: 'Z → A',
+    results: 'results',
+    items: 'items',
+    noProducts: 'No products found',
+    clearFilters: 'Clear filters',
+  },
+}
+
+export default function ProductGrid({ products, categorySlug, totalCount, locale = 'th' }: Props) {
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOrder>('default')
+  const t = i18n[locale]
 
   const filtered = useMemo(() => {
     let result = [...products]
@@ -29,19 +56,19 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
     }
 
     if (sort === 'asc') {
-      result.sort((a, b) => a.name.localeCompare(b.name, 'th'))
+      result.sort((a, b) => a.name.localeCompare(b.name, locale === 'th' ? 'th' : 'en'))
     } else if (sort === 'desc') {
-      result.sort((a, b) => b.name.localeCompare(a.name, 'th'))
+      result.sort((a, b) => b.name.localeCompare(a.name, locale === 'th' ? 'th' : 'en'))
     }
 
     return result
-  }, [products, query, sort])
+  }, [products, query, sort, locale])
 
   const cycleSort = () => {
     setSort((s) => s === 'default' ? 'asc' : s === 'asc' ? 'desc' : 'default')
   }
 
-  const sortLabel = sort === 'asc' ? 'ก → ฮ' : sort === 'desc' ? 'ฮ → ก' : 'เรียงชื่อ'
+  const sortLabel = sort === 'asc' ? t.sortAsc : sort === 'desc' ? t.sortDesc : t.sortLabel
   const SortIcon = sort === 'desc' ? ArrowUpAZ : ArrowDownAZ
 
   const isSearching = query.trim().length > 0
@@ -59,14 +86,14 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="ค้นหาสินค้า..."
+            placeholder={t.searchPlaceholder}
             className="w-full rounded-2xl border border-slate-300 bg-white py-3 pl-11 pr-10 text-sm text-slate-900 placeholder-slate-500 shadow-sm outline-none transition-all focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
-              aria-label="ล้างคำค้นหา"
+              aria-label={t.clearSearch}
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -90,7 +117,7 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
           <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700">
             {displayCount}
             <span className="ml-1 font-normal text-slate-600">
-              {isSearching ? 'ผลลัพธ์' : 'รายการ'}
+              {isSearching ? t.results : t.items}
             </span>
           </div>
         </div>
@@ -102,15 +129,29 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-slate-100">
             <Search className="h-7 w-7 text-slate-600" />
           </div>
-          <p className="text-sm font-semibold text-slate-900">ไม่พบสินค้า</p>
+          <p className="text-sm font-semibold text-slate-900">{t.noProducts}</p>
           <p className="mt-1 text-sm text-slate-600">
-            ลองค้นหาด้วยคำอื่น หรือ{' '}
-            <button
-              onClick={() => { setQuery(''); setSort('default') }}
-              className="text-teal-600 underline underline-offset-2"
-            >
-              ล้างตัวกรอง
-            </button>
+            {locale === 'th' ? (
+              <>
+                ลองค้นหาด้วยคำอื่น หรือ{' '}
+                <button
+                  onClick={() => { setQuery(''); setSort('default') }}
+                  className="text-teal-600 underline underline-offset-2"
+                >
+                  {t.clearFilters}
+                </button>
+              </>
+            ) : (
+              <>
+                Try searching with different keywords or{' '}
+                <button
+                  onClick={() => { setQuery(''); setSort('default') }}
+                  className="text-teal-600 underline underline-offset-2"
+                >
+                  {t.clearFilters}
+                </button>
+              </>
+            )}
           </p>
         </div>
       )}
@@ -121,7 +162,7 @@ export default function ProductGrid({ products, categorySlug, totalCount }: Prop
           {filtered.map((product) => (
             <Link
               key={product.id}
-              href={`/categories/${categorySlug}/${product.slug}`}
+              href={locale === 'en' ? `/en/categories/${categorySlug}/${product.slug}` : `/categories/${categorySlug}/${product.slug}`}
               className="group rounded-3xl bg-white border border-slate-200 p-2 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
             >
               <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100">
