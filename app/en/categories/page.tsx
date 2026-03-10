@@ -28,7 +28,7 @@ export default async function CategoriesPage() {
             eyebrow="OEM / ODM"
             title="Product Categories"
             description="No product categories available at this time."
-            breadcrumbs={[{ label: "Products", href: "/en/categories" }, { label: "Product Categories" }]}
+            breadcrumbs={[{ label: "Product Categories" }]}
           />
         </div>
       </main>
@@ -42,7 +42,7 @@ export default async function CategoriesPage() {
           eyebrow="OEM / ODM"
           title="Product Categories"
           description="Browse packaging types and plastic components with a cleaner path from sourcing to production."
-          breadcrumbs={[{ label: "Products", href: "/en/categories" }, { label: "Product Categories" }]}
+          breadcrumbs={[{ label: "Product Categories" }]}
         />
 
         <section aria-label="Product Categories" className="mt-10">

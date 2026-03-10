@@ -100,7 +100,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           title={category.name}
           description={category.description}
           breadcrumbs={[
-            { label: "Products", href: "/en/categories" },
+            { label: "Categories", href: "/en/categories" },
             { label: category.name },
           ]}
           actions={

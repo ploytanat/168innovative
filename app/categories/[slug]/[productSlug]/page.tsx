@@ -146,7 +146,7 @@ export default async function ProductDetailPage({ params }: Props) {
       {
         "@type": "ListItem",
         position: 2,
-        name: "สินค้าของเรา",
+        name: "หมวดหมู่สินค้า",
         item: `${SITE_URL}/categories`,
       },
       {
@@ -221,7 +221,7 @@ export default async function ProductDetailPage({ params }: Props) {
       <div className="mx-auto max-w-7xl px-6 pb-28 pt-6 lg:px-8">
         <Breadcrumb
           items={[
-            { label: "สินค้าของเรา", href: "/categories" },
+            { label: "หมวดหมู่สินค้า", href: "/categories" },
             { label: category.name, href: `/categories/${slug}` },
             { label: product.name },
           ]}
