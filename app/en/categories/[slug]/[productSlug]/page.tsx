@@ -361,6 +361,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
               <Link
                 href={`/en/categories/${slug}`}
+                prefetch={false}
                 className="hidden items-center gap-1.5 rounded-full border border-[#D9E2EA] bg-white px-4 py-2.5 text-sm font-semibold text-[#637284] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
               >
                 View All <ChevronRight size={14} />
@@ -372,6 +373,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 <Link
                   key={item.id}
                   href={`/en/categories/${slug}/${item.slug}`}
+                  prefetch={false}
                   className="group overflow-hidden rounded-[1.6rem] border border-[#E3EAF1] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.06)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(15,23,42,0.12)]"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[#F3F6F9]">

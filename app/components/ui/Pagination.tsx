@@ -43,6 +43,7 @@ function PageLink({
   return (
     <Link
       href={href}
+      prefetch={false}
       aria-current={active ? 'page' : undefined}
       className={`inline-flex min-w-10 items-center justify-center rounded-full border px-3.5 py-2 text-xs font-semibold transition-all ${
         active

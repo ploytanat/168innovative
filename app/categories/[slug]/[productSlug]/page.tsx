@@ -343,6 +343,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
               <Link
                 href={`/categories/${slug}`}
+                prefetch={false}
                 className="hidden items-center gap-1 text-xs uppercase tracking-widest text-slate-600 hover:text-slate-900 md:flex"
               >
                 ดูทั้งหมด <ChevronRight size={13} />
@@ -354,6 +355,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 <Link
                   key={item.id}
                   href={`/categories/${slug}/${item.slug}`}
+                  prefetch={false}
                   className="group flex flex-col"
                 >
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-100">

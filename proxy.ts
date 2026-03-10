@@ -12,7 +12,6 @@ export async function proxy(request: NextRequest) {
       new URL("/categories", request.url),
       { status: 301 }
     )
-    response.cookies.set("site-locale", locale, { path: "/" })
     return response
   }
 
@@ -21,7 +20,6 @@ export async function proxy(request: NextRequest) {
       new URL("/categories", request.url),
       { status: 301 }
     )
-    response.cookies.set("site-locale", locale, { path: "/" })
     return response
   }
 
@@ -42,7 +40,6 @@ export async function proxy(request: NextRequest) {
             new URL(`/categories/${categorySlug}/${productSlug}`, request.url),
             { status: 301 }
           )
-          response.cookies.set("site-locale", locale, { path: "/" })
           return response
         }
       }
@@ -53,7 +50,6 @@ export async function proxy(request: NextRequest) {
     const response = NextResponse.redirect(new URL("/categories", request.url), {
       status: 301,
     })
-    response.cookies.set("site-locale", locale, { path: "/" })
     return response
   }
 
@@ -63,7 +59,6 @@ export async function proxy(request: NextRequest) {
     },
   })
   response.headers.set("x-site-locale", locale)
-  response.cookies.set("site-locale", locale, { path: "/" })
   return response
 }
 

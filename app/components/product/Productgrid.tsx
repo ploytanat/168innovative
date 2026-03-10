@@ -222,6 +222,7 @@ export default function ProductGrid({
                   ? `/en/categories/${categorySlug}/${product.slug}`
                   : `/categories/${categorySlug}/${product.slug}`
               }
+              prefetch={false}
               className={`group overflow-hidden rounded-[1.75rem] border ${tone.cardBorder} bg-white p-2.5 ${tone.cardShadow} transition-all duration-500 hover:-translate-y-1.5 ${tone.cardHoverShadow}`}
             >
               <div

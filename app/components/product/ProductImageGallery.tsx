@@ -41,6 +41,7 @@ export default function ProductImageGallery({ src, alt }: Props) {
             src={src}
             alt={alt}
             fill
+            priority
             sizes="(max-width: 1024px) 100vw, 28rem"
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />

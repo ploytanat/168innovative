@@ -51,6 +51,7 @@ export default async function CategoriesPage() {
               <LocalizedLink
                 key={category.id}
                 href={`/categories/${category.slug}`}
+                prefetch={false}
                 className="group overflow-hidden rounded-[1.75rem] border border-[#E7EAF0] bg-white p-2 shadow-[0_12px_35px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_55px_rgba(26,37,53,0.1)]"
               >
                 <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[#F1F5F9]">
@@ -104,7 +105,7 @@ export default async function CategoriesPage() {
                   key={category.id}
                   className="rounded-[1.5rem] border border-[#EEF2F6] bg-[#FCFDFF] p-5 transition-colors hover:border-[#14B8A6]/40"
                 >
-                  <LocalizedLink href={`/categories/${category.slug}`}>
+                  <LocalizedLink href={`/categories/${category.slug}`} prefetch={false}>
                     <h3 className="text-base font-semibold text-[#1A2535] transition-colors hover:text-[#14B8A6]">
                       {category.seoTitle || category.name}
                     </h3>

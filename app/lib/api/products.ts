@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache"
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
+import { getCategoryIdBySlug } from "./categories"
 import { Locale, WPProduct } from "../types/content"
 import { ProductView, ProductSpecView } from "../types/view"
 
@@ -61,19 +62,6 @@ const _getCategoryMap = unstable_cache(
   ["category-map-v5"],
   { revalidate: 3600, tags: ["categories"] }
 )
-
-function _getCategoryIdBySlug(slug: string): Promise<number | null> {
-  return unstable_cache(
-    async () => {
-      const terms = await fetchJSON<{ id: number }[]>(
-        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&_fields=id`
-      )
-      return terms[0]?.id ?? null
-    },
-    [`category-id-${slug}`],
-    { revalidate: 3600, tags: ["categories"] }
-  )()
-}
 
 /* ─────────────────────────────
    Homepage products (8 items)
@@ -241,7 +229,7 @@ export async function getProductsByCategory(
   page: number = 1
 ) {
   const [categoryId, catMap] = await Promise.all([
-    _getCategoryIdBySlug(slug),
+    getCategoryIdBySlug(slug),
     _getCategoryMap(),
   ])
 
@@ -276,7 +264,7 @@ export async function getRelatedProducts(
   locale: Locale
 ) {
   const [categoryId, catMap] = await Promise.all([
-    _getCategoryIdBySlug(categorySlug),
+    getCategoryIdBySlug(categorySlug),
     _getCategoryMap(),
   ])
 
