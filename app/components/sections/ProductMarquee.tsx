@@ -52,7 +52,7 @@ export default function ProductMarquee({
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto px-4 lg:hidden scrollbar-hide touch-pan-x">
+      <div className="no-scrollbar w-full overflow-x-auto px-4 lg:hidden touch-pan-x">
         <div className="flex flex-nowrap gap-4 pb-6">
           {items.map((item) => (
             <Link
@@ -130,7 +130,7 @@ export default function ProductMarquee({
           href={withLocalePath("/categories", locale)}
           className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-8 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md active:scale-95 md:text-xs"
         >
-          {locale === "th" ? "View all products" : "View All Products"}
+          {uiText.viewAllProducts[locale]}
           <span aria-hidden="true" className="text-sm">
             →
           </span>

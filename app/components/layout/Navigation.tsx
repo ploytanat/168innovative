@@ -67,9 +67,20 @@ function LangToggle({
   )
 }
 
-export default function Navigation({ locale, logo }: NavigationProps) {
-  const router = useRouter()
+export default function Navigation(props: NavigationProps) {
   const pathname = usePathname()
+
+  return <NavigationInner key={pathname} pathname={pathname} {...props} />
+}
+
+function NavigationInner({
+  locale,
+  logo,
+  pathname,
+}: NavigationProps & {
+  pathname: string
+}) {
+  const router = useRouter()
 
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -86,7 +97,13 @@ export default function Navigation({ locale, logo }: NavigationProps) {
     return pathname === full || pathname.startsWith(`${full}/`)
   }
 
+  const closeMenu = useCallback(() => {
+    setOpen(false)
+  }, [])
+
   const toggleLanguage = useCallback(() => {
+    closeMenu()
+
     const nextPath = isEN
       ? pathname.replace(/^\/en/, "") || "/"
       : pathname === "/"
@@ -94,7 +111,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
         : `/en${pathname}`
 
     router.push(nextPath)
-  }, [isEN, pathname, router])
+  }, [closeMenu, isEN, pathname, router])
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
@@ -102,10 +119,6 @@ export default function Navigation({ locale, logo }: NavigationProps) {
       document.body.style.overflow = ""
     }
   }, [open])
-
-  useEffect(() => {
-    setOpen(false)
-  }, [pathname])
 
   useEffect(() => {
     let frame = 0
@@ -141,6 +154,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
       <nav className="mx-auto flex h-[4.35rem] max-w-7xl items-center justify-between px-5 sm:px-6 lg:h-[4.75rem] lg:px-8">
         <Link
           href={withLocale("/")}
+          onClick={closeMenu}
           className="relative shrink-0 rounded-full px-1 py-1 transition-opacity hover:opacity-85 active:opacity-70"
         >
           <Image
@@ -199,6 +213,7 @@ export default function Navigation({ locale, logo }: NavigationProps) {
               <Link
                 key={item.href}
                 href={withLocale(item.href)}
+                onClick={closeMenu}
                 className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
                     ? "bg-[#1A2535] text-white shadow-[0_10px_22px_rgba(26,37,53,0.12)]"

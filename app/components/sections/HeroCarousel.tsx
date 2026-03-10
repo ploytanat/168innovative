@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useState, useEffect, useCallback } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import Link from 'next/link'
 import { HomeHeroView } from '@/app/lib/types/view'
 
@@ -33,18 +33,26 @@ interface Props {
 export default function HeroCarousel({ hero }: Props) {
   const slides = hero.slides ?? []
   const [current, setCurrent] = useState(0)
-  const active = slides[current]
   const hasMultiple = slides.length > 1
+  const safeCurrent = current < slides.length ? current : 0
+  const active = slides[safeCurrent]
 
-  const next = useCallback(() => {
+  const next = useEffectEvent(() => {
     setCurrent((c) => (c + 1) % slides.length)
-  }, [slides.length])
+  })
 
   useEffect(() => {
     if (!hasMultiple) return
-    const id = setInterval(next, AUTOPLAY_MS)
-    return () => clearInterval(id)
-  }, [hasMultiple, next])
+
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)")
+    if (motionPreference.matches) return
+
+    const id = window.setInterval(() => {
+      next()
+    }, AUTOPLAY_MS)
+
+    return () => window.clearInterval(id)
+  }, [hasMultiple, slides.length])
 
   if (!active) return null
 
@@ -114,10 +122,11 @@ export default function HeroCarousel({ hero }: Props) {
                   onClick={() => setCurrent(i)}
                   className="p-2 transition-all duration-300"
                   aria-label={`Go to slide ${i + 1}`}
+                  aria-pressed={i === safeCurrent}
                 >
                   <span
                     className={`block rounded-full transition-all duration-300 ${
-                      i === current
+                      i === safeCurrent
                         ? 'w-6 h-[3px] bg-neutral-800'
                         : 'w-[6px] h-[6px] bg-neutral-400'
                     }`}
@@ -134,7 +143,7 @@ export default function HeroCarousel({ hero }: Props) {
           {/* EYEBROW */}
           <div className="flex items-center gap-3 mb-6">
             <span className="font-body text-[11px] tracking-[0.2em] text-neutral-400">
-              {(current + 1).toString().padStart(2, '0')}
+              {(safeCurrent + 1).toString().padStart(2, '0')}
             </span>
             <div className="w-8 h-px bg-neutral-300" />
             <span className="font-body text-[11px] tracking-[0.3em] uppercase text-neutral-400">
@@ -202,7 +211,7 @@ export default function HeroCarousel({ hero }: Props) {
 
             <div className="flex items-center gap-4 mb-10">
               <span className="font-body text-[11px] tracking-[0.2em] text-neutral-500">
-                {(current + 1).toString().padStart(2, '0')}
+                {(safeCurrent + 1).toString().padStart(2, '0')}
               </span>
               <div className="w-10 h-px bg-neutral-300" />
               <span className="font-body text-[11px] tracking-[0.35em] uppercase text-neutral-500">
@@ -304,7 +313,7 @@ export default function HeroCarousel({ hero }: Props) {
 
               <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5 bg-gradient-to-t from-white/70 to-transparent">
                 <span className="font-body text-[11px] tracking-[0.2em] text-neutral-500 tabular-nums">
-                  {(current + 1).toString().padStart(2, '0')} /
+                  {(safeCurrent + 1).toString().padStart(2, '0')} /
                   {slides.length.toString().padStart(2, '0')}
                 </span>
 
@@ -316,10 +325,11 @@ export default function HeroCarousel({ hero }: Props) {
                       onClick={() => setCurrent(i)}
                       className="p-2 transition-all duration-300"
                       aria-label={`Go to slide ${i + 1}`}
+                      aria-pressed={i === safeCurrent}
                     >
                       <span
                         className={`block rounded-full transition-all duration-300 ${
-                          i === current
+                          i === safeCurrent
                             ? 'w-6 h-[3px] bg-neutral-800'
                             : 'w-[6px] h-[6px] bg-neutral-300'
                         }`}

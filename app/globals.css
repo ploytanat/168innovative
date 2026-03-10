@@ -7,13 +7,13 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
-    scrollbar-gutter: stable both-edges;
   }
 
   body {
     font-family: var(--font-body-th), sans-serif;
     color: #1a2535;
     -webkit-overflow-scrolling: touch;
+    overflow-x: clip;
   }
 
   html[lang="en"] body {
@@ -86,7 +86,7 @@
   }
 
   .floating-animation {
-    animation: floating 6s ease-in-out infinite;
+    animation: floating var(--floating-duration, 6s) ease-in-out infinite;
     will-change: transform;
   }
 

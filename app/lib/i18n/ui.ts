@@ -3,8 +3,10 @@ export const uiText = {
     th: 'สินค้าแนะนำ',
     en: 'Featured Products',
   },
- 
-
+  viewAllProducts: {
+    th: 'ดูสินค้าทั้งหมด',
+    en: 'View All Products',
+  },
 
   categories: {
     title: {

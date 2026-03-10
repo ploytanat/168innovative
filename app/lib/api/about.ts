@@ -1,9 +1,38 @@
 // lib/api/about.ts
 
-import { Locale } from "../types/content"
+import { Locale, WPMediaItem } from "../types/content"
+import { pickLocalizedText } from "./acf"
 import { AboutView } from "../types/view"
 
 const BASE = process.env.WP_API_URL!
+
+interface AboutAcf {
+  hero_title_th?: string
+  hero_title_en?: string
+  hero_description_th?: string
+  hero_description_en?: string
+  hero_image_1?: number
+  hero_image_1_alt_th?: string
+  hero_image_1_alt_en?: string
+  hero_image_2?: number
+  hero_image_2_alt_th?: string
+  hero_image_2_alt_en?: string
+  who_title_th?: string
+  who_title_en?: string
+  who_description_th?: string
+  who_description_en?: string
+  who_image?: number
+  who_image_alt_th?: string
+  who_image_alt_en?: string
+  seo_title_th?: string
+  seo_title_en?: string
+  seo_description_th?: string
+  seo_description_en?: string
+}
+
+type WPAboutEntry = {
+  acf?: AboutAcf
+}
 
 /* =====================================================
    Fetch Media Map
@@ -26,12 +55,12 @@ async function getMediaMap(ids: number[]) {
 
     if (!res.ok) return {}
 
-    const data = await res.json()
+    const data = (await res.json()) as WPMediaItem[]
 
     const map: Record<number, string> = {}
 
-    data.forEach((m: any) => {
-      map[m.id] = m.source_url
+    data.forEach((media) => {
+      map[media.id] = media.source_url ?? media.guid?.rendered ?? ""
     })
 
     return map
@@ -54,11 +83,11 @@ export async function getAbout(
 
     if (!res.ok) return null
 
-    const data = await res.json()
+    const data = (await res.json()) as WPAboutEntry[]
 
     if (!data?.length) return null
 
-    const acf = data[0].acf || {}
+    const acf: AboutAcf = data[0].acf ?? {}
 
     /* ===============================
        Collect Image IDs
@@ -79,15 +108,13 @@ export async function getAbout(
     =============================== */
 
     const hero = {
-      title:
-        locale === "th"
-          ? acf.hero_title_th
-          : acf.hero_title_en || acf.hero_title_th,
+      title: pickLocalizedText(locale, acf.hero_title_th, acf.hero_title_en),
 
-      description:
-        locale === "th"
-          ? acf.hero_description_th
-          : acf.hero_description_en || acf.hero_description_th,
+      description: pickLocalizedText(
+        locale,
+        acf.hero_description_th,
+        acf.hero_description_en
+      ),
 
       image1:
         acf.hero_image_1 && getUrl(acf.hero_image_1)
@@ -117,15 +144,13 @@ export async function getAbout(
     =============================== */
 
     const whoAreWe = {
-      title:
-        locale === "th"
-          ? acf.who_title_th
-          : acf.who_title_en || acf.who_title_th,
+      title: pickLocalizedText(locale, acf.who_title_th, acf.who_title_en),
 
-      description:
-        locale === "th"
-          ? acf.who_description_th
-          : acf.who_description_en || acf.who_description_th,
+      description: pickLocalizedText(
+        locale,
+        acf.who_description_th,
+        acf.who_description_en
+      ),
 
       image:
         acf.who_image && getUrl(acf.who_image)

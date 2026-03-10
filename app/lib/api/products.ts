@@ -38,7 +38,7 @@ function safeParseJSON(value: unknown): Record<string, unknown> | null {
 
     try {
       return JSON.parse(cleaned)
-    } catch (err) {
+    } catch {
       console.warn("Invalid specs_json:", cleaned)
       return null
     }

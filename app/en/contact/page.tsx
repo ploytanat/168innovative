@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import { Mail, MapPin, Phone } from "lucide-react"
 
 import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs"
@@ -71,10 +72,12 @@ export default async function ContactPage() {
                 <div className="mb-8">
                   <div className="inline-block rounded-3xl bg-white p-3 shadow-xl">
                     <div className="relative block h-40 w-40">
-                      <img
+                      <Image
                         src={company.lineQrCode.src}
                         alt={company.lineQrCode.alt}
-                        className="h-full w-full object-contain"
+                        fill
+                        sizes="160px"
+                        className="object-contain"
                       />
                     </div>
                   </div>
@@ -95,7 +98,7 @@ export default async function ContactPage() {
                         rel="noopener noreferrer"
                         className="transition-transform hover:scale-110 active:scale-95"
                       >
-                        <img
+                        <Image
                           src={social.icon.src}
                           alt={social.icon.alt || social.type}
                           width={48}

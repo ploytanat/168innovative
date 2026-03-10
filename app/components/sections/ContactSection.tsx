@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react"
+
 import Image from "next/image"
 
 import { uiText } from "@/app/lib/i18n/ui"
@@ -165,10 +167,12 @@ export default function ContactSection({
                   return (
                     <div
                       key={image.src}
-                      className={`relative overflow-hidden rounded-3xl bg-white shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
-                      style={{
-                        animation: `floating ${6 + index * 0.4}s ease-in-out infinite`,
-                      }}
+                      className={`floating-animation relative overflow-hidden rounded-3xl bg-white shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
+                      style={
+                        {
+                          "--floating-duration": `${6 + index * 0.4}s`,
+                        } as CSSProperties
+                      }
                     >
                       <div className="relative h-[220px] w-full sm:h-[260px] lg:h-[300px]">
                         <Image

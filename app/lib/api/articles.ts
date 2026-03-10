@@ -1,5 +1,5 @@
 import { mapFaqItems, pickLocalizedText } from "./acf"
-import { Locale, WPArticle } from "../types/content"
+import { Locale, WPArticle, WPFeaturedMedia } from "../types/content"
 import { ArticleView } from "../types/view"
 
 const WP_URL = process.env.WP_API_URL
@@ -14,7 +14,7 @@ const fetchConfig: RequestInit = {
 }
 
 function mapWPImage(
-  media: any | undefined,
+  media: WPFeaturedMedia | undefined,
   altTh?: string,
   altEn?: string,
   locale?: Locale

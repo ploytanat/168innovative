@@ -176,6 +176,13 @@ export interface WPFeaturedMedia {
   alt_text?: string; // <--- เพิ่มบรรทัดนี้
 }
 
+export interface WPMediaItem extends WPFeaturedMedia {
+  id: number;
+  guid?: {
+    rendered?: string;
+  };
+}
+
 export interface WPEmbedded {
   ["wp:featuredmedia"]?: WPFeaturedMedia[];
   ["wp:term"]?: WPTerm[][];

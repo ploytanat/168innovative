@@ -1,8 +1,22 @@
 // lib/api/why.ts
-import { Locale } from "../types/content"
+import { Locale, WPMediaItem } from "../types/content"
+import { pickLocalizedText } from "./acf"
 import { WhyItemView } from "../types/view"
 
 const BASE = process.env.WP_API_URL!
+
+interface WhyAcf {
+  order?: number
+  image?: number
+  title_th?: string
+  title_en?: string
+  description_th?: string
+  description_en?: string
+}
+
+type WPWhyEntry = {
+  acf?: WhyAcf
+}
 
 // ฟังก์ชันสำหรับดึง Media URL จาก IDs หลายๆ ตัวพร้อมกัน
 async function getMediaMap(ids: number[]) {
@@ -17,10 +31,10 @@ async function getMediaMap(ids: number[]) {
       { next: { revalidate: 3600 } }
     )
     if (!res.ok) return {}
-    const data = await res.json()
+    const data = (await res.json()) as WPMediaItem[]
     const map: Record<number, string> = {}
-    data.forEach((m: any) => {
-      map[m.id] = m.source_url
+    data.forEach((media) => {
+      map[media.id] = media.source_url ?? media.guid?.rendered ?? ""
     })
     return map
   } catch {
@@ -36,27 +50,31 @@ export async function getWhy(locale: Locale): Promise<WhyItemView[]> {
     )
 
     if (!res.ok) return []
-    const data = await res.json()
+    const data = (await res.json()) as WPWhyEntry[]
 
     // 1. รวบรวม ID รูปภาพทั้งหมดจากทุกรายการ
     const imageIds = data
-      .map((wp: any) => wp.acf?.image)
-      .filter((id: any): id is number => typeof id === 'number')
+      .map((wp) => wp.acf?.image)
+      .filter((id): id is number => typeof id === "number")
 
     // 2. ไปดึงข้อมูล URL ของ Media ทั้งหมดมาทีเดียว
     const mediaMap = await getMediaMap(imageIds)
 
     // 3. Map ข้อมูลกลับเป็นโครงสร้าง WhyItemView
     return data
-      .sort((a: any, b: any) => (a.acf?.order ?? 0) - (b.acf?.order ?? 0))
-      .map((wp: any) => {
+      .sort((a, b) => (a.acf?.order ?? 0) - (b.acf?.order ?? 0))
+      .map((wp) => {
         const acf = wp.acf
         const imageId = acf?.image
         const title = locale === "th" ? acf?.title_th : acf?.title_en || acf?.title_th
         
         return {
           title: title || "",
-          description: locale === "th" ? acf?.description_th : acf?.description_en || acf?.description_th,
+          description: pickLocalizedText(
+            locale,
+            acf?.description_th,
+            acf?.description_en
+          ),
           image: imageId && mediaMap[imageId]
             ? {
                 src: mediaMap[imageId],

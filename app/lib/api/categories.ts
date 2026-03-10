@@ -11,6 +11,30 @@ if (!BASE) {
   throw new Error("WP_API_URL is not defined");
 }
 
+interface CategoryAcf {
+  name_th?: string
+  name_en?: string
+  description_th?: string
+  description_en?: string
+  image_alt_th?: string
+  image_alt_en?: string
+  intro_html_th?: string
+  intro_html_en?: string
+  faq_items?: unknown
+  seo_title_th?: string
+  seo_title_en?: string
+  seo_description_th?: string
+  seo_description_en?: string
+}
+
+interface WPProductCategory {
+  id: number
+  slug: string
+  name: string
+  image_url?: string
+  acf?: CategoryAcf
+}
+
 /* ================= Helper ================= */
 
 async function fetchJSON<T>(url: string): Promise<T> {
@@ -30,7 +54,7 @@ async function fetchJSON<T>(url: string): Promise<T> {
 export function getCategories(locale: Locale): Promise<CategoryView[]> {
   return unstable_cache(
     async () => {
-      const data = await fetchJSON<any[]>(
+      const data = await fetchJSON<WPProductCategory[]>(
         `${BASE}/wp-json/wp/v2/product_category?per_page=100`
       );
       return data.map((wp) => mapCategory(wp, locale));
@@ -63,7 +87,7 @@ export function getCategoryBySlug(
 ): Promise<CategoryView | null> {
   return unstable_cache(
     async () => {
-      const data = await fetchJSON<any[]>(
+      const data = await fetchJSON<WPProductCategory[]>(
         `${BASE}/wp-json/wp/v2/product_category?slug=${slug}`
       );
       if (!data.length) return null;
@@ -76,7 +100,7 @@ export function getCategoryBySlug(
 
 /* ================= Mapper ================= */
 
-function mapCategory(wp: any, locale: Locale): CategoryView {
+function mapCategory(wp: WPProductCategory, locale: Locale): CategoryView {
   return {
     id: String(wp.id),
     slug: wp.slug,

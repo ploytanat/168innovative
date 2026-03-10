@@ -19,6 +19,14 @@ interface Props {
   searchParams: Promise<{ page?: string }>
 }
 
+function normalizeText(value?: string) {
+  return (value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
 function parsePage(value?: string) {
   const page = Number(value ?? 1)
   return Number.isFinite(page) && page > 0 ? Math.floor(page) : 1
@@ -74,6 +82,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
   if (!category) notFound()
   const faqJsonLd = buildFaqJsonLd(category.faqItems)
+  const hasDistinctIntro =
+    Boolean(category.introHtml) &&
+    normalizeText(category.introHtml) !== normalizeText(category.description)
 
   return (
     <main className="min-h-screen bg-white">
@@ -104,12 +115,12 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           }
         />
 
-        {category.introHtml ? (
+        {hasDistinctIntro ? (
           <RichTextSection
             className="mt-12"
             eyebrow="รายละเอียดหมวดสินค้า"
             title="ข้อมูลเพิ่มเติมในหมวดนี้"
-            html={category.introHtml}
+            html={category.introHtml ?? ""}
           />
         ) : null}
 

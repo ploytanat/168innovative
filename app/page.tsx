@@ -6,11 +6,7 @@ import HeroCarousel from "./components/sections/HeroCarousel"
 import ProductMarquee from "./components/sections/ProductMarquee"
 import WhyChooseUs from "./components/sections/WhyChooseUs"
 import { buildMetadata } from "./config/seo"
-import { getCategories } from "./lib/api/categories"
-import { getCompany } from "./lib/api/company"
-import { getHeroSlides } from "./lib/api/hero"
-import { getProducts } from "./lib/api/products"
-import { getWhy } from "./lib/api/why"
+import { getHomeSections } from "./lib/api/home"
 
 export const metadata: Metadata = buildMetadata({
   locale: "th",
@@ -29,16 +25,11 @@ export const metadata: Metadata = buildMetadata({
 export default async function HomePage() {
   const locale = "th"
 
-  const [heroSlides, products, categories, whys, company] = await Promise.all([
-    getHeroSlides(locale),
-    getProducts(locale),
-    getCategories(locale),
-    getWhy(locale),
-    getCompany(locale),
-  ])
+  const { heroSlides, products, categories, whys, company } =
+    await getHomeSections(locale)
 
   return (
-    <main>
+    <>
       <h1 className="sr-only">
         168 Innovative บรรจุภัณฑ์เครื่องสำอางและพลาสติกสำหรับงาน OEM และ ODM
       </h1>
@@ -49,6 +40,6 @@ export default async function HomePage() {
       )}
       {whys.length > 0 && <WhyChooseUs items={whys} locale={locale} />}
       {company && <ContactSection locale={locale} data={company} />}
-    </main>
+    </>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
+import Image from "next/image"
 import { useRef } from "react"
 
 import type { AboutHeroView, AboutSectionView, ImageView } from "@/app/lib/types/view"
@@ -34,23 +35,30 @@ function HeroBackground({ image }: { image?: ImageView }) {
         className="relative hidden h-[108%] w-full will-change-transform sm:block"
       >
         {/* Vignette ขอบซ้ายไล่เข้าหาภาพ — สีตรงกับ bg จริง */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#f2f4f7] via-[#f2f4f7]/80 via-[45%] to-transparent" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#f2f4f7] via-[#f2f4f7]/94 via-[28%] to-[#f2f4f7]/8" />
         {/* Vignette ด้านบน–ล่างเพิ่มความลึก */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#f2f4f7]/40 via-transparent to-[#f2f4f7]/30" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_18%_48%,rgba(242,244,247,0.98)_0%,rgba(242,244,247,0.88)_24%,rgba(242,244,247,0.42)_48%,rgba(242,244,247,0)_72%)]" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#f2f4f7]/54 via-transparent via-[36%] to-[#f2f4f7]/38" />
 
-        <img
+        <Image
           src={image.src}
           alt={image.alt}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          fill
+          priority
+          sizes="(min-width: 1024px) 56vw, 100vw"
+          className="object-cover object-center opacity-[0.9]"
         />
       </motion.div>
 
       {/* Mobile — image เบามาก เป็น texture หลังเนื้อหา */}
       <div className="relative h-full w-full sm:hidden">
-        <img
+        <Image
           src={image.src}
           alt={image.alt}
-          className="absolute inset-0 h-full w-full object-cover object-center opacity-10"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-10"
         />
         {/* overlay เพื่อป้องกัน contrast ต่ำบน mobile */}
         <div className="absolute inset-0 bg-[#f2f4f7]/60" />
@@ -126,10 +134,12 @@ function WhoWeAreSection({
     <div className="relative flex min-h-[420px] w-full items-center overflow-hidden border-t border-white/50 shadow-inner md:min-h-[520px]">
       <div className="absolute inset-0 z-0">
         {background && (
-          <img
+          <Image
             src={background.src}
             alt={background.alt}
-            className="absolute inset-0 h-full w-full object-cover object-center grayscale-[15%]"
+            fill
+            sizes="100vw"
+            className="object-cover object-center grayscale-[15%]"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-white/80 lg:bg-gradient-to-r lg:from-white lg:via-white/95 lg:to-white/30" />
@@ -177,8 +187,10 @@ function WhoWeAreSection({
 export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
   return (
     <section className="overflow-hidden bg-[#eeeeee]">
-      <div className="mx-auto relative max-w-7xl px-6 pb-3 pt-6 lg:px-8">
-        <Breadcrumb />
+      <div className="relative mx-auto max-w-7xl px-6 pt-6 md:pt-8 lg:px-8">
+        <div className="pb-7 md:pb-8">
+          <Breadcrumb />
+        </div>
       </div>
       <div className="relative overflow-hidden pb-5 lg:pb-6">
         <HeroBackground image={hero.image1} />

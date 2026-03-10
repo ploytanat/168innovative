@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache"
 
-import { Locale } from "../types/content"
+import { Locale, WPMediaItem } from "../types/content"
+import { pickLocalizedText } from "./acf"
 import { CompanyView } from "../types/view"
 
 const BASE = process.env.WP_API_URL
@@ -9,8 +10,51 @@ if (!BASE) {
   throw new Error("WP_API_URL is not defined")
 }
 
+interface CompanyAcf {
+  logo?: number
+  name_th?: string
+  name_en?: string
+  address_th?: string
+  address_en?: string
+  phone_1_number?: string
+  phone_1_label_th?: string
+  phone_1_label_en?: string
+  phone_2_number?: string
+  phone_2_label_th?: string
+  phone_2_label_en?: string
+  phone_3_number?: string
+  phone_3_label_th?: string
+  phone_3_label_en?: string
+  email_1?: string
+  email_2?: string
+  email_3?: string
+  social_1_type?: string
+  social_1_url?: string
+  social_1_icon?: number
+  social_2_type?: string
+  social_2_url?: string
+  social_2_icon?: number
+  social_3_type?: string
+  social_3_url?: string
+  social_3_icon?: number
+  line_qr?: number
+  contact_image?: number
+  contact_image_1?: number
+  contact_image_1_alt_th?: string
+  contact_image_1_alt_en?: string
+  contact_image_2?: number
+  contact_image_2_alt_th?: string
+  contact_image_2_alt_en?: string
+  contact_image_3?: number
+  contact_image_3_alt_th?: string
+  contact_image_3_alt_en?: string
+  contact_image_4?: number
+  contact_image_4_alt_th?: string
+  contact_image_4_alt_en?: string
+}
+
 type RawCompanyData = {
-  acf: Record<string, any>
+  acf: CompanyAcf
   mediaMap: Record<number, string>
 } | null
 
@@ -24,7 +68,7 @@ const getCompanyData = unstable_cache(
       return null
     }
 
-    const data = await res.json()
+    const data = (await res.json()) as Array<{ acf?: CompanyAcf }>
     const acf = data?.[0]?.acf
 
     if (!acf) {
@@ -54,8 +98,8 @@ const getCompanyData = unstable_cache(
       )
 
       if (mediaRes.ok) {
-        const mediaData = await mediaRes.json()
-        mediaData.forEach((media: any) => {
+        const mediaData = (await mediaRes.json()) as WPMediaItem[]
+        mediaData.forEach((media) => {
           mediaMap[media.id] = media.source_url || media.guid?.rendered || ""
         })
       }
@@ -134,12 +178,14 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
       .filter((social) => social.url)
       .map((social) => {
         const iconSrc = getMediaUrl(mediaMap, social.iconId)
+        const type = social.type ?? "social"
+        const url = social.url ?? "#"
 
         return {
-          type: social.type,
-          url: social.url,
+          type,
+          url,
           icon: iconSrc
-            ? { src: iconSrc, alt: social.type }
+            ? { src: iconSrc, alt: type }
             : undefined,
         }
       })
@@ -147,34 +193,57 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
     const logoSrc = getMediaUrl(mediaMap, acf.logo)
     const lineQrSrc = getMediaUrl(mediaMap, acf.line_qr)
     const contactImageSrc = getMediaUrl(mediaMap, acf.contact_image)
+    const phones = [
+      {
+        number: acf.phone_1_number,
+        label: pickLocalizedText(
+          locale,
+          acf.phone_1_label_th,
+          acf.phone_1_label_en
+        ),
+      },
+      {
+        number: acf.phone_2_number,
+        label: pickLocalizedText(
+          locale,
+          acf.phone_2_label_th,
+          acf.phone_2_label_en
+        ),
+      },
+      {
+        number: acf.phone_3_number,
+        label: pickLocalizedText(
+          locale,
+          acf.phone_3_label_th,
+          acf.phone_3_label_en
+        ),
+      },
+    ].filter(
+      (
+        phone
+      ): phone is {
+        number: string
+        label: string
+      } => Boolean(phone.number)
+    )
+    const email = [acf.email_1, acf.email_2, acf.email_3].filter(
+      (item): item is string => Boolean(item)
+    )
 
     return {
-      name: locale === "th" ? acf.name_th : acf.name_en,
-      address: locale === "th" ? acf.address_th : acf.address_en,
+      name: pickLocalizedText(locale, acf.name_th, acf.name_en),
+      address: pickLocalizedText(locale, acf.address_th, acf.address_en),
       logo: logoSrc
         ? {
             src: logoSrc,
-            alt: locale === "th" ? acf.name_th : acf.name_en,
+            alt: pickLocalizedText(locale, acf.name_th, acf.name_en, "168 Innovative"),
           }
         : {
             src: "/fallback-logo.png",
             alt: "Company Logo",
           },
-      phones: [
-        {
-          number: acf.phone_1_number,
-          label: locale === "th" ? acf.phone_1_label_th : acf.phone_1_label_en,
-        },
-        {
-          number: acf.phone_2_number,
-          label: locale === "th" ? acf.phone_2_label_th : acf.phone_2_label_en,
-        },
-        {
-          number: acf.phone_3_number,
-          label: locale === "th" ? acf.phone_3_label_th : acf.phone_3_label_en,
-        },
-      ].filter((phone) => phone.number),
-      email: [acf.email_1, acf.email_2, acf.email_3].filter(Boolean),
+      phones,
+      email,
       socials,
       lineQrCode: lineQrSrc
         ? {
@@ -185,7 +254,7 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
       contactImage: contactImageSrc
         ? {
             src: contactImageSrc,
-            alt: locale === "th" ? acf.name_th : acf.name_en,
+            alt: pickLocalizedText(locale, acf.name_th, acf.name_en, "168 Innovative"),
           }
         : undefined,
       contactGallery,
