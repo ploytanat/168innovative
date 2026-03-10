@@ -1,56 +1,49 @@
-import type { Metadata } from 'next'
-import Image from 'next/image'
+import type { Metadata } from "next"
+import Image from "next/image"
 
-import Breadcrumb from '@/app/components/ui/Breadcrumb'
-import LocalizedLink from '@/app/components/ui/LocalizedLink'
-import { getCategories } from '@/app/lib/api/categories'
+import PageIntro from "@/app/components/ui/PageIntro"
+import LocalizedLink from "@/app/components/ui/LocalizedLink"
+import { buildMetadata } from "@/app/config/seo"
+import { getCategories } from "@/app/lib/api/categories"
 
-export const metadata: Metadata = {
-  title: 'Product Categories | 168 Innovative',
+export const metadata: Metadata = buildMetadata({
+  locale: "en",
+  title: "Product Categories",
   description:
-    'Explore cosmetic packaging categories with OEM and ODM support for production-ready brands.',
-}
+    "Explore cosmetic packaging categories and plastic components with OEM and ODM support for sourcing, sampling, and production.",
+  path: "/categories",
+  keywords: ["product categories", "cosmetic packaging", "OEM / ODM packaging"],
+})
 
 export default async function CategoriesPage() {
-  const locale = 'en'
+  const locale = "en"
   const categories = await getCategories(locale)
+  const seoCategories = categories.filter((category) => category.seoDescription).slice(0, 6)
 
   if (!categories.length) {
     return (
-      <main className="min-h-screen bg-[#FAF7F3] pb-24 pt-8">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <Breadcrumb />
-          <div className="mt-10 rounded-[2rem] border border-[#E6DED6] bg-white/80 px-6 py-16 shadow-sm">
-            <p className="text-sm text-[#84776D]">
-              No product categories available at this time
-            </p>
-          </div>
+      <main className="min-h-screen bg-white">
+        <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+          <PageIntro
+            eyebrow="OEM / ODM"
+            title="Product Categories"
+            description="No product categories available at this time."
+            breadcrumbs={[{ label: "Products", href: "/en/categories" }, { label: "Product Categories" }]}
+          />
         </div>
       </main>
     )
   }
 
-  const seoCategories = categories.filter((category) => category.seoDescription).slice(0, 6)
-
   return (
-    <main className="min-h-screen bg-[#FAF7F3] pb-28 pt-8">
-      <div className="mx-auto max-w-7xl px-6">
-        <Breadcrumb />
-
-        <header className="mt-6 overflow-hidden rounded-[2.5rem] border border-[#E5DDD5] bg-[linear-gradient(135deg,#fffdf9_0%,#f3ece4_100%)] px-6 py-10 shadow-[0_20px_60px_rgba(26,37,53,0.06)] sm:px-8 lg:px-10">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-[#14B8A6]">
-            OEM / ODM
-          </p>
-          <h1 className="mt-4 max-w-3xl font-heading text-3xl leading-tight text-[#1A2535] md:text-5xl">
-            Product Categories
-            <br />
-            for brands that want a cleaner launch path
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6D635B] md:text-base">
-            Browse cosmetic packaging types and plastic components with OEM / ODM
-            support designed to make sourcing and production move faster.
-          </p>
-        </header>
+    <main className="min-h-screen bg-white">
+      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
+        <PageIntro
+          eyebrow="OEM / ODM"
+          title="Product Categories"
+          description="Browse packaging types and plastic components with a cleaner path from sourcing to production."
+          breadcrumbs={[{ label: "Products", href: "/en/categories" }, { label: "Product Categories" }]}
+        />
 
         <section aria-label="Product Categories" className="mt-10">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -58,9 +51,9 @@ export default async function CategoriesPage() {
               <LocalizedLink
                 key={category.id}
                 href={`/categories/${category.slug}`}
-                className="group overflow-hidden rounded-[1.75rem] border border-[#E7DED6] bg-white p-2 shadow-[0_12px_35px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_55px_rgba(26,37,53,0.1)]"
+                className="group overflow-hidden rounded-[1.75rem] border border-[#E7EAF0] bg-white p-2 shadow-[0_12px_35px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_55px_rgba(26,37,53,0.1)]"
               >
-                <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[#F2ECE5]">
+                <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[#F1F5F9]">
                   {category.image?.src ? (
                     <Image
                       src={category.image.src}
@@ -70,11 +63,10 @@ export default async function CategoriesPage() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-[#A3968C]">
+                    <div className="flex h-full items-center justify-center text-xs text-[#94A3B8]">
                       No Image
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A2535]/14 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
                 <div className="px-2 pb-3 pt-4">
@@ -82,7 +74,7 @@ export default async function CategoriesPage() {
                     {category.name}
                   </h2>
                   {category.description && (
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#7F736A]">
+                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#5A6A7E]">
                       {category.description}
                     </p>
                   )}
@@ -94,7 +86,7 @@ export default async function CategoriesPage() {
 
         {seoCategories.length > 0 && (
           <section
-            className="mt-20 rounded-[2.25rem] border border-[#E6DED6] bg-white px-6 py-10 shadow-[0_18px_50px_rgba(26,37,53,0.05)] sm:px-8 lg:px-10"
+            className="mt-20 rounded-[2.25rem] border border-[#E5E7EB] bg-white px-6 py-10 shadow-[0_18px_50px_rgba(26,37,53,0.05)] sm:px-8 lg:px-10"
             aria-label="Category insights"
           >
             <header className="mb-10">
@@ -110,14 +102,14 @@ export default async function CategoriesPage() {
               {seoCategories.map((category) => (
                 <article
                   key={category.id}
-                  className="rounded-[1.5rem] border border-[#EEE6DE] bg-[#FCFAF7] p-5 transition-colors hover:border-[#14B8A6]/40"
+                  className="rounded-[1.5rem] border border-[#EEF2F6] bg-[#FCFDFF] p-5 transition-colors hover:border-[#14B8A6]/40"
                 >
                   <LocalizedLink href={`/categories/${category.slug}`}>
                     <h3 className="text-base font-semibold text-[#1A2535] transition-colors hover:text-[#14B8A6]">
                       {category.seoTitle || category.name}
                     </h3>
                   </LocalizedLink>
-                  <p className="mt-2 text-sm leading-7 text-[#6F655D]">
+                  <p className="mt-2 text-sm leading-7 text-[#5A6A7E]">
                     {category.seoDescription}
                   </p>
                 </article>

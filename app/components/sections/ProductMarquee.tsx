@@ -41,11 +41,7 @@ export default function ProductMarquee({
 
       <div className="relative mb-8 px-6 text-center md:mb-16">
         <h2
-          className="mt-3 text-2xl font-bold text-slate-800 sm:text-3xl lg:text-4xl"
-          style={{
-            fontFamily: "'Cormorant Garamond', 'Noto Serif Thai', serif",
-            letterSpacing: "0.02em",
-          }}
+          className="font-heading mt-3 text-2xl font-bold tracking-[0.02em] text-slate-800 sm:text-3xl lg:text-4xl"
         >
           {uiText.featuredProducts[locale]}
         </h2>

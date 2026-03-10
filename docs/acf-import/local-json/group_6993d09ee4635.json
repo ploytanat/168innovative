@@ -1,0 +1,907 @@
+{
+  "key": "group_6993d09ee4635",
+  "title": "Product Fields",
+  "fields": [
+    {
+      "key": "field_6993d0a0fdc5d",
+      "label": "Name TH",
+      "name": "name_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_6993d0acfdc5e",
+      "label": "Name EN",
+      "name": "name_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_6993d0f3fdc5f",
+      "label": "Description TH",
+      "name": "description_th",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_6993d106fdc60",
+      "label": "Description EN",
+      "name": "description_en",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_6993d11efdc61",
+      "label": "Image Alt TH",
+      "name": "image_alt_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_6993d129fdc62",
+      "label": "Image Alt EN",
+      "name": "image_alt_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_6997d931665db",
+      "label": "specs_json",
+      "name": "specs_json",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_699bd34ca9ee7",
+      "label": "SEO Title TH",
+      "name": "seo_title_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_699bd35ea9ee8",
+      "label": "SEO Title EN",
+      "name": "seo_title_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_699bd369a9ee9",
+      "label": "SEO Description (TH)",
+      "name": "seo_description_th",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_699bd370a9eea",
+      "label": "SEO Description (EN)",
+      "name": "seo_description_en",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_699bd37ba9eeb",
+      "label": "Application (TH)",
+      "name": "application_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_699bd381a9eec",
+      "label": "Application (EN)",
+      "name": "application_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_content_th",
+      "label": "Content TH",
+      "name": "content_th",
+      "aria-label": "",
+      "type": "wysiwyg",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "tabs": "all",
+      "toolbar": "full",
+      "media_upload": 1,
+      "delay": 0
+    },
+    {
+      "key": "field_168_product_content_en",
+      "label": "Content EN",
+      "name": "content_en",
+      "aria-label": "",
+      "type": "wysiwyg",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "tabs": "all",
+      "toolbar": "full",
+      "media_upload": 1,
+      "delay": 0
+    },
+    {
+      "key": "field_168_product_sku",
+      "label": "SKU",
+      "name": "sku",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_brand_name",
+      "label": "Brand Name",
+      "name": "brand_name",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_material",
+      "label": "Material",
+      "name": "material",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_capacity",
+      "label": "Capacity",
+      "name": "capacity",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_dimensions",
+      "label": "Dimensions",
+      "name": "dimensions",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_moq",
+      "label": "MOQ",
+      "name": "moq",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_lead_time_days",
+      "label": "Lead Time Days",
+      "name": "lead_time_days",
+      "aria-label": "",
+      "type": "number",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "min": "",
+      "max": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "step": ""
+    },
+    {
+      "key": "field_168_product_availability_status",
+      "label": "Availability Status",
+      "name": "availability_status",
+      "aria-label": "",
+      "type": "select",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "choices": {
+        "in_stock": "In stock",
+        "preorder": "Pre-order",
+        "out_of_stock": "Out of stock"
+      },
+      "default_value": "",
+      "return_format": "value",
+      "multiple": 0,
+      "allow_null": 1,
+      "allow_in_bindings": 0,
+      "ui": 1,
+      "ajax": 0,
+      "placeholder": ""
+    },
+    {
+      "key": "field_168_product_related_products",
+      "label": "Related Products",
+      "name": "related_products",
+      "aria-label": "",
+      "type": "relationship",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "post_type": [
+        "product"
+      ],
+      "taxonomy": [],
+      "filters": [
+        "search",
+        "post_type"
+      ],
+      "elements": "",
+      "min": "",
+      "max": "",
+      "return_format": "id",
+      "bidirectional": 0,
+      "bidirectional_target": []
+    },
+    {
+      "key": "field_168_product_related_articles",
+      "label": "Related Articles",
+      "name": "related_articles",
+      "aria-label": "",
+      "type": "relationship",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "post_type": [
+        "article"
+      ],
+      "taxonomy": [],
+      "filters": [
+        "search",
+        "post_type"
+      ],
+      "elements": "",
+      "min": "",
+      "max": "",
+      "return_format": "id",
+      "bidirectional": 0,
+      "bidirectional_target": []
+    },
+    {
+      "key": "field_168_product_canonical_url_th",
+      "label": "Canonical URL TH",
+      "name": "canonical_url_th",
+      "aria-label": "",
+      "type": "url",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "allow_in_bindings": 0,
+      "placeholder": "https://"
+    },
+    {
+      "key": "field_168_product_canonical_url_en",
+      "label": "Canonical URL EN",
+      "name": "canonical_url_en",
+      "aria-label": "",
+      "type": "url",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "allow_in_bindings": 0,
+      "placeholder": "https://"
+    },
+    {
+      "key": "field_168_product_focus_keyword_th",
+      "label": "Focus Keyword TH",
+      "name": "focus_keyword_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_focus_keyword_en",
+      "label": "Focus Keyword EN",
+      "name": "focus_keyword_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_og_title_th",
+      "label": "OG Title TH",
+      "name": "og_title_th",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_og_title_en",
+      "label": "OG Title EN",
+      "name": "og_title_en",
+      "aria-label": "",
+      "type": "text",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "placeholder": "",
+      "prepend": "",
+      "append": ""
+    },
+    {
+      "key": "field_168_product_og_description_th",
+      "label": "OG Description TH",
+      "name": "og_description_th",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_168_product_og_description_en",
+      "label": "OG Description EN",
+      "name": "og_description_en",
+      "aria-label": "",
+      "type": "textarea",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "default_value": "",
+      "maxlength": "",
+      "allow_in_bindings": 0,
+      "rows": 4,
+      "placeholder": "",
+      "new_lines": ""
+    },
+    {
+      "key": "field_168_product_og_image",
+      "label": "OG Image",
+      "name": "og_image",
+      "aria-label": "",
+      "type": "image",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "return_format": "array",
+      "library": "all",
+      "min_width": "",
+      "min_height": "",
+      "min_size": "",
+      "max_width": "",
+      "max_height": "",
+      "max_size": "",
+      "mime_types": "",
+      "allow_in_bindings": 0,
+      "preview_size": "medium"
+    },
+    {
+      "key": "field_168_product_robots_index",
+      "label": "Robots Index",
+      "name": "robots_index",
+      "aria-label": "",
+      "type": "true_false",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "message": "",
+      "default_value": 1,
+      "allow_in_bindings": 0,
+      "ui": 1,
+      "ui_on_text": "",
+      "ui_off_text": ""
+    },
+    {
+      "key": "field_168_product_robots_follow",
+      "label": "Robots Follow",
+      "name": "robots_follow",
+      "aria-label": "",
+      "type": "true_false",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "message": "",
+      "default_value": 1,
+      "allow_in_bindings": 0,
+      "ui": 1,
+      "ui_on_text": "",
+      "ui_off_text": ""
+    },
+    {
+      "key": "field_168_product_faq_items",
+      "label": "FAQ Items",
+      "name": "faq_items",
+      "aria-label": "",
+      "type": "repeater",
+      "instructions": "",
+      "required": 0,
+      "conditional_logic": 0,
+      "wrapper": {
+        "width": "",
+        "class": "",
+        "id": ""
+      },
+      "layout": "table",
+      "pagination": 0,
+      "min": 0,
+      "max": 0,
+      "collapsed": "",
+      "button_label": "Add FAQ Item",
+      "rows_per_page": 20,
+      "sub_fields": [
+        {
+          "key": "field_168_product_faq_items_q_th",
+          "label": "Question TH",
+          "name": "question_th",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 1,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "allow_in_bindings": 0,
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        },
+        {
+          "key": "field_168_product_faq_items_q_en",
+          "label": "Question EN",
+          "name": "question_en",
+          "aria-label": "",
+          "type": "text",
+          "instructions": "",
+          "required": 1,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "maxlength": "",
+          "allow_in_bindings": 0,
+          "placeholder": "",
+          "prepend": "",
+          "append": ""
+        },
+        {
+          "key": "field_168_product_faq_items_a_th",
+          "label": "Answer TH",
+          "name": "answer_th",
+          "aria-label": "",
+          "type": "wysiwyg",
+          "instructions": "",
+          "required": 1,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "tabs": "all",
+          "toolbar": "basic",
+          "media_upload": 1,
+          "delay": 0
+        },
+        {
+          "key": "field_168_product_faq_items_a_en",
+          "label": "Answer EN",
+          "name": "answer_en",
+          "aria-label": "",
+          "type": "wysiwyg",
+          "instructions": "",
+          "required": 1,
+          "conditional_logic": 0,
+          "wrapper": {
+            "width": "",
+            "class": "",
+            "id": ""
+          },
+          "default_value": "",
+          "tabs": "all",
+          "toolbar": "basic",
+          "media_upload": 1,
+          "delay": 0
+        }
+      ]
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "product"
+      }
+    ]
+  ],
+  "menu_order": 0,
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "hide_on_screen": "",
+  "active": true,
+  "description": "Import-safe update of the existing Product Fields group with SEO and long-form content fields.",
+  "show_in_rest": 1,
+  "modified": 1773116525
+}

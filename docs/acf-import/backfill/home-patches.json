@@ -1,0 +1,23 @@
+[
+  {
+    "id": 25,
+    "slug": "home",
+    "endpoint": "pages",
+    "patch": {
+      "hero_image_alt_th": "168 Innovative",
+      "hero_image_alt_en": "168 Innovative",
+      "seo_title_th": "168 Innovative",
+      "seo_title_en": "168 Innovative",
+      "seo_description_th": "ผู้นำด้านบรรจุภัณฑ์พลาสติกและแพ็กเกจจิ้ง สำหรับเครื่องสำอางและอุตสาหกรรม",
+      "seo_description_en": "Leading plastic packaging solutions for cosmetics and industry",
+      "canonical_url_th": "https://168innovative.co.th/",
+      "canonical_url_en": "https://168innovative.co.th/en",
+      "og_title_th": "168 Innovative",
+      "og_title_en": "168 Innovative",
+      "og_description_th": "ผู้นำด้านบรรจุภัณฑ์พลาสติกและแพ็กเกจจิ้ง สำหรับเครื่องสำอางและอุตสาหกรรม",
+      "og_description_en": "Leading plastic packaging solutions for cosmetics and industry",
+      "og_image": 33
+    },
+    "patchFieldCount": 13
+  }
+]

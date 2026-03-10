@@ -179,6 +179,14 @@ export interface WPFeaturedMedia {
 export interface WPEmbedded {
   ["wp:featuredmedia"]?: WPFeaturedMedia[];
   ["wp:term"]?: WPTerm[][];
+  author?: Array<{ name?: string }>;
+}
+
+export interface WPFaqItem {
+  question_th?: string;
+  question_en?: string;
+  answer_th?: string;
+  answer_en?: string;
 }
 
 // ---------------------------
@@ -200,13 +208,17 @@ export interface WPArticle {
     content_en?: string;
     image_alt_th?: string;
     image_alt_en?: string;
-        seo_title_th?: string
+    seo_title_th?: string
     seo_title_en?: string
     meta_description_th?: string
     meta_description_en?: string
     canonical_url_th?: string
     canonical_url_en?: string
     focus_keyword?: string
+    focus_keyword_th?: string
+    focus_keyword_en?: string
+    reading_time_minutes?: number
+    faq_items?: WPFaqItem[]
   };
 
   _embedded?: WPEmbedded;
@@ -245,9 +257,16 @@ export interface WPProduct {
     name_en?: string;
     description_th?: string;
     description_en?: string;
+    content_th?: string;
+    content_en?: string;
+    application_th?: string;
+    application_en?: string;
     image_alt_th?: string;
     image_alt_en?: string;
     specs_json?: string;
+    focus_keyword_th?: string;
+    focus_keyword_en?: string;
+    faq_items?: WPFaqItem[];
   };
 }
 

@@ -17,7 +17,7 @@ export default function ArticleBody({ html }: { html: string }) {
   }, [html])
 
   return (
-    <article className="mt-12" ref={ref}>
+    <article className="rich-content mt-12" ref={ref}>
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </article>
   )

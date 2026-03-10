@@ -1,0 +1,169 @@
+[
+  {
+    "id": 5,
+    "slug": "spout",
+    "endpoint": "product_category",
+    "patch": {
+      "canonical_url_th": "https://168innovative.co.th/categories/spout",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/spout",
+      "image_alt_th": "จุกซอง",
+      "image_alt_en": "Spout Caps",
+      "intro_html_th": "<p>จุกซองสำหรับซองบรรจุครีม เจล และของเหลว รองรับการใช้งานกับเครื่องบรรจุหลากหลายประเภท</p>",
+      "intro_html_en": "<p>Spout caps for cream, gel, and liquid pouches. Compatible with various filling machines.</p>",
+      "focus_keyword_th": "จุกซอง",
+      "focus_keyword_en": "Spout Caps",
+      "og_title_th": "จำหน่ายจุกซองและฝาบรรจุภัณฑ์คุณภาพสูง",
+      "og_title_en": "High-Quality Spout Caps & Packaging Solutions",
+      "og_description_th": "ผู้เชี่ยวชาญด้านจุกซองและอุปกรณ์แพคเกจจิ้งสำหรับเครื่องสำอางและอาหาร สินค้ามาตรฐานอุตสาหกรรม",
+      "og_description_en": "Expert in spout caps and packaging accessories for cosmetics and food. Industrial grade materials."
+    },
+    "patchFieldCount": 12
+  },
+  {
+    "id": 9,
+    "slug": "powder-compact",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "ตลับแป้ง",
+      "canonical_url_th": "https://168innovative.co.th/categories/powder-compact",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/powder-compact",
+      "image_alt_th": "ตลับแป้ง",
+      "image_alt_en": "Compact Powder Case",
+      "intro_html_th": "<p>ตลับแป้งสำหรับเครื่องสำอางชนิดผง ออกแบบสำหรับแป้งอัดแข็งและแป้งฝุ่นคุณภาพสูง</p>",
+      "intro_html_en": "<p>Compact cases for powder-based cosmetic products. Designed for pressed and loose powder.</p>",
+      "focus_keyword_th": "ตลับแป้ง",
+      "focus_keyword_en": "Compact Powder Case",
+      "og_title_th": "ตลับแป้งพัฟและบรรจุภัณฑ์เครื่องสำอางชนิดผง",
+      "og_title_en": "Compact Powder Cases for Beauty Brands",
+      "og_description_th": "ตลับแป้งหลากหลายดีไซน์ ทนทาน สวยงาม เหมาะสำหรับแบรนด์ที่ต้องการความพรีเมียมและนวัตกรรม",
+      "og_description_en": "Diverse compact case designs, durable and stylish. Perfect for innovative beauty brands."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 10,
+    "slug": "soap-bag",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "ถุงสบู่ / ถุงบรรจุภัณฑ์",
+      "canonical_url_th": "https://168innovative.co.th/categories/soap-bag",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/soap-bag",
+      "image_alt_th": "ถุงสบู่ / ถุงบรรจุภัณฑ์",
+      "image_alt_en": "Soap Packaging Bag",
+      "intro_html_th": "<p>ซองบรรจุสบู่เหลวและผลิตภัณฑ์รีฟิล เหมาะสำหรับสบู่เหลวและผลิตภัณฑ์ดูแลผิว</p>",
+      "intro_html_en": "<p>Soap packaging bags for liquid soap and refill products. Ideal for personal care brands.</p>",
+      "focus_keyword_th": "ถุงสบู่ / ถุงบรรจุภัณฑ์",
+      "focus_keyword_en": "Soap Packaging Bag",
+      "og_title_th": "ผลิตและจำหน่ายถุงบรรจุภัณฑ์สำหรับสบู่และของเหลว",
+      "og_title_en": "Soap and Pouch Packaging Solutions",
+      "og_description_th": "ซองบรรจุภัณฑ์คุณภาพสูง ป้องกันการรั่วซึมได้ดีเยี่ยม รองรับงานพิมพ์ลายและขนาดที่หลากหลาย",
+      "og_description_en": "High-quality pouch packaging with excellent leak protection. Customizable sizes and printing."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 23,
+    "slug": "plastic-handle",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "ที่จับพลาสติก",
+      "canonical_url_th": "https://168innovative.co.th/categories/plastic-handle",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/plastic-handle",
+      "image_alt_th": "ที่จับพลาสติก",
+      "image_alt_en": "Plastic Handle",
+      "intro_html_th": "<p>ด้ามจับพลาสติกสำหรับเครื่องจักรอุตสาหกรรมและเครื่องบรรจุภัณฑ์ ผลิตจากวัสดุคุณภาพสูง แข็งแรง ทนทาน เหมาะสำหรับงานที่ต้องการความมั่นคงและปลอดภัยในการใช้งาน</p>",
+      "intro_html_en": "<p>Durable plastic handles designed for industrial and packaging machinery applications. Manufactured from high-quality materials to ensure strength, reliability, and safe operation.</p>",
+      "focus_keyword_th": "ที่จับพลาสติก",
+      "focus_keyword_en": "Plastic Handle",
+      "og_title_th": "ด้ามจับพลาสติกสำหรับเครื่องบรรจุภัณฑ์ | ชิ้นส่วนอุตสาหกรรม",
+      "og_title_en": "Plastic Handles for Packaging Machines | Industrial Parts",
+      "og_description_th": "ด้ามจับพลาสติกคุณภาพสูงสำหรับเครื่องจักรบรรจุภัณฑ์และอุปกรณ์อุตสาหกรรม ออกแบบมาเพื่อความทนทานและประสิทธิภาพการใช้งานในระยะยาว",
+      "og_description_en": "High-quality plastic handles for packaging machines and industrial equipment. Designed for durability and long-term performance."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 8,
+    "slug": "mascara-packaging",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "บรรจุภัณฑ์มาสคาร่า",
+      "canonical_url_th": "https://168innovative.co.th/categories/mascara-packaging",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/mascara-packaging",
+      "image_alt_th": "บรรจุภัณฑ์มาสคาร่า",
+      "image_alt_en": "Mascara Packaging",
+      "intro_html_th": "<p>บรรจุภัณฑ์มาสคาร่าออกแบบสำหรับแปรงและของเหลวเข้มข้น เหมาะสำหรับการผลิตเชิงพาณิชย์</p>",
+      "intro_html_en": "<p>Mascara packaging designed for liquid products and brushes. Suitable for commercial manufacturing.</p>",
+      "focus_keyword_th": "บรรจุภัณฑ์มาสคาร่า",
+      "focus_keyword_en": "Mascara Packaging",
+      "og_title_th": "จำหน่ายหลอดมาสคาร่าและแปรงปัดคุณภาพพรีเมียม",
+      "og_title_en": "Premium Mascara Tubes and Brushes",
+      "og_description_th": "หลอดมาสคาร่าดีไซน์ทันสมัย มาพร้อมแปรงที่ช่วยเพิ่มวอลลุ่ม รองรับงานสั่งผลิตแบรนด์เครื่องสำอาง",
+      "og_description_en": "Modern mascara tube designs with high-quality brushes. Supporting private label manufacturing."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 6,
+    "slug": "dispensing-press-cap",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "ฝาพลาสติก ฝากด",
+      "canonical_url_th": "https://168innovative.co.th/categories/dispensing-press-cap",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/dispensing-press-cap",
+      "image_alt_th": "ฝาพลาสติก ฝากด",
+      "image_alt_en": "Dispensing Press Cap",
+      "intro_html_th": "<p>ฝาขวดพลาสติกที่ออกแบบมาให้ใช้งานได้ด้วยมือเดียว เพื่อให้สามารถเทของเหลว เจล หรือโลชั่นได้อย่างง่ายดายโดยไม่ต้องถอดฝาออก</p>",
+      "intro_html_en": "<p>a plastic bottle closure designed for one-handed operation to easily dispense liquids, gels, or lotions without removing the cap</p>",
+      "focus_keyword_th": "ฝาพลาสติก ฝากด",
+      "focus_keyword_en": "Dispensing Press Cap",
+      "og_title_th": "แหล่งรวมฝาปิดและอุปกรณ์หัวกดทุกรูปแบบ",
+      "og_title_en": "A comprehensive source for all types of lids and press heads.",
+      "og_description_th": "เลือกชมฝาปิดหลากหลายขนาดและดีไซน์ที่เหมาะกับขวดสกินแคร์ ไม่รั่วซึม รองรับงานอุตสาหกรรม",
+      "og_description_en": "Explore various dispensing cap sizes and designs perfect for your skincare bottles. Leak-proof quality."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 7,
+    "slug": "lipstick-packaging",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "แพ็กเกจลิปสติก",
+      "canonical_url_th": "https://168innovative.co.th/categories/lipstick-packaging",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/lipstick-packaging",
+      "image_alt_th": "แพ็กเกจลิปสติก",
+      "image_alt_en": "Lipstick Packaging",
+      "intro_html_th": "<p>บรรจุภัณฑ์แท่งลิปสติกสำหรับเครื่องสำอาง ออกแบบสำหรับลิปสติกและผลิตภัณฑ์ประเภทแท่ง</p>",
+      "intro_html_en": "<p>Lipstick bottles designed for cosmetic stick products. Ideal for commercial production.</p>",
+      "focus_keyword_th": "แพ็กเกจลิปสติก",
+      "focus_keyword_en": "Lipstick Packaging",
+      "og_title_th": "บรรจุภัณฑ์ลิปสติกและแท่งเครื่องสำอางนวัตกรรมใหม่",
+      "og_title_en": "Innovative Lipstick Packaging",
+      "og_description_th": "ดีไซน์แท่งลิปสติกที่สะท้อนเอกลักษณ์แบรนด์ มีหลายวัสดุทั้งพลาสติกพรีเมียมและโลหะ",
+      "og_description_en": "Lipstick designs that reflect your brand identity with premium materials and custom finishes."
+    },
+    "patchFieldCount": 13
+  },
+  {
+    "id": 12,
+    "slug": "ball-chain",
+    "endpoint": "product_category",
+    "patch": {
+      "name_th": "โซ่ลูกปัดและอุปกรณ์เสริม",
+      "canonical_url_th": "https://168innovative.co.th/categories/ball-chain",
+      "canonical_url_en": "https://168innovative.co.th/en/categories/ball-chain",
+      "image_alt_th": "โซ่ลูกปัดและอุปกรณ์เสริม",
+      "image_alt_en": "Ball Chain Accessories",
+      "intro_html_th": "<p>โซ่ลูกปัดสำหรับอุปกรณ์เสริมบรรจุภัณฑ์ เหมาะสำหรับสินค้าโปรโมชั่นและงานดีไซน์พิเศษ</p>",
+      "intro_html_en": "<p>Ball chain accessories for packaging. Suitable for promotional products and custom designs.</p>",
+      "focus_keyword_th": "โซ่ลูกปัดและอุปกรณ์เสริม",
+      "focus_keyword_en": "Ball Chain Accessories",
+      "og_title_th": "อุปกรณ์ตกแต่งบรรจุภัณฑ์และโซ่ลูกปัดอเนกประสงค์",
+      "og_title_en": "Packaging Accessories and Ball Chains",
+      "og_description_th": "โซ่ลูกปัดวัสดุพรีเมียม มีหลายสีให้เลือก เหมาะสำหรับการเพิ่มมูลค่าให้กับบรรจุภัณฑ์ของคุณ",
+      "og_description_en": "Premium ball chains available in various colors. Add value to your product packaging."
+    },
+    "patchFieldCount": 13
+  }
+]

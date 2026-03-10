@@ -1,9 +1,14 @@
 // types/view.ts
 
-// == Shared / Base == 
+// == Shared / Base ==
 export interface ImageView {
   src: string
   alt: string
+}
+
+export interface FAQItemView {
+  question: string
+  answer: string
 }
 
 // == Category ==
@@ -12,8 +17,9 @@ export interface CategoryView {
   slug: string
   name: string
   description?: string
-
   image?: ImageView
+  introHtml?: string
+  faqItems: FAQItemView[]
 
   // SEO display content
   seoTitle?: string
@@ -22,16 +28,16 @@ export interface CategoryView {
 
 // == Social / Company==
 export type SocialType =
-  | 'facebook'
-  | 'line'
-  | 'instagram'
-  | 'shopee'
-  | string   // 🔥 เพิ่มเผื่อ WP ใส่ type อื่นมา
+  | "facebook"
+  | "line"
+  | "instagram"
+  | "shopee"
+  | string
 
 export interface SocialView {
   type: SocialType
   url: string
-  icon?: ImageView   // 🔥 ทำให้ optional
+  icon?: ImageView
 }
 
 export interface CompanyView {
@@ -45,55 +51,45 @@ export interface CompanyView {
   }[]
 
   email: string[]
-
   socials: SocialView[]
-
   lineQrCode?: ImageView
   contactImage?: ImageView
   contactGallery?: ImageView[]
 }
 
-// ==  Product ==
-/* ================= Product Spec ================= */
-
+// == Product ==
 export type ProductSpecView = {
   label: string
   value: string
 }
 
-/* ================= Product View ================= */
-
 export type ProductView = {
   id: string
   slug: string
-
   name: string
   description: string
-
   image: {
     src: string
     alt: string
   }
-
   categoryId: string
   categorySlug: string
-
-  specs: ProductSpecView[]   // ไม่ optional
-
+  specs: ProductSpecView[]
+  contentHtml?: string
+  applicationHtml?: string
+  faqItems: FAQItemView[]
   price?: number
 }
 
-// === Why Choose Us === 
+// == Why Choose Us ==
 export interface WhyItemView {
   title: string
   description: string
   image?: ImageView
 }
 
-// === Hero (Home)===
-// === Hero (Home) ===
-
-export type HeroLayoutType = 'split' | 'fullBg'
+// == Hero (Home) ==
+export type HeroLayoutType = "split" | "fullBg"
 
 export interface HeroStatView {
   label: string
@@ -107,42 +103,29 @@ export interface HeroCTAView {
 
 export interface HeroSlideView {
   id: number
-
-  // Layout control (default = split)
   layout?: HeroLayoutType
-
-  // Content
   title: string
   subtitle?: string
   description: string
-
   image: ImageView
-
-  // CTA
   ctaPrimary: HeroCTAView
   ctaSecondary?: HeroCTAView
-
-  // Bottom stats (optional)
   stats?: HeroStatView[]
 }
 
 export interface HomeHeroView {
   slides: HeroSlideView[]
 }
-/* === Home ==== */
+
 export interface HomeView {
   hero: HomeHeroView
-}
-
-export interface HomeHeroView {
-  slides: HeroSlideView[]
 }
 
 /* === About === */
 export interface AboutHeroView {
   title: string
   description: string
-  image1?: ImageView 
+  image1?: ImageView
   image2?: ImageView
 }
 
@@ -154,21 +137,16 @@ export interface AboutSectionView {
 
 export interface AboutView {
   hero: AboutHeroView
-
   whoAreWe: AboutSectionView
-
   why: {
     title: string
     items: WhyItemView[]
   }
-
-  // ✅ เพิ่ม SEO
   seoTitle?: string
   seoDescription?: string
 }
 
 // == Article View ==
-
 export interface TagView {
   id: number
   slug: string
@@ -178,18 +156,17 @@ export interface TagView {
 export interface ArticleView {
   id: string
   slug: string
-
   title: string
   excerpt: string
   content: string
-
   coverImage?: ImageView
   category?: string
   tags: TagView[]
   publishedAt: string
-
   seoTitle?: string
   metaDescription?: string
   canonicalUrl?: string
   focusKeyword?: string
+  readingTimeMinutes?: number
+  faqItems: FAQItemView[]
 }

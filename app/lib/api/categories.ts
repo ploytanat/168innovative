@@ -1,6 +1,7 @@
 // lib/api/categories.ts
 
 import { unstable_cache } from "next/cache";
+import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf";
 import { Locale } from "../types/content";
 import { CategoryView } from "../types/view";
 
@@ -34,7 +35,7 @@ export function getCategories(locale: Locale): Promise<CategoryView[]> {
       );
       return data.map((wp) => mapCategory(wp, locale));
     },
-    [`categories-${locale}`],
+    [`categories-${locale}-v2`],
     { revalidate: 300, tags: ["categories"] }
   )();
 }
@@ -68,7 +69,7 @@ export function getCategoryBySlug(
       if (!data.length) return null;
       return mapCategory(data[0], locale);
     },
-    [`category-${slug}-${locale}`],
+    [`category-${slug}-${locale}-v2`],
     { revalidate: 300, tags: ["categories"] }
   )();
 }
@@ -80,22 +81,29 @@ function mapCategory(wp: any, locale: Locale): CategoryView {
     id: String(wp.id),
     slug: wp.slug,
 
-    name:
-      locale === "th"
-        ? wp.name
-        : wp.acf?.name_en ?? wp.name,
+    name: pickLocalizedText(locale, wp.acf?.name_th, wp.acf?.name_en, wp.name),
 
-    description:
-      locale === "th"
-        ? wp.acf?.description_th ?? ""
-        : wp.acf?.description_en ?? "",
+    description: pickLocalizedText(
+      locale,
+      wp.acf?.description_th,
+      wp.acf?.description_en
+    ),
 
     image: wp.image_url
       ? {
           src: wp.image_url,
-          alt: wp.name,
+          alt: pickLocalizedText(
+            locale,
+            wp.acf?.image_alt_th,
+            wp.acf?.image_alt_en,
+            wp.name
+          ),
         }
       : undefined,
+    introHtml: normalizeRichText(
+      locale === "th" ? wp.acf?.intro_html_th : wp.acf?.intro_html_en
+    ),
+    faqItems: mapFaqItems(wp.acf?.faq_items, locale),
 
     seoTitle:
       locale === "th"

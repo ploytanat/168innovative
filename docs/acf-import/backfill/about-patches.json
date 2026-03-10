@@ -1,0 +1,18 @@
+[
+  {
+    "id": 164,
+    "slug": "about-us",
+    "endpoint": "about",
+    "patch": {
+      "hero_image_2_alt_en": "คลังสินค้าและระบบจัดการสต็อกบรรจุภัณฑ์",
+      "canonical_url_th": "https://168innovative.co.th/about",
+      "canonical_url_en": "https://168innovative.co.th/en/about",
+      "og_title_th": "เกี่ยวกับเรา | 168 Innovative",
+      "og_title_en": "about us | 168 Innovative",
+      "og_description_th": "168 Innovative Co., Ltd. ผู้นำเข้าและจัดจำหน่ายบรรจุภัณฑ์เครื่องสำอาง ขวดปั๊ม กระปุกครีม และผลิตภัณฑ์พลาสติกสำหรับแบรนด์ OEM พร้อมบริการจัดหาสินค้าและควบคุมคุณภาพจากโรงงานผู้ผลิต",
+      "og_description_en": "168 Innovative Co., Ltd. is a trusted importer and distributor of cosmetic packaging and plastic containers for OEM brands, providing high-quality packaging solutions and reliable supply chains.",
+      "og_image": 165
+    },
+    "patchFieldCount": 8
+  }
+]

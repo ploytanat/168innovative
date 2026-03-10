@@ -2,18 +2,26 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 import { notFound } from "next/navigation"
-import { Suspense } from "react"
+import Script from "next/script"
 
 import CategoryProductsSection from "@/app/components/product/CategoryProductsSection"
-import ProductGrid from "@/app/components/product/Productgrid"
-import Breadcrumb from "@/app/components/ui/Breadcrumb"
-import Pagination from "@/app/components/ui/Pagination"
+import FaqSection from "@/app/components/ui/FaqSection"
+import PageIntro from "@/app/components/ui/PageIntro"
+import RichTextSection from "@/app/components/ui/RichTextSection"
+import { buildMetadata } from "@/app/config/seo"
 import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
 import { getProductsByCategory } from "@/app/lib/api/products"
-import { Locale } from "@/app/lib/types/content"
+import { buildFaqJsonLd } from "@/app/lib/schema"
+import type { Locale } from "@/app/lib/types/content"
 
 interface Props {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ page?: string }>
+}
+
+function parsePage(value?: string) {
+  const page = Number(value ?? 1)
+  return Number.isFinite(page) && page > 0 ? Math.floor(page) : 1
 }
 
 export async function generateStaticParams() {
@@ -21,84 +29,106 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: Props): Promise<Metadata> {
   const { slug } = await params
-  const locale: Locale = "th"
+  const currentPage = parsePage((await searchParams).page)
+  const category = await getCategoryBySlug(slug, "th")
 
-  const category = await getCategoryBySlug(slug, locale)
-  if (!category) return { title: "Category not found" }
+  if (!category) {
+    return { title: "ไม่พบหมวดสินค้า" }
+  }
 
-  return {
-    title: category.seoTitle || `${category.name} | 168 Innovative`,
+  const path =
+    currentPage > 1
+      ? `/categories/${slug}?page=${currentPage}`
+      : `/categories/${slug}`
+  const title =
+    currentPage > 1
+      ? `${category.seoTitle || category.name} - หน้า ${currentPage}`
+      : category.seoTitle || category.name
+
+  return buildMetadata({
+    locale: "th",
+    title,
     description:
       category.seoDescription ||
       category.description ||
-      `Products in category ${category.name}`,
-  }
+      `รวมสินค้าในหมวด ${category.name} จาก 168 Innovative สำหรับงานบรรจุภัณฑ์และการผลิต`,
+    path,
+    keywords: [category.name, "168 Innovative", "หมวดหมู่สินค้า"],
+  })
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
   const { slug } = await params
   const locale: Locale = "th"
+  const currentPage = parsePage((await searchParams).page)
 
   const [category, result] = await Promise.all([
     getCategoryBySlug(slug, locale),
-    getProductsByCategory(slug, locale, 1),
+    getProductsByCategory(slug, locale, currentPage),
   ])
 
   if (!category) notFound()
+  const faqJsonLd = buildFaqJsonLd(category.faqItems)
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="mx-auto max-w-7xl px-6 pb-32 pt-6">
-        <Breadcrumb />
+      {faqJsonLd ? (
+        <Script
+          id="category-faq-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
 
-        <header className="mb-14 mt-6 border-b border-[#E5E7EB] pb-10">
-          <Link
-            href="/categories"
-            className="mb-5 inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-[#14B8A6] transition-colors hover:text-[#0F766E]"
-          >
-            <ChevronLeft className="h-3 w-3" />
-            หมวดสินค้าทั้งหมด
-          </Link>
-
-          <h1 className="mt-4 text-3xl font-bold text-[#1A2535] md:text-4xl">
-            {category.name}
-          </h1>
-
-          {category.description && (
-            <p className="mt-3 max-w-lg text-sm leading-relaxed text-[#5A6A7E]">
-              {category.description}
-            </p>
-          )}
-        </header>
-
-        <Suspense
-          fallback={
-            <>
-              <ProductGrid
-                products={result.products}
-                categorySlug={slug}
-                totalCount={result.totalCount}
-                locale={locale}
-              />
-              <Pagination
-                currentPage={1}
-                totalPages={result.totalPages}
-                basePath={`/categories/${slug}`}
-              />
-            </>
+      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
+        <PageIntro
+          title={category.name}
+          description={category.description}
+          breadcrumbs={[
+            { label: "สินค้าของเรา", href: "/categories" },
+            { label: category.name },
+          ]}
+          actions={
+            <Link
+              href="/categories"
+              className="inline-flex items-center gap-1 rounded-full border border-[#D8E1EA] px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5A6A7E] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              ดูหมวดสินค้าทั้งหมด
+            </Link>
           }
-        >
-          <CategoryProductsSection
-            slug={slug}
-            locale={locale}
-            basePath={`/categories/${slug}`}
-            initialProducts={result.products}
-            initialTotalPages={result.totalPages}
-            initialTotalCount={result.totalCount}
+        />
+
+        {category.introHtml ? (
+          <RichTextSection
+            className="mt-12"
+            eyebrow="รายละเอียดหมวดสินค้า"
+            title="ข้อมูลเพิ่มเติมในหมวดนี้"
+            html={category.introHtml}
           />
-        </Suspense>
+        ) : null}
+
+        <CategoryProductsSection
+          slug={slug}
+          locale={locale}
+          basePath={`/categories/${slug}`}
+          currentPage={currentPage}
+          products={result.products}
+          totalPages={result.totalPages}
+          totalCount={result.totalCount}
+        />
+
+        <FaqSection
+          className="mt-12"
+          eyebrow="คำถามที่พบบ่อย"
+          title="FAQ"
+          items={category.faqItems}
+        />
       </div>
     </main>
   )

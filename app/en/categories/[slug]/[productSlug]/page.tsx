@@ -1,28 +1,58 @@
-// en/categories/[slug]/[productSlug]/page.tsx
-
 export const revalidate = 3600
 
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import Script from 'next/script'
+import { notFound } from 'next/navigation'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Factory,
+  Package,
+  Send,
+  ShieldCheck,
+  Truck,
+} from 'lucide-react'
+
+import ProductImageGallery from '@/app/components/product/ProductImageGallery'
+import Breadcrumb from '@/app/components/ui/Breadcrumb'
+import FaqSection from '@/app/components/ui/FaqSection'
+import RichTextSection from '@/app/components/ui/RichTextSection'
 import { getCategoryBySlug } from '@/app/lib/api/categories'
 import {
   getAllProductsForSitemap,
   getProductBySlug,
   getRelatedProducts,
 } from '@/app/lib/api/products'
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { Send, ChevronRight, ChevronLeft } from 'lucide-react'
-
-import Breadcrumb from '@/app/components/ui/Breadcrumb'
-import ProductImageGallery from '@/app/components/product/ProductImageGallery'
+import { buildFaqJsonLd } from '@/app/lib/schema'
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
 }
 
-/* ─────────────────────────────────────────────
-   Static Generation
-   ───────────────────────────────────────────── */
+const SITE_URL = 'https://168innovative.co.th'
+
+const TRUST_BADGES = [
+  { icon: Factory, text: 'Factory Standard' },
+  { icon: ShieldCheck, text: 'Food Grade Material' },
+  { icon: Package, text: 'Secure Packaging' },
+  { icon: Truck, text: 'Nationwide Shipping' },
+]
+
+function buildProductDescription(
+  productName: string,
+  categoryName?: string,
+  description?: string
+) {
+  const summary = description?.trim() || `${productName} from 168 Innovative`
+  const categoryText = categoryName ? ` in ${categoryName}` : ''
+  return `${productName}${categoryText} from 168 Innovative Co., Ltd. ${summary}`.slice(
+    0,
+    160
+  )
+}
+
 export async function generateStaticParams() {
   const products = await getAllProductsForSitemap()
 
@@ -32,31 +62,72 @@ export async function generateStaticParams() {
   }))
 }
 
-/* ─────────────────────────────────────────────
-   Metadata
-   ───────────────────────────────────────────── */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { productSlug, slug } = await params
-  // ✅ แก้: ใช้ locale 'en'
-  const product = await getProductBySlug(productSlug, 'en')
-  if (!product) return { title: 'Product not found' }
+  const [category, product] = await Promise.all([
+    getCategoryBySlug(slug, 'en'),
+    getProductBySlug(productSlug, 'en'),
+  ])
+
+  if (!product) {
+    return { title: 'Product not found' }
+  }
+
+  const canonicalPath = `/en/categories/${slug}/${productSlug}`
+  const description = buildProductDescription(
+    product.name,
+    category?.name,
+    product.description
+  )
+  const keywords = [
+    product.name,
+    `${product.name} supplier`,
+    `${product.name} manufacturer`,
+    category?.name,
+    '168 Innovative',
+    '168 Innovative Co., Ltd.',
+    'cosmetic packaging',
+  ].filter(Boolean) as string[]
 
   return {
-    title: `${product.name} | 168 Innovative`,
-    description: product.description.slice(0, 155),
+    title: product.name,
+    description,
+    keywords,
     alternates: {
-      canonical: `/en/categories/${slug}/${productSlug}`,
-      languages: { th: `/categories/${slug}/${productSlug}` },
+      canonical: canonicalPath,
+      languages: {
+        en: canonicalPath,
+        th: `/categories/${slug}/${productSlug}`,
+      },
+    },
+    openGraph: {
+      type: 'website',
+      url: `${SITE_URL}${canonicalPath}`,
+      title: `${product.name} | 168 Innovative`,
+      description,
+      siteName: '168 Innovative',
+      images: [
+        {
+          url: product.image.src,
+          alt: product.image.alt || product.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.name} | 168 Innovative`,
+      description,
+      images: [product.image.src],
+    },
+    robots: {
+      index: true,
+      follow: true,
     },
   }
 }
 
-/* ─────────────────────────────────────────────
-   Page
-   ───────────────────────────────────────────── */
 export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
-  // ✅ แก้: locale เป็น 'en'
   const locale = 'en'
 
   const [category, product, related] = await Promise.all([
@@ -68,149 +139,230 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!category || !product) notFound()
   if (product.categoryId !== category.id) notFound()
 
+  const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${SITE_URL}/en`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Products',
+        item: `${SITE_URL}/en/categories`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: category.name,
+        item: `${SITE_URL}/en/categories/${slug}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: product.name,
+        item: productUrl,
+      },
+    ],
+  }
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    url: productUrl,
+    mainEntityOfPage: productUrl,
+    name: product.name,
+    image: [`${SITE_URL}${product.image.src}`],
+    description: product.description,
+    sku: product.slug,
+    category: category.name,
+    brand: { '@type': 'Brand', name: '168 Innovative' },
+    manufacturer: { '@type': 'Organization', name: '168 Innovative Co., Ltd.' },
+    additionalProperty: product.specs.map((spec) => ({
+      '@type': 'PropertyValue',
+      name: spec.label,
+      value: spec.value,
+    })),
+    offers: {
+      '@type': 'Offer',
+      availability: 'https://schema.org/InStock',
+      priceCurrency: 'THB',
+      url: productUrl,
+    },
+  }
+  const faqJsonLd = buildFaqJsonLd(product.faqItems)
+
   return (
-    <main className="min-h-screen bg-[#F7F9FC]">
-      {/* Top accent bar */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#14B8A6] via-[#0EA5E9] to-[#6366F1]" />
+    <main className="min-h-screen bg-[#F8FAFC]">
+      <Script
+        id="product-jsonld-en"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="breadcrumb-jsonld-en"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd ? (
+        <Script
+          id="product-faq-jsonld-en"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
 
-      <div className="mx-auto max-w-7xl px-4 pb-32 pt-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pb-28 pt-6 lg:px-8">
+        <Breadcrumb
+          items={[
+            { label: "Products", href: "/en/categories" },
+            { label: category.name, href: `/en/categories/${slug}` },
+            { label: product.name },
+          ]}
+        />
 
-        {/* Breadcrumb */}
-        <div className="mb-10">
-          <Breadcrumb />
-        </div>
-
-        {/* ═══════════════ PRODUCT HERO ═══════════════ */}
-        <div className="grid grid-cols-1 gap-0 overflow-hidden rounded-[2.5rem] bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-2">
-
-          {/* LEFT — Image Panel */}
-          <div className="relative bg-gradient-to-br from-[#EEF2F7] to-[#E2EAF4] p-8 lg:p-12">
-            <div className="pointer-events-none absolute -left-12 -top-12 h-64 w-64 rounded-full bg-[#14B8A6]/10 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-8 -right-8 h-48 w-48 rounded-full bg-[#6366F1]/10 blur-2xl" />
-
-            {/* Category pill */}
-            {/* ✅ แก้: link ไปหน้า en/categories */}
+        <section className="mt-6 grid grid-cols-1 overflow-hidden rounded-[2rem] border border-[#DEE5EC] bg-white shadow-[0_18px_50px_rgba(15,23,42,0.06)] lg:grid-cols-2">
+          <div className="bg-[#F3F6F9] p-8 lg:p-12">
             <Link
               href={`/en/categories/${slug}`}
-              className="relative mb-6 inline-flex items-center gap-2 rounded-full border border-[#14B8A6]/30 bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#14B8A6] backdrop-blur-sm transition-all hover:bg-[#14B8A6] hover:text-white"
+              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[#D7E0E8] bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
             >
-              <ChevronLeft className="h-3 w-3" />
+              <ChevronLeft className="h-3.5 w-3.5" />
               {category.name}
             </Link>
 
-            <div className="relative">
-              <ProductImageGallery
-                src={product.image.src}
-                alt={product.image.alt}
-              />
-            </div>
+            <ProductImageGallery
+              src={product.image.src}
+              alt={product.image.alt}
+            />
 
-            {/* Model badge */}
-            <div className="mt-6 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-[#14B8A6]/40 to-transparent" />
-              <span className="rounded-full bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#64748B] shadow-sm">
-                {product.slug.toUpperCase()}
+            <div className="mt-8 flex items-center gap-3">
+              <div className="h-px flex-1 bg-[#D8E1EA]" />
+              <span className="rounded-full border border-[#D8E1EA] bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#728092]">
+                {product.slug}
               </span>
-              <div className="h-px flex-1 bg-gradient-to-l from-[#14B8A6]/40 to-transparent" />
+              <div className="h-px flex-1 bg-[#D8E1EA]" />
             </div>
           </div>
 
-          {/* RIGHT — Content Panel */}
-          <div className="flex flex-col justify-center p-8 lg:p-12">
+          <div className="flex flex-col justify-center border-t border-[#E3EAF1] p-8 lg:border-l lg:border-t-0 lg:p-12">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#14B8A6]">
+              Product Detail
+            </p>
 
-            <h1 className="font-serif text-3xl font-bold leading-tight text-[#0F1E33] md:text-4xl lg:text-[2.6rem]">
+            <h1 className="mt-4 font-heading text-3xl font-semibold leading-tight tracking-tight text-[#1A2535] md:text-4xl lg:text-[2.55rem]">
               {product.name}
             </h1>
 
-            <div className="my-6 flex items-center gap-3">
+            <div className="my-6 flex items-center gap-2.5">
               <div className="h-[3px] w-10 rounded-full bg-[#14B8A6]" />
-              <div className="h-[3px] w-4 rounded-full bg-[#14B8A6]/30" />
+              <div className="h-[3px] w-4 rounded-full bg-[#B9EAE5]" />
             </div>
 
-            <p className="text-base font-light leading-relaxed text-[#4A5568] lg:text-[1.05rem]">
+            <p className="text-sm leading-7 text-[#556476] md:text-[15px]">
               {product.description}
             </p>
 
-            {/* Specifications */}
             {product.specs && product.specs.length > 0 && (
               <div className="mt-10">
-                {/* ✅ แก้: หัวข้อภาษาอังกฤษ */}
-                <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#94A3B8]">
+                <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#7E8C9B]">
                   Specifications
                 </p>
-                <div className="overflow-hidden rounded-2xl border border-slate-100 bg-[#F8FAFC]">
+
+                <div className="overflow-hidden rounded-[1.4rem] border border-[#E3EAF1] bg-[#FAFCFD]">
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
-                      className={`flex flex-col gap-1.5 px-6 py-4 text-sm transition-colors hover:bg-[#EEF6F5] sm:flex-row sm:items-center sm:justify-between ${
-                        index !== product.specs.length - 1 ? 'border-b border-slate-100' : ''
+                      className={`grid gap-2 px-5 py-4 text-sm sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] sm:items-center ${
+                        index !== product.specs.length - 1
+                          ? 'border-b border-[#ECF1F5]'
+                          : ''
                       }`}
                     >
-                      <span className="shrink-0 font-medium text-[#94A3B8]">{spec.label}</span>
-                      <span className="rounded-lg bg-white px-3 py-1 font-bold text-[#0F1E33] shadow-sm sm:max-w-[60%] sm:text-right">
+                      <div className="text-[#7B8897]">{spec.label}</div>
+                      <div className="font-semibold text-[#1A2535] sm:text-right">
                         {spec.value}
-                      </span>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* CTA */}
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              {/* ✅ แก้: ข้อความปุ่มภาษาอังกฤษ */}
               <Link
                 href={`/en/contact?product=${encodeURIComponent(product.name)}`}
-                className="group relative flex flex-1 items-center justify-center gap-3 overflow-hidden rounded-2xl bg-[#0F1E33] px-8 py-4 text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl active:scale-[0.98]"
+                className="group inline-flex items-center justify-center gap-2 rounded-[1.1rem] bg-[#1A2535] px-7 py-4 text-sm font-semibold text-white transition-all hover:bg-[#14B8A6] active:scale-[0.98]"
               >
-                <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 Request a Quote
               </Link>
             </div>
 
-            {/* Trust badges */}
-            {/* ✅ แก้: ข้อความ badge ภาษาอังกฤษ */}
-            <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {[
-                { icon: '🏭', text: 'Factory Standard' },
-                { icon: '🛡️', text: 'Food Grade' },
-                { icon: '📦', text: 'Secure Packaging' },
-                { icon: '🚚', text: 'Nationwide Shipping' },
-              ].map((b) => (
+            <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {TRUST_BADGES.map(({ icon: Icon, text }) => (
                 <div
-                  key={b.text}
-                  className="flex flex-col items-center gap-1.5 rounded-xl bg-[#F8FAFC] p-3 text-center transition-colors hover:bg-[#EEF6F5]"
+                  key={text}
+                  className="rounded-[1rem] border border-[#E7EDF3] bg-[#F8FAFC] p-3 text-center"
                 >
-                  <span className="text-lg">{b.icon}</span>
-                  <span className="text-[11px] font-semibold leading-tight text-[#64748B]">
-                    {b.text}
+                  <Icon
+                    className="mx-auto h-4 w-4 text-[#14B8A6]"
+                    strokeWidth={1.8}
+                  />
+                  <span className="mt-2 block text-[11px] font-medium leading-tight text-[#6E7D8D]">
+                    {text}
                   </span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ═══════════════ RELATED PRODUCTS ═══════════════ */}
+        {product.contentHtml ? (
+          <RichTextSection
+            className="mt-16"
+            eyebrow="Deep Detail"
+            title="Product Overview"
+            html={product.contentHtml}
+          />
+        ) : null}
+
+        {product.applicationHtml ? (
+          <RichTextSection
+            className="mt-8"
+            eyebrow="Applications"
+            title="Recommended Applications"
+            html={product.applicationHtml}
+          />
+        ) : null}
+
+        <FaqSection
+          className="mt-8"
+          eyebrow="Frequently Asked Questions"
+          title="FAQ"
+          items={product.faqItems}
+        />
+
         {related.length > 0 && (
-          // ✅ แก้: aria-label ภาษาอังกฤษ
           <section className="mt-24" aria-label="Related Products">
-            <div className="mb-10 flex items-end justify-between">
+            <div className="mb-10 flex items-end justify-between border-b border-[#E5EBF1] pb-6">
               <div>
-                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#14B8A6]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#14B8A6]">
                   Discover More
-                </span>
-                {/* ✅ แก้: หัวข้อภาษาอังกฤษ */}
-                <h2 className="mt-2 font-serif text-2xl font-bold text-[#0F1E33] md:text-3xl">
+                </p>
+                <h2 className="mt-2 font-heading text-2xl font-semibold text-[#1A2535] md:text-3xl">
                   You May Also Like
                 </h2>
               </div>
+
               <Link
                 href={`/en/categories/${slug}`}
-                className="hidden items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-[#0F1E33] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
+                className="hidden items-center gap-1.5 rounded-full border border-[#D9E2EA] bg-white px-4 py-2.5 text-sm font-semibold text-[#637284] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
               >
-                {/* ✅ แก้: ข้อความภาษาอังกฤษ */}
                 View All <ChevronRight size={14} />
               </Link>
             </div>
@@ -220,20 +372,23 @@ export default async function ProductDetailPage({ params }: Props) {
                 <Link
                   key={item.id}
                   href={`/en/categories/${slug}/${item.slug}`}
-                  className="group rounded-3xl bg-white p-4 shadow-sm shadow-slate-100 transition-all hover:-translate-y-1 hover:shadow-md hover:shadow-slate-200"
+                  className="group overflow-hidden rounded-[1.6rem] border border-[#E3EAF1] bg-white p-2 shadow-[0_12px_35px_rgba(15,23,42,0.06)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(15,23,42,0.12)]"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#EEF2F7]">
-                    <img
+                  <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[#F3F6F9]">
+                    <Image
                       src={item.image.src}
                       alt={item.image.alt}
-                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <div className="mt-3 space-y-0.5 px-1">
-                    <h3 className="line-clamp-2 text-xs font-bold leading-snug text-[#0F1E33] transition-colors group-hover:text-[#14B8A6]">
+
+                  <div className="px-2 pb-3 pt-4">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
                       {item.name}
                     </h3>
-                    <p className="text-[11px] font-medium text-[#94A3B8]">168 Innovative</p>
+                    <div className="mt-3 h-px w-10 bg-[#D8E1EA] transition-all duration-300 group-hover:w-16 group-hover:bg-[#14B8A6]" />
                   </div>
                 </Link>
               ))}

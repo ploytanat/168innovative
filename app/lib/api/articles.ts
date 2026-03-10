@@ -1,3 +1,4 @@
+import { mapFaqItems, pickLocalizedText } from "./acf"
 import { Locale, WPArticle } from "../types/content"
 import { ArticleView } from "../types/view"
 
@@ -60,7 +61,13 @@ function mapWPArticleToView(wp: WPArticle, locale: Locale): ArticleView {
       locale === "th" ? acf.meta_description_th : acf.meta_description_en,
     canonicalUrl:
       locale === "th" ? acf.canonical_url_th : acf.canonical_url_en,
-    focusKeyword: acf.focus_keyword,
+    focusKeyword: pickLocalizedText(
+      locale,
+      acf.focus_keyword_th ?? acf.focus_keyword,
+      acf.focus_keyword_en ?? acf.focus_keyword
+    ),
+    readingTimeMinutes: acf.reading_time_minutes,
+    faqItems: mapFaqItems(acf.faq_items, locale),
   }
 }
 

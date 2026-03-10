@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ExternalLink, MapPin } from 'lucide-react'
 
 import { CompanyView } from '@/app/lib/types/view'
 
@@ -28,6 +29,7 @@ const copy = {
     contact: 'Contact',
     connect: 'Connect',
     language: 'Language',
+    openMap: 'เปิดใน Google Maps',
     salesDesk: 'Sales Desk',
     emailDesk: 'Email',
     copyright: 'All rights reserved.',
@@ -41,11 +43,15 @@ const copy = {
     contact: 'Contact',
     connect: 'Connect',
     language: 'Language',
+    openMap: 'Open in Google Maps',
     salesDesk: 'Sales Desk',
     emailDesk: 'Email',
     copyright: 'All rights reserved.',
   },
 } as const
+
+const GOOGLE_MAPS_URL =
+  "https://www.google.com/maps/place/168+INNOVATIVE/@13.6189889,100.4238107,16.58z/data=!4m15!1m8!3m7!1s0x30e2bcb939ac5e39:0xa5d1f39039bd8382!2zODkg4LiL4Lit4LiiIOC5gOC4l-C4teC4ouC4meC4l-C4sOC5gOC4pSAyMCDguYHguILguKfguIfguYHguKrguKHguJTguLMg4LmA4LiC4LiV4Lia4Liy4LiH4LiC4Li44LiZ4LmA4LiX4Li14Lii4LiZIOC4geC4o-C4uOC4h-C5gOC4l-C4nuC4oeC4q-C4suC4meC4hOC4oyAxMDE1MA!3b1!8m2!3d13.620821!4d100.4236494!16s%2Fg%2F11sp98b_dz!3m5!1s0x30e2bd007a6774dd:0xa3b3383a2a290b44!8m2!3d13.6174254!4d100.4232667!16s%2Fg%2F11w4sb_jqj?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D"
 
 function formatSocialLabel(type: string) {
   return type.replace(/[-_]/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
@@ -118,6 +124,16 @@ export default function Footer({ company }: FooterProps) {
                 <p className="mt-1.5 text-[12px] leading-5 text-[#5F5650]">
                   {company.address}
                 </p>
+                <a
+                  href={GOOGLE_MAPS_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#DCD4CB] bg-white px-3 py-2 text-[11px] font-semibold tracking-[0.08em] text-[#1A2535] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
+                >
+                  <MapPin className="h-3.5 w-3.5" />
+                  <span>{text.openMap}</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
               </div>
 
               <div className="rounded-[1rem] border border-[#E9E2D9] bg-[#1A2535] p-3 text-white">

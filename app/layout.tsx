@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { headers } from "next/headers"
 import {
   Cormorant_Garamond,
   Manrope,
@@ -13,9 +14,11 @@ import "./globals.css"
 import Footer from "./components/layout/Footer"
 import Navigation from "./components/layout/Navigation"
 import BackToTop from "./components/ui/BackToTop"
+import { COMPANY_NAME, SITE_URL } from "./config/site"
 import { getCompany } from "./lib/api/company"
+import type { Locale } from "./lib/types/content"
 
-const baseUrl = "https://168innovative.co.th"
+const baseUrl = SITE_URL
 
 const headingEn = Cormorant_Garamond({
   subsets: ["latin"],
@@ -99,7 +102,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = "th"
+  const headerStore = await headers()
+  const locale = (headerStore.get("x-site-locale") === "en" ? "en" : "th") as Locale
   const company = await getCompany(locale)
 
   const displayLogo = company?.logo ?? {
@@ -110,7 +114,7 @@ export default async function RootLayout({
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: "168 Innovative Co., Ltd.",
+    name: COMPANY_NAME,
     url: baseUrl,
     logo: displayLogo.src,
     image: displayLogo.src,

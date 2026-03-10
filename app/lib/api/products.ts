@@ -1,6 +1,7 @@
 // app/lib/api/products.ts
 
 import { unstable_cache } from "next/cache"
+import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
 import { Locale, WPProduct } from "../types/content"
 import { ProductView, ProductSpecView } from "../types/view"
 
@@ -83,7 +84,7 @@ const _getProductsRaw = unstable_cache(
     fetchJSON<WPProduct[]>(
       `${BASE}/wp-json/wp/v2/product?per_page=8&_fields=${PRODUCT_FIELDS}`
     ),
-  ["products-home-v5"],
+  ["products-home-v6"],
   { revalidate: 3600, tags: ["products"] }
 )
 
@@ -113,7 +114,7 @@ function _getProductsByCategoryId(
 
       return { data, totalPages, totalCount }
     },
-    [`products-category-${categoryId}-p${page}`],
+    [`products-category-${categoryId}-p${page}-v2`],
     { revalidate: 3600, tags: ["products"] }
   )()
 }
@@ -128,7 +129,7 @@ function _getProductRaw(slug: string): Promise<WPProduct[]> {
       fetchJSON<WPProduct[]>(
         `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`
       ),
-    [`product-single-${slug}`],
+    [`product-single-${slug}-v2`],
     { revalidate: 3600, tags: ["products"] }
   )()
 }
@@ -143,7 +144,7 @@ function _getRelatedRaw(categoryId: number): Promise<WPProduct[]> {
       fetchJSON<WPProduct[]>(
         `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`
       ),
-    [`products-related-${categoryId}`],
+    [`products-related-${categoryId}-v2`],
     { revalidate: 3600, tags: ["products"] }
   )()
 }
@@ -171,21 +172,22 @@ function mapWPToProductView(
   return {
     id: wp.id.toString(),
     slug: wp.slug,
-    name:
-      locale === "th"
-        ? wp.acf?.name_th ?? wp.title.rendered
-        : wp.acf?.name_en ?? wp.title.rendered,
-    description:
-      locale === "th"
-        ? wp.acf?.description_th ?? ""
-        : wp.acf?.description_en ?? "",
+    name: pickLocalizedText(locale, wp.acf?.name_th, wp.acf?.name_en, wp.title.rendered),
+    description: pickLocalizedText(locale, wp.acf?.description_th, wp.acf?.description_en),
     image: {
       src: wp.featured_image_url ?? "/images/placeholder.webp",
-      alt: wp.title.rendered,
+      alt: pickLocalizedText(locale, wp.acf?.image_alt_th, wp.acf?.image_alt_en, wp.title.rendered),
     },
     categoryId: categoryId.toString(),
     categorySlug: catMap[categoryId] ?? "",
     specs,
+    contentHtml: normalizeRichText(
+      locale === "th" ? wp.acf?.content_th : wp.acf?.content_en
+    ),
+    applicationHtml: normalizeRichText(
+      locale === "th" ? wp.acf?.application_th : wp.acf?.application_en
+    ),
+    faqItems: mapFaqItems(wp.acf?.faq_items, locale),
     price: undefined,
   }
 }

@@ -3,6 +3,11 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+export type BreadcrumbItem = {
+  label: string
+  href?: string
+}
+
 const ChevronRightIcon = () => (
   <svg
     fill="none"
@@ -35,18 +40,30 @@ function formatLabel(segment: string, isEn: boolean) {
   return segment.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
-export default function Breadcrumb() {
+export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
   const pathname = usePathname()
   const isEn = pathname.startsWith('/en')
 
-  const segments = pathname
-    .split('/')
-    .filter(Boolean)
-    .filter((segment) => segment !== 'en')
+  const derivedItems =
+    items ??
+    pathname
+      .split('/')
+      .filter(Boolean)
+      .filter((segment) => segment !== 'en')
+      .map((segment, index, segments) => {
+        const href = isEn
+          ? `/en/${segments.slice(0, index + 1).join('/')}`
+          : `/${segments.slice(0, index + 1).join('/')}`
+
+        return {
+          label: formatLabel(segment, isEn),
+          href,
+        }
+      })
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[#E6DED6] bg-white/80 px-4 py-2 text-[11px] font-medium text-[#8A7E74] shadow-sm backdrop-blur">
+    <nav aria-label="Breadcrumb">
+      <ol className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[#E5E7EB] bg-white px-4 py-2 text-[11px] font-medium text-[#7A8795] shadow-sm">
         <li>
           <Link
             href={isEn ? '/en' : '/'}
@@ -56,27 +73,22 @@ export default function Breadcrumb() {
           </Link>
         </li>
 
-        {segments.map((segment, index) => {
-          const isLast = index === segments.length - 1
-          const href = isEn
-            ? `/en/${segments.slice(0, index + 1).join('/')}`
-            : `/${segments.slice(0, index + 1).join('/')}`
-
-          const label = formatLabel(segment, isEn)
+        {derivedItems.map((item, index) => {
+          const isLast = index === derivedItems.length - 1
 
           return (
-            <li key={`${segment}-${index}`} className="inline-flex items-center gap-2">
+            <li key={`${item.label}-${index}`} className="inline-flex items-center gap-2">
               <ChevronRightIcon />
               {isLast ? (
                 <span className="font-semibold text-[#1A2535]" aria-current="page">
-                  {label}
+                  {item.label}
                 </span>
               ) : (
                 <Link
-                  href={href}
+                  href={item.href || '#'}
                   className="transition-colors hover:text-[#1A2535]"
                 >
-                  {label}
+                  {item.label}
                 </Link>
               )}
             </li>
