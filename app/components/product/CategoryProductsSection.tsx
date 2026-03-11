@@ -1,3 +1,7 @@
+"use client"
+
+import { useState } from "react"
+
 import type { ProductView } from "@/app/lib/types/view"
 
 import Pagination from "../ui/Pagination"
@@ -9,6 +13,7 @@ interface CategoryProductsSectionProps {
   basePath: string
   currentPage: number
   products: ProductView[]
+  searchProducts: ProductView[]
   totalPages: number
   totalCount: number
 }
@@ -19,23 +24,29 @@ export default function CategoryProductsSection({
   basePath,
   currentPage,
   products,
+  searchProducts,
   totalPages,
   totalCount,
 }: CategoryProductsSectionProps) {
+  const [isSearching, setIsSearching] = useState(false)
+
   return (
     <section className="mt-14 md:mt-16">
       <ProductGrid
         products={products}
+        searchProducts={searchProducts}
         categorySlug={slug}
         totalCount={totalCount}
         locale={locale}
+        onSearchStateChange={setIsSearching}
       />
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        basePath={basePath}
-      />
+      {totalPages > 1 && !isSearching ? (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          basePath={basePath}
+        />
+      ) : null}
     </section>
   )
 }

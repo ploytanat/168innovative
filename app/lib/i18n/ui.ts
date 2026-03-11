@@ -1,69 +1,75 @@
 export const uiText = {
   featuredProducts: {
-    th: 'สินค้าแนะนำ',
-    en: 'Featured Products',
+    th: "สินค้าแนะนำ",
+    en: "Featured Products",
+  },
+  spoutProducts: {
+    th: "จุก Spout แนะนำ",
+    en: "Featured Spout Collection",
   },
   viewAllProducts: {
-    th: 'ดูสินค้าทั้งหมด',
-    en: 'View All Products',
+    th: "ดูสินค้าทั้งหมด",
+    en: "View All Products",
+  },
+  viewAllSpoutProducts: {
+    th: "ดูสินค้า Spout ทั้งหมด",
+    en: "View All Spout Products",
   },
 
   categories: {
     title: {
-      th: 'หมวดหมู่สินค้า',
-      en: 'Our Categories',
+      th: "หมวดหมู่สินค้า",
+      en: "Our Categories",
     },
     viewAll: {
-      th: 'ดูหมวดหมู่ทั้งหมด',
-      en: 'View All Categories',
+      th: "ดูหมวดหมู่ทั้งหมด",
+      en: "View All Categories",
     },
-
-    // ✅ เพิ่มตรงนี้
     exploreMore: {
-      th: 'ดูเพิ่มเติม',
-      en: 'Explore More',
+      th: "ดูเพิ่มเติม",
+      en: "Explore More",
     },
     noImage: {
-      th: 'ไม่มีรูปภาพ',
-      en: 'No Image',
+      th: "ไม่มีรูปภาพ",
+      en: "No Image",
     },
   },
 
   contact: {
     title: {
-      th: 'สร้างแบรนด์ของคุณ',
+      th: "สร้างแบรนด์ของคุณ",
       en: "Let's build your brand",
     },
     subtitle: {
-      th: 'ไปกับเรา',
-      en: 'together.',
+      th: "ไปกับเรา",
+      en: "together.",
     },
     desc: {
-      th: 'เราพร้อมให้คำปรึกษาเรื่องบรรจุภัณฑ์และการผลิต OEM ครบวงจร',
-      en: 'Consult with our experts about packaging and OEM services.',
+      th: "เราพร้อมให้คำปรึกษาเรื่องบรรจุภัณฑ์และการผลิต OEM ครบวงจร",
+      en: "Consult with our experts about packaging and OEM services.",
     },
     phoneLabel: {
-      th: 'ปรึกษาฝ่ายขาย',
-      en: 'Phone Support',
+      th: "ปรึกษาฝ่ายขาย",
+      en: "Phone Support",
     },
     emailLabel: {
-      th: 'ติดต่อทางอีเมล',
-      en: 'Direct Email',
+      th: "ติดต่อทางอีเมล",
+      en: "Direct Email",
     },
     lineLabel: {
-      th: 'ช่องทาง LINE OA',
-      en: 'Official LINE Account',
+      th: "ช่องทาง LINE OA",
+      en: "Official LINE Account",
     },
     lineDesc: {
-      th: 'แอดไลน์เพื่อรับโปรโมชั่นและคุยกับเจ้าหน้าที่',
-      en: 'Scan to chat with us',
+      th: "แอดไลน์เพื่อรับโปรโมชั่นและคุยกับเจ้าหน้าที่",
+      en: "Scan to chat with us",
     },
   },
 
   whyChooseUs: {
     title: {
-      th: 'ทำไมต้องเลือก 168 Innovative',
-      en: 'Why Choose 168 Innovative',
+      th: "ทำไมต้องเลือก 168 Innovative",
+      en: "Why Choose 168 Innovative",
     },
   },
 } as const

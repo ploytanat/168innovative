@@ -10,7 +10,10 @@ import PageIntro from "@/app/components/ui/PageIntro"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
 import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
-import { getProductsByCategory } from "@/app/lib/api/products"
+import {
+  getAllProductsByCategory,
+  getProductsByCategory,
+} from "@/app/lib/api/products"
 import { shouldIndexCategory } from "@/app/lib/seo/indexability"
 import { buildFaqJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
@@ -84,9 +87,10 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const locale: Locale = "th"
   const currentPage = parsePage((await searchParams).page)
 
-  const [category, result] = await Promise.all([
+  const [category, result, allProducts] = await Promise.all([
     getCategoryBySlug(slug, locale),
     getProductsByCategory(slug, locale, currentPage),
+    getAllProductsByCategory(slug, locale),
   ])
 
   if (!category) notFound()
@@ -139,6 +143,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           basePath={`/categories/${slug}`}
           currentPage={currentPage}
           products={result.products}
+          searchProducts={allProducts}
           totalPages={result.totalPages}
           totalCount={result.totalCount}
         />

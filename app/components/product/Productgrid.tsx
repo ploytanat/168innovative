@@ -1,17 +1,19 @@
-'use client'
+"use client"
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowDownAZ, ArrowUpAZ, Search, X } from 'lucide-react'
 
 import { ProductView } from '@/app/lib/types/view'
 
 interface Props {
   products: ProductView[]
+  searchProducts: ProductView[]
   categorySlug: string
   totalCount: number
   locale?: 'th' | 'en'
+  onSearchStateChange?: (isSearching: boolean) => void
 }
 
 type SortOrder = 'default' | 'asc' | 'desc'
@@ -89,9 +91,11 @@ function getTone(locale: 'th' | 'en') {
 
 export default function ProductGrid({
   products,
+  searchProducts,
   categorySlug,
   totalCount,
   locale = 'th',
+  onSearchStateChange,
 }: Props) {
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOrder>('default')
@@ -99,7 +103,8 @@ export default function ProductGrid({
   const tone = getTone(locale)
 
   const filtered = useMemo(() => {
-    let result = [...products]
+    const source = query.trim() ? searchProducts : products
+    let result = [...source]
 
     if (query.trim()) {
       const normalized = query.trim().toLowerCase()
@@ -121,7 +126,7 @@ export default function ProductGrid({
     }
 
     return result
-  }, [products, query, sort, locale])
+  }, [products, searchProducts, query, sort, locale])
 
   const cycleSort = () => {
     setSort((state) =>
@@ -134,6 +139,10 @@ export default function ProductGrid({
   const SortIcon = sort === 'desc' ? ArrowUpAZ : ArrowDownAZ
   const isSearching = query.trim().length > 0
   const displayCount = isSearching ? filtered.length : totalCount
+
+  useEffect(() => {
+    onSearchStateChange?.(isSearching)
+  }, [isSearching, onSearchStateChange])
 
   return (
     <div>

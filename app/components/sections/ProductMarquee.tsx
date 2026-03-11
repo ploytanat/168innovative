@@ -16,7 +16,15 @@ export default function ProductMarquee({
 }: ProductMarqueeProps) {
   if (!items.length) return null
 
+  const isSpoutShowcase = items.every((item) => item.categorySlug === "spout")
   const marqueeItems = [...items, ...items]
+  const sectionTitle = isSpoutShowcase
+    ? uiText.spoutProducts[locale]
+    : uiText.featuredProducts[locale]
+  const ctaHref = isSpoutShowcase ? "/categories/spout" : "/categories"
+  const ctaLabel = isSpoutShowcase
+    ? uiText.viewAllSpoutProducts[locale]
+    : uiText.viewAllProducts[locale]
 
   return (
     <section className="relative overflow-hidden bg-white py-12 md:py-4">
@@ -43,7 +51,7 @@ export default function ProductMarquee({
         <h2
           className="font-heading mt-3 text-2xl font-bold tracking-[0.02em] text-slate-800 sm:text-3xl lg:text-4xl"
         >
-          {uiText.featuredProducts[locale]}
+          {sectionTitle}
         </h2>
         <div className="mx-auto mt-4 flex items-center justify-center gap-2">
           <div className="h-px w-8 bg-rose-300 md:w-12" />
@@ -127,10 +135,10 @@ export default function ProductMarquee({
 
       <div className="mt-8 text-center md:mt-6">
         <Link
-          href={withLocalePath("/categories", locale)}
+          href={withLocalePath(ctaHref, locale)}
           className="inline-flex items-center gap-2.5 rounded-full border border-rose-200 bg-white px-8 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-400 shadow-sm transition-all duration-300 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-500 hover:shadow-md active:scale-95 md:text-xs"
         >
-          {uiText.viewAllProducts[locale]}
+          {ctaLabel}
           <span aria-hidden="true" className="text-sm">
             →
           </span>

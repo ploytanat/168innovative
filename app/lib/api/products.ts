@@ -139,6 +139,35 @@ function _getProductsByCategoryId(
   )()
 }
 
+function _getProductsByCategoryBatch(
+  categoryId: number,
+  page: number,
+  perPage: number
+): Promise<{ data: WPProduct[]; totalPages: number; totalCount: number }> {
+  return unstable_cache(
+    async () => {
+      const res = await fetch(
+        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
+        { next: { revalidate: 3600 } }
+      )
+
+      if (!res.ok) {
+        throw new Error(
+          `Fetch failed: category ${categoryId} page ${page} per_page ${perPage}`
+        )
+      }
+
+      const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
+      const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
+      const data = (await res.json()) as WPProduct[]
+
+      return { data, totalPages, totalCount }
+    },
+    [`products-category-${categoryId}-p${page}-pp${perPage}-v1`],
+    { revalidate: 3600, tags: ["products"] }
+  )()
+}
+
 /* ─────────────────────────────
    Single product
 ───────────────────────────── */
@@ -318,6 +347,32 @@ export async function getProductsByCategory(
     totalPages,
     totalCount,
   }
+}
+
+export async function getAllProductsByCategory(slug: string, locale: Locale) {
+  const [categoryId, catMap] = await Promise.all([
+    getCategoryIdBySlug(slug),
+    _getCategoryMap(),
+  ])
+
+  if (!categoryId) {
+    return []
+  }
+
+  const firstBatch = await _getProductsByCategoryBatch(categoryId, 1, 100)
+  let data = firstBatch.data
+
+  if (firstBatch.totalPages > 1) {
+    const remainingBatches = await Promise.all(
+      Array.from({ length: firstBatch.totalPages - 1 }, (_, index) =>
+        _getProductsByCategoryBatch(categoryId, index + 2, 100)
+      )
+    )
+
+    data = data.concat(remainingBatches.flatMap((batch) => batch.data))
+  }
+
+  return data.map((wp) => mapWPToProductView(wp, locale, catMap))
 }
 
 export async function getProductBySlug(slug: string, locale: Locale) {
