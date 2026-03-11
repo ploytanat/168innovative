@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 
-import AboutHero from "../components/sections/AboutHero"
-import WhyChooseUs from "../components/sections/WhyChooseUs"
-import { buildMetadata } from "../config/seo"
-import { getAbout } from "../lib/api/about"
-import { getWhy } from "../lib/api/why"
+import AboutHero from "@/app/components/sections/AboutHero"
+import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import { buildMetadata } from "@/app/config/seo"
+import { getAbout } from "@/app/lib/api/about"
+import { getWhy } from "@/app/lib/api/why"
 
 export async function generateMetadata(): Promise<Metadata> {
   const about = await getAbout("th")

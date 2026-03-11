@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 
-import CategorySection from "../components/sections/CategorySection"
-import ContactSection from "../components/sections/ContactSection"
-import HeroCarousel from "../components/sections/HeroCarousel"
-import ProductMarquee from "../components/sections/ProductMarquee"
-import WhyChooseUs from "../components/sections/WhyChooseUs"
-import { buildMetadata } from "../config/seo"
-import { getHomeSections } from "../lib/api/home"
+import CategorySection from "@/app/components/sections/CategorySection"
+import ContactSection from "@/app/components/sections/ContactSection"
+import HeroCarousel from "@/app/components/sections/HeroCarousel"
+import ProductMarquee from "@/app/components/sections/ProductMarquee"
+import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import { buildMetadata } from "@/app/config/seo"
+import { getHomeSections } from "@/app/lib/api/home"
 
 export const metadata: Metadata = buildMetadata({
   locale: "en",

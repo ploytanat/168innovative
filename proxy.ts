@@ -3,9 +3,6 @@ import type { NextRequest } from "next/server"
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const locale = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "th"
-  const requestHeaders = new Headers(request.headers)
-  requestHeaders.set("x-site-locale", locale)
 
   if (pathname === "/category") {
     const response = NextResponse.redirect(
@@ -53,13 +50,7 @@ export async function proxy(request: NextRequest) {
     return response
   }
 
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  })
-  response.headers.set("x-site-locale", locale)
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

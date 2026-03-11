@@ -2,12 +2,12 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { Mail, MapPin, Phone } from "lucide-react"
 
-import BackgroundBlobs from "../components/ui/BackgroundBlobs"
-import LazyMap from "../components/ui/LazyMap"
-import PageIntro from "../components/ui/PageIntro"
-import { buildMetadata } from "../config/seo"
-import { getCompany } from "../lib/api/company"
-import type { Locale } from "../lib/types/content"
+import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs"
+import LazyMap from "@/app/components/ui/LazyMap"
+import PageIntro from "@/app/components/ui/PageIntro"
+import { buildMetadata } from "@/app/config/seo"
+import { getCompany } from "@/app/lib/api/company"
+import type { Locale } from "@/app/lib/types/content"
 
 export const metadata: Metadata = buildMetadata({
   locale: "th",

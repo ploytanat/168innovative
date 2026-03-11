@@ -5,6 +5,7 @@ import { pickLocalizedText } from "./acf"
 import { CompanyView } from "../types/view"
 
 const BASE = process.env.WP_API_URL
+const COMPANY_REVALIDATE_SECONDS = 60
 
 if (!BASE) {
   throw new Error("WP_API_URL is not defined")
@@ -25,6 +26,9 @@ interface CompanyAcf {
   phone_3_number?: string
   phone_3_label_th?: string
   phone_3_label_en?: string
+  phone_4_number?: string
+  phone_4_label_th?: string
+  phone_4_label_en?: string
   email_1?: string
   email_2?: string
   email_3?: string
@@ -61,7 +65,7 @@ type RawCompanyData = {
 const getCompanyData = unstable_cache(
   async (): Promise<RawCompanyData> => {
     const res = await fetch(`${BASE}/wp-json/wp/v2/company?per_page=1`, {
-      next: { revalidate: 3600, tags: ["company"] },
+      next: { revalidate: COMPANY_REVALIDATE_SECONDS, tags: ["company"] },
     })
 
     if (!res.ok) {
@@ -94,7 +98,12 @@ const getCompanyData = unstable_cache(
       const uniqueIds = Array.from(new Set(imageIds))
       const mediaRes = await fetch(
         `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
-        { next: { revalidate: 3600, tags: ["company"] } }
+        {
+          next: {
+            revalidate: COMPANY_REVALIDATE_SECONDS,
+            tags: ["company"],
+          },
+        }
       )
 
       if (mediaRes.ok) {
@@ -107,12 +116,27 @@ const getCompanyData = unstable_cache(
 
     return { acf, mediaMap }
   },
-  ["company-data-v2"],
-  { revalidate: 3600, tags: ["company"] }
+  ["company-data-v3"],
+  { revalidate: COMPANY_REVALIDATE_SECONDS, tags: ["company"] }
 )
 
 function getMediaUrl(mediaMap: Record<number, string>, id: unknown) {
   return typeof id === "number" ? mediaMap[id] ?? null : null
+}
+
+function getPhonePriority(label: string) {
+  const normalized = label.trim().toLowerCase()
+
+  if (
+    normalized.includes("สำนักงานใหญ่") ||
+    normalized.includes("ติดต่อสำนักงาน") ||
+    normalized.includes("head office") ||
+    normalized.includes("office")
+  ) {
+    return 0
+  }
+
+  return 1
 }
 
 export async function getCompany(locale: Locale): Promise<CompanyView | null> {
@@ -218,6 +242,14 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
           acf.phone_3_label_en
         ),
       },
+      {
+        number: acf.phone_4_number,
+        label: pickLocalizedText(
+          locale,
+          acf.phone_4_label_th,
+          acf.phone_4_label_en
+        ),
+      },
     ].filter(
       (
         phone
@@ -226,6 +258,13 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
         label: string
       } => Boolean(phone.number)
     )
+      .map((phone, index) => ({ ...phone, index }))
+      .sort(
+        (a, b) =>
+          getPhonePriority(a.label) - getPhonePriority(b.label) ||
+          a.index - b.index
+      )
+      .map((phone) => ({ number: phone.number, label: phone.label }))
     const email = [acf.email_1, acf.email_2, acf.email_3].filter(
       (item): item is string => Boolean(item)
     )
