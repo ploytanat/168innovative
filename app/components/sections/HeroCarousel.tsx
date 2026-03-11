@@ -253,7 +253,7 @@ export default function HeroCarousel({ hero }: Props) {
             <div className="flex gap-12 pt-12 border-t border-neutral-200">
               {active.stats.map((s, i) => (
                 <div key={i}>
-                  <div className="font-heading text-3xl text-neutral-900">
+                  <div className="font-heading text-xl text-neutral-900">
                     {s.value}
                   </div>
                   <div className="font-body text-[11px] tracking-[0.2em] uppercase text-neutral-500 mt-1">

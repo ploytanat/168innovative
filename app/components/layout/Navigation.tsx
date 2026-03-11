@@ -172,7 +172,7 @@ function NavigationInner({
             <li key={item.href}>
               <Link
                 href={withLocale(item.href)}
-                className={`inline-flex rounded-full px-3.5 py-2 text-[12px] font-medium uppercase tracking-[0.16em] transition-all ${
+                className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-medium uppercase tracking-[0.16em] transition-all ${
                   isActive(item.href)
                     ? "bg-[#1A2535] text-white shadow-[0_10px_24px_rgba(26,37,53,0.14)]"
                     : "text-neutral-500 hover:bg-[#F5F2EE] hover:text-[#1A2535]"
@@ -214,7 +214,7 @@ function NavigationInner({
                 key={item.href}
                 href={withLocale(item.href)}
                 onClick={closeMenu}
-                className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] transition-all ${
+                className={`flex items-center justify-between rounded-2xl px-4 py-3 text-md font-medium uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
                     ? "bg-[#1A2535] text-white shadow-[0_10px_22px_rgba(26,37,53,0.12)]"
                     : "text-neutral-500 hover:bg-white hover:text-[#1A2535]"
