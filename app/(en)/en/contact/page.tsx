@@ -3,6 +3,7 @@ import Image from "next/image"
 import { Mail, MapPin, Phone } from "lucide-react"
 
 import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs"
+import ContactPhoneList from "@/app/components/ui/ContactPhoneList"
 import LazyMap from "@/app/components/ui/LazyMap"
 import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
@@ -49,12 +50,7 @@ export default async function ContactPage() {
             <div className="flex justify-center p-8 md:p-14">
               <div className="w-full max-w-md space-y-12">
                 <ContactSection icon={<Phone />} title="Phone">
-                  {company.phones?.map((p, i) => (
-                    <div key={i} className="mb-4 last:mb-0">
-                      <p className="text-2xl font-bold text-gray-800">{p.number}</p>
-                      <p className="text-sm font-medium text-gray-500">{p.label}</p>
-                    </div>
-                  ))}
+                  <ContactPhoneList phones={company.phones} locale="en" />
                 </ContactSection>
 
                 <ContactSection icon={<Mail />} title="Email">

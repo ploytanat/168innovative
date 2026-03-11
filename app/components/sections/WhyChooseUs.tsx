@@ -12,8 +12,14 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   if (!items.length) return null
 
   return (
-    <section className="bg-transparent py-14 shadow-sm sm:py-16 md:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-[#f2f4f7] py-14 sm:py-16 md:py-24">
+      <div className="absolute inset-0">
+        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/75 to-transparent" />
+        <div className="absolute left-[-8rem] top-12 h-56 w-56 rounded-full bg-white/70 blur-3xl" />
+        <div className="absolute right-[-5rem] top-20 h-48 w-48 rounded-full bg-[#dbe7f0]/70 blur-3xl" />
+      </div>
+
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="mb-10 text-center text-xl font-bold text-[#1e3a5f] sm:mb-12 sm:text-2xl md:text-3xl">
           {uiText.whyChooseUs.title[locale]}
         </h2>
@@ -22,8 +28,10 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
           {items.map((item, index) => (
             <div
               key={index}
-              className="group flex flex-col items-center rounded-3xl border border-white bg-white px-5 py-6 text-center shadow-md transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-xl"
+              className="group relative flex flex-col items-center overflow-hidden rounded-3xl border border-white/40 bg-white/70 px-5 py-6 text-center shadow-xl backdrop-blur-xl transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-[0_18px_44px_rgba(15,23,42,0.14)]"
             >
+              <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#14B8A6]/35 to-transparent" />
+
               <div className="mb-4 flex h-16 w-16 items-center justify-center sm:mb-5 sm:h-18 sm:w-18">
                 {item.image?.src ? (
                   <div className="relative h-[72px] w-[72px]">
@@ -58,7 +66,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
                 {item.title}
               </h3>
 
-              <p className="text-xs leading-relaxed text-gray-500 sm:text-sm">
+              <p className="text-xs leading-relaxed text-[#4a5d6e] sm:text-sm">
                 {item.description}
               </p>
             </div>
