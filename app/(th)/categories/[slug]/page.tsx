@@ -11,6 +11,7 @@ import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
 import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
 import { getProductsByCategory } from "@/app/lib/api/products"
+import { shouldIndexCategory } from "@/app/lib/seo/indexability"
 import { buildFaqJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 
@@ -58,7 +59,7 @@ export async function generateMetadata({
       ? `${category.seoTitle || category.name} - หน้า ${currentPage}`
       : category.seoTitle || category.name
 
-  return buildMetadata({
+  const metadata = buildMetadata({
     locale: "th",
     title,
     description:
@@ -68,6 +69,14 @@ export async function generateMetadata({
     path,
     keywords: [category.name, "168 Innovative", "หมวดหมู่สินค้า"],
   })
+
+  return {
+    ...metadata,
+    robots: {
+      index: shouldIndexCategory(category, currentPage),
+      follow: true,
+    },
+  }
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {

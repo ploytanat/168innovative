@@ -25,6 +25,10 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from '@/app/lib/api/products'
+import {
+  hasDistinctText,
+  shouldIndexProduct,
+} from '@/app/lib/seo/indexability'
 import { buildFaqJsonLd } from '@/app/lib/schema'
 
 interface Props {
@@ -88,6 +92,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     '168 Innovative Co., Ltd.',
     'cosmetic packaging',
   ].filter(Boolean) as string[]
+  const shouldIndex = shouldIndexProduct(product)
 
   return {
     title: product.name,
@@ -120,7 +125,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [product.image.src],
     },
     robots: {
-      index: true,
+      index: shouldIndex,
       follow: true,
     },
   }
@@ -138,6 +143,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
   if (!category || !product) notFound()
   if (product.categoryId !== category.id) notFound()
+  const hasDistinctContent = hasDistinctText(
+    product.contentHtml,
+    product.description
+  )
+  const hasDistinctApplication = hasDistinctText(product.applicationHtml, [
+    product.description,
+    product.contentHtml,
+  ])
 
   const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
   const breadcrumbJsonLd = {
@@ -322,7 +335,7 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
         </section>
 
-        {product.contentHtml ? (
+        {product.contentHtml && hasDistinctContent ? (
           <RichTextSection
             className="mt-16"
             eyebrow="Deep Detail"
@@ -331,7 +344,7 @@ export default async function ProductDetailPage({ params }: Props) {
           />
         ) : null}
 
-        {product.applicationHtml ? (
+        {product.applicationHtml && hasDistinctApplication ? (
           <RichTextSection
             className="mt-8"
             eyebrow="Applications"

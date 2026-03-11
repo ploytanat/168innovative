@@ -1,7 +1,8 @@
 import { MetadataRoute } from "next"
 import { getCategories } from "./lib/api/categories"
 import { getArticles } from "./lib/api/articles"
-import { getAllProductsForSitemap } from "./lib/api/products"
+import { getIndexableProductsForSitemap } from "./lib/api/products"
+import { shouldIndexCategory } from "./lib/seo/indexability"
 
 const baseUrl = "https://168innovative.co.th"
 
@@ -28,21 +29,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: item.priority,
   }))
 
-  const categories = (await getCategories("th")) || []
-  const categoryUrls = categories.flatMap((cat) => [
-    {
-      url: `${baseUrl}/categories/${cat.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/en/categories/${cat.slug}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    },
+  const [categoriesTh, categoriesEn] = await Promise.all([
+    getCategories("th"),
+    getCategories("en"),
   ])
+  const categoryUrls = [
+    ...((categoriesTh || [])
+      .filter((category) => shouldIndexCategory(category, 1))
+      .map((category) => ({
+        url: `${baseUrl}/categories/${category.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      }))),
+    ...((categoriesEn || [])
+      .filter((category) => shouldIndexCategory(category, 1))
+      .map((category) => ({
+        url: `${baseUrl}/en/categories/${category.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      }))),
+  ]
 
   const articles = (await getArticles("th")) || []
   const articleUrls = articles.flatMap((article) => [
@@ -60,21 +68,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ])
 
-  const products = (await getAllProductsForSitemap()) || []
-  const productUrls = products.flatMap((product) => [
-    {
-      url: `${baseUrl}/categories/${product.categorySlug}/${product.slug}`,
-      lastModified: formatDate(product.modified),
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/en/categories/${product.categorySlug}/${product.slug}`,
-      lastModified: formatDate(product.modified),
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    },
-  ])
+  const products = (await getIndexableProductsForSitemap()) || []
+  const productUrls = products.flatMap((product) => {
+    const routes: MetadataRoute.Sitemap = []
+
+    if (product.indexTh) {
+      routes.push({
+        url: `${baseUrl}/categories/${product.categorySlug}/${product.slug}`,
+        lastModified: formatDate(product.modified),
+        changeFrequency: "weekly" as const,
+        priority: 0.9,
+      })
+    }
+
+    if (product.indexEn) {
+      routes.push({
+        url: `${baseUrl}/en/categories/${product.categorySlug}/${product.slug}`,
+        lastModified: formatDate(product.modified),
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      })
+    }
+
+    return routes
+  })
 
   return [...staticRoutes, ...categoryUrls, ...articleUrls, ...productUrls]
 }

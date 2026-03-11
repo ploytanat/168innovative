@@ -3,6 +3,7 @@
 import { unstable_cache } from "next/cache"
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
 import { getCategoryIdBySlug } from "./categories"
+import { shouldIndexProduct } from "../seo/indexability"
 import { Locale, WPProduct } from "../types/content"
 import { ProductView, ProductSpecView } from "../types/view"
 
@@ -46,6 +47,37 @@ function safeParseJSON(value: unknown): Record<string, unknown> | null {
   }
 
   return null
+}
+
+const SPEC_LABEL_MAP: Record<string, { th: string; en: string }> = {
+  width_mm: { th: "ความกว้าง (มม.)", en: "Width (mm)" },
+  height_mm: { th: "ความสูง (มม.)", en: "Height (mm)" },
+  length_mm: { th: "ความยาว (มม.)", en: "Length (mm)" },
+  diameter_mm: { th: "เส้นผ่านศูนย์กลาง (มม.)", en: "Diameter (mm)" },
+  neck_size_mm: { th: "ขนาดคอ (มม.)", en: "Neck Size (mm)" },
+  capacity_ml: { th: "ความจุ (มล.)", en: "Capacity (ml)" },
+  shape: { th: "รูปทรง", en: "Shape" },
+  color: { th: "สี", en: "Color" },
+  cap_color: { th: "สีฝา", en: "Cap Color" },
+  material: { th: "วัสดุ", en: "Material" },
+  application: { th: "การใช้งาน", en: "Application" },
+  usage: { th: "การใช้งาน", en: "Usage" },
+}
+
+function formatSpecLabel(key: string, locale: Locale) {
+  const normalizedKey = key.trim().toLowerCase().replace(/\s+/g, "_")
+  const mappedLabel = SPEC_LABEL_MAP[normalizedKey]?.[locale]
+
+  if (mappedLabel) {
+    return mappedLabel
+  }
+
+  return normalizedKey
+    .replace(/[_-]+/g, " ")
+    .replace(/\b(mm|ml|pp|pe|pet|hdpe|ldpe|as)\b/gi, (value) =>
+      value.toUpperCase()
+    )
+    .replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
 /* ─────────────────────────────
@@ -150,7 +182,7 @@ function mapWPToProductView(
 
   const specs: ProductSpecView[] = parsedSpecs
     ? Object.entries(parsedSpecs).map(([key, value]) => ({
-        label: key,
+        label: formatSpecLabel(key, locale),
         value: Array.isArray(value) ? value.join(", ") : String(value),
       }))
     : []
@@ -207,6 +239,47 @@ export async function getAllProductsForSitemap() {
     .filter(
       (p): p is { slug: string; modified: string; categorySlug: string } =>
         p !== null
+    )
+}
+
+export async function getIndexableProductsForSitemap() {
+  const [products, catMap] = await Promise.all([
+    fetchJSON<Array<WPProduct & { modified: string }>>(
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS},modified`
+    ),
+    _getCategoryMap(),
+  ])
+
+  return products
+    .map((wp) => {
+      const categoryId = wp.product_category?.[0]
+      const categorySlug = categoryId ? catMap[categoryId] : null
+
+      if (!categorySlug) {
+        return null
+      }
+
+      const thProduct = mapWPToProductView(wp, "th", catMap)
+      const enProduct = mapWPToProductView(wp, "en", catMap)
+
+      return {
+        slug: wp.slug,
+        modified: wp.modified,
+        categorySlug,
+        indexTh: shouldIndexProduct(thProduct),
+        indexEn: shouldIndexProduct(enProduct),
+      }
+    })
+    .filter(
+      (
+        product
+      ): product is {
+        slug: string
+        modified: string
+        categorySlug: string
+        indexTh: boolean
+        indexEn: boolean
+      } => product !== null
     )
 }
 
