@@ -36,7 +36,7 @@ export default async function AboutPage() {
 
   return (
     <main className="bg-transparent">
-      <AboutHero hero={about.hero} whoAreWe={about.whoAreWe} />
+      <AboutHero hero={about.hero}   />
       <WhyChooseUs items={why} locale={locale} />
     </main>
   )

@@ -48,100 +48,34 @@ function PhotoPanel({
   extraImages?: { src: string; alt: string }[]
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 28 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="flex flex-col gap-3"
-    >
-      {/* Frame */}
-      <div className="relative">
-        {/* Corner accent dots */}
-        <div className="absolute -left-2.5 -top-2.5 z-10 h-7 w-7 rounded-lg bg-[#f0788a] shadow-[0_4px_12px_rgba(240,120,138,0.35)]" />
-        <div className="absolute -bottom-2.5 -right-2.5 z-10 h-5 w-5 rounded-md bg-[#6ab4e8] shadow-[0_4px_10px_rgba(106,180,232,0.35)]" />
+    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden">
+      {/* Desktop: strong left fade so card text is always on white */}
+      <motion.div
+        style={{ y }}
+        className="relative hidden h-[112%] w-full will-change-transform sm:block"
+      >
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/98 from-[20%] via-white/80 via-[42%] to-transparent" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-white/40 via-transparent to-white/20" />
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-70"
+        />
+      </motion.div>
 
-        <div className="overflow-hidden rounded-[1.75rem] shadow-[0_24px_64px_rgba(26,22,20,0.12),0_4px_16px_rgba(26,22,20,0.06)]">
-          <div className="relative aspect-[4/3] w-full bg-[#b8d0c8]">
-            {image ? (
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            ) : (
-              /* Warehouse placeholder */
-              <div
-                className="relative h-full w-full overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(160deg, #d4e8e0 0%, #b8d4c8 20%, #c8dcd4 40%, #a8c4bc 60%, #b4ccc4 80%, #9ab8b0 100%)",
-                }}
-              >
-                {/* Ceiling */}
-                <div className="absolute inset-x-0 top-0 h-[18%] bg-gradient-to-b from-[#a0b8b0] to-transparent" />
-                {/* Lights */}
-                {[20, 50, 80].map((l) => (
-                  <div
-                    key={l}
-                    className="absolute top-0 h-[55%] w-[3px] rounded-b-full bg-gradient-to-b from-white/70 to-transparent"
-                    style={{ left: `${l}%` }}
-                  />
-                ))}
-                {/* Shelves */}
-                {[28, 54, 76].map((t) => (
-                  <div key={t} className="absolute inset-x-0 h-px bg-white/30" style={{ top: `${t}%` }} />
-                ))}
-                {/* Columns */}
-                {[22, 44, 66].map((l) => (
-                  <div key={l} className="absolute inset-y-0 w-px bg-white/18" style={{ left: `${l}%` }} />
-                ))}
-                {/* Boxes */}
-                {[
-                  { l: 24, t: 30, w: 16, h: 20, o: 0.22 },
-                  { l: 46, t: 30, w: 18, h: 20, o: 0.18 },
-                  { l: 68, t: 30, w: 13, h: 20, o: 0.25 },
-                  { l: 24, t: 56, w: 12, h: 18, o: 0.20 },
-                  { l: 46, t: 56, w: 20, h: 18, o: 0.15 },
-                  { l: 68, t: 56, w: 16, h: 18, o: 0.22 },
-                ].map((b, i) => (
-                  <div
-                    key={i}
-                    className="absolute rounded-sm border border-white/35"
-                    style={{
-                      left: `${b.l}%`, top: `${b.t}%`,
-                      width: `${b.w}%`, height: `${b.h}%`,
-                      background: `rgba(255,255,255,${b.o})`,
-                    }}
-                  />
-                ))}
-                {/* Floor shadow */}
-                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black/22 to-transparent" />
-                {/* Vignette */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 90% 90% at 50% 50%, transparent 50%, rgba(60,40,30,0.18) 100%)",
-                  }}
-                />
-              </div>
-            )}
-
-            {/* Caption */}
-  
-
-            {/* Est. badge */}
-            <div className="absolute right-3 top-3 rounded-xl bg-[#3ecfb8] px-3.5 py-2 shadow-[0_4px_16px_rgba(62,207,184,0.4)]">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-white">
-                Est. 2022
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Mobile: near-invisible */}
+      <div className="relative h-full w-full sm:hidden">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-[0.06]"
+        />
       </div>
 
       {/* Mini photo strip */}
@@ -298,14 +232,25 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             ))}
           </motion.div>
         </div>
-  {/* extraImages={[hero.image2, hero.image3].filter(Boolean) as ImageView[]} */}
-        {/* ── Right: photo + mini strip ── */}
-        <PhotoPanel
-          image={hero.image1}
-          extraImages={[hero.image2].filter(Boolean) as ImageView[]}
+      </div>
+    </div>
+  )
+}
 
-        
-        />
+// ─── Root ─────────────────────────────────────────────────────────────────────
+export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
+  return (
+    <section className="overflow-hidden bg-white">
+      <div className="relative mx-auto max-w-7xl px-6 pt-6 md:pt-8 lg:px-8">
+        <div className="pb-7 md:pb-8">
+          <Breadcrumb />
+        </div>
+      </div>
+
+      <div className="relative overflow-hidden pb-6 lg:pb-8">
+        <HeroBackground image={hero.image1} />
+        <DecorOrbs />
+        <HeroContent title={hero.title} description={hero.description} />
       </div>
     </section>
   )
