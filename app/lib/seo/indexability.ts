@@ -34,18 +34,14 @@ export function hasDistinctText(
 }
 
 export function shouldIndexCategory(
-  category: Pick<CategoryView, "description" | "introHtml" | "faqItems">,
+  _category: Pick<CategoryView, "description" | "introHtml" | "faqItems">,
   currentPage: number
 ) {
   if (currentPage > 1) {
     return false
   }
 
-  return (
-    textLength(category.description) >= 80 ||
-    textLength(category.introHtml) >= 140 ||
-    category.faqItems.length > 0
-  )
+  return true
 }
 
 export function shouldIndexProduct(
@@ -54,27 +50,11 @@ export function shouldIndexProduct(
     "description" | "contentHtml" | "applicationHtml" | "faqItems" | "specs"
   >
 ) {
-  const descriptionScore = textLength(product.description)
-  const distinctContentScore = hasDistinctText(
-    product.contentHtml,
-    product.description
-  )
-    ? textLength(product.contentHtml)
-    : 0
-  const distinctApplicationScore = hasDistinctText(product.applicationHtml, [
-    product.description,
-    product.contentHtml,
-  ])
-    ? textLength(product.applicationHtml)
-    : 0
-
   return (
-    descriptionScore >= 90 &&
-    (
-      product.specs.length >= 3 ||
-      product.faqItems.length > 0 ||
-      distinctContentScore >= 120 ||
-      distinctApplicationScore >= 80
-    )
+    textLength(product.description) > 0 ||
+    textLength(product.contentHtml) > 0 ||
+    textLength(product.applicationHtml) > 0 ||
+    product.specs.length > 0 ||
+    product.faqItems.length > 0
   )
 }

@@ -11,6 +11,7 @@ import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
 import { SITE_URL } from "@/app/config/site"
 import { getArticleBySlug } from "@/app/lib/api/articles"
+import { getArticleInternalLinks } from "@/app/lib/seo/article-internal-links"
 import { buildFaqJsonLd } from "@/app/lib/schema"
 
 export async function generateMetadata({
@@ -42,6 +43,7 @@ export default async function ArticleDetailPage({
   const { slug } = await params
   const article = await getArticleBySlug(slug, "en")
   if (!article) notFound()
+  const internalLinks = getArticleInternalLinks(slug, "en")
 
   const articleUrl = article.canonicalUrl || `${SITE_URL}/en/articles/${slug}`
   const readingTime = article.readingTimeMinutes ?? 5
@@ -136,6 +138,46 @@ export default async function ArticleDetailPage({
         ) : null}
 
         <ArticleBody html={article.content} />
+
+        {internalLinks ? (
+          <section className="mt-14 rounded-[2rem] border border-[#E7E1D9] bg-[#FCFBF8] px-6 py-8 shadow-sm">
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#14B8A6]">
+                Internal Links
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+                {internalLinks.sectionTitle}
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                {internalLinks.sectionDescription}
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-5 md:grid-cols-2">
+              {internalLinks.groups.map((group) => (
+                <div
+                  key={group.title}
+                  className="rounded-[1.5rem] border border-[#E7E1D9] bg-white p-5"
+                >
+                  <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    {group.title}
+                  </h3>
+                  <div className="mt-4 space-y-3">
+                    {group.items.map((item) => (
+                      <LocalizedLink
+                        key={item.href}
+                        href={item.href.replace(/^\/en/, "")}
+                        className="block rounded-2xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
+                      >
+                        {item.label}
+                      </LocalizedLink>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         <FaqSection
           className="mt-12"

@@ -29,6 +29,7 @@ import {
   hasDistinctText,
   shouldIndexProduct,
 } from "@/app/lib/seo/indexability"
+import { buildProductSupportCopy } from "@/app/lib/seo/product-support-copy"
 import { buildFaqJsonLd } from "@/app/lib/schema"
 
 interface Props {
@@ -144,6 +145,7 @@ export default async function ProductDetailPage({ params }: Props) {
     product.description,
     product.contentHtml,
   ])
+  const supportCopy = buildProductSupportCopy(product, category, "th")
 
   const productUrl = `${SITE_URL}/categories/${slug}/${productSlug}`
   const breadcrumbJsonLd = {
@@ -334,6 +336,33 @@ export default async function ProductDetailPage({ params }: Props) {
             html={product.applicationHtml}
           />
         ) : null}
+
+        <section className="mt-8 rounded-[2rem] border border-slate-200 bg-slate-50 px-6 py-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-600">
+            {supportCopy.eyebrow}
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+            {supportCopy.title}
+          </h2>
+          <div className="mt-4 space-y-3 text-sm leading-7 text-slate-700">
+            {supportCopy.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          <div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-white p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+              {supportCopy.bulletsTitle}
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-slate-700">
+              {supportCopy.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-start gap-3">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-teal-500" />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         <FaqSection
           className="mt-8"

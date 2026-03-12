@@ -29,6 +29,7 @@ import {
   hasDistinctText,
   shouldIndexProduct,
 } from '@/app/lib/seo/indexability'
+import { buildProductSupportCopy } from '@/app/lib/seo/product-support-copy'
 import { buildFaqJsonLd } from '@/app/lib/schema'
 
 interface Props {
@@ -151,6 +152,7 @@ export default async function ProductDetailPage({ params }: Props) {
     product.description,
     product.contentHtml,
   ])
+  const supportCopy = buildProductSupportCopy(product, category, 'en')
 
   const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
   const breadcrumbJsonLd = {
@@ -352,6 +354,33 @@ export default async function ProductDetailPage({ params }: Props) {
             html={product.applicationHtml}
           />
         ) : null}
+
+        <section className="mt-8 rounded-[2rem] border border-[#E3EAF1] bg-white px-6 py-8 shadow-[0_12px_35px_rgba(15,23,42,0.05)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#14B8A6]">
+            {supportCopy.eyebrow}
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[#1A2535]">
+            {supportCopy.title}
+          </h2>
+          <div className="mt-4 space-y-3 text-sm leading-7 text-[#556476]">
+            {supportCopy.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          <div className="mt-6 rounded-[1.5rem] border border-[#E3EAF1] bg-[#F8FAFC] p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7E8C9B]">
+              {supportCopy.bulletsTitle}
+            </p>
+            <ul className="mt-4 space-y-3 text-sm text-[#556476]">
+              {supportCopy.bullets.map((bullet) => (
+                <li key={bullet} className="flex items-start gap-3">
+                  <span className="mt-1 h-2 w-2 rounded-full bg-[#14B8A6]" />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
 
         <FaqSection
           className="mt-8"
