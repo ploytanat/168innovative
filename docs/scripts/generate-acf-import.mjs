@@ -89,6 +89,24 @@ function textareaField(config) {
   };
 }
 
+function messageField(config) {
+  return {
+    ...baseField({ ...config, type: "message" }),
+    message: config.message ?? "",
+    new_lines: "wpautop",
+    esc_html: 0,
+  };
+}
+
+function tabField(config) {
+  return {
+    ...baseField({ ...config, type: "tab" }),
+    placement: config.placement ?? "top",
+    endpoint: config.endpoint ?? 0,
+    selected: config.selected ?? 0,
+  };
+}
+
 function wysiwygField(config) {
   return {
     ...baseField({ ...config, type: "wysiwyg" }),
@@ -97,6 +115,16 @@ function wysiwygField(config) {
     toolbar: config.toolbar ?? "full",
     media_upload: 1,
     delay: 0,
+  };
+}
+
+function dateTimeField(config) {
+  return {
+    ...baseField({ ...config, type: "date_time_picker" }),
+    display_format: "Y-m-d H:i:s",
+    return_format: "Y-m-d H:i:s",
+    first_day: 1,
+    allow_in_bindings: 0,
   };
 }
 
@@ -191,6 +219,22 @@ function relationshipField(config) {
   };
 }
 
+function taxonomyField(config) {
+  return {
+    ...baseField({ ...config, type: "taxonomy" }),
+    taxonomy: config.taxonomy,
+    field_type: config.fieldType ?? "select",
+    allow_null: config.allowNull ?? 1,
+    add_term: 0,
+    save_terms: config.saveTerms ?? 1,
+    load_terms: config.loadTerms ?? 1,
+    return_format: config.returnFormat ?? "id",
+    multiple: config.multiple ?? 0,
+    bidirectional: 0,
+    bidirectional_target: [],
+  };
+}
+
 function repeaterField(config) {
   return {
     ...baseField({ ...config, type: "repeater" }),
@@ -202,6 +246,16 @@ function repeaterField(config) {
     button_label: config.buttonLabel ?? "Add Row",
     rows_per_page: 20,
     sub_fields: config.subFields,
+  };
+}
+
+function flexibleContentField(config) {
+  return {
+    ...baseField({ ...config, type: "flexible_content" }),
+    layouts: config.layouts,
+    button_label: config.buttonLabel ?? "Add Block",
+    min: 0,
+    max: 0,
   };
 }
 
@@ -230,6 +284,320 @@ function faqRepeater(key, name = "faq_items", label = "FAQ Items") {
       }),
     ],
   });
+}
+
+function articleBlockItemRepeater({
+  key,
+  label = "Items",
+  name = "items",
+  buttonLabel = "Add Item",
+}) {
+  return repeaterField({
+    key,
+    label,
+    name,
+    buttonLabel,
+    subFields: [
+      textField({ key: `${key}_item_th`, label: "Item TH", name: "item_th", required: 1 }),
+      textField({ key: `${key}_item_en`, label: "Item EN", name: "item_en", required: 1 }),
+    ],
+  });
+}
+
+function articleFlexibleLayouts() {
+  return [
+    {
+      key: "layout_168_article_rich_text",
+      name: "rich_text",
+      label: "Rich Text Section",
+      display: "block",
+      sub_fields: [
+        textField({
+          key: "field_168_article_block_rich_anchor_id",
+          label: "Anchor ID",
+          name: "anchor_id",
+          instructions: "Optional. Use lowercase-with-dashes for in-page links.",
+        }),
+        textField({
+          key: "field_168_article_block_rich_eyebrow_th",
+          label: "Eyebrow TH",
+          name: "eyebrow_th",
+        }),
+        textField({
+          key: "field_168_article_block_rich_eyebrow_en",
+          label: "Eyebrow EN",
+          name: "eyebrow_en",
+        }),
+        textField({
+          key: "field_168_article_block_rich_heading_th",
+          label: "Heading TH",
+          name: "heading_th",
+        }),
+        textField({
+          key: "field_168_article_block_rich_heading_en",
+          label: "Heading EN",
+          name: "heading_en",
+        }),
+        wysiwygField({
+          key: "field_168_article_block_rich_body_th",
+          label: "Body TH",
+          name: "body_th",
+          instructions: "Semantic formatting only. No inline CSS.",
+          required: 1,
+          toolbar: "basic",
+        }),
+        wysiwygField({
+          key: "field_168_article_block_rich_body_en",
+          label: "Body EN",
+          name: "body_en",
+          instructions: "Semantic formatting only. No inline CSS.",
+          required: 1,
+          toolbar: "basic",
+        }),
+      ],
+      min: "",
+      max: "",
+    },
+    {
+      key: "layout_168_article_checklist",
+      name: "checklist",
+      label: "Checklist",
+      display: "block",
+      sub_fields: [
+        textField({
+          key: "field_168_article_block_checklist_anchor_id",
+          label: "Anchor ID",
+          name: "anchor_id",
+        }),
+        textField({
+          key: "field_168_article_block_checklist_heading_th",
+          label: "Heading TH",
+          name: "heading_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_checklist_heading_en",
+          label: "Heading EN",
+          name: "heading_en",
+          required: 1,
+        }),
+        textareaField({
+          key: "field_168_article_block_checklist_intro_th",
+          label: "Intro TH",
+          name: "intro_th",
+        }),
+        textareaField({
+          key: "field_168_article_block_checklist_intro_en",
+          label: "Intro EN",
+          name: "intro_en",
+        }),
+        articleBlockItemRepeater({
+          key: "field_168_article_block_checklist_items",
+          label: "Checklist Items",
+          name: "items",
+          buttonLabel: "Add Checklist Item",
+        }),
+      ],
+      min: "",
+      max: "",
+    },
+    {
+      key: "layout_168_article_callout",
+      name: "callout",
+      label: "Callout",
+      display: "block",
+      sub_fields: [
+        selectField({
+          key: "field_168_article_block_callout_style",
+          label: "Style",
+          name: "style",
+          choices: {
+            info: "Info",
+            success: "Success",
+            warning: "Warning",
+            note: "Note",
+          },
+        }),
+        textField({
+          key: "field_168_article_block_callout_heading_th",
+          label: "Heading TH",
+          name: "heading_th",
+        }),
+        textField({
+          key: "field_168_article_block_callout_heading_en",
+          label: "Heading EN",
+          name: "heading_en",
+        }),
+        wysiwygField({
+          key: "field_168_article_block_callout_body_th",
+          label: "Body TH",
+          name: "body_th",
+          required: 1,
+          toolbar: "basic",
+        }),
+        wysiwygField({
+          key: "field_168_article_block_callout_body_en",
+          label: "Body EN",
+          name: "body_en",
+          required: 1,
+          toolbar: "basic",
+        }),
+      ],
+      min: "",
+      max: "",
+    },
+    {
+      key: "layout_168_article_comparison_table",
+      name: "comparison_table",
+      label: "Comparison Table",
+      display: "block",
+      sub_fields: [
+        textField({
+          key: "field_168_article_block_compare_heading_th",
+          label: "Heading TH",
+          name: "heading_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_compare_heading_en",
+          label: "Heading EN",
+          name: "heading_en",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_compare_left_label_th",
+          label: "Left Column Label TH",
+          name: "left_label_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_compare_left_label_en",
+          label: "Left Column Label EN",
+          name: "left_label_en",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_compare_right_label_th",
+          label: "Right Column Label TH",
+          name: "right_label_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_compare_right_label_en",
+          label: "Right Column Label EN",
+          name: "right_label_en",
+          required: 1,
+        }),
+        repeaterField({
+          key: "field_168_article_block_compare_rows",
+          label: "Rows",
+          name: "rows",
+          buttonLabel: "Add Row",
+          subFields: [
+            textField({
+              key: "field_168_article_block_compare_rows_criterion_th",
+              label: "Criterion TH",
+              name: "criterion_th",
+              required: 1,
+            }),
+            textField({
+              key: "field_168_article_block_compare_rows_criterion_en",
+              label: "Criterion EN",
+              name: "criterion_en",
+              required: 1,
+            }),
+            textareaField({
+              key: "field_168_article_block_compare_rows_left_value_th",
+              label: "Left Value TH",
+              name: "left_value_th",
+              rows: 3,
+            }),
+            textareaField({
+              key: "field_168_article_block_compare_rows_left_value_en",
+              label: "Left Value EN",
+              name: "left_value_en",
+              rows: 3,
+            }),
+            textareaField({
+              key: "field_168_article_block_compare_rows_right_value_th",
+              label: "Right Value TH",
+              name: "right_value_th",
+              rows: 3,
+            }),
+            textareaField({
+              key: "field_168_article_block_compare_rows_right_value_en",
+              label: "Right Value EN",
+              name: "right_value_en",
+              rows: 3,
+            }),
+          ],
+        }),
+      ],
+      min: "",
+      max: "",
+    },
+    {
+      key: "layout_168_article_cta",
+      name: "cta",
+      label: "CTA Box",
+      display: "block",
+      sub_fields: [
+        selectField({
+          key: "field_168_article_block_cta_style",
+          label: "Style",
+          name: "style",
+          choices: {
+            dark: "Dark",
+            accent: "Accent",
+            soft: "Soft",
+          },
+        }),
+        textField({
+          key: "field_168_article_block_cta_heading_th",
+          label: "Heading TH",
+          name: "heading_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_cta_heading_en",
+          label: "Heading EN",
+          name: "heading_en",
+          required: 1,
+        }),
+        textareaField({
+          key: "field_168_article_block_cta_body_th",
+          label: "Body TH",
+          name: "body_th",
+          rows: 3,
+        }),
+        textareaField({
+          key: "field_168_article_block_cta_body_en",
+          label: "Body EN",
+          name: "body_en",
+          rows: 3,
+        }),
+        textField({
+          key: "field_168_article_block_cta_button_label_th",
+          label: "Button Label TH",
+          name: "button_label_th",
+          required: 1,
+        }),
+        textField({
+          key: "field_168_article_block_cta_button_label_en",
+          label: "Button Label EN",
+          name: "button_label_en",
+          required: 1,
+        }),
+        urlField({
+          key: "field_168_article_block_cta_button_url",
+          label: "Button URL",
+          name: "button_url",
+        }),
+      ],
+      min: "",
+      max: "",
+    },
+  ];
 }
 
 function buildExistingField(field) {
@@ -457,7 +825,69 @@ const extraFields = {
     trueFalseField({ key: "field_168_about_robots_follow", label: "Robots Follow", name: "robots_follow" }),
   ],
   "Article Fields": [
+    tabField({
+      key: "field_168_article_tab_content_model",
+      label: "Content Model",
+      name: "",
+      selected: 1,
+    }),
+    messageField({
+      key: "field_168_article_content_model_note",
+      label: "Content Model Note",
+      name: "",
+      message:
+        "Use Flexible Content blocks for new articles. Keep legacy Content TH/EN only for older posts or temporary migration fallback.",
+    }),
+    flexibleContentField({
+      key: "field_168_article_content_blocks",
+      label: "Content Blocks",
+      name: "content_blocks",
+      instructions:
+        "Primary article body for new content. Compose the page with structured blocks instead of inline HTML or CSS.",
+      buttonLabel: "Add Content Block",
+      layouts: articleFlexibleLayouts(),
+    }),
+    tabField({
+      key: "field_168_article_tab_taxonomy_relations",
+      label: "Taxonomy & Relations",
+      name: "",
+    }),
+    taxonomyField({
+      key: "field_168_article_primary_category",
+      label: "Primary Category",
+      name: "primary_category",
+      taxonomy: "article_category",
+      fieldType: "select",
+      allowNull: 1,
+      saveTerms: 1,
+      loadTerms: 1,
+      returnFormat: "id",
+    }),
+    taxonomyField({
+      key: "field_168_article_article_tags",
+      label: "Article Tags",
+      name: "article_tags",
+      taxonomy: "article_tag",
+      fieldType: "multi_select",
+      allowNull: 1,
+      saveTerms: 1,
+      loadTerms: 1,
+      returnFormat: "id",
+      multiple: 1,
+    }),
     textField({ key: "field_168_article_author_name", label: "Author Name", name: "author_name" }),
+    dateTimeField({
+      key: "field_168_article_published_at",
+      label: "Published At",
+      name: "published_at",
+      instructions: "Optional override if editorial publish date should differ from WordPress post date.",
+    }),
+    dateTimeField({
+      key: "field_168_article_updated_at",
+      label: "Updated At",
+      name: "updated_at",
+      instructions: "Optional editorial updated date for schema and on-page display.",
+    }),
     numberField({
       key: "field_168_article_reading_time_minutes",
       label: "Reading Time Minutes",
@@ -490,7 +920,17 @@ const extraFields = {
       name: "related_articles",
       postTypes: ["article"],
     }),
+    tabField({
+      key: "field_168_article_tab_faq",
+      label: "FAQ",
+      name: "",
+    }),
     faqRepeater("field_168_article_faq_items"),
+    tabField({
+      key: "field_168_article_tab_robots",
+      label: "Robots",
+      name: "",
+    }),
     trueFalseField({ key: "field_168_article_robots_index", label: "Robots Index", name: "robots_index" }),
     trueFalseField({ key: "field_168_article_robots_follow", label: "Robots Follow", name: "robots_follow" }),
   ],
@@ -509,7 +949,7 @@ const descriptions = {
   "About Fields":
     "Preserves current About fields and fixes the duplicate hero_image_1_alt_en field by converting the second copy into hero_image_2_alt_en.",
   "Article Fields":
-    "Extends the current bilingual article model with author, FAQ, localized focus keywords, OG, and robots fields.",
+    "Extends the current bilingual article model with flexible content blocks, taxonomy, editorial dates, FAQ, localized focus keywords, OG, and robots fields.",
 };
 
 const groups = groupOrder.map((title) => {
@@ -541,6 +981,26 @@ const groups = groupOrder.map((title) => {
           ...field,
           label: "Email 3",
           name: "email_3",
+        });
+      }
+
+      if (title === "Article Fields" && field.name === "content_th") {
+        return wysiwygField({
+          ...field,
+          label: "Legacy Content TH",
+          instructions:
+            "Legacy fallback only. Prefer Content Blocks for all new articles.",
+          toolbar: "basic",
+        });
+      }
+
+      if (title === "Article Fields" && field.name === "content_en") {
+        return wysiwygField({
+          ...field,
+          label: "Legacy Content EN",
+          instructions:
+            "Legacy fallback only. Prefer Content Blocks for all new articles.",
+          toolbar: "basic",
         });
       }
 

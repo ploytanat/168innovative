@@ -29,10 +29,13 @@ Use this bundle to import the updated field groups into WordPress via ACF.
 ## Notes
 
 - the Home field group now targets `page_type == front_page` instead of a fixed page ID
+- the Article field group now includes `Content Blocks` via ACF Flexible Content as the primary body model for new articles
+- the legacy Article `content_th` and `content_en` fields are retained as fallback fields for migration and older content
 - the Article canonical fields are upgraded to ACF `url` fields for better validation
 - this bundle assumes the CPTs already exist on the WordPress site:
   `product`, `article`, `hero_slide`, `why`, `about`, `company`
 - this bundle assumes taxonomy `product_category` already exists
+- the Article flexible schema also assumes `article_category` and `article_tag` taxonomies already exist
 
 ## Generated From
 

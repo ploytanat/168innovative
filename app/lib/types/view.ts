@@ -153,12 +153,67 @@ export interface TagView {
   name: string
 }
 
+export type ArticleRichTextBlockView = {
+  type: "rich_text"
+  anchorId?: string
+  eyebrow?: string
+  heading?: string
+  body: string
+}
+
+export type ArticleChecklistBlockView = {
+  type: "checklist"
+  anchorId?: string
+  heading: string
+  intro?: string
+  items: string[]
+}
+
+export type ArticleCalloutBlockView = {
+  type: "callout"
+  style?: "info" | "success" | "warning" | "note"
+  heading?: string
+  body: string
+}
+
+export type ArticleComparisonRowView = {
+  criterion: string
+  leftValue?: string
+  rightValue?: string
+}
+
+export type ArticleComparisonTableBlockView = {
+  type: "comparison_table"
+  heading: string
+  leftLabel: string
+  rightLabel: string
+  rows: ArticleComparisonRowView[]
+}
+
+export type ArticleCtaBlockView = {
+  type: "cta"
+  style?: "dark" | "accent" | "soft"
+  heading: string
+  body?: string
+  buttonLabel: string
+  buttonUrl?: string
+}
+
+export type ArticleBlockView =
+  | ArticleRichTextBlockView
+  | ArticleChecklistBlockView
+  | ArticleCalloutBlockView
+  | ArticleComparisonTableBlockView
+  | ArticleCtaBlockView
+
 export interface ArticleView {
   id: string
   slug: string
   title: string
   excerpt: string
   content: string
+  blocks: ArticleBlockView[]
+  authorName?: string
   coverImage?: ImageView
   category?: string
   tags: TagView[]

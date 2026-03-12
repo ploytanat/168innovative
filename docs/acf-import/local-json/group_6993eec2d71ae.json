@@ -445,5 +445,5 @@
   "active": true,
   "description": "Front-page fields. The location rule is set to the configured front page instead of a fixed page ID.",
   "show_in_rest": 1,
-  "modified": 1773116525
+  "modified": 1773285531
 }

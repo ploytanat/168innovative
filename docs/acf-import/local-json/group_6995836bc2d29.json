@@ -665,5 +665,5 @@
   "active": true,
   "description": "Preserves current About fields and fixes the duplicate hero_image_1_alt_en field by converting the second copy into hero_image_2_alt_en.",
   "show_in_rest": 1,
-  "modified": 1773116525
+  "modified": 1773285531
 }

@@ -1,16 +1,16 @@
 import type { Locale } from "@/app/lib/types/content"
 
-type ArticleLinkItem = {
+export type ArticleLinkItem = {
   label: string
   href: string
 }
 
-type ArticleLinkGroup = {
+export type ArticleLinkGroup = {
   title: string
   items: ArticleLinkItem[]
 }
 
-type ArticleLinkContent = {
+export type ArticleLinkContent = {
   sectionTitle: string
   sectionDescription: string
   groups: ArticleLinkGroup[]

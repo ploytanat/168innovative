@@ -196,6 +196,43 @@ export interface WPFaqItem {
   answer_en?: string;
 }
 
+export interface WPArticleBlockChecklistItem {
+  item_th?: string;
+  item_en?: string;
+}
+
+export interface WPArticleBlockComparisonRow {
+  criterion_th?: string;
+  criterion_en?: string;
+  left_value_th?: string;
+  left_value_en?: string;
+  right_value_th?: string;
+  right_value_en?: string;
+}
+
+export interface WPArticleContentBlock {
+  acf_fc_layout?: string;
+  anchor_id?: string;
+  eyebrow_th?: string;
+  eyebrow_en?: string;
+  heading_th?: string;
+  heading_en?: string;
+  body_th?: string;
+  body_en?: string;
+  intro_th?: string;
+  intro_en?: string;
+  items?: WPArticleBlockChecklistItem[];
+  style?: "info" | "success" | "warning" | "note" | "dark" | "accent" | "soft";
+  left_label_th?: string;
+  left_label_en?: string;
+  right_label_th?: string;
+  right_label_en?: string;
+  rows?: WPArticleBlockComparisonRow[];
+  button_label_th?: string;
+  button_label_en?: string;
+  button_url?: string;
+}
+
 // ---------------------------
 // WP Article (CPT: article)
 // ---------------------------
@@ -224,6 +261,12 @@ export interface WPArticle {
     focus_keyword?: string
     focus_keyword_th?: string
     focus_keyword_en?: string
+    content_blocks?: WPArticleContentBlock[]
+    primary_category?: number | number[]
+    article_tags?: number[]
+    published_at?: string
+    updated_at?: string
+    author_name?: string
     reading_time_minutes?: number
     faq_items?: WPFaqItem[]
   };
