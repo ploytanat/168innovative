@@ -34,7 +34,7 @@ function LangToggle({
       type="button"
       onClick={onToggle}
       aria-label="Toggle language"
-      className="group inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.92)] bg-[linear-gradient(135deg,rgba(255,255,255,0.94),rgba(239,250,255,0.88))] px-2.5 py-1.5 shadow-[0_10px_26px_rgba(28,40,66,0.08)] transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_30px_rgba(46,207,196,0.18)]"
+      className="liquid-glass-pill group inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_30px_rgba(46,207,196,0.18)]"
     >
       <span
         className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
@@ -46,7 +46,7 @@ function LangToggle({
 
       <span
         className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${
-          isEN ? "bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" : "bg-[linear-gradient(90deg,#f8c1cf,#cab8f2)]"
+          isEN ? "bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" : "bg-[linear-gradient(90deg,#a9e7c7,#cab8f2)]"
         }`}
       >
         <span
@@ -147,8 +147,8 @@ function NavigationInner({
     <header
       className={`sticky top-0 z-[60] w-full border-b transition-all duration-300 ${
         scrolled || open
-          ? "border-[rgba(205,222,241,0.76)] bg-[linear-gradient(135deg,rgba(255,255,255,0.76),rgba(244,251,255,0.72),rgba(255,240,245,0.72))] shadow-[0_18px_38px_rgba(28,40,66,0.1)] backdrop-blur-xl"
-          : "border-transparent bg-[linear-gradient(135deg,rgba(255,255,255,0.88),rgba(244,251,255,0.84),rgba(255,240,245,0.82))]"
+          ? "liquid-glass-shell border-[rgba(205,222,241,0.76)] shadow-[0_18px_38px_rgba(28,40,66,0.1)]"
+          : "liquid-glass-shell border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-[4.35rem] max-w-7xl items-center justify-between px-5 sm:px-6 lg:h-[4.75rem] lg:px-8">
@@ -175,7 +175,7 @@ function NavigationInner({
                 className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
                     ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white shadow-[0_12px_28px_rgba(46,207,196,0.28)]"
-                    : "text-[#5d6984] hover:bg-[linear-gradient(135deg,#eefcff,#fdf1f6)] hover:text-[var(--color-ink)]"
+                    : "text-[#5d6984] hover:bg-[linear-gradient(135deg,#eefcff,#f2f8ff)] hover:text-[var(--color-ink)]"
                 }`}
               >
                 {item.label[lang]}
@@ -193,7 +193,7 @@ function NavigationInner({
             type="button"
             onClick={() => setOpen((current) => !current)}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-[linear-gradient(135deg,rgba(255,255,255,0.94),rgba(239,250,255,0.88))] text-neutral-700 shadow-[0_10px_26px_rgba(28,40,66,0.08)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] md:hidden"
+            className="liquid-glass-pill inline-flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] md:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -207,7 +207,7 @@ function NavigationInner({
           opacity: open ? 1 : 0,
         }}
       >
-        <div className="bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(241,251,255,0.98)_48%,rgba(255,241,246,0.98)_100%)] px-5 pb-6 pt-4">
+        <div className="liquid-glass-panel rounded-b-[1.75rem] border-x border-b border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(241,251,255,0.92)_48%,rgba(242,247,255,0.9)_100%)] px-5 pb-6 pt-4">
           <div className="space-y-1">
             {NAV_MENU.map((item) => (
               <Link
@@ -228,7 +228,7 @@ function NavigationInner({
             ))}
           </div>
 
-          <div className="mt-5 flex items-center justify-between rounded-2xl border border-[#E6DFD7] bg-white/80 px-4 py-3">
+          <div className="liquid-glass-pill mt-5 flex items-center justify-between rounded-2xl px-4 py-3">
             <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[#66748a]">
               {isEN ? "Language" : "ภาษา"}
             </span>

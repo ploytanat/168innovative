@@ -17,7 +17,7 @@ export default function FaqSection({
 
   return (
     <section className={className}>
-      <div className="overflow-hidden rounded-[1.9rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(150deg,rgba(255,255,255,0.96),rgba(247,240,233,0.88)_58%,rgba(233,246,242,0.76))] p-7 shadow-[0_24px_70px_rgba(26,37,53,0.06)] md:p-10">
+      <div className="liquid-glass-panel rounded-[1.9rem] p-7 md:p-10">
         {eyebrow ? (
           <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
             {eyebrow}
@@ -30,7 +30,7 @@ export default function FaqSection({
           {items.map((item) => (
             <details
               key={item.question}
-              className="group rounded-[1.35rem] border border-[rgba(221,211,201,0.8)] bg-white/80 p-5 shadow-[0_12px_32px_rgba(26,37,53,0.04)] backdrop-blur md:p-6"
+              className="glass-panel group rounded-[1.35rem] p-5 md:p-6"
             >
               <summary className="cursor-pointer list-none pr-8 text-[1.05rem] font-semibold leading-7 text-[var(--color-ink)] marker:hidden">
                 {item.question}

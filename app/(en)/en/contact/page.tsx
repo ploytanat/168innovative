@@ -42,7 +42,7 @@ export default async function ContactPage() {
           breadcrumbs={[{ label: "Contact" }]}
         />
 
-        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.8),rgba(255,241,246,0.74))] shadow-[0_24px_64px_rgba(28,40,66,0.1)] backdrop-blur-xl">
+        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.8),rgba(242,247,255,0.74))] shadow-[0_24px_64px_rgba(28,40,66,0.1)] backdrop-blur-xl">
           <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#cab8f2]/18 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-[#9ddcf6]/20 blur-3xl" />
 
@@ -146,7 +146,7 @@ function ContactSection({
       <h3 className="mb-4 text-[12px] font-black uppercase tracking-[0.14em] text-[#73839e]">
         {title}
       </h3>
-      <div className="mb-6 h-1 w-12 rounded-full bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
+      <div className="mb-6 h-1 w-12 rounded-full bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" />
       <div className="w-full">{children}</div>
     </div>
   )

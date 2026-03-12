@@ -46,7 +46,7 @@ export default function ProductMarquee({
       />
 
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(241,251,255,0.82)_48%,rgba(255,241,246,0.82)_100%)] px-6 py-8 shadow-[0_20px_60px_rgba(28,40,66,0.06)] md:mb-12 md:px-8">
+        <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(241,251,255,0.82)_48%,rgba(242,247,255,0.82)_100%)] px-6 py-8 shadow-[0_20px_60px_rgba(28,40,66,0.06)] md:mb-12 md:px-8">
           <div className="relative text-center">
             <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               Product Focus
@@ -56,7 +56,7 @@ export default function ProductMarquee({
             </h2>
             <div className="mx-auto mt-4 flex items-center justify-center gap-2">
               <div className="h-px w-8 bg-[rgba(46,207,196,0.4)] md:w-12" />
-              <div className="h-1 w-1 rounded-full bg-[rgba(248,167,184,0.8)]" />
+              <div className="h-1 w-1 rounded-full bg-[rgba(202,184,242,0.82)]" />
               <div className="h-px w-8 bg-[rgba(157,220,246,0.5)] md:w-12" />
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function ProductMarquee({
                 className="shrink-0"
               >
                 <div className="w-40 rounded-[1.6rem] border border-[rgba(205,222,241,0.78)] bg-white/86 p-3 shadow-[0_14px_34px_rgba(28,40,66,0.07)] transition-transform active:scale-95 md:w-48">
-                  <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
+                  <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt || item.name}
@@ -119,8 +119,8 @@ export default function ProductMarquee({
                 className="group/item"
               >
                 <div className="relative w-48 shrink-0 rounded-[1.75rem] border border-[rgba(205,222,241,0.78)] bg-white/86 p-3.5 shadow-[0_14px_34px_rgba(28,40,66,0.07)] transition-all duration-500 group-hover/item:-translate-y-2 group-hover/item:border-[#b9d6ec] group-hover/item:shadow-[0_26px_60px_rgba(28,40,66,0.12)]">
-                  <div className="absolute inset-0 rounded-[1.75rem] bg-linear-to-b from-[#eefbff]/0 to-[#fff0f5]/80 opacity-0 transition-opacity duration-300 group-hover/item:opacity-100" />
-                  <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
+                  <div className="absolute inset-0 rounded-[1.75rem] bg-linear-to-b from-[#eefbff]/0 to-[#f3f8ff]/80 opacity-0 transition-opacity duration-300 group-hover/item:opacity-100" />
+                  <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt || item.name}
@@ -133,7 +133,7 @@ export default function ProductMarquee({
                   <p className="relative mt-4 line-clamp-1 text-center text-[13px] font-medium text-[var(--color-ink-soft)] transition-colors duration-300 group-hover/item:text-[var(--color-accent)]">
                     {item.name}
                   </p>
-                  <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-[rgba(46,207,196,0.55)] to-[rgba(248,167,184,0.75)] transition-all duration-500 group-hover/item:w-12" />
+                  <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-[rgba(46,207,196,0.55)] to-[rgba(157,220,246,0.75)] transition-all duration-500 group-hover/item:w-12" />
                 </div>
               </Link>
             ))}

@@ -79,13 +79,13 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10">
         <Link
           href={listHref}
-          className="inline-flex items-center gap-2 rounded-full border border-[#D8E1EA] bg-white/90 px-5 py-2.5 text-sm font-medium text-[#5A6A7E] shadow-sm backdrop-blur transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]"
+          className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]"
         >
           <ArrowLeft size={14} />
           {copy.backToList}
         </Link>
 
-        <section className="relative mt-6 overflow-hidden rounded-[2rem] border border-[#DDE7EE] bg-white shadow-[0_30px_90px_rgba(15,23,42,0.08)]">
+        <section className="liquid-glass-panel relative mt-6 rounded-[2rem]">
           <div className="absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top_left,rgba(20,184,166,0.18),transparent_55%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.14),transparent_45%)]" />
           <div className="relative grid gap-10 px-6 py-8 lg:grid-cols-[minmax(0,1.2fr)_360px] lg:px-10 lg:py-10">
             <div>
@@ -102,30 +102,30 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
               ) : null}
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#DCE7EE] bg-[#F8FBFC] px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
+                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
                   <CalendarDays size={14} />
                   {publishedAt}
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#DCE7EE] bg-[#F8FBFC] px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
+                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
                   <BookOpen size={14} />
                   {locale === "th" ? `อ่าน ${readingTime} นาที` : `${readingTime} min read`}
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#F1E4CC] bg-[#FFF8ED] px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8b5414]">
+                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8b5414]">
                   <Tag size={14} />
                   {categoryLabel}
                 </div>
               </div>
             </div>
 
-            <aside className="rounded-[1.75rem] border border-[#E5EDF3] bg-[#F9FBFC] p-6">
+            <aside className="glass-panel rounded-[1.75rem] p-6">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                <div className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm">
+                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.published}
                   </p>
                   <p className="mt-3 text-sm font-medium text-[#1A2535]">{publishedAt}</p>
                 </div>
-                <div className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm">
+                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.readingTime}
                   </p>
@@ -133,7 +133,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                     {locale === "th" ? `${readingTime} นาที` : `${readingTime} minutes`}
                   </p>
                 </div>
-                <div className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm">
+                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.author}
                   </p>
@@ -141,7 +141,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                     {article.authorName || "168 Innovative"}
                   </p>
                 </div>
-                <div className="rounded-[1.25rem] border border-white bg-white p-4 shadow-sm">
+                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.tags}
                   </p>
@@ -150,13 +150,13 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                       article.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="rounded-full bg-[#EDF7F6] px-3 py-1.5 text-[13px] font-medium text-[#0F766E]"
+                          className="liquid-glass-pill rounded-full px-3 py-1.5 text-[13px] font-medium text-[#0F766E]"
                         >
                           {tag.name}
                         </span>
                       ))
                     ) : (
-                      <span className="rounded-full bg-[#EDF2F7] px-3 py-1.5 text-[13px] font-medium text-[#46576f]">
+                      <span className="liquid-glass-pill rounded-full px-3 py-1.5 text-[13px] font-medium text-[#46576f]">
                         {categoryLabel}
                       </span>
                     )}

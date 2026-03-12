@@ -34,7 +34,7 @@ export default function ProductImageGallery({ src, alt }: Props) {
         <button
           onClick={() => setIsOpen(true)}
           aria-label="ขยายรูปภาพสินค้า"
-          className="group relative w-full aspect-square cursor-zoom-in overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,#eefbff,#fff0f5)] shadow-[0_18px_40px_rgba(28,40,66,0.08)] transition-all hover:shadow-[0_26px_55px_rgba(28,40,66,0.12)] active:scale-[0.98]"
+          className="group relative w-full aspect-square cursor-zoom-in overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)] shadow-[0_18px_40px_rgba(28,40,66,0.08)] transition-all hover:shadow-[0_26px_55px_rgba(28,40,66,0.12)] active:scale-[0.98]"
           style={{ maxWidth: 'min(100%, 28rem)' }}
         >
           <Image

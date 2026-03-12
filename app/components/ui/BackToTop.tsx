@@ -32,7 +32,7 @@ export default function BackToTop() {
     <button
       aria-label="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className={`fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#D9D3CB] bg-[rgba(255,255,255,0.86)] text-[#1A2535] shadow-[0_12px_28px_rgba(26,37,53,0.14)] backdrop-blur transition-all duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:border-[#14B8A6] hover:text-[#14B8A6] ${
+      className={`liquid-glass-pill fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full text-[#1A2535] transition-all duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:border-[#14B8A6] hover:text-[#14B8A6] ${
         visible
           ? 'translate-y-0 scale-100 opacity-100'
           : 'pointer-events-none translate-y-6 scale-95 opacity-0'

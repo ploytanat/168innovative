@@ -57,13 +57,13 @@ export default function HeroCarousel({ hero }: Props) {
   if (!active) return null
 
   return (
-    <section className="w-full overflow-hidden border-y border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(241,251,255,0.82)_46%,rgba(255,241,246,0.78))]">
+    <section className="w-full overflow-hidden border-y border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(241,251,255,0.82)_46%,rgba(242,247,255,0.78))]">
 
       {/* ───────────────────── MOBILE (< lg) ───────────────────── */}
       <div className="flex flex-col lg:hidden">
 
         {/* IMAGE */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
+        <div className="relative w-full aspect-[4/3] overflow-hidden bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
           <div
             className="absolute inset-0 opacity-40 pointer-events-none"
             style={{
@@ -96,7 +96,7 @@ export default function HeroCarousel({ hero }: Props) {
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
-                className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 shadow-[0_12px_26px_rgba(28,40,66,0.08)] transition hover:bg-white"
+                className="liquid-glass-pill absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
               >
                 <ChevronLeft />
               </button>
@@ -105,7 +105,7 @@ export default function HeroCarousel({ hero }: Props) {
                 type="button"
                 aria-label="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 shadow-[0_12px_26px_rgba(28,40,66,0.08)] transition hover:bg-white"
+                className="liquid-glass-pill absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
               >
                 <ChevronRight />
               </button>
@@ -156,7 +156,7 @@ export default function HeroCarousel({ hero }: Props) {
             {active.title}
           </h2>
 
-          <div className="my-6 h-px w-10 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
+          <div className="my-6 h-px w-10 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" />
 
           {/* DESCRIPTION */}
           <p className="font-body text-base leading-8 text-[var(--color-ink-soft)]">
@@ -223,7 +223,7 @@ export default function HeroCarousel({ hero }: Props) {
               {active.title}
             </h2>
 
-            <div className="my-10 h-px w-12 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
+            <div className="my-10 h-px w-12 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" />
 
             <p className="font-body max-w-sm text-base leading-8 text-[var(--color-ink-soft)]">
               {active.description}
@@ -266,7 +266,7 @@ export default function HeroCarousel({ hero }: Props) {
         </div>
 
         {/* RIGHT - CSS fade instead of Framer Motion */}
-        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
+        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
 
           <div
             className="absolute inset-0 opacity-40 pointer-events-none"
@@ -297,7 +297,7 @@ export default function HeroCarousel({ hero }: Props) {
                 onClick={() =>
                   setCurrent((c) => (c - 1 + slides.length) % slides.length)
                 }
-                className="absolute left-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 shadow-[0_12px_26px_rgba(28,40,66,0.1)] transition hover:bg-white"
+                className="liquid-glass-pill absolute left-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
               >
                 <ChevronLeft />
               </button>
@@ -306,12 +306,12 @@ export default function HeroCarousel({ hero }: Props) {
                 type="button"
                 aria-label="Next slide"
                 onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="absolute right-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 shadow-[0_12px_26px_rgba(28,40,66,0.1)] transition hover:bg-white"
+                className="liquid-glass-pill absolute right-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
               >
                 <ChevronRight />
               </button>
 
-              <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5 bg-gradient-to-t from-white/70 to-transparent">
+              <div className="absolute bottom-5 left-8 right-8 z-20 flex items-center justify-between rounded-full px-5 py-3 liquid-glass-pill">
                 <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099] tabular-nums">
                   {(safeCurrent + 1).toString().padStart(2, '0')} /
                   {slides.length.toString().padStart(2, '0')}

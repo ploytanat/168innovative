@@ -51,7 +51,7 @@ export default async function ArticlesPage() {
           <section className="mt-10 mb-20">
             <Link
               href={`/articles/${featured.slug}`}
-              className="group grid overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(241,251,255,0.84)_54%,rgba(255,241,246,0.78))] shadow-[0_20px_54px_rgba(28,40,66,0.07)] transition-shadow hover:shadow-[0_28px_70px_rgba(28,40,66,0.12)] lg:grid-cols-[1.1fr_1fr]"
+              className="group grid overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(241,251,255,0.84)_54%,rgba(242,247,255,0.78))] shadow-[0_20px_54px_rgba(28,40,66,0.07)] transition-shadow hover:shadow-[0_28px_70px_rgba(28,40,66,0.12)] lg:grid-cols-[1.1fr_1fr]"
             >
               <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px]">
                 <Image
@@ -100,7 +100,7 @@ export default async function ArticlesPage() {
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {others.map((article) => (
             <Link key={article.id} href={`/articles/${article.slug}`} className="group flex flex-col rounded-[1.6rem] border border-[rgba(205,222,241,0.78)] bg-white/76 p-3 shadow-[0_14px_36px_rgba(28,40,66,0.06)] backdrop-blur">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[1.1rem] bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[1.1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
                 {article.coverImage ? (
                   <Image
                     src={article.coverImage.src}
@@ -110,7 +110,7 @@ export default async function ArticlesPage() {
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#eefbff,#fff0f5)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]" />
                 )}
               </div>
 
@@ -133,7 +133,7 @@ export default async function ArticlesPage() {
                 {article.excerpt}
               </p>
 
-              <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)] transition-all duration-300 group-hover:w-10" />
+              <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)] transition-all duration-300 group-hover:w-10" />
             </Link>
           ))}
         </div>

@@ -28,7 +28,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
           {items.map((item, index) => (
             <div
               key={index}
-              className="group relative flex flex-col items-center overflow-hidden rounded-3xl border border-[rgba(205,222,241,0.72)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.78),rgba(255,241,246,0.7))] px-5 py-6 text-center shadow-xl backdrop-blur-xl transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-[0_18px_44px_rgba(28,40,66,0.14)]"
+              className="group relative flex flex-col items-center overflow-hidden rounded-3xl border border-[rgba(205,222,241,0.72)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.78),rgba(242,247,255,0.72))] px-5 py-6 text-center shadow-xl backdrop-blur-xl transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-[0_18px_44px_rgba(28,40,66,0.14)]"
             >
               <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#2ecfc4]/45 to-transparent" />
 

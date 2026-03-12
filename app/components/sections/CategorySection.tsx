@@ -68,7 +68,7 @@ export default function CategorySection({
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#eefbff,#fff0f5)] font-body text-sm text-[#9aa9c3]">
+                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#eefbff,#f3f8ff)] font-body text-sm text-[#9aa9c3]">
                     {uiText.categories.noImage[locale]}
                   </div>
                 )}
