@@ -35,13 +35,19 @@ export default function CategorySection({
   const displayItems = items.slice(0, 6)
 
   return (
-    <section className="border border-white bg-[#F8F9FA] py-14 shadow-sm sm:py-16 md:py-24">
+    <section className="relative py-14 sm:py-16 md:py-24">
+      <div className="pointer-events-none absolute left-0 top-10 h-44 w-44 rounded-full bg-[rgba(46,207,196,0.1)] blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[rgba(248,167,184,0.12)] blur-3xl" />
+
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10 flex flex-col items-center text-center md:mb-14">
-          <h2 className="font-heading text-2xl tracking-tight text-gray-900 sm:text-3xl md:text-5xl">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            Product Categories
+          </p>
+          <h2 className="font-heading mt-3 text-2xl tracking-tight text-[var(--color-ink)] sm:text-3xl md:text-5xl">
             {uiText.categories.title[locale]}
           </h2>
-          <div className="mt-4 h-1.5 w-16 rounded-full bg-[#29415B] sm:w-20 md:w-24" />
+          <div className="mt-4 h-1.5 w-16 rounded-full bg-[var(--color-ink)]/85 sm:w-20 md:w-24" />
         </div>
 
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:gap-8">
@@ -50,7 +56,7 @@ export default function CategorySection({
               key={item.id}
               href={withLocalePath(`/categories/${item.slug}`, locale)}
               aria-label={`${uiText.categories.exploreMore[locale]} ${item.name}`}
-              className="group relative overflow-hidden rounded-3xl bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
+            className="group relative overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.78)] bg-white/86 shadow-[0_18px_44px_rgba(28,40,66,0.08)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_28px_64px_rgba(28,40,66,0.14)]"
             >
               <div className="relative aspect-square w-full">
                 {item.image?.src ? (
@@ -62,23 +68,24 @@ export default function CategorySection({
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gray-100 font-body text-sm text-gray-400">
+                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#eefbff,#fff0f5)] font-body text-sm text-[#9aa9c3]">
                     {uiText.categories.noImage[locale]}
                   </div>
                 )}
 
-                <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 via-black/20 to-transparent p-5 sm:p-6">
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(28,40,66,0.04)_8%,rgba(28,40,66,0.14)_42%,rgba(28,40,66,0.82)_100%)]" />
+                <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
                   <h3 className="font-heading text-base text-white transition-transform duration-500 group-hover:-translate-y-1 sm:text-lg md:text-xl">
                     {item.name}
                   </h3>
 
                   {item.description && (
-                    <p className="mt-2 line-clamp-2 font-body text-xs text-gray-200 opacity-100 transition-all duration-500 sm:translate-y-3 sm:text-sm sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
+                    <p className="mt-2 line-clamp-2 font-body text-xs text-white/75 opacity-100 transition-all duration-500 sm:translate-y-3 sm:text-sm sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
                       {item.description}
                     </p>
                   )}
 
-                  <div className="mt-3 flex items-center gap-1 font-body text-[10px] font-semibold uppercase tracking-widest text-blue-400 opacity-100 transition-all duration-500 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
+                  <div className="mt-4 flex items-center gap-1 font-body text-[10px] font-semibold uppercase tracking-widest text-[#bff7f0] opacity-100 transition-all duration-500 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
                     {uiText.categories.exploreMore[locale]}
                     <ArrowRightIcon />
                   </div>
@@ -91,7 +98,7 @@ export default function CategorySection({
         <div className="mt-12 flex justify-center sm:mt-16">
           <Link
             href={withLocalePath("/categories", locale)}
-            className="group relative inline-flex items-center gap-3 rounded-full bg-gray-900 px-8 py-3.5 font-body text-sm font-semibold text-white transition-all hover:bg-[#14B8A6] hover:shadow-xl active:scale-95 sm:px-10 sm:py-4"
+            className="group relative inline-flex items-center gap-3 rounded-full bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-8 py-3.5 font-body text-sm font-semibold text-white transition-all hover:brightness-105 hover:shadow-xl active:scale-95 sm:px-10 sm:py-4"
           >
             <span>{uiText.categories.viewAll[locale]}</span>
             <ArrowRightIcon />

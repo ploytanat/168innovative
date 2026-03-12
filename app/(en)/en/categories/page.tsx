@@ -22,7 +22,7 @@ export default async function CategoriesPage() {
 
   if (!categories.length) {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-transparent">
         <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
           <PageIntro
             eyebrow="OEM / ODM"
@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-transparent">
       <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
         <PageIntro
           eyebrow="OEM / ODM"
@@ -52,9 +52,9 @@ export default async function CategoriesPage() {
                 key={category.id}
                 href={`/categories/${category.slug}`}
                 prefetch={false}
-                className="group overflow-hidden rounded-[1.75rem] border border-[#E7EAF0] bg-white p-2 shadow-[0_12px_35px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_24px_55px_rgba(26,37,53,0.1)]"
+                className="group overflow-hidden rounded-[1.75rem] border border-[rgba(222,214,205,0.86)] bg-white/88 p-2 shadow-[0_14px_36px_rgba(26,37,53,0.06)] backdrop-blur transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_26px_60px_rgba(26,37,53,0.12)]"
               >
-                <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[#F1F5F9]">
+                <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[linear-gradient(160deg,#f8f1e9,#e6f4f0)]">
                   {category.image?.src ? (
                     <Image
                       src={category.image.src}
@@ -64,18 +64,18 @@ export default async function CategoriesPage() {
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-[#94A3B8]">
+                    <div className="flex h-full items-center justify-center text-xs text-[#9B9085]">
                       No Image
                     </div>
                   )}
                 </div>
 
                 <div className="px-2 pb-3 pt-4">
-                  <h2 className="text-sm font-semibold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                  <h2 className="text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                     {category.name}
                   </h2>
                   {category.description && (
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[#5A6A7E]">
+                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--color-ink-soft)]">
                       {category.description}
                     </p>
                   )}
@@ -87,14 +87,14 @@ export default async function CategoriesPage() {
 
         {seoCategories.length > 0 && (
           <section
-            className="mt-20 rounded-[2.25rem] border border-[#E5E7EB] bg-white px-6 py-10 shadow-[0_18px_50px_rgba(26,37,53,0.05)] sm:px-8 lg:px-10"
+            className="mt-20 rounded-[2.25rem] border border-[rgba(153,184,178,0.2)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(247,240,233,0.88)_56%,rgba(231,246,242,0.78))] px-6 py-10 shadow-[0_24px_70px_rgba(26,37,53,0.06)] sm:px-8 lg:px-10"
             aria-label="Category insights"
           >
             <header className="mb-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#14B8A6]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--color-accent)]">
                 Product Knowledge
               </p>
-              <h2 className="mt-3 font-heading text-2xl text-[#1A2535] md:text-3xl">
+              <h2 className="mt-3 font-heading text-2xl text-[var(--color-ink)] md:text-3xl">
                 Explore high-interest packaging types in detail
               </h2>
             </header>
@@ -103,14 +103,14 @@ export default async function CategoriesPage() {
               {seoCategories.map((category) => (
                 <article
                   key={category.id}
-                  className="rounded-[1.5rem] border border-[#EEF2F6] bg-[#FCFDFF] p-5 transition-colors hover:border-[#14B8A6]/40"
+                  className="rounded-[1.5rem] border border-[rgba(221,211,201,0.76)] bg-white/84 p-5 shadow-[0_12px_32px_rgba(26,37,53,0.04)] transition-colors hover:border-[#14B8A6]/40"
                 >
                   <LocalizedLink href={`/categories/${category.slug}`} prefetch={false}>
-                    <h3 className="text-base font-semibold text-[#1A2535] transition-colors hover:text-[#14B8A6]">
+                    <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                       {category.seoTitle || category.name}
                     </h3>
                   </LocalizedLink>
-                  <p className="mt-2 text-sm leading-7 text-[#5A6A7E]">
+                  <p className="mt-2 text-sm leading-7 text-[var(--color-ink-soft)]">
                     {category.seoDescription}
                   </p>
                 </article>

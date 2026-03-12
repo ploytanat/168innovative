@@ -55,34 +55,35 @@ export default function ContactSection({
   locale,
 }: ContactSectionProps) {
   return (
-    <section
-      id="contact"
-      className="relative border-y border-white bg-white/40 py-16 md:py-24"
-    >
+    <section id="contact" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#363636fd] p-6 shadow-2xl sm:p-10 md:p-16 lg:p-20">
-          <div className="absolute inset-0 -z-10 opacity-30">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(135deg,#ffffff_0%,#eefbff_44%,#fff0f5_100%)] p-6 shadow-[0_32px_90px_rgba(28,40,66,0.14)] sm:p-10 md:p-16 lg:p-20">
+          <div className="absolute inset-0 -z-10 opacity-25">
             <BackgroundBlobs />
           </div>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,167,184,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(46,207,196,0.14),transparent_26%),radial-gradient(circle_at_bottom,rgba(202,184,242,0.16),transparent_26%)]" />
 
           <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="space-y-4">
-                <h2 className="text-3xl font-black leading-[1.1] text-white sm:text-4xl md:text-6xl">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+                  Contact Desk
+                </p>
+                <h2 className="text-3xl font-black leading-[1.1] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
                   {uiText.contact.title[locale]} <br />
-                  <span className="italic text-blue-500">
+                  <span className="text-[#8ebcf5]">
                     {uiText.contact.subtitle[locale]}
                   </span>
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-relaxed text-gray-300 md:text-lg">
+                <p className="mt-6 max-w-md text-base leading-relaxed text-[var(--color-ink-soft)] md:text-lg">
                   {uiText.contact.desc[locale]}
                 </p>
               </div>
 
               <div className="mt-10 w-full max-w-md space-y-4">
-                <div className="overflow-hidden rounded-[2rem] bg-white shadow-2xl">
-                  <div className="border-b border-gray-50 p-6 md:p-8">
-                    <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600">
+                  <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl">
+                  <div className="border-b border-[#eef2f6] p-6 md:p-8">
+                    <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                       {uiText.contact.phoneLabel[locale]}
                     </p>
 
@@ -94,14 +95,14 @@ export default function ContactSection({
                           className="group flex items-center justify-between transition-all"
                         >
                           <div className="flex items-center gap-4 text-left">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-all duration-300 group-hover:bg-blue-600 group-hover:text-white">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf9f7] text-[var(--color-accent)] transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                               <PhoneIcon />
                             </div>
                             <div>
-                              <span className="block text-[10px] font-bold uppercase text-gray-400">
+                              <span className="block text-[10px] font-bold uppercase text-[#9aacc0]">
                                 {phone.label}
                               </span>
-                              <span className="text-lg font-bold text-gray-900 md:text-xl">
+                              <span className="text-lg font-bold text-[var(--color-ink)] md:text-xl">
                                 {phone.number}
                               </span>
                             </div>
@@ -112,8 +113,8 @@ export default function ContactSection({
                     </div>
                   </div>
 
-                  <div className="bg-gray-50/50 p-6 md:p-8">
-                    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600">
+                  <div className="bg-[linear-gradient(145deg,#f6fdff,#fff3f7)] p-6 md:p-8">
+                    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                       {uiText.contact.emailLabel[locale]}
                     </p>
                     <div className="space-y-4">
@@ -123,10 +124,10 @@ export default function ContactSection({
                           href={`mailto:${email}`}
                           className="group flex items-center gap-4"
                         >
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-400 transition-all duration-300 group-hover:bg-gray-900 group-hover:text-white">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(205,222,241,0.72)] bg-white text-[#8fa2b8] transition-all duration-300 group-hover:bg-[var(--color-ink)] group-hover:text-white">
                             <MailIcon />
                           </div>
-                          <span className="break-all text-sm font-bold text-gray-700 md:text-base">
+                          <span className="break-all text-sm font-bold text-[var(--color-ink-soft)] md:text-base">
                             {email}
                           </span>
                         </a>
@@ -136,8 +137,8 @@ export default function ContactSection({
                 </div>
 
                 {data.lineQrCode && (
-                  <div className="flex items-center gap-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4 shadow-sm">
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-emerald-600 bg-white">
+                  <div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur">
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[rgba(46,207,196,0.42)] bg-white">
                       <Image
                         src={data.lineQrCode.src}
                         alt={data.lineQrCode.alt}
@@ -147,10 +148,10 @@ export default function ContactSection({
                       />
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-bold text-emerald-900">
+                      <p className="text-sm font-bold text-[var(--color-ink)]">
                         {uiText.contact.lineLabel[locale]}
                       </p>
-                      <p className="text-xs font-medium text-emerald-600/80">
+                      <p className="text-xs font-medium text-[var(--color-ink-soft)]">
                         {uiText.contact.lineDesc[locale]}
                       </p>
                     </div>
@@ -167,7 +168,7 @@ export default function ContactSection({
                   return (
                     <div
                       key={image.src}
-                      className={`floating-animation relative overflow-hidden rounded-3xl bg-white shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
+                      className={`floating-animation relative overflow-hidden rounded-3xl border border-white/10 bg-white/80 shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
                       style={
                         {
                           "--floating-duration": `${6 + index * 0.4}s`,

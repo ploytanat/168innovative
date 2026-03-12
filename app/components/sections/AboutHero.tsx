@@ -35,10 +35,10 @@ function HeroBackground({ image }: { image?: ImageView }) {
         className="relative hidden h-[108%] w-full will-change-transform sm:block"
       >
         {/* Vignette ขอบซ้ายไล่เข้าหาภาพ — สีตรงกับ bg จริง */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#f2f4f7] via-[#f2f4f7]/94 via-[28%] to-[#f2f4f7]/8" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#fefcff] via-[#f5fbff]/94 via-[28%] to-[#f5fbff]/8" />
         {/* Vignette ด้านบน–ล่างเพิ่มความลึก */}
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_18%_48%,rgba(242,244,247,0.98)_0%,rgba(242,244,247,0.88)_24%,rgba(242,244,247,0.42)_48%,rgba(242,244,247,0)_72%)]" />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#f2f4f7]/54 via-transparent via-[36%] to-[#f2f4f7]/38" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_18%_48%,rgba(254,252,255,0.98)_0%,rgba(245,251,255,0.88)_24%,rgba(255,241,246,0.42)_48%,rgba(245,251,255,0)_72%)]" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#fefcff]/54 via-transparent via-[36%] to-[#f5fbff]/38" />
 
         <Image
           src={image.src}
@@ -61,7 +61,7 @@ function HeroBackground({ image }: { image?: ImageView }) {
           className="object-cover object-center opacity-10"
         />
         {/* overlay เพื่อป้องกัน contrast ต่ำบน mobile */}
-        <div className="absolute inset-0 bg-[#f2f4f7]/60" />
+        <div className="absolute inset-0 bg-[#f9fcff]/60" />
       </div>
     </div>
   )
@@ -82,27 +82,27 @@ function HeroContent({
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="w-full max-w-[46rem] rounded-2xl border border-white/60 bg-white/50 px-6 py-7 shadow-[0_8px_40px_rgba(15,23,42,0.10)] backdrop-blur-lg sm:px-8 sm:py-9 lg:max-w-[43rem] lg:px-10 lg:py-10"
+          className="w-full max-w-[46rem] rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.78),rgba(255,241,246,0.72))] px-6 py-7 shadow-[0_18px_52px_rgba(28,40,66,0.1)] backdrop-blur-lg sm:px-8 sm:py-9 lg:max-w-[43rem] lg:px-10 lg:py-10"
         >
           {/* Badge */}
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#c8d9e8] bg-white/70 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#1e3a5f]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#14B8A6]" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/76 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2ecfc4]" />
             Established Excellence
           </span>
 
           {/* Heading */}
-          <h1 className="mt-5 text-[2rem] font-black leading-[1.08] tracking-[-0.02em] text-[#1e3a5f] sm:text-[2.5rem] md:text-[3.15rem] lg:text-[3.6rem]">
+          <h1 className="mt-5 text-[2rem] font-black leading-[1.08] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[2.5rem] md:text-[3.15rem] lg:text-[3.6rem]">
             {title}
           </h1>
 
           {/* Accent divider — เพิ่ม taper ให้ดูละเอียดขึ้น */}
           <div className="mt-4 flex items-center gap-2">
-            <div className="h-[2px] w-10 rounded-full bg-[#14B8A6]" />
-            <div className="h-[2px] w-3 rounded-full bg-[#14B8A6]/40" />
+            <div className="h-[2px] w-10 rounded-full bg-[#2ecfc4]" />
+            <div className="h-[2px] w-3 rounded-full bg-[#f8a7b8]" />
           </div>
 
           {/* Description */}
-          <p className="mt-5 max-w-[40rem] text-[0.95rem] leading-7 text-[#4a5d6e] sm:text-base sm:leading-8 md:text-[1.02rem]">
+          <p className="mt-5 max-w-[40rem] text-[0.95rem] leading-7 text-[var(--color-ink-soft)] sm:text-base sm:leading-8 md:text-[1.02rem]">
             {description}
           </p>
         </motion.div>
@@ -115,8 +115,8 @@ function HeroContent({
           transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}
           className="flex flex-col items-center gap-1"
         >
-          <div className="h-8 w-px bg-gradient-to-b from-[#1e3a5f]/50 to-transparent" />
-          <div className="h-1 w-1 rounded-full bg-[#14B8A6]/60" />
+          <div className="h-8 w-px bg-gradient-to-b from-[#8ebcf5]/70 to-transparent" />
+          <div className="h-1 w-1 rounded-full bg-[#2ecfc4]/70" />
         </motion.div>
       </div>
     </>
@@ -142,7 +142,7 @@ function WhoWeAreSection({
             className="object-cover object-center grayscale-[15%]"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white/95 to-white/80 lg:bg-gradient-to-r lg:from-white lg:via-white/95 lg:to-white/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#fefcff] via-[#f9fcff]/95 to-white/80 lg:bg-gradient-to-r lg:from-[#fefcff] lg:via-[#f9fcff]/95 lg:to-white/30" />
       </div>
 
       <div className="container mx-auto relative z-10 px-4 py-16 sm:px-6 lg:px-12 lg:py-18">
@@ -154,10 +154,10 @@ function WhoWeAreSection({
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h2 className="mb-5 text-3xl font-bold leading-tight text-[#1e3a5f] sm:text-4xl md:text-[3rem]">
+            <h2 className="mb-5 text-3xl font-bold leading-tight text-[var(--color-ink)] sm:text-4xl md:text-[3rem]">
               {whoAreWe.title}
             </h2>
-            <p className="max-w-xl text-base leading-relaxed text-gray-700 sm:text-lg md:text-[1.05rem]">
+            <p className="max-w-xl text-base leading-relaxed text-[var(--color-ink-soft)] sm:text-lg md:text-[1.05rem]">
               {whoAreWe.description}
             </p>
           </motion.div>
@@ -169,10 +169,10 @@ function WhoWeAreSection({
             transition={{ duration: 0.8, delay: 0.15 }}
           >
             <div className="relative p-1">
-              <div className="absolute inset-0 rounded-3xl bg-[#1e3a5f]/5 blur-2xl" />
-              <div className="relative rounded-3xl border border-white/40 bg-white/70 p-7 shadow-xl backdrop-blur-xl sm:p-9 md:p-12">
-                <div className="mb-5 h-1 w-12 bg-[#1e3a5f]" />
-                <p className="text-lg font-semibold italic leading-relaxed text-[#1e3a5f] sm:text-xl md:text-[1.65rem]">
+              <div className="absolute inset-0 rounded-3xl bg-[#8ebcf5]/10 blur-2xl" />
+              <div className="relative rounded-3xl border border-[rgba(205,222,241,0.72)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.78),rgba(255,241,246,0.72))] p-7 shadow-xl backdrop-blur-xl sm:p-9 md:p-12">
+                <div className="mb-5 h-1 w-12 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
+                <p className="text-lg font-semibold italic leading-relaxed text-[var(--color-ink)] sm:text-xl md:text-[1.65rem]">
                   &quot;We focus on product sourcing, quality control, and reliable supply from trusted manufacturing partners.&quot;
                 </p>
               </div>
@@ -186,7 +186,7 @@ function WhoWeAreSection({
 
 export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
   return (
-    <section className="overflow-hidden bg-[#eeeeee]">
+    <section className="overflow-hidden bg-transparent">
       <div className="relative mx-auto max-w-7xl px-6 pt-6 md:pt-8 lg:px-8">
         <div className="pb-7 md:pb-8">
           <Breadcrumb />

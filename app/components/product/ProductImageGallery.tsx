@@ -34,7 +34,7 @@ export default function ProductImageGallery({ src, alt }: Props) {
         <button
           onClick={() => setIsOpen(true)}
           aria-label="ขยายรูปภาพสินค้า"
-          className="group relative w-full aspect-square overflow-hidden rounded-[2.5rem] bg-gray-50 border border-gray-100 shadow-sm transition-all hover:shadow-xl cursor-zoom-in active:scale-[0.98]"
+          className="group relative w-full aspect-square cursor-zoom-in overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,#eefbff,#fff0f5)] shadow-[0_18px_40px_rgba(28,40,66,0.08)] transition-all hover:shadow-[0_26px_55px_rgba(28,40,66,0.12)] active:scale-[0.98]"
           style={{ maxWidth: 'min(100%, 28rem)' }}
         >
           <Image
@@ -47,10 +47,10 @@ export default function ProductImageGallery({ src, alt }: Props) {
           />
 
           {/* Overlay & Icon */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_40%,rgba(28,40,66,0.08)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           
-          <div className="absolute bottom-6 right-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/90 shadow-lg backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <ZoomIn className="w-6 h-6 text-gray-800" />
+          <div className="absolute bottom-6 right-6 flex h-12 w-12 translate-y-2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            <ZoomIn className="h-6 w-6 text-[var(--color-ink)]" />
           </div>
         </button>
       </div>
@@ -58,7 +58,7 @@ export default function ProductImageGallery({ src, alt }: Props) {
       {/* Modal - ใช้ Portal จะดีที่สุด แต่ในเบื้องต้นปรับปรุง Logic เดิมก่อน */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4 animate-in fade-in duration-300"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[radial-gradient(circle_at_top,rgba(157,220,246,0.2),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(248,167,184,0.18),transparent_28%),rgba(20,26,42,0.94)] p-4 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setIsOpen(false)}
           role="dialog"
           aria-modal="true"

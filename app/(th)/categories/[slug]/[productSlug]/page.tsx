@@ -214,7 +214,7 @@ export default async function ProductDetailPage({ params }: Props) {
   ]
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-transparent">
       <Script
         id="product-jsonld"
         type="application/ld+json"
@@ -242,11 +242,11 @@ export default async function ProductDetailPage({ params }: Props) {
           ]}
         />
 
-        <div className="mt-6 grid grid-cols-1 overflow-hidden rounded-2xl border border-slate-200 lg:grid-cols-2">
-          <div className="bg-slate-50 p-8 lg:p-12">
+        <div className="mt-6 grid grid-cols-1 overflow-hidden rounded-[2.2rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(145deg,rgba(255,255,255,0.95),rgba(247,240,233,0.9)_54%,rgba(230,246,241,0.8))] shadow-[0_28px_80px_rgba(26,37,53,0.07)] lg:grid-cols-2">
+          <div className="bg-[linear-gradient(165deg,rgba(248,241,233,0.76),rgba(231,245,241,0.66))] p-8 lg:p-12">
             <Link
               href={`/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-widest text-teal-600 hover:text-teal-700"
+              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-600 backdrop-blur hover:text-teal-700"
             >
               <ChevronLeft className="h-3 w-3" />
               {category.name}
@@ -257,19 +257,23 @@ export default async function ProductDetailPage({ params }: Props) {
               alt={product.image.alt}
             />
 
-            <p className="mt-8 break-words text-center text-xs uppercase tracking-[0.25em] text-slate-600">
-              {product.slug}
-            </p>
+            <div className="mt-8 flex items-center gap-3">
+              <div className="h-px flex-1 bg-[rgba(210,200,190,0.9)]" />
+              <p className="rounded-full border border-[rgba(210,200,190,0.9)] bg-white/82 px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 backdrop-blur">
+                {product.slug}
+              </p>
+              <div className="h-px flex-1 bg-[rgba(210,200,190,0.9)]" />
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center border-t border-slate-200 p-8 lg:border-l lg:border-t-0 lg:p-12">
-            <h1 className="font-heading text-3xl font-semibold tracking-tight text-slate-900 break-words md:text-4xl">
+          <div className="flex flex-col justify-center border-t border-[rgba(220,211,201,0.82)] p-8 lg:border-l lg:border-t-0 lg:p-12">
+            <h1 className="break-words font-heading text-3xl font-semibold tracking-tight text-[var(--color-ink)] md:text-4xl">
               {product.name}
             </h1>
 
             <div className="my-6 h-px w-12 bg-teal-500" />
 
-            <p className="break-words text-sm leading-relaxed text-slate-700">
+            <p className="break-words text-sm leading-relaxed text-[var(--color-ink-soft)]">
               {product.description}
             </p>
 
@@ -279,14 +283,14 @@ export default async function ProductDetailPage({ params }: Props) {
                   ข้อมูลจำเพาะ
                 </p>
 
-                <div className="divide-y divide-slate-100 rounded-xl border border-slate-200">
+                <div className="divide-y divide-[rgba(233,226,219,0.9)] rounded-[1.4rem] border border-[rgba(221,211,201,0.82)] bg-white/76 backdrop-blur">
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
                       className="grid grid-cols-2 gap-4 px-5 py-4 text-sm"
                     >
                       <div className="break-words text-slate-600">{spec.label}</div>
-                      <div className="break-words text-right font-medium text-slate-900">
+                      <div className="break-words text-right font-medium text-[var(--color-ink)]">
                         {spec.value}
                       </div>
                     </div>
@@ -298,7 +302,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-10 flex justify-center">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
-                className="group inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-900 bg-slate-900 px-8 py-4 text-sm font-medium tracking-wide text-white transition-all hover:bg-white hover:text-slate-900 active:scale-[0.98]"
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--color-ink)] bg-[var(--color-ink)] px-8 py-4 text-sm font-medium tracking-wide text-white shadow-[0_16px_36px_rgba(26,37,53,0.16)] transition-all hover:bg-white hover:text-slate-900 active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 ขอใบเสนอราคาออนไลน์
@@ -309,7 +313,7 @@ export default async function ProductDetailPage({ params }: Props) {
               {TRUST_BADGES.map(({ icon: Icon, text }) => (
                 <div
                   key={text}
-                  className="flex flex-col items-center gap-1.5 rounded-xl bg-slate-50 p-3 text-center"
+                  className="flex flex-col items-center gap-1.5 rounded-xl border border-[rgba(221,211,201,0.82)] bg-white/72 p-3 text-center backdrop-blur"
                 >
                   <Icon className="h-4 w-4 text-teal-600" strokeWidth={1.5} />
                   <span className="break-words text-xs text-slate-600">{text}</span>
@@ -337,23 +341,23 @@ export default async function ProductDetailPage({ params }: Props) {
           />
         ) : null}
 
-        <section className="mt-8 rounded-[2rem] border border-slate-200 bg-slate-50 px-6 py-8">
+        <section className="mt-8 rounded-[2rem] border border-[rgba(153,184,178,0.2)] bg-[linear-gradient(145deg,rgba(255,255,255,0.95),rgba(248,241,235,0.88)_56%,rgba(230,246,241,0.78))] px-6 py-8 shadow-[0_24px_64px_rgba(26,37,53,0.06)]">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-600">
             {supportCopy.eyebrow}
           </p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-900">
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">
             {supportCopy.title}
           </h2>
-          <div className="mt-4 space-y-3 text-sm leading-7 text-slate-700">
+          <div className="mt-4 space-y-3 text-sm leading-7 text-[var(--color-ink-soft)]">
             {supportCopy.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-white p-5">
+          <div className="mt-6 rounded-[1.5rem] border border-[rgba(221,211,201,0.82)] bg-white/74 p-5 backdrop-blur">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
               {supportCopy.bulletsTitle}
             </p>
-            <ul className="mt-4 space-y-3 text-sm text-slate-700">
+            <ul className="mt-4 space-y-3 text-sm text-[var(--color-ink-soft)]">
               {supportCopy.bullets.map((bullet) => (
                 <li key={bullet} className="flex items-start gap-3">
                   <span className="mt-1 h-2 w-2 rounded-full bg-teal-500" />
@@ -373,12 +377,12 @@ export default async function ProductDetailPage({ params }: Props) {
 
         {related.length > 0 ? (
           <section className="mt-24" aria-label="สินค้าที่เกี่ยวข้อง">
-            <div className="mb-10 flex items-end justify-between border-b border-slate-200 pb-6">
+            <div className="mb-10 flex items-end justify-between border-b border-[rgba(222,214,205,0.88)] pb-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-600">
                   Discover More
                 </p>
-                <h2 className="mt-2 font-heading text-2xl font-bold text-slate-900">
+                <h2 className="mt-2 font-heading text-2xl font-bold text-[var(--color-ink)]">
                   สินค้าที่คุณอาจสนใจ
                 </h2>
               </div>
@@ -386,7 +390,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <Link
                 href={`/categories/${slug}`}
                 prefetch={false}
-                className="hidden items-center gap-1 text-xs uppercase tracking-widest text-slate-600 hover:text-slate-900 md:flex"
+                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2.5 text-sm font-semibold text-slate-600 backdrop-blur hover:text-slate-900 md:flex"
               >
                 ดูทั้งหมด <ChevronRight size={13} />
               </Link>
@@ -398,9 +402,9 @@ export default async function ProductDetailPage({ params }: Props) {
                   key={item.id}
                   href={`/categories/${slug}/${item.slug}`}
                   prefetch={false}
-                  className="group flex flex-col"
+                  className="group overflow-hidden rounded-[1.6rem] border border-[rgba(221,211,201,0.82)] bg-white/86 p-2 shadow-[0_14px_36px_rgba(26,37,53,0.06)] backdrop-blur"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-100">
+                  <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[linear-gradient(160deg,#f8f1e9,#e6f4f0)]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt}
@@ -410,8 +414,8 @@ export default async function ProductDetailPage({ params }: Props) {
                     />
                   </div>
 
-                  <div className="mt-3 px-1">
-                    <h3 className="break-words text-sm font-medium leading-snug text-slate-900 group-hover:text-teal-600">
+                  <div className="mt-3 px-2 pb-3 pt-1">
+                    <h3 className="break-words text-sm font-medium leading-snug text-[var(--color-ink)] group-hover:text-teal-600">
                       {item.name}
                     </h3>
                     <div className="mt-1.5 h-px w-0 bg-teal-500 transition-all duration-300 group-hover:w-8" />

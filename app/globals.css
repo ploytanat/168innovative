@@ -4,16 +4,43 @@
    Base
 ───────────────────────────── */
 @layer base {
+  :root {
+    --color-ink: #1c2842;
+    --color-ink-soft: #5f6c86;
+    --color-accent: #2ecfc4;
+    --color-accent-soft: #dffaf7;
+    --color-warm: #fdf6fb;
+    --color-warm-strong: #f3d8eb;
+    --color-surface: rgba(255, 255, 255, 0.74);
+    --color-surface-strong: #ffffff;
+    --color-sky: #9ddcf6;
+    --color-sky-soft: #e5f6ff;
+    --color-coral: #f8a7b8;
+    --color-coral-soft: #ffe6ec;
+    --color-lilac: #cab8f2;
+    --color-lilac-soft: #f2edff;
+    --color-mint: #a9e7c7;
+    --color-mint-soft: #e7f9ee;
+    --shadow-soft: 0 18px 50px rgba(28, 40, 66, 0.08);
+    --shadow-strong: 0 28px 90px rgba(28, 40, 66, 0.16);
+  }
+
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
+    background:
+      radial-gradient(circle at top left, rgba(46, 207, 196, 0.16), transparent 28%),
+      radial-gradient(circle at 82% 10%, rgba(248, 167, 184, 0.2), transparent 24%),
+      radial-gradient(circle at 50% 0%, rgba(157, 220, 246, 0.16), transparent 30%),
+      linear-gradient(180deg, #fefcff 0%, #f9fcff 20%, #ffffff 100%);
   }
 
   body {
     font-family: var(--font-body-th), sans-serif;
-    color: #1a2535;
+    color: var(--color-ink);
     -webkit-overflow-scrolling: touch;
     overflow-x: clip;
+    background: transparent;
   }
 
   html[lang="en"] body {
@@ -74,14 +101,54 @@
   }
 
   .hero-gradient-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, #ffe9ef 0%, #ebfbff 52%, #eef7ea 100%);
+  }
+
+  .site-frame {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .site-frame::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(46, 207, 196, 0.16), transparent 22%),
+      radial-gradient(circle at 88% 8%, rgba(248, 167, 184, 0.2), transparent 20%),
+      radial-gradient(circle at 74% 36%, rgba(202, 184, 242, 0.16), transparent 22%),
+      radial-gradient(circle at 26% 68%, rgba(169, 231, 199, 0.16), transparent 20%),
+      linear-gradient(180deg, #fefcff 0%, #f9fcff 18%, #ffffff 100%);
+    pointer-events: none;
+  }
+
+  .section-shell {
+    position: relative;
+  }
+
+  .section-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 2rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.45));
+    pointer-events: none;
+  }
+
+  .glass-panel {
+    border: 1px solid rgba(209, 225, 241, 0.78);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(16px);
   }
 
   .hero-glow {
     background: radial-gradient(
       circle,
-      rgba(245, 227, 230, 0.6) 0%,
-      rgba(252, 246, 229, 0) 70%
+      rgba(248, 167, 184, 0.42) 0%,
+      rgba(157, 220, 246, 0.18) 42%,
+      rgba(255, 255, 255, 0) 72%
     );
   }
 
@@ -91,7 +158,7 @@
   }
 
   .rich-content {
-    color: #556476;
+    color: #5f6c86;
     font-size: 1rem;
     line-height: 1.9;
   }
@@ -107,7 +174,7 @@
   .rich-content h2,
   .rich-content h3,
   .rich-content h4 {
-    color: #1a2535;
+    color: #1c2842;
     font-family: var(--font-heading-th), serif;
     font-weight: 600;
     line-height: 1.2;
@@ -140,13 +207,13 @@
   }
 
   .rich-content p:first-child {
-    color: #304255;
+    color: #324061;
     font-size: 1.08rem;
     line-height: 2;
   }
 
   .rich-content a {
-    color: #0f766e;
+    color: #179ea3;
     text-decoration: underline;
     text-underline-offset: 0.15em;
   }
@@ -154,7 +221,7 @@
   .rich-content hr {
     margin: 2.5rem 0;
     border: 0;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid #dfe8f4;
   }
 
   .rich-content ul,
@@ -180,7 +247,7 @@
     margin: 2rem 0;
     width: 100%;
     height: auto;
-    box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 18px 50px rgba(28, 40, 66, 0.12);
   }
 
   .rich-content table {
@@ -189,7 +256,7 @@
     overflow: hidden;
     border-collapse: separate;
     border-spacing: 0;
-    border: 1px solid #dbe4ec;
+    border: 1px solid #d9e6f3;
     border-radius: 1rem;
     font-size: 0.95rem;
   }
@@ -199,12 +266,12 @@
     padding: 0.9rem 1rem;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid #e8eef3;
+    border-bottom: 1px solid #e7eef6;
   }
 
   .rich-content th {
-    background: #f8fafc;
-    color: #1a2535;
+    background: linear-gradient(135deg, #eef9ff 0%, #f9f3ff 100%);
+    color: #1c2842;
     font-weight: 600;
   }
 
@@ -213,14 +280,14 @@
   }
 
   .rich-content strong {
-    color: #1a2535;
+    color: #1c2842;
     font-weight: 600;
   }
 
   .rich-content blockquote {
-    border-left: 4px solid #14b8a6;
-    background: linear-gradient(135deg, #effcf9 0%, #f8fafc 100%);
-    color: #1a2535;
+    border-left: 4px solid #2ecfc4;
+    background: linear-gradient(135deg, #eefdf9 0%, #f8f5ff 100%);
+    color: #1c2842;
     margin: 2rem 0;
     padding: 1.25rem 1.25rem 1.25rem 1rem;
     border-radius: 0 1rem 1rem 0;
@@ -234,7 +301,7 @@
     margin-top: 0.75rem;
     font-size: 0.85rem;
     line-height: 1.7;
-    color: #708092;
+    color: #7a88a4;
     text-align: center;
   }
 
@@ -262,7 +329,7 @@
     font-family: var(--font-heading-th), serif;
     font-size: 3.6rem;
     line-height: 0.9;
-    color: #122033;
+    color: #1c2842;
   }
 
   html[lang="en"] .article-body__content > p:first-child::first-letter {
@@ -273,7 +340,7 @@
     margin: 1.75rem 0;
     overflow-x: auto;
     border-radius: 1rem;
-    background: #122033;
+    background: #1c2842;
     padding: 1rem 1.15rem;
     color: #f8fafc;
   }
@@ -301,7 +368,7 @@
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
-    border: 1px solid #dbe4ec;
+    border: 1px solid #d9e6f3;
     border-radius: 1rem;
   }
 
@@ -310,12 +377,12 @@
     padding: 0.95rem 1rem;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid #e8eef3;
+    border-bottom: 1px solid #e7eef6;
   }
 
   .article-compare-table thead th {
-    background: #f8fafc;
-    color: #122033;
+    background: linear-gradient(135deg, #eef9ff 0%, #f9f3ff 100%);
+    color: #1c2842;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.08em;

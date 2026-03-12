@@ -22,7 +22,7 @@ export default async function ArticlesPage() {
 
   if (!articles.length) {
     return (
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-transparent">
         <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
           <PageIntro
             eyebrow="Articles & Insights"
@@ -38,7 +38,7 @@ export default async function ArticlesPage() {
   const [featured, ...others] = articles
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-transparent">
       <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
         <PageIntro
           eyebrow="Articles & Insights"
@@ -51,7 +51,7 @@ export default async function ArticlesPage() {
           <section className="mt-10 mb-20">
             <LocalizedLink
               href={`/articles/${featured.slug}`}
-              className="group grid overflow-hidden rounded-[2rem] border border-[#E5E7EB] bg-white transition-shadow hover:shadow-md lg:grid-cols-[1.1fr_1fr]"
+              className="group grid overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(241,251,255,0.84)_54%,rgba(255,241,246,0.78))] shadow-[0_20px_54px_rgba(28,40,66,0.07)] transition-shadow hover:shadow-[0_28px_70px_rgba(28,40,66,0.12)] lg:grid-cols-[1.1fr_1fr]"
             >
               <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px]">
                 <Image
@@ -65,20 +65,20 @@ export default async function ArticlesPage() {
               </div>
 
               <div className="flex flex-col justify-center p-8 md:p-12">
-                <span className="inline-flex w-fit items-center rounded-full border border-[#14B8A6]/30 bg-[#F0FDFA] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#14B8A6]">
+                <span className="inline-flex w-fit items-center rounded-full border border-[#2ecfc4]/30 bg-[#eefdf9] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#2ecfc4]">
                   Featured Article
                 </span>
 
-                <h2 className="mt-5 font-heading text-2xl font-bold leading-snug text-[#1A2535] md:text-3xl">
+                <h2 className="mt-5 font-heading text-2xl font-bold leading-snug text-[var(--color-ink)] md:text-3xl">
                   {featured.title}
                 </h2>
 
-                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-[#5A6A7E]">
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink-soft)]">
                   {featured.excerpt}
                 </p>
 
                 {featured.publishedAt && (
-                  <p className="mt-6 flex items-center gap-1.5 text-xs text-[#94A3B8]">
+                  <p className="mt-6 flex items-center gap-1.5 text-xs text-[#93a3be]">
                     <CalendarDays size={12} />
                     {new Date(featured.publishedAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -88,7 +88,7 @@ export default async function ArticlesPage() {
                   </p>
                 )}
 
-                <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[#14B8A6] transition-all group-hover:gap-3">
+                <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[#2ecfc4] transition-all group-hover:gap-3">
                   Read More
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
@@ -102,9 +102,9 @@ export default async function ArticlesPage() {
             <LocalizedLink
               key={article.id}
               href={`/articles/${article.slug}`}
-              className="group flex flex-col"
+              className="group flex flex-col rounded-[1.6rem] border border-[rgba(205,222,241,0.78)] bg-white/76 p-3 shadow-[0_14px_36px_rgba(28,40,66,0.06)] backdrop-blur"
             >
-              <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-[#F1F5F9]">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[1.1rem] bg-[linear-gradient(145deg,#eefbff,#fff0f5)]">
                 {article.coverImage ? (
                   <Image
                     src={article.coverImage.src}
@@ -114,12 +114,12 @@ export default async function ArticlesPage() {
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-[#EEF2F7]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#eefbff,#fff0f5)]" />
                 )}
               </div>
 
               {article.publishedAt && (
-                <p className="mt-4 flex items-center gap-1.5 text-[11px] text-[#94A3B8]">
+                <p className="mt-4 flex items-center gap-1.5 text-[11px] text-[#93a3be]">
                   <CalendarDays size={11} />
                   {new Date(article.publishedAt).toLocaleDateString("en-US", {
                     year: "numeric",
@@ -129,15 +129,15 @@ export default async function ArticlesPage() {
                 </p>
               )}
 
-              <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+              <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[#2ecfc4]">
                 {article.title}
               </h3>
 
-              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[#5A6A7E]">
+              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[var(--color-ink-soft)]">
                 {article.excerpt}
               </p>
 
-              <div className="mt-3 h-px w-0 bg-[#14B8A6] transition-all duration-300 group-hover:w-8" />
+              <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)] transition-all duration-300 group-hover:w-10" />
             </LocalizedLink>
           ))}
         </div>

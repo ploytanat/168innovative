@@ -100,7 +100,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     normalizeText(category.introHtml) !== normalizeText(category.description)
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-transparent">
       {faqJsonLd ? (
         <Script
           id="category-faq-jsonld-en"
@@ -119,7 +119,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           actions={
             <Link
               href="/en/categories"
-              className="inline-flex items-center gap-1 rounded-full border border-[#D8E1EA] px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5A6A7E] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
+              className="inline-flex items-center gap-1 rounded-full border border-[rgba(221,211,201,0.9)] bg-white/82 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[var(--color-ink-soft)] transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               All Categories
