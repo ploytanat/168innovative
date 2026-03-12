@@ -37,7 +37,7 @@ function LangToggle({
       className="group inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.92)] bg-[linear-gradient(135deg,rgba(255,255,255,0.94),rgba(239,250,255,0.88))] px-2.5 py-1.5 shadow-[0_10px_26px_rgba(28,40,66,0.08)] transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_30px_rgba(46,207,196,0.18)]"
     >
       <span
-        className={`text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+        className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
           !isEN ? "text-[var(--color-ink)]" : "text-[#9eb2c5]"
         }`}
       >
@@ -57,7 +57,7 @@ function LangToggle({
       </span>
 
       <span
-        className={`text-[10px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+        className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
           isEN ? "text-[var(--color-ink)]" : "text-[#9eb2c5]"
         }`}
       >
@@ -172,7 +172,7 @@ function NavigationInner({
             <li key={item.href}>
               <Link
                 href={withLocale(item.href)}
-                className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-medium uppercase tracking-[0.16em] transition-all ${
+                className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
                     ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white shadow-[0_12px_28px_rgba(46,207,196,0.28)]"
                     : "text-[#5d6984] hover:bg-[linear-gradient(135deg,#eefcff,#fdf1f6)] hover:text-[var(--color-ink)]"
@@ -229,7 +229,7 @@ function NavigationInner({
           </div>
 
           <div className="mt-5 flex items-center justify-between rounded-2xl border border-[#E6DFD7] bg-white/80 px-4 py-3">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#7787a1]">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[#66748a]">
               {isEN ? "Language" : "ภาษา"}
             </span>
             <LangToggle isEN={isEN} onToggle={toggleLanguage} />

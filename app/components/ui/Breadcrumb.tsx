@@ -63,7 +63,7 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[rgba(221,211,201,0.85)] bg-white/82 px-4 py-2 text-[11px] font-medium text-[#7A8795] shadow-[0_10px_24px_rgba(26,37,53,0.05)] backdrop-blur">
+      <ol className="inline-flex flex-wrap items-center gap-2 rounded-full border border-[rgba(221,211,201,0.85)] bg-white/82 px-4 py-2.5 text-[12px] font-medium text-[#66748a] shadow-[0_10px_24px_rgba(26,37,53,0.05)] backdrop-blur">
         <li>
           <Link
             href={isEn ? '/en' : '/'}

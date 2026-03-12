@@ -6,7 +6,7 @@
 @layer base {
   :root {
     --color-ink: #1c2842;
-    --color-ink-soft: #5f6c86;
+    --color-ink-soft: #4f5d74;
     --color-accent: #2ecfc4;
     --color-accent-soft: #dffaf7;
     --color-warm: #fdf6fb;
@@ -158,9 +158,9 @@
   }
 
   .rich-content {
-    color: #5f6c86;
-    font-size: 1rem;
-    line-height: 1.9;
+    color: #4f5d74;
+    font-size: 1.02rem;
+    line-height: 1.85;
   }
 
   .rich-content > * + * {
@@ -207,8 +207,8 @@
   }
 
   .rich-content p:first-child {
-    color: #324061;
-    font-size: 1.08rem;
+    color: #2e3d56;
+    font-size: 1.12rem;
     line-height: 2;
   }
 

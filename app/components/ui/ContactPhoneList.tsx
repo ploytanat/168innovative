@@ -28,24 +28,24 @@ export default function ContactPhoneList({
     <div className="w-full">
       {officePhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold text-gray-800">{phone.number}</p>
-          <p className="text-sm font-medium text-gray-500">{phone.label}</p>
+          <p className="text-2xl font-bold text-[var(--color-ink)]">{phone.number}</p>
+          <p className="text-base font-medium text-[var(--color-ink-soft)]">{phone.label}</p>
         </div>
       ))}
 
       {officePhones.length > 0 && salesPhones.length > 0 && (
         <div className="mb-4 mt-7">
-          <p className="text-xs font-black tracking-[0.18em] text-gray-400">
+          <p className="text-[12px] font-black tracking-[0.16em] text-[#7586a1]">
             {salesHeading}
           </p>
-          <div className="mt-3 h-px w-14 bg-black/10" />
+          <div className="mt-3 h-px w-14 bg-[rgba(28,40,66,0.14)]" />
         </div>
       )}
 
       {salesPhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold text-gray-800">{phone.number}</p>
-          <p className="text-sm font-medium text-gray-500">{phone.label}</p>
+          <p className="text-2xl font-bold text-[var(--color-ink)]">{phone.number}</p>
+          <p className="text-base font-medium text-[var(--color-ink-soft)]">{phone.label}</p>
         </div>
       ))}
     </div>

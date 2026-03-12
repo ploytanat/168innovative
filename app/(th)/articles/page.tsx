@@ -65,7 +65,7 @@ export default async function ArticlesPage() {
               </div>
 
               <div className="flex flex-col justify-center p-8 md:p-12">
-                <span className="inline-flex w-fit items-center rounded-full border border-[#2ecfc4]/30 bg-[#eefdf9] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#2ecfc4]">
+                <span className="inline-flex w-fit items-center rounded-full border border-[#2ecfc4]/30 bg-[#eefdf9] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e9a94]">
                   บทความแนะนำ
                 </span>
 
@@ -73,12 +73,12 @@ export default async function ArticlesPage() {
                   {featured.title}
                 </h2>
 
-                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink-soft)]">
+                <p className="mt-4 line-clamp-3 text-base leading-8 text-[var(--color-ink-soft)]">
                   {featured.excerpt}
                 </p>
 
                 {featured.publishedAt && (
-                  <p className="mt-6 flex items-center gap-1.5 text-xs text-[#93a3be]">
+                  <p className="mt-6 flex items-center gap-1.5 text-[12px] text-[#6f8099]">
                     <CalendarDays size={12} />
                     {new Date(featured.publishedAt).toLocaleDateString("th-TH", {
                       year: "numeric",
@@ -115,7 +115,7 @@ export default async function ArticlesPage() {
               </div>
 
               {article.publishedAt && (
-                <p className="mt-4 flex items-center gap-1.5 text-[11px] text-[#93a3be]">
+                <p className="mt-4 flex items-center gap-1.5 text-[12px] text-[#6f8099]">
                   <CalendarDays size={11} />
                   {new Date(article.publishedAt).toLocaleDateString("th-TH", {
                     year: "numeric",
@@ -129,7 +129,7 @@ export default async function ArticlesPage() {
                 {article.title}
               </h3>
 
-              <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[var(--color-ink-soft)]">
+              <p className="mt-2 line-clamp-2 text-base leading-7 text-[var(--color-ink-soft)]">
                 {article.excerpt}
               </p>
 

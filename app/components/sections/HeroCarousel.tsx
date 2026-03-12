@@ -142,11 +142,11 @@ export default function HeroCarousel({ hero }: Props) {
 
           {/* EYEBROW */}
           <div className="flex items-center gap-3 mb-6">
-              <span className="font-body text-[11px] tracking-[0.2em] text-[#93a3be]">
+              <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099]">
               {(safeCurrent + 1).toString().padStart(2, '0')}
             </span>
             <div className="h-px w-8 bg-[#c9d7ea]" />
-            <span className="font-body text-[11px] uppercase tracking-[0.3em] text-[#93a3be]">
+            <span className="font-body text-[12px] uppercase tracking-[0.22em] text-[#6f8099]">
               {active.subtitle}
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function HeroCarousel({ hero }: Props) {
           <div className="my-6 h-px w-10 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
 
           {/* DESCRIPTION */}
-          <p className="font-body text-sm leading-7 text-[var(--color-ink-soft)]">
+          <p className="font-body text-base leading-8 text-[var(--color-ink-soft)]">
             {active.description}
           </p>
 
@@ -167,7 +167,7 @@ export default function HeroCarousel({ hero }: Props) {
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Link
               href={active.ctaPrimary.href}
-              className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-6 py-3 font-body text-xs font-medium uppercase tracking-[0.14em] text-white shadow-[0_14px_32px_rgba(46,207,196,0.24)] transition hover:brightness-105"
+              className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-6 py-3 font-body text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_14px_32px_rgba(46,207,196,0.24)] transition hover:brightness-105"
             >
               {active.ctaPrimary.label}
               <ArrowRight />
@@ -176,7 +176,7 @@ export default function HeroCarousel({ hero }: Props) {
             {active.ctaSecondary?.label && (
               <Link
                 href={active.ctaSecondary.href}
-                className="border-b border-transparent pb-1 font-body text-xs uppercase tracking-[0.14em] text-[#6c7b97] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
+                className="border-b border-transparent pb-1 font-body text-[13px] uppercase tracking-[0.1em] text-[#596b87] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
               >
                 {active.ctaSecondary.label}
               </Link>
@@ -191,7 +191,7 @@ export default function HeroCarousel({ hero }: Props) {
                   <div className="font-heading text-2xl text-[var(--color-ink)]">
                     {s.value}
                   </div>
-                  <div className="mt-1 font-body text-[11px] uppercase tracking-[0.2em] text-[#93a3be]">
+                  <div className="mt-1 font-body text-[12px] uppercase tracking-[0.16em] text-[#6f8099]">
                     {s.label}
                   </div>
                 </div>
@@ -210,11 +210,11 @@ export default function HeroCarousel({ hero }: Props) {
           <div className="flex flex-col justify-center flex-1">
 
             <div className="flex items-center gap-4 mb-10">
-              <span className="font-body text-[11px] tracking-[0.2em] text-[#93a3be]">
+              <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099]">
                 {(safeCurrent + 1).toString().padStart(2, '0')}
               </span>
               <div className="h-px w-10 bg-[#c9d7ea]" />
-              <span className="font-body text-[11px] uppercase tracking-[0.35em] text-[#93a3be]">
+              <span className="font-body text-[12px] uppercase tracking-[0.24em] text-[#6f8099]">
                 {active.subtitle}
               </span>
             </div>
@@ -225,14 +225,14 @@ export default function HeroCarousel({ hero }: Props) {
 
             <div className="my-10 h-px w-12 bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />
 
-            <p className="font-body max-w-sm text-sm leading-7 text-[var(--color-ink-soft)]">
+            <p className="font-body max-w-sm text-base leading-8 text-[var(--color-ink-soft)]">
               {active.description}
             </p>
 
             <div className="mt-12 flex items-center gap-6">
               <Link
                 href={active.ctaPrimary.href}
-                className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-8 py-4 font-body text-xs font-medium uppercase tracking-[0.14em] text-white shadow-[0_18px_36px_rgba(46,207,196,0.24)] transition hover:brightness-105"
+                className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-8 py-4 font-body text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_18px_36px_rgba(46,207,196,0.24)] transition hover:brightness-105"
               >
                 {active.ctaPrimary.label}
                 <ArrowRight />
@@ -241,7 +241,7 @@ export default function HeroCarousel({ hero }: Props) {
               {active.ctaSecondary?.label && (
                 <Link
                   href={active.ctaSecondary.href}
-                  className="border-b border-transparent pb-1 font-body text-xs uppercase tracking-[0.14em] text-[#6c7b97] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
+                  className="border-b border-transparent pb-1 font-body text-[13px] uppercase tracking-[0.1em] text-[#596b87] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
                 >
                   {active.ctaSecondary.label}
                 </Link>
@@ -256,7 +256,7 @@ export default function HeroCarousel({ hero }: Props) {
                   <div className="font-heading text-xl text-[var(--color-ink)]">
                     {s.value}
                   </div>
-                  <div className="mt-1 font-body text-[11px] uppercase tracking-[0.2em] text-[#93a3be]">
+                  <div className="mt-1 font-body text-[12px] uppercase tracking-[0.16em] text-[#6f8099]">
                     {s.label}
                   </div>
                 </div>
@@ -312,7 +312,7 @@ export default function HeroCarousel({ hero }: Props) {
               </button>
 
               <div className="absolute bottom-0 left-0 right-0 z-20 flex items-center justify-between px-8 py-5 bg-gradient-to-t from-white/70 to-transparent">
-                <span className="font-body text-[11px] tracking-[0.2em] text-[#93a3be] tabular-nums">
+                <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099] tabular-nums">
                   {(safeCurrent + 1).toString().padStart(2, '0')} /
                   {slides.length.toString().padStart(2, '0')}
                 </span>

@@ -24,7 +24,7 @@ export default function PageIntro({
       <Breadcrumb items={breadcrumbs} />
       <div className="mt-7 overflow-hidden rounded-[2rem] border border-[rgba(153,184,178,0.24)] bg-[linear-gradient(140deg,rgba(255,255,255,0.96),rgba(246,239,231,0.92)_52%,rgba(224,245,240,0.84))] px-6 py-8 shadow-[0_24px_70px_rgba(26,37,53,0.07)] md:mt-8 md:px-8 md:py-10 lg:px-10">
         {eyebrow ? (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--color-accent)]">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[var(--color-accent)]">
             {eyebrow}
           </p>
         ) : null}
@@ -34,7 +34,7 @@ export default function PageIntro({
               {title}
             </h1>
             {description ? (
-              <p className="mt-5 max-w-3xl text-sm leading-7 text-[var(--color-ink-soft)] md:mt-6 md:text-base">
+              <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--color-ink-soft)] md:mt-6 md:text-lg">
                 {description}
               </p>
             ) : null}

@@ -66,7 +66,7 @@ export default function ContactSection({
           <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="space-y-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                   Contact Desk
                 </p>
                 <h2 className="text-3xl font-black leading-[1.1] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
@@ -75,7 +75,7 @@ export default function ContactSection({
                     {uiText.contact.subtitle[locale]}
                   </span>
                 </h2>
-                <p className="mt-6 max-w-md text-base leading-relaxed text-[var(--color-ink-soft)] md:text-lg">
+                <p className="mt-6 max-w-md text-[1.05rem] leading-8 text-[var(--color-ink-soft)] md:text-lg">
                   {uiText.contact.desc[locale]}
                 </p>
               </div>
@@ -83,7 +83,7 @@ export default function ContactSection({
               <div className="mt-10 w-full max-w-md space-y-4">
                   <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl">
                   <div className="border-b border-[#eef2f6] p-6 md:p-8">
-                    <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                    <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.phoneLabel[locale]}
                     </p>
 
@@ -99,10 +99,10 @@ export default function ContactSection({
                               <PhoneIcon />
                             </div>
                             <div>
-                              <span className="block text-[10px] font-bold uppercase text-[#9aacc0]">
+                              <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-[#7487a3]">
                                 {phone.label}
                               </span>
-                              <span className="text-lg font-bold text-[var(--color-ink)] md:text-xl">
+                              <span className="text-xl font-bold text-[var(--color-ink)] md:text-[1.4rem]">
                                 {phone.number}
                               </span>
                             </div>
@@ -114,7 +114,7 @@ export default function ContactSection({
                   </div>
 
                   <div className="bg-[linear-gradient(145deg,#f6fdff,#fff3f7)] p-6 md:p-8">
-                    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                    <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.emailLabel[locale]}
                     </p>
                     <div className="space-y-4">
@@ -127,7 +127,7 @@ export default function ContactSection({
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(205,222,241,0.72)] bg-white text-[#8fa2b8] transition-all duration-300 group-hover:bg-[var(--color-ink)] group-hover:text-white">
                             <MailIcon />
                           </div>
-                          <span className="break-all text-sm font-bold text-[var(--color-ink-soft)] md:text-base">
+                          <span className="break-all text-base font-bold text-[var(--color-ink)] md:text-[1.05rem]">
                             {email}
                           </span>
                         </a>
@@ -151,7 +151,7 @@ export default function ContactSection({
                       <p className="text-sm font-bold text-[var(--color-ink)]">
                         {uiText.contact.lineLabel[locale]}
                       </p>
-                      <p className="text-xs font-medium text-[var(--color-ink-soft)]">
+                      <p className="text-[13px] font-medium leading-6 text-[var(--color-ink-soft)]">
                         {uiText.contact.lineDesc[locale]}
                       </p>
                     </div>

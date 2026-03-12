@@ -87,7 +87,7 @@ export default function Footer({ company }: FooterProps) {
       <div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10">
         <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">
           <section className="glass-panel rounded-[1.5rem] p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               {text.eyebrow}
             </p>
 
@@ -113,23 +113,23 @@ export default function Footer({ company }: FooterProps) {
               </div>
             </div>
 
-            <p className="mt-3 max-w-xl text-[12px] leading-5 text-[#61708a]">
+            <p className="mt-3 max-w-xl text-[13px] leading-6 text-[var(--color-ink-soft)]">
               {text.description}
             </p>
 
             <div className="mt-4 grid gap-2.5 sm:grid-cols-[1.15fr_0.85fr]">
               <div className="rounded-[1rem] border border-[rgba(209,225,241,0.78)] bg-[linear-gradient(145deg,rgba(236,251,255,0.9),rgba(255,243,247,0.86))] p-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   {text.contact}
                 </p>
-                <p className="mt-1.5 text-[12px] leading-5 text-[#5f6c86]">
+                <p className="mt-1.5 text-[13px] leading-6 text-[var(--color-ink-soft)]">
                   {company.address}
                 </p>
                 <a
                   href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[11px] font-semibold tracking-[0.08em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[12px] font-semibold tracking-[0.04em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   <span>{text.openMap}</span>
@@ -138,14 +138,14 @@ export default function Footer({ company }: FooterProps) {
               </div>
 
               <div className="rounded-[1rem] border border-[rgba(159,210,246,0.45)] bg-[linear-gradient(145deg,#7dbdf0,#baacf1)] p-3 text-white">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/80">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/88">
                   {text.language}
                 </p>
                 <div className="mt-2.5 inline-flex rounded-full border border-white/10 bg-white/10 p-1">
                   <Link
                     href={toTH}
                     hrefLang="th"
-                    className={`rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.16em] transition-colors ${
+                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
                       !isEN
                         ? 'bg-white text-[var(--color-ink)]'
                         : 'text-white/70 hover:text-white'
@@ -156,7 +156,7 @@ export default function Footer({ company }: FooterProps) {
                   <Link
                     href={toEN}
                     hrefLang="en"
-                    className={`rounded-full px-3 py-1.5 text-[10px] font-semibold tracking-[0.16em] transition-colors ${
+                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
                       isEN
                         ? 'bg-white text-[var(--color-ink)]'
                         : 'text-white/70 hover:text-white'
@@ -170,7 +170,7 @@ export default function Footer({ company }: FooterProps) {
           </section>
 
           <section className="glass-panel rounded-[1.5rem] p-4">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {text.navigation}
             </p>
             <nav aria-label="Footer navigation" className="mt-3">
@@ -179,7 +179,7 @@ export default function Footer({ company }: FooterProps) {
                   <li key={item.href}>
                     <Link
                       href={withLocale(item.href)}
-                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent px-3 py-2 text-[12px] text-[#5f6c86] transition-all hover:border-[rgba(205,222,241,0.82)] hover:bg-white hover:text-[var(--color-ink)]"
+                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:border-[rgba(205,222,241,0.82)] hover:bg-white hover:text-[var(--color-ink)]"
                     >
                       <span>{item.label[locale]}</span>
                       <span className="text-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-100">
@@ -194,7 +194,7 @@ export default function Footer({ company }: FooterProps) {
 
           <section className="glass-panel rounded-[1.5rem] p-4">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                 {text.salesDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -205,11 +205,11 @@ export default function Footer({ company }: FooterProps) {
                     className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 transition-all hover:-translate-y-0.5 hover:border-[#14B8A6]"
                   >
                     {phone.label && (
-                      <span className="block text-[10px] uppercase tracking-[0.18em] text-[#9aacc0]">
+                      <span className="block text-[11px] uppercase tracking-[0.12em] text-[#7f90ab]">
                         {phone.label}
                       </span>
                     )}
-                    <span className="mt-1 block text-[12px] font-semibold text-[var(--color-ink)]">
+                    <span className="mt-1 block text-[13px] font-semibold text-[var(--color-ink)]">
                       {phone.number}
                     </span>
                   </a>
@@ -218,7 +218,7 @@ export default function Footer({ company }: FooterProps) {
             </div>
 
             <div className="mt-5">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                 {text.emailDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -226,7 +226,7 @@ export default function Footer({ company }: FooterProps) {
                   <a
                     key={email}
                     href={`mailto:${email}`}
-                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[12px] text-[#5f6c86] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
+                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
                   >
                     {email}
                   </a>
@@ -236,7 +236,7 @@ export default function Footer({ company }: FooterProps) {
 
             {company.socials.length > 0 && (
               <div className="mt-5">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   {text.connect}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -246,7 +246,7 @@ export default function Footer({ company }: FooterProps) {
                       href={social.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-1.5 text-[12px] text-[#5f6c86] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
+                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
                     >
                       {social.icon && (
                         <Image
@@ -267,11 +267,11 @@ export default function Footer({ company }: FooterProps) {
           </section>
         </div>
 
-        <div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[10px] text-[#8c9db4] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[11px] text-[#6f8099] sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {company.name}. {text.copyright}
           </p>
-          <p className="tracking-[0.18em] uppercase text-[#a7b8cb]">
+          <p className="tracking-[0.14em] uppercase text-[#8394ab]">
             Cosmetic Packaging • OEM • ODM
           </p>
         </div>

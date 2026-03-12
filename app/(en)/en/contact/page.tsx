@@ -77,7 +77,7 @@ export default async function ContactPage() {
                       />
                     </div>
                   </div>
-                  <p className="mt-4 text-sm font-bold uppercase tracking-widest text-[var(--color-ink-soft)]">
+                  <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
                     Scan to Add Line
                   </p>
                 </div>
@@ -143,7 +143,7 @@ function ContactSection({
   return (
     <div className="flex flex-col items-center text-center md:items-start md:text-left">
       <div className="mb-4 rounded-xl bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] p-3 text-white shadow-lg">{icon}</div>
-      <h3 className="mb-4 text-xs font-black uppercase tracking-[0.2em] text-[#8ea0b8]">
+      <h3 className="mb-4 text-[12px] font-black uppercase tracking-[0.14em] text-[#73839e]">
         {title}
       </h3>
       <div className="mb-6 h-1 w-12 rounded-full bg-[linear-gradient(90deg,#2ecfc4,#f8a7b8)]" />

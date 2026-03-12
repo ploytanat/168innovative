@@ -25,7 +25,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
               className="article-block article-block--rich"
             >
               {block.eyebrow ? (
-                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#14B8A6]">
+                <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
                   {block.eyebrow}
                 </p>
               ) : null}

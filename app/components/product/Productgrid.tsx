@@ -190,7 +190,7 @@ export default function ProductGrid({
             <button
               type="button"
               onClick={cycleSort}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] transition-all ${
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] transition-all ${
                 sort !== 'default'
                   ? 'border-[#14B8A6] bg-[#EAF9F7] text-[#0E7C72]'
                   : tone.idleButton
@@ -201,7 +201,7 @@ export default function ProductGrid({
             </button>
 
             <div
-              className={`rounded-full border ${tone.countBorder} ${tone.countBg} px-4 py-3 text-xs font-semibold text-[#1A2535] shadow-sm backdrop-blur`}
+              className={`rounded-full border ${tone.countBorder} ${tone.countBg} px-4 py-3 text-[13px] font-semibold text-[#1A2535] shadow-sm backdrop-blur`}
             >
               {displayCount}
               <span className={`ml-1 font-medium ${tone.mutedText}`}>

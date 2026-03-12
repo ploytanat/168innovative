@@ -48,7 +48,7 @@ export default function ProductMarquee({
       <div className="mx-auto max-w-7xl px-6">
         <div className="relative mb-8 overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(241,251,255,0.82)_48%,rgba(255,241,246,0.82)_100%)] px-6 py-8 shadow-[0_20px_60px_rgba(28,40,66,0.06)] md:mb-12 md:px-8">
           <div className="relative text-center">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               Product Focus
             </p>
             <h2 className="font-heading mt-3 text-2xl font-bold tracking-[0.02em] text-[var(--color-ink)] sm:text-3xl lg:text-4xl">
@@ -83,7 +83,7 @@ export default function ProductMarquee({
                       className="object-cover"
                     />
                   </div>
-                  <p className="mt-3 line-clamp-1 px-1 text-center text-xs font-medium text-[var(--color-ink-soft)]">
+                  <p className="mt-3 line-clamp-1 px-1 text-center text-[13px] font-medium text-[var(--color-ink-soft)]">
                     {item.name}
                   </p>
                 </div>
@@ -130,7 +130,7 @@ export default function ProductMarquee({
                     />
                   </div>
 
-                  <p className="relative mt-4 line-clamp-1 text-center text-[12px] font-medium text-[var(--color-ink-soft)] transition-colors duration-300 group-hover/item:text-[var(--color-accent)]">
+                  <p className="relative mt-4 line-clamp-1 text-center text-[13px] font-medium text-[var(--color-ink-soft)] transition-colors duration-300 group-hover/item:text-[var(--color-accent)]">
                     {item.name}
                   </p>
                   <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-[rgba(46,207,196,0.55)] to-[rgba(248,167,184,0.75)] transition-all duration-500 group-hover/item:w-12" />
@@ -143,7 +143,7 @@ export default function ProductMarquee({
         <div className="mt-8 text-center md:mt-6">
           <Link
             href={withLocalePath(ctaHref, locale)}
-            className="inline-flex items-center gap-2.5 rounded-full border border-[rgba(205,222,241,0.82)] bg-white/88 px-8 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-ink-soft)] shadow-sm transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[#f4fbfa] hover:text-[var(--color-accent)] hover:shadow-md active:scale-95 md:text-xs"
+            className="inline-flex items-center gap-2.5 rounded-full border border-[rgba(205,222,241,0.82)] bg-white/88 px-8 py-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)] shadow-sm transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[#f4fbfa] hover:text-[var(--color-accent)] hover:shadow-md active:scale-95"
           >
             {ctaLabel}
             <span aria-hidden="true" className="text-sm">{"->"}</span>

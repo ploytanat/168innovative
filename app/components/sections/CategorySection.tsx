@@ -41,7 +41,7 @@ export default function CategorySection({
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10 flex flex-col items-center text-center md:mb-14">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
             Product Categories
           </p>
           <h2 className="font-heading mt-3 text-2xl tracking-tight text-[var(--color-ink)] sm:text-3xl md:text-5xl">
@@ -80,12 +80,12 @@ export default function CategorySection({
                   </h3>
 
                   {item.description && (
-                    <p className="mt-2 line-clamp-2 font-body text-xs text-white/75 opacity-100 transition-all duration-500 sm:translate-y-3 sm:text-sm sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
+                    <p className="mt-2 line-clamp-2 font-body text-[13px] leading-6 text-white/88 opacity-100 transition-all duration-500 sm:translate-y-3 sm:text-sm sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
                       {item.description}
                     </p>
                   )}
 
-                  <div className="mt-4 flex items-center gap-1 font-body text-[10px] font-semibold uppercase tracking-widest text-[#bff7f0] opacity-100 transition-all duration-500 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
+                  <div className="mt-4 flex items-center gap-1 font-body text-[12px] font-semibold uppercase tracking-[0.14em] text-[#d9fffa] opacity-100 transition-all duration-500 sm:text-xs sm:opacity-0 sm:group-hover:opacity-100">
                     {uiText.categories.exploreMore[locale]}
                     <ArrowRightIcon />
                   </div>
