@@ -174,7 +174,7 @@ function NavigationInner({
                 href={withLocale(item.href)}
                 className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
-                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white shadow-[0_12px_28px_rgba(46,207,196,0.28)]"
+                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white"
                     : "text-[#5d6984] hover:bg-[linear-gradient(135deg,#eefcff,#f2f8ff)] hover:text-[var(--color-ink)]"
                 }`}
               >
@@ -216,7 +216,7 @@ function NavigationInner({
                 onClick={closeMenu}
                 className={`flex items-center justify-between rounded-2xl px-4 py-3 text-md font-medium uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
-                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white shadow-[0_10px_22px_rgba(46,207,196,0.2)]"
+                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white"
                     : "text-[#5d6984] hover:bg-white hover:text-[var(--color-ink)]"
                 }`}
               >
