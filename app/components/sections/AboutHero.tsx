@@ -14,32 +14,23 @@ interface AboutHeroProps {
 function PastelBlobs() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      {/* Mint — top right */}
       <div
         className="absolute -right-20 -top-32 h-[580px] w-[580px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(62,207,184,0.13) 0%, transparent 70%)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(62,207,184,0.13) 0%, transparent 70%)" }}
       />
-      {/* Blush — bottom left */}
       <div
         className="absolute -bottom-24 -left-16 h-[420px] w-[420px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(240,120,138,0.10) 0%, transparent 70%)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(240,120,138,0.10) 0%, transparent 70%)" }}
       />
-      {/* Sky — centre */}
       <div
         className="absolute left-[38%] top-[38%] h-[300px] w-[300px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(106,180,232,0.08) 0%, transparent 70%)",
-        }}
+        style={{ background: "radial-gradient(circle, rgba(106,180,232,0.08) 0%, transparent 70%)" }}
       />
     </div>
   )
 }
 
-// ─── Warehouse photo + mini photo strip ──────────────────────────────────────
+// ─── Photo panel (right column) ───────────────────────────────────────────────
 function PhotoPanel({
   image,
   extraImages,
@@ -48,37 +39,93 @@ function PhotoPanel({
   extraImages?: { src: string; alt: string }[]
 }) {
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden">
-      {/* Desktop: strong left fade so card text is always on white */}
-      <motion.div
-        style={{ y }}
-        className="relative hidden h-[112%] w-full will-change-transform sm:block"
-      >
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-white/98 from-[20%] via-white/80 via-[42%] to-transparent" />
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-white/40 via-transparent to-white/20" />
-        <Image
-          src={image.src}
-          alt={image.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-70"
-        />
-      </motion.div>
+    <motion.div
+      initial={{ opacity: 0, x: 28 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-col gap-3"
+    >
+      {/* ── Main frame ── */}
+      <div className="relative">
+        {/* Corner accent dots */}
+        <div className="absolute -left-2.5 -top-2.5 z-10 h-7 w-7 rounded-lg bg-[#f0788a] shadow-[0_4px_12px_rgba(240,120,138,0.35)]" />
+        <div className="absolute -bottom-2.5 -right-2.5 z-10 h-5 w-5 rounded-md bg-[#6ab4e8] shadow-[0_4px_10px_rgba(106,180,232,0.35)]" />
 
-      {/* Mobile: near-invisible */}
-      <div className="relative h-full w-full sm:hidden">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center opacity-[0.06]"
-        />
+        <div className="overflow-hidden rounded-[1.75rem] shadow-[0_24px_64px_rgba(26,22,20,0.12),0_4px_16px_rgba(26,22,20,0.06)]">
+          <div className="relative aspect-[4/3] w-full bg-[#b8d0c8]">
+            {image ? (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                priority
+                sizes="(max-width:1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            ) : (
+              /* Warehouse placeholder */
+              <div
+                className="relative h-full w-full overflow-hidden"
+                style={{
+                  background:
+                    "linear-gradient(160deg, #d4e8e0 0%, #b8d4c8 20%, #c8dcd4 40%, #a8c4bc 60%, #b4ccc4 80%, #9ab8b0 100%)",
+                }}
+              >
+                <div className="absolute inset-x-0 top-0 h-[18%] bg-gradient-to-b from-[#a0b8b0] to-transparent" />
+                {[20, 50, 80].map((l) => (
+                  <div
+                    key={l}
+                    className="absolute top-0 h-[55%] w-[3px] rounded-b-full bg-gradient-to-b from-white/70 to-transparent"
+                    style={{ left: `${l}%` }}
+                  />
+                ))}
+                {[28, 54, 76].map((t) => (
+                  <div key={t} className="absolute inset-x-0 h-px bg-white/30" style={{ top: `${t}%` }} />
+                ))}
+                {[22, 44, 66].map((l) => (
+                  <div key={l} className="absolute inset-y-0 w-px bg-white/20" style={{ left: `${l}%` }} />
+                ))}
+                {[
+                  { l: 24, t: 30, w: 16, h: 20, o: 0.22 },
+                  { l: 46, t: 30, w: 18, h: 20, o: 0.18 },
+                  { l: 68, t: 30, w: 13, h: 20, o: 0.25 },
+                  { l: 24, t: 56, w: 12, h: 18, o: 0.20 },
+                  { l: 46, t: 56, w: 20, h: 18, o: 0.15 },
+                  { l: 68, t: 56, w: 16, h: 18, o: 0.22 },
+                ].map((b, i) => (
+                  <div
+                    key={i}
+                    className="absolute rounded-sm border border-white/35"
+                    style={{
+                      left: `${b.l}%`, top: `${b.t}%`,
+                      width: `${b.w}%`, height: `${b.h}%`,
+                      background: `rgba(255,255,255,${b.o})`,
+                    }}
+                  />
+                ))}
+                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black/22 to-transparent" />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 90% 90% at 50% 50%, transparent 50%, rgba(60,40,30,0.18) 100%)",
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Est. badge */}
+            <div className="absolute right-3 top-3 z-10 rounded-xl bg-[#3ecfb8] px-3.5 py-2 shadow-[0_4px_16px_rgba(62,207,184,0.4)]">
+              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-white">
+                Est. 2022
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Mini photo strip */}
+      {/* ── Mini photo strip ── */}
       {extraImages && extraImages.length > 0 && (
         <div className={`grid gap-2.5 ${extraImages.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
           {extraImages.slice(0, 3).map((img, i) => (
@@ -98,13 +145,11 @@ function PhotoPanel({
                 sizes="(max-width:1024px) 33vw, 16vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              {/* Subtle mint overlay on hover */}
               <div className="absolute inset-0 bg-[#3ecfb8]/0 transition-colors duration-300 group-hover:bg-[#3ecfb8]/10" />
             </motion.div>
           ))}
         </div>
       )}
-
     </motion.div>
   )
 }
@@ -127,15 +172,14 @@ export default function AboutHero({ hero }: AboutHeroProps) {
 
         {/* ── Left: text ── */}
         <div>
-          {/* Separator line (desktop only) */}
-          <div className="absolute bottom-[12%] right-1/2 top-[12%] hidden w-px lg:block"
+          <div
+            className="absolute bottom-[12%] right-1/2 top-[12%] hidden w-px lg:block"
             style={{
               background:
                 "linear-gradient(to bottom, transparent, rgba(62,207,184,0.3) 30%, rgba(62,207,184,0.3) 70%, transparent)",
             }}
           />
 
-          {/* Eyebrow */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -152,7 +196,6 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             </span>
           </motion.div>
 
-          {/* Headline — Cormorant Garamond via next/font or @import */}
           <h1
             className="mb-0 text-[1.9rem] font-bold leading-[1.18] tracking-[-0.02em] text-[#1a1614] sm:text-[2.4rem] lg:text-[3rem]"
             style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif" }}
@@ -166,7 +209,6 @@ export default function AboutHero({ hero }: AboutHeroProps) {
                 transition={{ duration: 0.55, delay: 0.08 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
                 className="mr-[0.18em] inline-block last:mr-0"
               >
-                {/* Second word gets italic mint colour */}
                 {i === 1 ? (
                   <em style={{ fontStyle: "italic", color: "#3ecfb8" }}>{word}</em>
                 ) : (
@@ -176,7 +218,6 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             ))}
           </h1>
 
-          {/* Accent rule */}
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
@@ -190,18 +231,16 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             <div className="h-[5px] w-[5px] rounded-full bg-[#f0788a]" />
           </motion.div>
 
-          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.65, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-9  max-w-[38rem] text-[0.95rem] font-light leading-[1.82] tracking-[0.005em] text-[#5a524c] sm:text-[1rem]"
+            className="mb-9 max-w-[38rem] text-[0.95rem] font-light leading-[1.82] tracking-[0.005em] text-[#5a524c] sm:text-[1rem]"
           >
             {hero.description}
           </motion.p>
 
-          {/* Tag chips */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -210,18 +249,9 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             className="flex flex-wrap gap-2"
           >
             {[
-              {
-                label: "Product Sourcing",
-                cls: "bg-[#1a1614] text-[#fafaf8] shadow-[0_4px_16px_rgba(26,22,20,0.2)]",
-              },
-              {
-                label: "Quality Control",
-                cls: "border border-[rgba(62,207,184,0.35)] bg-[#e6faf6] text-[#0a8a78] shadow-[0_2px_8px_rgba(62,207,184,0.12)]",
-              },
-              {
-                label: "Supply Chain",
-                cls: "border border-[rgba(240,120,138,0.3)] bg-[#fef0f2] text-[#c0384c] shadow-[0_2px_8px_rgba(240,120,138,0.10)]",
-              },
+              { label: "Product Sourcing", cls: "bg-[#1a1614] text-[#fafaf8] shadow-[0_4px_16px_rgba(26,22,20,0.2)]" },
+              { label: "Quality Control", cls: "border border-[rgba(62,207,184,0.35)] bg-[#e6faf6] text-[#0a8a78] shadow-[0_2px_8px_rgba(62,207,184,0.12)]" },
+              { label: "Supply Chain", cls: "border border-[rgba(240,120,138,0.3)] bg-[#fef0f2] text-[#c0384c] shadow-[0_2px_8px_rgba(240,120,138,0.10)]" },
             ].map(({ label, cls }) => (
               <span
                 key={label}
@@ -232,25 +262,14 @@ export default function AboutHero({ hero }: AboutHeroProps) {
             ))}
           </motion.div>
         </div>
-      </div>
-    </div>
-  )
-}
 
-// ─── Root ─────────────────────────────────────────────────────────────────────
-export default function AboutHero({ hero, whoAreWe }: AboutHeroProps) {
-  return (
-    <section className="overflow-hidden bg-white">
-      <div className="relative mx-auto max-w-7xl px-6 pt-6 md:pt-8 lg:px-8">
-        <div className="pb-7 md:pb-8">
-          <Breadcrumb />
+        {/* ── Right: photo panel ── */}
+        <div className="relative">
+          <PhotoPanel
+            image={hero.image1}
+            extraImages={[hero.image2].filter(Boolean) as ImageView[]}
+          />
         </div>
-      </div>
-
-      <div className="relative overflow-hidden pb-6 lg:pb-8">
-        <HeroBackground image={hero.image1} />
-        <DecorOrbs />
-        <HeroContent title={hero.title} description={hero.description} />
       </div>
     </section>
   )
