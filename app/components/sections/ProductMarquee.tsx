@@ -7,334 +7,443 @@ import { uiText } from "@/app/lib/i18n/ui"
 import { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
-// ─── slugs ที่ต้องการ spotlight ───────────────────────────────────────────────
-const SPOTLIGHT_SLUGS = ["spout", "coffee-bag-valve-hl400"]
+/* ─────────────────────────────
+   spotlight slugs
+───────────────────────────── */
 
-interface ProductMarqueeProps {
-  items: ProductView[]
-  locale: "th" | "en"
+const PRIMARY_SLUG   = "oil-spout-os200"
+const SECONDARY_SLUG = "coffee-bag-valve-hl400-40mm"
+
+const PRIMARY_META = {
+  badge:      { th: "สินค้าเด่น · Spout",        en: "Featured · Spout"   },
+  accentText: "#2d6b57",
+  accentBg:   "#ddf0ea",
+  imageBg:    "#eef4f2",
 }
 
-// ─── label map สำหรับ spotlight cards ─────────────────────────────────────────
-const spotlightMeta: Record<
-  string,
-  {
-    badge: { th: string; en: string }
-    accent: string          // tailwind color token (used in arbitrary values)
-    accentHex: string
-    accentMuted: string     // light bg
-    accentText: string      // dark text on light bg
-    tagline: { th: string; en: string }
-    specs: { label: { th: string; en: string }; value: { th: string; en: string } }[]
-  }
-> = {
-  spout: {
-    badge: { th: "สินค้าเด่น", en: "Featured" },
-    accentHex: "#0F6E56",
-    accentMuted: "#E1F5EE",
-    accentText: "#0F6E56",
-    accent: "teal",
-    tagline: {
-      th: "จุกสปาวท์คุณภาพสูง · ผลิตตามสั่ง OEM",
-      en: "High-quality spout caps · OEM ready",
-    },
-    specs: [
-      { label: { th: "ขนาดปาก", en: "Mouth size" }, value: { th: "22 / 24 / 28 มม.", en: "22 / 24 / 28 mm" } },
-      { label: { th: "วัสดุ", en: "Material" }, value: { th: "PE · PP · Food Grade", en: "PE · PP · Food Grade" } },
-      { label: { th: "สี", en: "Color" }, value: { th: "ขาว / โปร่งใส / Custom", en: "White / Clear / Custom" } },
-    ],
-  },
-  "coffee-bag-valve-hl400": {
-    badge: { th: "สินค้าใหม่", en: "New" },
-    accentHex: "#854F0B",
-    accentMuted: "#FAEEDA",
-    accentText: "#854F0B",
-    accent: "amber",
-    tagline: {
-      th: "วาล์วถุงกาแฟ HL400 · ระบาย CO₂ · กันความชื้น",
-      en: "HL400 coffee valve · CO₂ release · moisture barrier",
-    },
-    specs: [
-      { label: { th: "รุ่น", en: "Model" }, value: { th: "HL400", en: "HL400" } },
-      { label: { th: "ขนาด", en: "Size" }, value: { th: "40 มิลลิเมตร", en: "40 mm" } },
-      { label: { th: "วัสดุ", en: "Material" }, value: { th: "PE", en: "PE" } },
-    ],
-  },
+const SECONDARY_META = {
+  badge:      { th: "สินค้าใหม่ · Coffee Valve", en: "New · Coffee Valve" },
+  accentText: "#7a4a1e",
+  accentBg:   "#f2e9dc",
+  imageBg:    "#f7f2ec",
+}
+
+const BORDER = "0.5px solid rgba(0,0,0,0.09)"
+
+/* desktop height constants */
+const PANEL_H   = 560
+const SEC_IMG_H = 220
+const FOOTER_H  = 82
+
+interface ProductMarqueeProps {
+  items:  ProductView[]
+  locale: "th" | "en"
 }
 
 export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   if (!items.length) return null
 
-  const isSpoutShowcase = items.every((item) => item.categorySlug === "spout")
+  const isSpoutShowcase = items.every((i) => i.categorySlug === "spout")
+  const secondaryItem   = items.find((i) => i.slug === SECONDARY_SLUG) ?? null
 
-  // แยก spotlight ออกจาก rest
-  const spotlightItems = items.filter((item) => SPOTLIGHT_SLUGS.includes(item.slug))
-  const restItems = items.filter((item) => !SPOTLIGHT_SLUGS.includes(item.slug))
-  const marqueeItems = [...restItems, ...restItems]
+  let primaryItem = items.find((i) => i.slug === PRIMARY_SLUG) ?? null
+  if (!primaryItem) primaryItem = items.find((i) => i.slug !== SECONDARY_SLUG) ?? null
+  if (items.length === 1) primaryItem = null
 
-  const sectionTitle = isSpoutShowcase
-    ? uiText.spoutProducts[locale]
-    : uiText.featuredProducts[locale]
-  const ctaHref = isSpoutShowcase ? "/categories/spout" : "/categories"
-  const ctaLabel = isSpoutShowcase
-    ? uiText.viewAllSpoutProducts[locale]
-    : uiText.viewAllProducts[locale]
+  const restItems = items.filter(
+    (i) => i.slug !== PRIMARY_SLUG && i.slug !== SECONDARY_SLUG,
+  )
+
+  const ctaHref      = isSpoutShowcase ? "/categories/spout" : "/categories"
+  const ctaLabel     = isSpoutShowcase ? uiText.viewAllSpoutProducts[locale] : uiText.viewAllProducts[locale]
+  const sectionTitle = isSpoutShowcase ? uiText.spoutProducts[locale] : uiText.featuredProducts[locale]
 
   return (
-    <section className="relative overflow-hidden py-14 md:py-16">
-      {/* ── ambient blobs ── */}
-      <div className="pointer-events-none absolute -top-20 left-1/4 h-48 w-48 rounded-full bg-[rgba(46,207,196,0.12)] blur-[80px] md:h-96 md:w-96 md:blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-20 right-1/4 h-48 w-48 rounded-full bg-[rgba(248,167,184,0.14)] blur-[80px] md:h-96 md:w-96 md:blur-[120px]" />
+    <>
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          .pm-img, .pm-thumb-img { transition: none !important; }
+          .pm-pulse               { animation:  none !important; }
+        }
+        .pm-primary:hover .pm-img     { transform: scale(1.05); }
+        .pm-sec:hover     .pm-img     { transform: scale(1.05); }
+        .pm-thumb:hover .pm-thumb-img { transform: scale(1.07); }
+        .pm-img {
+          transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+          will-change: transform;
+        }
+        .pm-thumb-img {
+          transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
+          will-change: transform;
+        }
+        .pm-thumb {
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pm-thumb:hover {
+          border-color: rgba(0,0,0,0.18) !important;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        }
+        @keyframes pm-pulse {
+          0%,100% { opacity:1;  transform:scale(1);   }
+          50%      { opacity:.4; transform:scale(1.6); }
+        }
+        .pm-pulse {
+          display: inline-block;
+          width: 5px; height: 5px;
+          border-radius: 50%;
+          background: currentColor;
+          animation: pm-pulse 2.2s ease-in-out infinite;
+          vertical-align: middle;
+          margin-right: 5px;
+          flex-shrink: 0;
+        }
+        .pm-primary .pm-desc {
+          max-height: 0; overflow: hidden; opacity: 0;
+          transition: max-height 0.4s ease, opacity 0.3s ease 0.05s;
+        }
+        .pm-primary:hover .pm-desc { max-height: 4rem; opacity: 1; }
+        .pm-thumb-name { transition: color 0.18s ease; }
+        .pm-thumb:hover .pm-thumb-name { color: #1a2332 !important; }
+        .pm-hscroll { scrollbar-width: none; }
+        .pm-hscroll::-webkit-scrollbar { display: none; }
 
-      {/* ── noise texture ── */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.025]"
-        style={{
-          backgroundImage:
-            'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-        }}
-      />
+        /* mobile: show only mobile section */
+        @media (min-width: 1024px) {
+          .pm-mobile { display: none !important; }
+        }
+        @media (max-width: 1023px) {
+          .pm-desktop { display: none !important; }
+        }
+      `}</style>
 
-      {/* ── top / bottom gradient lines ── */}
-      <div
-        className="absolute inset-x-0 top-0 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(46,207,196,0.35), rgba(248,167,184,0.6), rgba(157,220,246,0.45), transparent)",
-        }}
-      />
+      <section style={{ background: "#f3f5f7", padding: "52px 0" }}>
+        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
 
-      <div className="mx-auto max-w-7xl px-6">
-
-        {/* ════════════════════════════════════════════════
-            SECTION HEADER
-        ════════════════════════════════════════════════ */}
-        <div className="relative mb-10 overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,rgba(255,255,255,0.8)_0%,rgba(241,251,255,0.82)_48%,rgba(242,247,255,0.82)_100%)] px-6 py-8 shadow-[0_20px_60px_rgba(28,40,66,0.06)] md:mb-14 md:px-8">
-          <div className="relative text-center">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-              Product Focus
-            </p>
-            <h2 className="font-heading mt-3 text-2xl font-bold tracking-[0.02em] text-[var(--color-ink)] sm:text-3xl lg:text-4xl">
-              {sectionTitle}
-            </h2>
-            <div className="mx-auto mt-4 flex items-center justify-center gap-2">
-              <div className="h-px w-8 bg-[rgba(46,207,196,0.4)] md:w-12" />
-              <div className="h-1 w-1 rounded-full bg-[rgba(202,184,242,0.82)]" />
-              <div className="h-px w-8 bg-[rgba(157,220,246,0.5)] md:w-12" />
+          {/* ── HEADER ── */}
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "24px" }}>
+            <div>
+              <p style={{ fontSize: "10px", fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#9eaab8", marginBottom: "6px" }}>
+                Product Focus
+              </p>
+              <h2 style={{ fontSize: "22px", fontWeight: 500, letterSpacing: "-0.02em", color: "#1a2332", lineHeight: 1.2 }}>
+                {sectionTitle}
+              </h2>
             </div>
+            <Link
+              href={withLocalePath(ctaHref, locale)}
+              className="hidden md:block"
+              style={{ fontSize: "12px", fontWeight: 500, color: "#64748b", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", whiteSpace: "nowrap" }}
+            >
+              {ctaLabel} →
+            </Link>
           </div>
-        </div>
 
-        {/* ════════════════════════════════════════════════
-            SPOTLIGHT HERO CARDS (Spout + Coffee Valve)
-        ════════════════════════════════════════════════ */}
-        {spotlightItems.length > 0 && (
-          <div className="mb-12 grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {spotlightItems.map((item) => {
-              const meta = spotlightMeta[item.slug]
-              if (!meta) return null
-              return (
-                <Link
-                  key={item.id}
-                  href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-                  className="group/hero block"
+          {/* ═══════════════════════════
+              DESKTOP ONLY
+          ═══════════════════════════ */}
+          <div
+            className="pm-desktop"
+            style={{ display: "flex", gap: "10px", height: `${PANEL_H}px` }}
+          >
+            {/* PRIMARY */}
+            {primaryItem && (
+              <Link
+                href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
+                className="pm-primary"
+                style={{
+                  flex: "0 0 58%",
+                  borderRadius: "14px",
+                  border: BORDER,
+                  overflow: "hidden",
+                  background: "#fff",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: `${PANEL_H}px`,
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    height: `${PANEL_H - FOOTER_H}px`,
+                    flexShrink: 0,
+                    background: PRIMARY_META.imageBg,
+                    overflow: "hidden",
+                  }}
                 >
-                  <article
-                    className="relative overflow-hidden rounded-[1.75rem] border border-[rgba(205,222,241,0.78)] bg-white/90 shadow-[0_20px_50px_rgba(28,40,66,0.08)] transition-all duration-500 group-hover/hero:-translate-y-1 group-hover/hero:shadow-[0_32px_70px_rgba(28,40,66,0.13)]"
-                  >
-                    {/* accent top bar */}
-                    <div
-                      className="h-[3px] w-full"
-                      style={{
-                        background: `linear-gradient(to right, ${meta.accentHex}88, ${meta.accentHex})`,
-                      }}
-                    />
+                  <Image
+                    src={primaryItem.image.src}
+                    alt={primaryItem.image.alt || primaryItem.name}
+                    fill
+                    sizes="58vw"
+                    className="pm-img"
+                    style={{ objectFit: "contain", padding: "40px" }}
+                    priority
+                  />
+                </div>
+                <div
+                  style={{
+                    height: `${FOOTER_H}px`,
+                    flexShrink: 0,
+                    padding: "0 22px",
+                    borderTop: BORDER,
+                    background: "#fff",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <span style={{ display: "inline-block", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText, padding: "3px 8px", borderRadius: "4px" }}>
+                    {PRIMARY_META.badge[locale]}
+                  </span>
+                  <h3 style={{ fontSize: "15px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0 }}>
+                    {primaryItem.name}
+                  </h3>
+                  {primaryItem.description && (
+                    <p className="pm-desc" style={{ fontSize: "11px", color: "#7a8fa6", margin: 0, lineHeight: 1.5 }}>
+                      {primaryItem.description}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            )}
 
-                    <div className="flex flex-col sm:flex-row">
-                      {/* ── image panel ── */}
-                      <div
-                        className="relative flex h-52 w-full items-center justify-center overflow-hidden sm:h-auto sm:w-52 sm:shrink-0"
-                        style={{ background: meta.accentMuted }}
+            {/* RIGHT COLUMN */}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                height: `${PANEL_H}px`,
+                minWidth: 0,
+              }}
+            >
+              {/* SECONDARY */}
+              {secondaryItem && (
+                <Link
+                  href={withLocalePath(`/categories/${secondaryItem.categorySlug}/${secondaryItem.slug}`, locale)}
+                  className="pm-sec"
+                  style={{
+                    height: `${SEC_IMG_H + FOOTER_H}px`,
+                    flexShrink: 0,
+                    borderRadius: "14px",
+                    border: BORDER,
+                    overflow: "hidden",
+                    background: "#fff",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "relative",
+                      height: `${SEC_IMG_H}px`,
+                      flexShrink: 0,
+                      background: SECONDARY_META.imageBg,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Image
+                      src={secondaryItem.image.src}
+                      alt={secondaryItem.image.alt || secondaryItem.name}
+                      fill
+                      sizes="42vw"
+                      className="pm-img"
+                      style={{ objectFit: "contain", padding: "28px" }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      height: `${FOOTER_H}px`,
+                      flexShrink: 0,
+                      padding: "0 18px",
+                      borderTop: BORDER,
+                      background: "#fff",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <span style={{ display: "inline-flex", alignItems: "center", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText, padding: "3px 8px", borderRadius: "4px" }}>
+                      <span className="pm-pulse" />
+                      {SECONDARY_META.badge[locale]}
+                    </span>
+                    <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0 }}>
+                      {secondaryItem.name}
+                    </h3>
+                  </div>
+                </Link>
+              )}
+
+              {/* MINI GRID */}
+              {restItems.length > 0 && (
+                <div
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    borderRadius: "14px",
+                    border: BORDER,
+                    background: "#fff",
+                    padding: "14px 16px",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <p style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "#b0bac5", marginBottom: "10px", flexShrink: 0 }}>
+                    {locale === "th" ? "สินค้าอื่นๆ" : "More products"}
+                  </p>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, 1fr)",
+                      gridTemplateRows: "repeat(2, 1fr)",
+                      gap: "8px",
+                      flex: 1,
+                      minHeight: 0,
+                    }}
+                  >
+                    {restItems.slice(0, 6).map((item) => (
+                      <Link
+                        key={item.id}
+                        href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
+                        className="pm-thumb"
+                        style={{
+                          borderRadius: "9px",
+                          border: BORDER,
+                          overflow: "hidden",
+                          background: "#fff",
+                          display: "flex",
+                          flexDirection: "column",
+                          minHeight: 0,
+                        }}
                       >
-                        <div className="relative h-36 w-36 sm:h-40 sm:w-40 transition-transform duration-700 group-hover/hero:scale-105">
+                        {/* image: use paddingTop trick instead of fill so height is predictable */}
+                        <div style={{ position: "relative", paddingTop: "70%", background: "#f3f5f7", overflow: "hidden", flexShrink: 0 }}>
                           <Image
                             src={item.image.src}
                             alt={item.image.alt || item.name}
                             fill
-                            sizes="(max-width: 640px) 9rem, 10rem"
-                            className="object-contain drop-shadow-md"
+                            sizes="5rem"
+                            className="pm-thumb-img"
+                            style={{ objectFit: "contain", padding: "12%" }}
                           />
                         </div>
-                      </div>
-
-                      {/* ── content panel ── */}
-                      <div className="flex flex-1 flex-col justify-between p-5 md:p-6">
-                        <div>
-                          {/* badge */}
-                          <span
-                            className="mb-3 inline-block rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.1em]"
-                            style={{ background: meta.accentMuted, color: meta.accentText }}
+                        <div style={{ flex: 1, padding: "5px 7px 6px" }}>
+                          <p
+                            className="pm-thumb-name"
+                            style={{
+                              fontSize: "9.5px",
+                              lineHeight: 1.35,
+                              color: "#64748b",
+                              overflow: "hidden",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              margin: 0,
+                            }}
                           >
-                            {meta.badge[locale]}
-                          </span>
-
-                          {/* name */}
-                          <h3 className="font-heading text-lg font-bold leading-snug text-[var(--color-ink)] md:text-xl">
                             {item.name}
-                          </h3>
-
-                          {/* tagline */}
-                          <p className="mt-1 text-[13px] leading-relaxed text-[var(--color-ink-soft)]">
-                            {meta.tagline[locale]}
                           </p>
-
-                          {/* spec rows */}
-                          <dl className="mt-4 divide-y divide-[rgba(205,222,241,0.5)]">
-                            {meta.specs.map((spec) => (
-                              <div
-                                key={spec.label.en}
-                                className="flex items-center justify-between py-2 text-[13px]"
-                              >
-                                <dt className="text-[var(--color-ink-soft)]">{spec.label[locale]}</dt>
-                                <dd className="font-medium text-[var(--color-ink)]">{spec.value[locale]}</dd>
-                              </div>
-                            ))}
-                          </dl>
                         </div>
+                      </Link>
+                    ))}
+                  </div>
 
-                        {/* CTA row */}
-                        <div className="mt-5 flex items-center gap-2">
-                          <span
-                            className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-[13px] font-semibold text-white transition-opacity duration-200 group-hover/hero:opacity-90"
-                            style={{ background: meta.accentHex }}
-                          >
-                            {locale === "th" ? "ดูสินค้า" : "View product"}
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                              <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </span>
-                          <span className="text-[13px] font-medium text-[var(--color-ink-soft)] underline-offset-2 transition-colors duration-200 group-hover/hero:text-[var(--color-accent)] group-hover/hero:underline">
-                            {locale === "th" ? "สอบถามราคา" : "Get a quote"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </Link>
-              )
-            })}
+                  {restItems.length > 6 && (
+                    <Link
+                      href={withLocalePath(ctaHref, locale)}
+                      style={{ display: "block", marginTop: "10px", fontSize: "11px", color: "#64748b", textAlign: "center", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", flexShrink: 0 }}
+                    >
+                      {locale === "th" ? `ดูทั้งหมด ${restItems.length} รายการ →` : `View all ${restItems.length} →`}
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        )}
 
-        {/* ════════════════════════════════════════════════
-            DIVIDER (แสดงเมื่อมีสินค้าอื่นใน marquee)
-        ════════════════════════════════════════════════ */}
-        {restItems.length > 0 && (
-          <div className="mb-8 flex items-center gap-4">
-            <div className="h-px flex-1 bg-[rgba(205,222,241,0.6)]" />
-            <p className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
-              {locale === "th" ? "สินค้าอื่นๆ" : "More products"}
-            </p>
-            <div className="h-px flex-1 bg-[rgba(205,222,241,0.6)]" />
-          </div>
-        )}
+          {/* ═══════════════════════════
+              MOBILE ONLY
+          ═══════════════════════════ */}
+          <div className="pm-mobile" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
 
-        {/* ════════════════════════════════════════════════
-            MARQUEE — mobile scrollable / desktop auto-scroll
-            (แสดงเฉพาะสินค้าที่ไม่ใช่ spotlight)
-        ════════════════════════════════════════════════ */}
-        {restItems.length > 0 && (
-          <>
-            {/* mobile */}
-            <div className="no-scrollbar w-full overflow-x-auto px-1 touch-pan-x lg:hidden">
-              <div className="flex flex-nowrap gap-4 pb-6">
-                {restItems.map((item) => (
+            {/* primary card */}
+            {primaryItem && (
+              <Link
+                href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
+                style={{ borderRadius: "12px", border: BORDER, overflow: "hidden", background: "#fff", display: "flex", height: "110px" }}
+              >
+                <div style={{ position: "relative", width: "110px", flexShrink: 0, background: PRIMARY_META.imageBg }}>
+                  <Image src={primaryItem.image.src} alt={primaryItem.image.alt || primaryItem.name} fill sizes="110px" style={{ objectFit: "contain", padding: "14px" }} />
+                </div>
+                <div style={{ padding: "14px 16px", borderLeft: BORDER, display: "flex", flexDirection: "column", justifyContent: "center", gap: "6px", minWidth: 0 }}>
+                  <span style={{ display: "inline-block", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText, padding: "2px 7px", borderRadius: "4px" }}>
+                    {PRIMARY_META.badge[locale]}
+                  </span>
+                  <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                    {primaryItem.name}
+                  </h3>
+                </div>
+              </Link>
+            )}
+
+            {/* secondary card */}
+            {secondaryItem && (
+              <Link
+                href={withLocalePath(`/categories/${secondaryItem.categorySlug}/${secondaryItem.slug}`, locale)}
+                style={{ borderRadius: "12px", border: BORDER, overflow: "hidden", background: "#fff", display: "flex", height: "110px" }}
+              >
+                <div style={{ position: "relative", width: "110px", flexShrink: 0, background: SECONDARY_META.imageBg }}>
+                  <Image src={secondaryItem.image.src} alt={secondaryItem.image.alt || secondaryItem.name} fill sizes="110px" style={{ objectFit: "contain", padding: "14px" }} />
+                </div>
+                <div style={{ padding: "14px 16px", borderLeft: BORDER, display: "flex", flexDirection: "column", justifyContent: "center", gap: "6px", minWidth: 0 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText, padding: "2px 7px", borderRadius: "4px" }}>
+                    <span className="pm-pulse" />
+                    {SECONDARY_META.badge[locale]}
+                  </span>
+                  <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                    {secondaryItem.name}
+                  </h3>
+                </div>
+              </Link>
+            )}
+
+            {/* horizontal scroll strip */}
+            {restItems.length > 0 && (
+              <div className="pm-hscroll" style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "2px" }}>
+                {restItems.slice(0, 8).map((item) => (
                   <Link
                     key={item.id}
                     href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-                    className="shrink-0"
+                    style={{ flexShrink: 0, width: "88px", borderRadius: "10px", border: BORDER, overflow: "hidden", background: "#fff" }}
                   >
-                    <div className="w-40 rounded-[1.6rem] border border-[rgba(205,222,241,0.78)] bg-white/86 p-3 shadow-[0_14px_34px_rgba(28,40,66,0.07)] transition-transform active:scale-95 md:w-48">
-                      <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
-                        <Image
-                          src={item.image.src}
-                          alt={item.image.alt || item.name}
-                          fill
-                          sizes="(max-width: 768px) 10rem, 12rem"
-                          className="object-cover"
-                        />
-                      </div>
-                      <p className="mt-3 line-clamp-1 px-1 text-center text-[13px] font-medium text-[var(--color-ink-soft)]">
+                    <div style={{ position: "relative", width: "88px", height: "88px", background: "#f3f5f7" }}>
+                      <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="88px" style={{ objectFit: "contain", padding: "14%" }} />
+                    </div>
+                    <div style={{ padding: "5px 7px 7px" }}>
+                      <p style={{ fontSize: "9.5px", color: "#64748b", lineHeight: 1.35, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", margin: 0 }}>
                         {item.name}
                       </p>
                     </div>
                   </Link>
                 ))}
               </div>
-            </div>
+            )}
 
-            {/* desktop marquee */}
-            <div className="group relative hidden overflow-hidden lg:block">
-              <div
-                className="pointer-events-none absolute inset-y-0 left-0 z-10 w-40"
-                style={{ backgroundImage: "linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0))" }}
-              />
-              <div
-                className="pointer-events-none absolute inset-y-0 right-0 z-10 w-40"
-                style={{ backgroundImage: "linear-gradient(to left, rgba(255,255,255,0.95), rgba(255,255,255,0))" }}
-              />
+            <Link
+              href={withLocalePath(ctaHref, locale)}
+              style={{ fontSize: "12px", fontWeight: 500, color: "#64748b", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", paddingTop: "4px" }}
+            >
+              {ctaLabel} →
+            </Link>
+          </div>
 
-              <div className="animate-marquee gap-6 px-2 py-1">
-                {marqueeItems.map((item, index) => (
-                  <Link
-                    key={`${item.id}-${index}`}
-                    href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-                    className="group/item"
-                  >
-                    <div className="relative w-48 shrink-0 rounded-[1.75rem] border border-[rgba(205,222,241,0.78)] bg-white/86 p-3.5 shadow-[0_14px_34px_rgba(28,40,66,0.07)] transition-all duration-500 group-hover/item:-translate-y-2 group-hover/item:border-[#b9d6ec] group-hover/item:shadow-[0_26px_60px_rgba(28,40,66,0.12)]">
-                      <div className="absolute inset-0 rounded-[1.75rem] bg-linear-to-b from-[#eefbff]/0 to-[#f3f8ff]/80 opacity-0 transition-opacity duration-300 group-hover/item:opacity-100" />
-                      <div className="relative aspect-square overflow-hidden rounded-[1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
-                        <Image
-                          src={item.image.src}
-                          alt={item.image.alt || item.name}
-                          fill
-                          sizes="12rem"
-                          className="select-none object-cover transition-transform duration-700 group-hover/item:scale-110"
-                        />
-                      </div>
-                      <p className="relative mt-4 line-clamp-1 text-center text-[13px] font-medium text-[var(--color-ink-soft)] transition-colors duration-300 group-hover/item:text-[var(--color-accent)]">
-                        {item.name}
-                      </p>
-                      <div className="mx-auto mt-2.5 h-px w-0 rounded-full bg-linear-to-r from-[rgba(46,207,196,0.55)] to-[rgba(157,220,246,0.75)] transition-all duration-500 group-hover/item:w-12" />
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* ════════════════════════════════════════════════
-            CTA BUTTON
-        ════════════════════════════════════════════════ */}
-        <div className="mt-8 text-center md:mt-10">
-          <Link
-            href={withLocalePath(ctaHref, locale)}
-            className="inline-flex items-center gap-2.5 rounded-full border border-[rgba(205,222,241,0.82)] bg-white/88 px-8 py-3 text-[13px] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)] shadow-sm transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[#f4fbfa] hover:text-[var(--color-accent)] hover:shadow-md active:scale-95"
-          >
-            {ctaLabel}
-            <span aria-hidden="true" className="text-sm">{"→"}</span>
-          </Link>
         </div>
-      </div>
-
-      <div
-        className="absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(46,207,196,0.35), rgba(248,167,184,0.6), rgba(157,220,246,0.45), transparent)",
-        }}
-      />
-    </section>
+      </section>
+    </>
   )
 }

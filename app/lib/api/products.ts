@@ -102,7 +102,7 @@ const _getCategoryMap = unstable_cache(
 const _getProductsRaw = unstable_cache(
   async (): Promise<WPProduct[]> =>
     fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?per_page=8&_fields=${PRODUCT_FIELDS}`
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS}`
     ),
   ["products-home-v6"],
   { revalidate: 3600, tags: ["products"] }

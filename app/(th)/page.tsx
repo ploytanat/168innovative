@@ -27,6 +27,7 @@ export default async function HomePage() {
 
   const { heroSlides, products, categories, whys, company } =
     await getHomeSections(locale)
+    console.log("products:", products.length, products.map(p => p.slug))
 
   return (
     <>

@@ -19,21 +19,58 @@ async function loadWithFallback<T>(
 }
 
 export async function getHomeSections(locale: Locale) {
-  const [heroSlides, products, categories, whys, company] = await Promise.all([
-    loadWithFallback(getHeroSlides(locale), [], `hero slides (${locale})`),
-    loadWithFallback(
-      getAllProductsByCategory("spout", locale),
-      [],
-      `spout products (${locale})`
-    ),
-    loadWithFallback(getCategories(locale), [], `categories (${locale})`),
-    loadWithFallback(getWhy(locale), [], `why items (${locale})`),
-    loadWithFallback(getCompany(locale), null, `company (${locale})`),
-  ])
 
-  const homeProducts = products.length > 0
-    ? products.slice(0, 12)
-    : await loadWithFallback(getProducts(locale), [], `products fallback (${locale})`)
+  const SPOTLIGHT = [
+    "plastic-spout-hl100sm-10mm",
+    "coffee-bag-valve-hl400-40mm",
+  ]
+
+  const [heroSlides, spoutProducts, allProducts, categories, whys, company] =
+    await Promise.all([
+      loadWithFallback(getHeroSlides(locale), [], `hero slides (${locale})`),
+
+      loadWithFallback(
+        getAllProductsByCategory("spout", locale),
+        [],
+        `spout products (${locale})`
+      ),
+
+      loadWithFallback(getProducts(locale), [], `all products (${locale})`),
+
+      loadWithFallback(getCategories(locale), [], `categories (${locale})`),
+
+      loadWithFallback(getWhy(locale), [], `why items (${locale})`),
+
+      loadWithFallback(getCompany(locale), null, `company (${locale})`),
+    ])
+
+  /* ─────────────────────────────
+     merge spotlight products
+  ───────────────────────────── */
+
+const spotlightProducts = allProducts.filter(p =>
+  SPOTLIGHT.includes(p.slug)
+)
+
+const mergedProducts = [
+  ...spotlightProducts,
+  ...spoutProducts
+]
+
+const uniqueProducts = Array.from(
+  new Map(mergedProducts.map(p => [p.slug, p])).values()
+)
+console.log(
+  "allProducts:",
+  allProducts.length,
+  allProducts.map(p => p.slug)
+)
+
+console.log(
+  "spotlightProducts:",
+  spotlightProducts.map(p => p.slug)
+)
+const homeProducts = uniqueProducts.slice(0, 12)
 
   return {
     heroSlides,
@@ -42,4 +79,6 @@ export async function getHomeSections(locale: Locale) {
     whys,
     company,
   }
+
+  
 }
