@@ -53,7 +53,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
 
   return (
     <section className="bg-[#f3f5f7] py-12">
-      <div className="max-w-7xl mx-auto px-7">
+      <div className="max-w-6xl mx-auto px-7">
 
         {/* ── HEADER ── */}
         <div className="flex items-end justify-between mb-5">
