@@ -21,7 +21,7 @@ async function loadWithFallback<T>(
 export async function getHomeSections(locale: Locale) {
 
   const SPOTLIGHT = [
-    "plastic-spout-hl100sm-10mm",
+    "spout-sm18-a",
     "coffee-bag-valve-hl400-40mm",
   ]
 

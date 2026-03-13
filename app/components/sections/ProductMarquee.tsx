@@ -16,7 +16,7 @@ const SECONDARY_SLUG = "coffee-bag-valve-hl400-40mm"
 
 const PRIMARY_META = {
   badge:      { th: "สินค้าเด่น · Spout",        en: "Featured · Spout"   },
-  accentText: "#2d6b57",
+  accentText: "#1e6645",
   accentBg:   "#ddf0ea",
   imageBg:    "#eef4f2",
 }
@@ -28,13 +28,6 @@ const SECONDARY_META = {
   imageBg:    "#f7f2ec",
 }
 
-const BORDER = "0.5px solid rgba(0,0,0,0.09)"
-
-/* desktop height constants */
-const PANEL_H   = 560
-const SEC_IMG_H = 220
-const FOOTER_H  = 82
-
 interface ProductMarqueeProps {
   items:  ProductView[]
   locale: "th" | "en"
@@ -44,9 +37,9 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   if (!items.length) return null
 
   const isSpoutShowcase = items.every((i) => i.categorySlug === "spout")
-  const secondaryItem   = items.find((i) => i.slug === SECONDARY_SLUG) ?? null
 
   let primaryItem = items.find((i) => i.slug === PRIMARY_SLUG) ?? null
+  const secondaryItem = items.find((i) => i.slug === SECONDARY_SLUG) ?? null
   if (!primaryItem) primaryItem = items.find((i) => i.slug !== SECONDARY_SLUG) ?? null
   if (items.length === 1) primaryItem = null
 
@@ -59,391 +52,279 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   const sectionTitle = isSpoutShowcase ? uiText.spoutProducts[locale] : uiText.featuredProducts[locale]
 
   return (
-    <>
-      <style>{`
-        @media (prefers-reduced-motion: reduce) {
-          .pm-img, .pm-thumb-img { transition: none !important; }
-          .pm-pulse               { animation:  none !important; }
-        }
-        .pm-primary:hover .pm-img     { transform: scale(1.05); }
-        .pm-sec:hover     .pm-img     { transform: scale(1.05); }
-        .pm-thumb:hover .pm-thumb-img { transform: scale(1.07); }
-        .pm-img {
-          transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
-          will-change: transform;
-        }
-        .pm-thumb-img {
-          transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-          will-change: transform;
-        }
-        .pm-thumb {
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        .pm-thumb:hover {
-          border-color: rgba(0,0,0,0.18) !important;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-        }
-        @keyframes pm-pulse {
-          0%,100% { opacity:1;  transform:scale(1);   }
-          50%      { opacity:.4; transform:scale(1.6); }
-        }
-        .pm-pulse {
-          display: inline-block;
-          width: 5px; height: 5px;
-          border-radius: 50%;
-          background: currentColor;
-          animation: pm-pulse 2.2s ease-in-out infinite;
-          vertical-align: middle;
-          margin-right: 5px;
-          flex-shrink: 0;
-        }
-        .pm-primary .pm-desc {
-          max-height: 0; overflow: hidden; opacity: 0;
-          transition: max-height 0.4s ease, opacity 0.3s ease 0.05s;
-        }
-        .pm-primary:hover .pm-desc { max-height: 4rem; opacity: 1; }
-        .pm-thumb-name { transition: color 0.18s ease; }
-        .pm-thumb:hover .pm-thumb-name { color: #1a2332 !important; }
-        .pm-hscroll { scrollbar-width: none; }
-        .pm-hscroll::-webkit-scrollbar { display: none; }
+    <section className="bg-[#f3f5f7] py-12">
+      <div className="max-w-7xl mx-auto px-7">
 
-        /* mobile: show only mobile section */
-        @media (min-width: 1024px) {
-          .pm-mobile { display: none !important; }
-        }
-        @media (max-width: 1023px) {
-          .pm-desktop { display: none !important; }
-        }
-      `}</style>
-
-      <section style={{ background: "#f3f5f7", padding: "52px 0" }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
-
-          {/* ── HEADER ── */}
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "24px" }}>
-            <div>
-              <p style={{ fontSize: "10px", fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#9eaab8", marginBottom: "6px" }}>
-                Product Focus
-              </p>
-              <h2 style={{ fontSize: "22px", fontWeight: 500, letterSpacing: "-0.02em", color: "#1a2332", lineHeight: 1.2 }}>
-                {sectionTitle}
-              </h2>
-            </div>
-            <Link
-              href={withLocalePath(ctaHref, locale)}
-              className="hidden md:block"
-              style={{ fontSize: "12px", fontWeight: 500, color: "#64748b", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", whiteSpace: "nowrap" }}
-            >
-              {ctaLabel} →
-            </Link>
+        {/* ── HEADER ── */}
+        <div className="flex items-end justify-between mb-5">
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-slate-400 mb-1.5">
+              Product Focus
+            </p>
+            <h2 className="text-[21px] font-semibold tracking-tight text-[#1a2332] leading-tight">
+              {sectionTitle}
+            </h2>
           </div>
-
-          {/* ═══════════════════════════
-              DESKTOP ONLY
-          ═══════════════════════════ */}
-          <div
-            className="pm-desktop"
-            style={{ display: "flex", gap: "10px", height: `${PANEL_H}px` }}
+          <Link
+            href={withLocalePath(ctaHref, locale)}
+            className="hidden md:block text-xs font-semibold text-slate-500 border-b border-slate-300 pb-px whitespace-nowrap hover:text-slate-800 hover:border-slate-500 transition-colors"
           >
-            {/* PRIMARY */}
-            {primaryItem && (
-              <Link
-                href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
-                className="pm-primary"
-                style={{
-                  flex: "0 0 58%",
-                  borderRadius: "14px",
-                  border: BORDER,
-                  overflow: "hidden",
-                  background: "#fff",
-                  display: "flex",
-                  flexDirection: "column",
-                  height: `${PANEL_H}px`,
-                }}
-              >
-                <div
-                  style={{
-                    position: "relative",
-                    height: `${PANEL_H - FOOTER_H}px`,
-                    flexShrink: 0,
-                    background: PRIMARY_META.imageBg,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    src={primaryItem.image.src}
-                    alt={primaryItem.image.alt || primaryItem.name}
-                    fill
-                    sizes="58vw"
-                    className="pm-img"
-                    style={{ objectFit: "contain", padding: "40px" }}
-                    priority
-                  />
-                </div>
-                <div
-                  style={{
-                    height: `${FOOTER_H}px`,
-                    flexShrink: 0,
-                    padding: "0 22px",
-                    borderTop: BORDER,
-                    background: "#fff",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    gap: "5px",
-                  }}
-                >
-                  <span style={{ display: "inline-block", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText, padding: "3px 8px", borderRadius: "4px" }}>
-                    {PRIMARY_META.badge[locale]}
-                  </span>
-                  <h3 style={{ fontSize: "15px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0 }}>
-                    {primaryItem.name}
-                  </h3>
-                  {primaryItem.description && (
-                    <p className="pm-desc" style={{ fontSize: "11px", color: "#7a8fa6", margin: 0, lineHeight: 1.5 }}>
-                      {primaryItem.description}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            )}
+            {ctaLabel} →
+          </Link>
+        </div>
 
-            {/* RIGHT COLUMN */}
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                height: `${PANEL_H}px`,
-                minWidth: 0,
-              }}
-            >
-              {/* SECONDARY */}
+        {/* ═══════════════════════════
+            DESKTOP ONLY
+        ═══════════════════════════ */}
+        <div className="hidden lg:block">
+
+          {/* TOP ROW — two equal cards */}
+          {(primaryItem || secondaryItem) && (
+            <div className="grid grid-cols-2 gap-2 mb-2">
+
+              {primaryItem && (
+                <Link
+                  href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
+                  className="group bg-white border border-black/[0.09] rounded-2xl overflow-hidden flex flex-col hover:border-black/[0.18] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-200"
+                >
+                  <div
+                    className="relative w-full overflow-hidden flex-shrink-0"
+                    style={{ paddingTop: "100%", background: PRIMARY_META.imageBg }}
+                  >
+                    <Image
+                      src={primaryItem.image.src}
+                      alt={primaryItem.image.alt || primaryItem.name}
+                      fill
+                      sizes="50vw"
+                      className="object-contain p-[10%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                      priority
+                    />
+                  </div>
+                  <div className="px-[18px] py-3.5 border-t border-black/[0.09]">
+                    <span
+                      className="inline-block text-[9px] font-semibold tracking-[0.16em] uppercase px-2.5 py-0.5 rounded mb-1.5"
+                      style={{ background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText }}
+                    >
+                      {PRIMARY_META.badge[locale]}
+                    </span>
+                    <h3 className="text-sm font-semibold text-[#1a2332] leading-snug">
+                      {primaryItem.name}
+                    </h3>
+                    {primaryItem.description && (
+                      <p className="text-[11.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                        {primaryItem.description}
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              )}
+
               {secondaryItem && (
                 <Link
                   href={withLocalePath(`/categories/${secondaryItem.categorySlug}/${secondaryItem.slug}`, locale)}
-                  className="pm-sec"
-                  style={{
-                    height: `${SEC_IMG_H + FOOTER_H}px`,
-                    flexShrink: 0,
-                    borderRadius: "14px",
-                    border: BORDER,
-                    overflow: "hidden",
-                    background: "#fff",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
+                  className="group bg-white border border-black/[0.09] rounded-2xl overflow-hidden flex flex-col hover:border-black/[0.18] hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-200"
                 >
                   <div
-                    style={{
-                      position: "relative",
-                      height: `${SEC_IMG_H}px`,
-                      flexShrink: 0,
-                      background: SECONDARY_META.imageBg,
-                      overflow: "hidden",
-                    }}
+                    className="relative w-full overflow-hidden flex-shrink-0"
+                    style={{ paddingTop: "100%", background: SECONDARY_META.imageBg }}
                   >
                     <Image
                       src={secondaryItem.image.src}
                       alt={secondaryItem.image.alt || secondaryItem.name}
                       fill
-                      sizes="42vw"
-                      className="pm-img"
-                      style={{ objectFit: "contain", padding: "28px" }}
+                      sizes="50vw"
+                      className="object-contain p-[10%] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
                     />
                   </div>
-                  <div
-                    style={{
-                      height: `${FOOTER_H}px`,
-                      flexShrink: 0,
-                      padding: "0 18px",
-                      borderTop: BORDER,
-                      background: "#fff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      gap: "4px",
-                    }}
-                  >
-                    <span style={{ display: "inline-flex", alignItems: "center", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText, padding: "3px 8px", borderRadius: "4px" }}>
-                      <span className="pm-pulse" />
+                  <div className="px-[18px] py-3.5 border-t border-black/[0.09]">
+                    <span
+                      className="inline-flex items-center gap-1 text-[9px] font-semibold tracking-[0.16em] uppercase px-2.5 py-0.5 rounded mb-1.5"
+                      style={{ background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText }}
+                    >
+                      <span className="inline-block w-[5px] h-[5px] rounded-full bg-current animate-pulse shrink-0" />
                       {SECONDARY_META.badge[locale]}
                     </span>
-                    <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0 }}>
+                    <h3 className="text-sm font-semibold text-[#1a2332] leading-snug">
                       {secondaryItem.name}
                     </h3>
+                    {secondaryItem.description && (
+                      <p className="text-[11.5px] text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                        {secondaryItem.description}
+                      </p>
+                    )}
                   </div>
                 </Link>
               )}
-
-              {/* MINI GRID */}
-              {restItems.length > 0 && (
-                <div
-                  style={{
-                    flex: 1,
-                    minHeight: 0,
-                    borderRadius: "14px",
-                    border: BORDER,
-                    background: "#fff",
-                    padding: "14px 16px",
-                    overflow: "hidden",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <p style={{ fontSize: "9px", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "#b0bac5", marginBottom: "10px", flexShrink: 0 }}>
-                    {locale === "th" ? "สินค้าอื่นๆ" : "More products"}
-                  </p>
-
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(3, 1fr)",
-                      gridTemplateRows: "repeat(2, 1fr)",
-                      gap: "8px",
-                      flex: 1,
-                      minHeight: 0,
-                    }}
-                  >
-                    {restItems.slice(0, 6).map((item) => (
-                      <Link
-                        key={item.id}
-                        href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-                        className="pm-thumb"
-                        style={{
-                          borderRadius: "9px",
-                          border: BORDER,
-                          overflow: "hidden",
-                          background: "#fff",
-                          display: "flex",
-                          flexDirection: "column",
-                          minHeight: 0,
-                        }}
-                      >
-                        {/* image: use paddingTop trick instead of fill so height is predictable */}
-                        <div style={{ position: "relative", paddingTop: "70%", background: "#f3f5f7", overflow: "hidden", flexShrink: 0 }}>
-                          <Image
-                            src={item.image.src}
-                            alt={item.image.alt || item.name}
-                            fill
-                            sizes="5rem"
-                            className="pm-thumb-img"
-                            style={{ objectFit: "contain", padding: "12%" }}
-                          />
-                        </div>
-                        <div style={{ flex: 1, padding: "5px 7px 6px" }}>
-                          <p
-                            className="pm-thumb-name"
-                            style={{
-                              fontSize: "9.5px",
-                              lineHeight: 1.35,
-                              color: "#64748b",
-                              overflow: "hidden",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: "vertical",
-                              margin: 0,
-                            }}
-                          >
-                            {item.name}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-
-                  {restItems.length > 6 && (
-                    <Link
-                      href={withLocalePath(ctaHref, locale)}
-                      style={{ display: "block", marginTop: "10px", fontSize: "11px", color: "#64748b", textAlign: "center", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", flexShrink: 0 }}
-                    >
-                      {locale === "th" ? `ดูทั้งหมด ${restItems.length} รายการ →` : `View all ${restItems.length} →`}
-                    </Link>
-                  )}
-                </div>
-              )}
             </div>
-          </div>
+          )}
 
-          {/* ═══════════════════════════
-              MOBILE ONLY
-          ═══════════════════════════ */}
-          <div className="pm-mobile" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          {/* MORE PRODUCTS — 2 rows of 6 */}
+          {restItems.length > 0 && (
+            <div className="bg-white border border-black/[0.09] rounded-2xl p-4">
+              <p className="text-[9px] font-semibold tracking-[0.18em] uppercase text-slate-300 mb-3">
+                {locale === "th" ? "สินค้าอื่นๆ" : "More products"}
+              </p>
 
-            {/* primary card */}
-            {primaryItem && (
-              <Link
-                href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
-                style={{ borderRadius: "12px", border: BORDER, overflow: "hidden", background: "#fff", display: "flex", height: "110px" }}
-              >
-                <div style={{ position: "relative", width: "110px", flexShrink: 0, background: PRIMARY_META.imageBg }}>
-                  <Image src={primaryItem.image.src} alt={primaryItem.image.alt || primaryItem.name} fill sizes="110px" style={{ objectFit: "contain", padding: "14px" }} />
-                </div>
-                <div style={{ padding: "14px 16px", borderLeft: BORDER, display: "flex", flexDirection: "column", justifyContent: "center", gap: "6px", minWidth: 0 }}>
-                  <span style={{ display: "inline-block", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText, padding: "2px 7px", borderRadius: "4px" }}>
-                    {PRIMARY_META.badge[locale]}
-                  </span>
-                  <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                    {primaryItem.name}
-                  </h3>
-                </div>
-              </Link>
-            )}
-
-            {/* secondary card */}
-            {secondaryItem && (
-              <Link
-                href={withLocalePath(`/categories/${secondaryItem.categorySlug}/${secondaryItem.slug}`, locale)}
-                style={{ borderRadius: "12px", border: BORDER, overflow: "hidden", background: "#fff", display: "flex", height: "110px" }}
-              >
-                <div style={{ position: "relative", width: "110px", flexShrink: 0, background: SECONDARY_META.imageBg }}>
-                  <Image src={secondaryItem.image.src} alt={secondaryItem.image.alt || secondaryItem.name} fill sizes="110px" style={{ objectFit: "contain", padding: "14px" }} />
-                </div>
-                <div style={{ padding: "14px 16px", borderLeft: BORDER, display: "flex", flexDirection: "column", justifyContent: "center", gap: "6px", minWidth: 0 }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", width: "fit-content", fontSize: "9px", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText, padding: "2px 7px", borderRadius: "4px" }}>
-                    <span className="pm-pulse" />
-                    {SECONDARY_META.badge[locale]}
-                  </span>
-                  <h3 style={{ fontSize: "13px", fontWeight: 500, color: "#1a2332", lineHeight: 1.35, margin: 0, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                    {secondaryItem.name}
-                  </h3>
-                </div>
-              </Link>
-            )}
-
-            {/* horizontal scroll strip */}
-            {restItems.length > 0 && (
-              <div className="pm-hscroll" style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "2px" }}>
-                {restItems.slice(0, 8).map((item) => (
-                  <Link
-                    key={item.id}
-                    href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
-                    style={{ flexShrink: 0, width: "88px", borderRadius: "10px", border: BORDER, overflow: "hidden", background: "#fff" }}
-                  >
-                    <div style={{ position: "relative", width: "88px", height: "88px", background: "#f3f5f7" }}>
-                      <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="88px" style={{ objectFit: "contain", padding: "14%" }} />
-                    </div>
-                    <div style={{ padding: "5px 7px 7px" }}>
-                      <p style={{ fontSize: "9.5px", color: "#64748b", lineHeight: 1.35, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", margin: 0 }}>
-                        {item.name}
-                      </p>
-                    </div>
-                  </Link>
+              <div className="grid grid-cols-6 gap-2">
+                {restItems.slice(0, 6).map((item) => (
+                  <ThumbCard key={item.id} item={item} locale={locale} />
                 ))}
               </div>
-            )}
 
-            <Link
-              href={withLocalePath(ctaHref, locale)}
-              style={{ fontSize: "12px", fontWeight: 500, color: "#64748b", textDecoration: "underline", textUnderlineOffset: "3px", textDecorationColor: "#c0cad4", paddingTop: "4px" }}
-            >
-              {ctaLabel} →
-            </Link>
-          </div>
+              {restItems.length > 6 && (
+                <div className="grid grid-cols-6 gap-2 mt-2">
+                  {restItems.slice(6, 12).map((item) => (
+                    <ThumbCard key={item.id} item={item} locale={locale} />
+                  ))}
+                </div>
+              )}
 
+              {restItems.length > 12 && (
+                <Link
+                  href={withLocalePath(ctaHref, locale)}
+                  className="block mt-2.5 text-[11px] text-slate-400 text-center underline underline-offset-[3px] decoration-slate-300"
+                >
+                  {locale === "th"
+                    ? `ดูทั้งหมด ${restItems.length} รายการ →`
+                    : `View all ${restItems.length} →`}
+                </Link>
+              )}
+            </div>
+          )}
         </div>
-      </section>
-    </>
+
+        {/* ═══════════════════════════
+            MOBILE ONLY
+        ═══════════════════════════ */}
+        <div className="lg:hidden flex flex-col gap-2">
+
+          {primaryItem && (
+            <Link
+              href={withLocalePath(`/categories/${primaryItem.categorySlug}/${primaryItem.slug}`, locale)}
+              className="rounded-xl border border-black/[0.09] overflow-hidden bg-white flex h-[110px]"
+            >
+              <div
+                className="relative w-[110px] shrink-0"
+                style={{ background: PRIMARY_META.imageBg }}
+              >
+                <Image
+                  src={primaryItem.image.src}
+                  alt={primaryItem.image.alt || primaryItem.name}
+                  fill
+                  sizes="110px"
+                  className="object-contain p-3.5"
+                />
+              </div>
+              <div className="px-4 py-3.5 border-l border-black/[0.09] flex flex-col justify-center gap-1.5 min-w-0">
+                <span
+                  className="inline-block w-fit text-[9px] font-semibold tracking-[0.14em] uppercase px-2 py-0.5 rounded"
+                  style={{ background: PRIMARY_META.accentBg, color: PRIMARY_META.accentText }}
+                >
+                  {PRIMARY_META.badge[locale]}
+                </span>
+                <h3 className="text-[13px] font-semibold text-[#1a2332] leading-snug line-clamp-2">
+                  {primaryItem.name}
+                </h3>
+              </div>
+            </Link>
+          )}
+
+          {secondaryItem && (
+            <Link
+              href={withLocalePath(`/categories/${secondaryItem.categorySlug}/${secondaryItem.slug}`, locale)}
+              className="rounded-xl border border-black/[0.09] overflow-hidden bg-white flex h-[110px]"
+            >
+              <div
+                className="relative w-[110px] shrink-0"
+                style={{ background: SECONDARY_META.imageBg }}
+              >
+                <Image
+                  src={secondaryItem.image.src}
+                  alt={secondaryItem.image.alt || secondaryItem.name}
+                  fill
+                  sizes="110px"
+                  className="object-contain p-3.5"
+                />
+              </div>
+              <div className="px-4 py-3.5 border-l border-black/[0.09] flex flex-col justify-center gap-1.5 min-w-0">
+                <span
+                  className="inline-flex items-center w-fit gap-1 text-[9px] font-semibold tracking-[0.14em] uppercase px-2 py-0.5 rounded"
+                  style={{ background: SECONDARY_META.accentBg, color: SECONDARY_META.accentText }}
+                >
+                  <span className="inline-block w-[5px] h-[5px] rounded-full bg-current animate-pulse shrink-0" />
+                  {SECONDARY_META.badge[locale]}
+                </span>
+                <h3 className="text-[13px] font-semibold text-[#1a2332] leading-snug line-clamp-2">
+                  {secondaryItem.name}
+                </h3>
+              </div>
+            </Link>
+          )}
+
+          {restItems.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {restItems.slice(0, 12).map((item) => (
+                <Link
+                  key={item.id}
+                  href={withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)}
+                  className="shrink-0 w-[88px] rounded-[10px] border border-black/[0.09] overflow-hidden bg-white"
+                >
+                  <div className="relative w-[88px] h-[88px] bg-[#f3f5f7]">
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt || item.name}
+                      fill
+                      sizes="88px"
+                      className="object-contain p-[14%]"
+                    />
+                  </div>
+                  <div className="px-1.5 pt-1 pb-1.5">
+                    <p className="text-[9.5px] font-medium text-slate-500 leading-snug line-clamp-2">
+                      {item.name}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          <Link
+            href={withLocalePath(ctaHref, locale)}
+            className="text-xs font-semibold text-slate-400 underline underline-offset-[3px] decoration-slate-300 pt-1"
+          >
+            {ctaLabel} →
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Thumbnail card (desktop more products) ── */
+function ThumbCard({ item, locale }: { item: ProductView; locale: "th" | "en" }) {
+  return (
+    <Link
+      href={`/${locale}/categories/${item.categorySlug}/${item.slug}`}
+      className="group border border-black/[0.09] rounded-lg overflow-hidden bg-white flex flex-col hover:border-black/[0.18] transition-colors"
+    >
+      <div
+        className="relative w-full overflow-hidden shrink-0 bg-[#f3f5f7]"
+        style={{ paddingTop: "100%" }}
+      >
+        <Image
+          src={item.image.src}
+          alt={item.image.alt || item.name}
+          fill
+          sizes="5rem"
+          className="object-contain p-[6%] transition-transform duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
+        />
+      </div>
+      <div className="px-1.5 pt-1 pb-1.5">
+        <p className="text-[9.5px] font-medium text-slate-900 leading-snug line-clamp-2">
+          {item.name}
+        </p>
+      </div>
+    </Link>
   )
 }
