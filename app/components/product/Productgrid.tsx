@@ -20,16 +20,17 @@ type SortOrder = 'default' | 'asc' | 'desc'
 
 const i18n = {
   th: {
-    searchPlaceholder: 'เธเนเธเธซเธฒเธชเธดเธเธเนเธฒ...',
-    clearSearch: 'เธฅเนเธฒเธเธเธณเธเนเธเธซเธฒ',
-    sortLabel: 'เน€เธฃเธตเธขเธเธเธทเนเธญ',
-    sortAsc: 'เธ -> เธฎ',
-    sortDesc: 'เธฎ -> เธ',
-    results: 'เธเธฅเธฅเธฑเธเธเน',
-    items: 'เธฃเธฒเธขเธเธฒเธฃ',
-    noProducts: 'เนเธกเนเธเธเธชเธดเธเธเนเธฒ',
-    emptyHint: 'เธฅเธญเธเธเนเธเธซเธฒเธ”เนเธงเธขเธเธณเธญเธทเนเธ เธซเธฃเธทเธญ ',
-    clearFilters: 'เธฅเนเธฒเธเธ•เธฑเธงเธเธฃเธญเธ',
+       searchPlaceholder: 'ค้นหาสินค้า...',
+    clearSearch: 'ล้างคำค้นหา',
+    sortLabel: 'เรียงตามชื่อ',
+    sortAsc: 'ก -> ฮ',
+    sortDesc: 'ฮ -> ก',
+    results: 'ผลลัพธ์',
+    items: 'รายการ',
+    noProducts: 'ไม่พบสินค้า',
+    emptyHint: 'ลองค้นหาด้วยคำอื่น หรือ ',
+    clearFilters: 'ล้างตัวกรอง',
+  
   },
   en: {
     searchPlaceholder: 'Search products...',
