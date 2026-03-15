@@ -200,7 +200,7 @@ export default function HeroCarousel({ hero }: Props) {
                   {/* Title */}
                   <h2
                     key={`ti-${animKey}`}
-                    className="fu2 font-black leading-[0.93] tracking-[-0.03em] text-[clamp(2.4rem,2.4rem,2.4rem)]"
+                    className="fu2 font-black leading-[0.93] tracking-[-0.03em] text-[clamp(2em,2em,2em)]"
                     style={{ color: '#1a2232' }}
                   >
                     {active.title}
@@ -303,7 +303,7 @@ export default function HeroCarousel({ hero }: Props) {
                   {/* Slide image */}
                   <div
                     key={`img-${animKey}`}
-                    className={`absolute inset-0 p-6 sm:p-8 lg:p-10 ${animDir === 'right' ? 'slide-r' : 'slide-l'}`}
+                    className={`absolute inset-0 ${animDir === 'right' ? 'slide-r' : 'slide-l'}`}
                   >
                     <div className="relative h-full w-full">
                       <Image
