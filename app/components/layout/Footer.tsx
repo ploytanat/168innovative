@@ -6,15 +6,6 @@ import { usePathname } from 'next/navigation'
 import { ExternalLink, MapPin } from 'lucide-react'
 
 import { CompanyView } from '@/app/lib/types/view'
-import {
-  COLORS,
-  CTA_GRADIENT,
-  EYEBROW_PILL_STYLE,
-  GLASS,
-  NAV_ACTIVE_PILL_STYLE,
-  SECTION_BACKGROUNDS,
-  SECTION_BORDER,
-} from '@/app/components/ui/designSystem'
 
 interface FooterProps {
   company: CompanyView
@@ -85,27 +76,25 @@ export default function Footer({ company }: FooterProps) {
 
   return (
     <footer
-      className="relative overflow-hidden border-t"
-      style={{ borderColor: SECTION_BORDER, background: SECTION_BACKGROUNDS.footer }}
+      className="relative overflow-hidden border-t border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,#fefcff_0%,#f2fbff_38%,#fff1f6_100%)]"
       aria-label="Site footer"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{ background: CTA_GRADIENT }} />
-      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#fff3e8]/50 blur-3xl" />
-      <div className="pointer-events-none absolute right-8 top-10 h-56 w-56 rounded-full bg-[#9fb3cc]/24 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#dfc0cd]/20 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(46,207,196,0.65),rgba(248,167,184,0.55),transparent)]" />
+      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#2ecfc4]/12 blur-3xl" />
+      <div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#f8a7b8]/18 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#cab8f2]/14 blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10">
         <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">
-          <section className="rounded-[0.95rem] p-4" style={GLASS.secondary}>
-            <p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE}>
+          <section className="glass-panel rounded-[1.5rem] p-4">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               {text.eyebrow}
             </p>
 
             <div className="mt-3 flex items-center gap-2.5">
               <Link
                 href={withLocale('/')}
-                className="inline-flex rounded-[0.85rem] px-2.5 py-2 transition-transform hover:-translate-y-0.5"
-                style={GLASS.card}
+                className="inline-flex rounded-[1rem] border border-[rgba(209,225,241,0.88)] bg-white/88 px-2.5 py-2 transition-transform hover:-translate-y-0.5"
               >
                 <Image
                   src={company.logo.src}
@@ -118,30 +107,29 @@ export default function Footer({ company }: FooterProps) {
               </Link>
 
               <div className="min-w-0">
-                <h2 className="font-heading text-lg leading-tight sm:text-[1.45rem]" style={{ color: COLORS.dark }}>
+                <h2 className="font-heading text-lg leading-tight text-[var(--color-ink)] sm:text-[1.45rem]">
                   {text.title}
                 </h2>
               </div>
             </div>
 
-            <p className="mt-3 max-w-xl text-[13px] leading-6" style={{ color: COLORS.mid }}>
+            <p className="mt-3 max-w-xl text-[13px] leading-6 text-[var(--color-ink-soft)]">
               {text.description}
             </p>
 
             <div className="mt-4 grid gap-2.5 sm:grid-cols-[1.15fr_0.85fr]">
-              <div className="rounded-[0.9rem] p-3" style={GLASS.card}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+              <div className="rounded-[1rem] border border-[rgba(209,225,241,0.78)] bg-[linear-gradient(145deg,rgba(236,251,255,0.9),rgba(255,243,247,0.86))] p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   {text.contact}
                 </p>
-                <p className="mt-1.5 text-[13px] leading-6" style={{ color: COLORS.mid }}>
+                <p className="mt-1.5 text-[13px] leading-6 text-[var(--color-ink-soft)]">
                   {company.address}
                 </p>
                 <a
                   href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 rounded-[0.85rem] px-3 py-2 text-[12px] font-semibold tracking-[0.04em] transition-all hover:-translate-y-0.5"
-                  style={{ ...GLASS.card, color: COLORS.dark }}
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[12px] font-semibold tracking-[0.04em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   <span>{text.openMap}</span>
@@ -149,24 +137,30 @@ export default function Footer({ company }: FooterProps) {
                 </a>
               </div>
 
-              <div className="rounded-[0.9rem] p-3" style={GLASS.card}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+              <div className="rounded-[1rem] border border-[rgba(159,210,246,0.45)] bg-[linear-gradient(145deg,#7dbdf0,#baacf1)] p-3 text-white">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/88">
                   {text.language}
                 </p>
-                <div className="mt-2.5 inline-flex rounded-[0.85rem] p-1" style={GLASS.stats}>
+                <div className="mt-2.5 inline-flex rounded-full border border-white/10 bg-white/10 p-1">
                   <Link
                     href={toTH}
                     hrefLang="th"
-                    className="rounded-[0.7rem] px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors"
-                    style={!isEN ? NAV_ACTIVE_PILL_STYLE : { color: COLORS.brandMuted }}
+                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
+                      !isEN
+                        ? 'bg-white text-[var(--color-ink)]'
+                        : 'text-white/70 hover:text-white'
+                    }`}
                   >
                     TH
                   </Link>
                   <Link
                     href={toEN}
                     hrefLang="en"
-                    className="rounded-[0.7rem] px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors"
-                    style={isEN ? NAV_ACTIVE_PILL_STYLE : { color: COLORS.brandMuted }}
+                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
+                      isEN
+                        ? 'bg-white text-[var(--color-ink)]'
+                        : 'text-white/70 hover:text-white'
+                    }`}
                   >
                     EN
                   </Link>
@@ -175,8 +169,8 @@ export default function Footer({ company }: FooterProps) {
             </div>
           </section>
 
-          <section className="rounded-[0.95rem] p-4" style={GLASS.secondary}>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+          <section className="glass-panel rounded-[1.5rem] p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {text.navigation}
             </p>
             <nav aria-label="Footer navigation" className="mt-3">
@@ -185,11 +179,10 @@ export default function Footer({ company }: FooterProps) {
                   <li key={item.href}>
                     <Link
                       href={withLocale(item.href)}
-                      className="group flex items-center justify-between rounded-[0.85rem] px-3 py-2.5 text-[13px] transition-all"
-                      style={{ ...GLASS.card, color: COLORS.mid }}
+                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:border-[rgba(205,222,241,0.82)] hover:bg-white hover:text-[var(--color-ink)]"
                     >
                       <span>{item.label[locale]}</span>
-                      <span className="opacity-0 transition-opacity group-hover:opacity-100" style={{ color: COLORS.brandNavy }}>
+                      <span className="text-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-100">
                         →
                       </span>
                     </Link>
@@ -199,9 +192,9 @@ export default function Footer({ company }: FooterProps) {
             </nav>
           </section>
 
-          <section className="rounded-[0.95rem] p-4" style={GLASS.secondary}>
+          <section className="glass-panel rounded-[1.5rem] p-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                 {text.salesDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -209,15 +202,14 @@ export default function Footer({ company }: FooterProps) {
                   <a
                     key={phone.number}
                     href={`tel:${phone.number}`}
-                    className="block rounded-[0.85rem] px-3 py-2 transition-all hover:-translate-y-0.5"
-                    style={GLASS.card}
+                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 transition-all hover:-translate-y-0.5 hover:border-[#14B8A6]"
                   >
                     {phone.label && (
-                      <span className="block text-[11px] uppercase tracking-[0.12em]" style={{ color: COLORS.hint }}>
+                      <span className="block text-[11px] uppercase tracking-[0.12em] text-[#7f90ab]">
                         {phone.label}
                       </span>
                     )}
-                    <span className="mt-1 block text-[13px] font-semibold" style={{ color: COLORS.dark }}>
+                    <span className="mt-1 block text-[13px] font-semibold text-[var(--color-ink)]">
                       {phone.number}
                     </span>
                   </a>
@@ -226,7 +218,7 @@ export default function Footer({ company }: FooterProps) {
             </div>
 
             <div className="mt-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                 {text.emailDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -234,8 +226,7 @@ export default function Footer({ company }: FooterProps) {
                   <a
                     key={email}
                     href={`mailto:${email}`}
-                    className="block rounded-[0.85rem] px-3 py-2.5 text-[13px] transition-all hover:-translate-y-0.5"
-                    style={{ ...GLASS.card, color: COLORS.mid }}
+                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
                   >
                     {email}
                   </a>
@@ -245,7 +236,7 @@ export default function Footer({ company }: FooterProps) {
 
             {company.socials.length > 0 && (
               <div className="mt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   {text.connect}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -255,8 +246,7 @@ export default function Footer({ company }: FooterProps) {
                       href={social.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-[0.85rem] px-3 py-2 text-[13px] transition-all hover:-translate-y-0.5"
-                      style={{ ...GLASS.card, color: COLORS.mid }}
+                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
                     >
                       {social.icon && (
                         <Image
@@ -277,11 +267,11 @@ export default function Footer({ company }: FooterProps) {
           </section>
         </div>
 
-        <div className="mt-5 flex flex-col gap-2 border-t pt-4 text-[11px] sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: SECTION_BORDER, color: COLORS.soft }}>
+        <div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[11px] text-[#6f8099] sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {company.name}. {text.copyright}
           </p>
-          <p className="tracking-[0.14em] uppercase" style={{ color: COLORS.brandMuted }}>
+          <p className="tracking-[0.14em] uppercase text-[#8394ab]">
             Cosmetic Packaging • OEM • ODM
           </p>
         </div>
