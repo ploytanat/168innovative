@@ -184,7 +184,7 @@ export default function AboutHero({ hero }: AboutHeroProps) {
                 </span>
               </motion.div>
 
-              <h1 className="font-heading mb-0 text-[2rem] leading-[1.1] tracking-tight sm:text-[2.6rem] lg:text-[3.4rem]" style={{ color: COLORS.dark }}>
+              <h1 className="font-heading mb-0 text-[2rem] leading-[1.1] tracking-tight sm:text-[2.4rem] lg:text-[2.4rem]" style={{ color: COLORS.dark }}>
                 {words.map((word, index) => (
                   <motion.span
                     key={index}

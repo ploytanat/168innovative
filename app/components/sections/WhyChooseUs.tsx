@@ -76,14 +76,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
                 {uiText.whyChooseUs.title[locale]}
               </h2>
             </div>
-            <p
-              className="max-w-2xl text-sm leading-7 sm:text-base sm:leading-8"
-              style={{ color: COLORS.mid }}
-            >
-              {locale === "th"
-                ? "จัดข้อมูลความแข็งแรงของทีมให้อยู่ในภาษาภาพที่คมขึ้น อ่านง่ายขึ้น และมีจังหวะ light/dark แบบ deck presentation"
-                : "A cleaner light-dark presentation of the capabilities that support sourcing, communication, and production."}
-            </p>
+           
           </div>
 
           {/* Cards */}

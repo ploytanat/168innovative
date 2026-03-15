@@ -200,7 +200,7 @@ export default function HeroCarousel({ hero }: Props) {
                   {/* Title */}
                   <h2
                     key={`ti-${animKey}`}
-                    className="fu2 font-black leading-[0.93] tracking-[-0.03em] text-[clamp(2.4rem,5.5vw,4.6rem)]"
+                    className="fu2 font-black leading-[0.93] tracking-[-0.03em] text-[clamp(2.4rem,2.4rem,2.4rem)]"
                     style={{ color: '#1a2232' }}
                   >
                     {active.title}

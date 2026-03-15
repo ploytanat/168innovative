@@ -211,7 +211,7 @@ function NavigationInner({
                 <Link
                   href={withLocale(item.href)}
                   // ← changed: text-[13px] instead of text-[16px]
-                  className={`inline-flex rounded-full border px-3.5 py-2 text-[13px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+                  className={`inline-flex rounded-full border px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
                     active
                       ? ""
                       : "border-transparent bg-transparent text-[#4d6181] hover:border-[rgba(36,69,124,0.14)] hover:bg-[rgba(233,241,255,0.72)] hover:text-[#24457c]"
