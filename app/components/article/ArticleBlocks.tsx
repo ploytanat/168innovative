@@ -25,7 +25,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
               className="article-block article-block--rich"
             >
               {block.eyebrow ? (
-                <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
+                <p className="eyebrow-label mb-3">
                   {block.eyebrow}
                 </p>
               ) : null}
@@ -160,8 +160,8 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
                 href={block.buttonUrl}
                 className={`mt-6 inline-flex rounded-full px-5 py-3 text-sm font-semibold transition ${
                   block.style === "dark"
-                    ? "bg-white text-[#122033] hover:bg-[#14B8A6] hover:text-white"
-                    : "bg-[#122033] text-white hover:bg-[#14B8A6]"
+                    ? "bg-white text-[#122033] hover:bg-[var(--color-accent)] hover:text-white"
+                    : "bg-[#122033] text-white hover:bg-[var(--color-accent)]"
                 }`.trim()}
               >
                 {block.buttonLabel}

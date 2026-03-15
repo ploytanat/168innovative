@@ -42,9 +42,9 @@ export default async function ContactPage() {
           breadcrumbs={[{ label: "ติดต่อเรา" }]}
         />
 
-        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(145deg,rgba(255,255,255,0.84),rgba(241,251,255,0.8),rgba(242,247,255,0.74))] shadow-[0_24px_64px_rgba(28,40,66,0.1)] backdrop-blur-xl">
-          <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#cab8f2]/18 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-[#9ddcf6]/20 blur-3xl" />
+        <section className="relative mt-12 overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(246,250,255,0.9),rgba(244,248,252,0.88))] shadow-[0_24px_64px_rgba(28,40,66,0.08)]">
+          <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-[#c6d1ec]/12 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-[#88b5e8]/12 blur-3xl" />
 
           <div className="relative z-10 grid grid-cols-1 divide-y divide-[rgba(205,222,241,0.62)] lg:grid-cols-[3fr_2fr] lg:divide-x lg:divide-y-0">
             <div className="flex justify-center p-8 md:p-14">
@@ -63,7 +63,7 @@ export default async function ContactPage() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center bg-white/16 p-8 text-center md:p-14">
+            <div className="flex flex-col items-center justify-center bg-white/32 p-8 text-center md:p-14">
               {company.lineQrCode && (
                 <div className="mb-8">
                   <div className="inline-block rounded-3xl border border-[rgba(205,222,241,0.72)] bg-white/88 p-3 shadow-xl">
@@ -113,8 +113,8 @@ export default async function ContactPage() {
       <section className="mt-8">
         <div className="mx-auto mb-12 max-w-4xl px-6 text-center">
           <div className="inline-flex items-start gap-4 text-left">
-            <div className="mt-1 rounded-lg bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] p-2">
-              <MapPin className="h-5 w-5 shrink-0 text-white" />
+            <div className="mt-1 rounded-lg border border-[rgba(15,118,110,0.16)] bg-[linear-gradient(135deg,#e2f7f1,#e3ebff)] p-2 text-[var(--color-ink)] shadow-[0_10px_24px_rgba(28,40,66,0.08)]">
+              <MapPin className="h-5 w-5 shrink-0" />
             </div>
             <p className="text-xl font-bold leading-relaxed text-[var(--color-ink)] md:text-2xl">
               {company.address}
@@ -142,7 +142,7 @@ function ContactSection({
 }) {
   return (
     <div className="flex flex-col items-center text-center md:items-start md:text-left">
-      <div className="mb-4 rounded-xl bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] p-3 text-white shadow-lg">{icon}</div>
+      <div className="mb-4 rounded-xl border border-[rgba(15,118,110,0.16)] bg-[linear-gradient(135deg,#e2f7f1,#e3ebff)] p-3 text-[var(--color-ink)] shadow-[0_12px_28px_rgba(28,40,66,0.08)]">{icon}</div>
       <h3 className="mb-4 text-[12px] font-black uppercase tracking-[0.14em] text-[#73839e]">
         {title}
       </h3>

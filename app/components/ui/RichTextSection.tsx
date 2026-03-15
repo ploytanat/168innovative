@@ -15,7 +15,7 @@ export default function RichTextSection({
     <section className={className}>
       <div className="overflow-hidden rounded-[1.9rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(150deg,rgba(255,255,255,0.96),rgba(248,241,235,0.88)_58%,rgba(231,245,242,0.76))] p-7 shadow-[0_24px_70px_rgba(26,37,53,0.06)] md:p-10">
         {eyebrow ? (
-          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+          <p className="eyebrow-label">
             {eyebrow}
           </p>
         ) : null}

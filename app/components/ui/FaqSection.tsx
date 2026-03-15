@@ -19,7 +19,7 @@ export default function FaqSection({
     <section className={className}>
       <div className="liquid-glass-panel rounded-[1.9rem] p-7 md:p-10">
         {eyebrow ? (
-          <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+          <p className="eyebrow-label">
             {eyebrow}
           </p>
         ) : null}

@@ -13,7 +13,7 @@ const ChevronRightIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    className="h-3.5 w-3.5 text-[#B7ABA0]"
+    className="h-3.5 w-3.5 text-[#9aa9bd]"
   >
     <path
       strokeLinecap="round"
@@ -63,7 +63,7 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="liquid-glass-pill inline-flex flex-wrap items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-medium text-[#66748a]">
+      <ol className="liquid-glass-pill inline-flex flex-wrap items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-medium text-[#627189]">
         <li>
           <Link
             href={isEn ? '/en' : '/'}

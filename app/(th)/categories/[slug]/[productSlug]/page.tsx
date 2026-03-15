@@ -302,7 +302,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-10 flex justify-center">
               <Link
                 href={`/contact?product=${encodeURIComponent(product.name)}`}
-                className="group inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--color-ink)] bg-[var(--color-ink)] px-8 py-4 text-sm font-medium tracking-wide text-white shadow-[0_16px_36px_rgba(26,37,53,0.16)] transition-all hover:bg-white hover:text-slate-900 active:scale-[0.98]"
+                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-2xl px-8 py-4 text-sm font-medium tracking-wide active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 ขอใบเสนอราคาออนไลน์
@@ -342,7 +342,7 @@ export default async function ProductDetailPage({ params }: Props) {
         ) : null}
 
         <section className="mt-8 rounded-[2rem] border border-[rgba(153,184,178,0.2)] bg-[linear-gradient(145deg,rgba(255,255,255,0.95),rgba(248,241,235,0.88)_56%,rgba(230,246,241,0.78))] px-6 py-8 shadow-[0_24px_64px_rgba(26,37,53,0.06)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-600">
+          <p className="eyebrow-label text-xs">
             {supportCopy.eyebrow}
           </p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">
@@ -360,7 +360,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <ul className="mt-4 space-y-3 text-sm text-[var(--color-ink-soft)]">
               {supportCopy.bullets.map((bullet) => (
                 <li key={bullet} className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-teal-500" />
+                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
                   <span>{bullet}</span>
                 </li>
               ))}
@@ -379,7 +379,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <section className="mt-24" aria-label="สินค้าที่เกี่ยวข้อง">
             <div className="mb-10 flex items-end justify-between border-b border-[rgba(222,214,205,0.88)] pb-6">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-teal-600">
+                <p className="eyebrow-label text-xs">
                   Discover More
                 </p>
                 <h2 className="mt-2 font-heading text-2xl font-bold text-[var(--color-ink)]">
@@ -415,10 +415,10 @@ export default async function ProductDetailPage({ params }: Props) {
                   </div>
 
                   <div className="mt-3 px-2 pb-3 pt-1">
-                    <h3 className="break-words text-sm font-medium leading-snug text-[var(--color-ink)] group-hover:text-teal-600">
+                    <h3 className="break-words text-sm font-medium leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
                       {item.name}
                     </h3>
-                    <div className="mt-1.5 h-px w-0 bg-teal-500 transition-all duration-300 group-hover:w-8" />
+                    <div className="mt-1.5 h-px w-0 bg-[var(--color-accent)] transition-all duration-300 group-hover:w-8" />
                   </div>
                 </Link>
               ))}

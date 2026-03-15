@@ -79,7 +79,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10">
         <Link
           href={listHref}
-          className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[#14B8A6] hover:text-[#14B8A6]"
+          className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
         >
           <ArrowLeft size={14} />
           {copy.backToList}
@@ -89,7 +89,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
           <div className="absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top_left,rgba(20,184,166,0.18),transparent_55%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.14),transparent_45%)]" />
           <div className="relative grid gap-10 px-6 py-8 lg:grid-cols-[minmax(0,1.2fr)_360px] lg:px-10 lg:py-10">
             <div>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[#14B8A6]">
+              <p className="eyebrow-label">
                 {copy.eyebrow}
               </p>
               <h1 className="mt-4 max-w-4xl font-heading text-4xl font-semibold leading-[1.08] tracking-tight text-[#122033] md:text-5xl lg:text-[3.7rem]">
@@ -185,7 +185,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
           <div className="min-w-0 space-y-8">
             <div className="overflow-hidden rounded-[2rem] border border-[#E3EAF1] bg-white shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
               <div className="border-b border-[#EEF3F6] px-6 py-5 md:px-10 md:py-6">
-                <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#14B8A6]">
+                <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   <Clock size={14} />
                   <span>
                     {locale === "th"
@@ -206,7 +206,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
             {internalLinks ? (
               <section className="rounded-[2rem] border border-[#E7E1D9] bg-[#FCFBF8] px-6 py-8 shadow-sm md:px-8">
                 <div className="max-w-3xl">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#14B8A6]">
+                  <p className="eyebrow-label text-[12px]">
                     {copy.internalLinks}
                   </p>
                   <h2 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-slate-900">
@@ -231,7 +231,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                           <Link
                             key={item.href}
                             href={item.href}
-                            className="block rounded-2xl border border-slate-200 px-4 py-3.5 text-base font-medium text-slate-700 transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
+                            className="block rounded-2xl border border-slate-200 px-4 py-3.5 text-base font-medium text-slate-700 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                           >
                             {item.label}
                           </Link>
@@ -253,7 +253,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
           <aside className="space-y-6">
             <div className="xl:sticky xl:top-28">
               <div className="rounded-[1.75rem] border border-[#DCE6ED] bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[#14B8A6]">
+                <p className="eyebrow-label">
                   {copy.category}
                 </p>
                 <h2 className="mt-4 font-heading text-2xl font-semibold tracking-tight text-[#1A2535]">
@@ -266,7 +266,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                 </p>
                 <Link
                   href={listHref}
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#122033] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#14B8A6]"
+                  className="btn-primary-soft mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
                 >
                   <ArrowLeft size={14} />
                   {copy.backToList}

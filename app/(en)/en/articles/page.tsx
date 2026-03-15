@@ -65,7 +65,7 @@ export default async function ArticlesPage() {
               </div>
 
               <div className="flex flex-col justify-center p-8 md:p-12">
-                <span className="inline-flex w-fit items-center rounded-full border border-[#2ecfc4]/30 bg-[#eefdf9] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#1e9a94]">
+                <span className="inline-flex w-fit items-center rounded-full border border-[rgba(15,118,110,0.18)] bg-[var(--color-accent-soft)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
                   Featured Article
                 </span>
 
@@ -88,7 +88,7 @@ export default async function ArticlesPage() {
                   </p>
                 )}
 
-                <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[#2ecfc4] transition-all group-hover:gap-3">
+                <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[var(--color-accent)] transition-all group-hover:gap-3">
                   Read More
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
@@ -129,7 +129,7 @@ export default async function ArticlesPage() {
                 </p>
               )}
 
-              <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[#2ecfc4]">
+              <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                 {article.title}
               </h3>
 

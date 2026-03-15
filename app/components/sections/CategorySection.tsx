@@ -41,7 +41,7 @@ export default function CategorySection({
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10 flex flex-col items-center text-center md:mb-14">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+          <p className="eyebrow-label">
             Product Categories
           </p>
           <h2 className="font-heading mt-3 text-2xl tracking-tight text-[var(--color-ink)] sm:text-3xl md:text-5xl">
@@ -98,7 +98,7 @@ export default function CategorySection({
         <div className="mt-12 flex justify-center sm:mt-16">
           <Link
             href={withLocalePath("/categories", locale)}
-            className="group relative inline-flex items-center gap-3 rounded-full bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-8 py-3.5 font-body text-sm font-semibold text-white transition-all hover:brightness-105 hover:shadow-xl active:scale-95 sm:px-10 sm:py-4"
+            className="btn-primary-soft group relative inline-flex items-center gap-3 rounded-full px-8 py-3.5 font-body text-sm font-semibold active:scale-[0.98] sm:px-10 sm:py-4"
           >
             <span>{uiText.categories.viewAll[locale]}</span>
             <ArrowRightIcon />

@@ -57,21 +57,21 @@ export default function ContactSection({
   return (
     <section id="contact" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(135deg,#ffffff_0%,#eefbff_44%,#f2f8ff_100%)] p-6 shadow-[0_32px_90px_rgba(28,40,66,0.14)] sm:p-10 md:p-16 lg:p-20">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(135deg,#ffffff_0%,#f4f8fc_44%,#f8fbff_100%)] p-6 shadow-[0_28px_72px_rgba(28,40,66,0.12)] sm:p-10 md:p-16 lg:p-20">
           <div className="absolute inset-0 -z-10 opacity-25">
             <BackgroundBlobs />
           </div>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,167,184,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(46,207,196,0.14),transparent_26%),radial-gradient(circle_at_bottom,rgba(202,184,242,0.16),transparent_26%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(136,181,232,0.1),transparent_24%),radial-gradient(circle_at_left_center,rgba(15,118,110,0.08),transparent_26%),radial-gradient(circle_at_bottom,rgba(198,209,236,0.1),transparent_26%)]" />
 
           <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="space-y-4">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                <p className="eyebrow-label">
                   Contact Desk
                 </p>
-                <h2 className="text-3xl font-black leading-[1.1] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
+                <h2 className="font-heading text-3xl font-semibold leading-[1.08] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
                   {uiText.contact.title[locale]} <br />
-                  <span className="text-[#8ebcf5]">
+                  <span className="text-[#3f6698]">
                     {uiText.contact.subtitle[locale]}
                   </span>
                 </h2>
@@ -81,7 +81,7 @@ export default function ContactSection({
               </div>
 
               <div className="mt-10 w-full max-w-md space-y-4">
-                  <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl">
+                  <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/94 shadow-[0_20px_48px_rgba(28,40,66,0.1)]">
                   <div className="border-b border-[#eef2f6] p-6 md:p-8">
                     <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.phoneLabel[locale]}
@@ -113,7 +113,7 @@ export default function ContactSection({
                     </div>
                   </div>
 
-                  <div className="bg-[linear-gradient(145deg,#f6fdff,#fff3f7)] p-6 md:p-8">
+                  <div className="bg-[linear-gradient(145deg,#f8fbfe,#f1f6fb)] p-6 md:p-8">
                     <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.emailLabel[locale]}
                     </p>
@@ -137,7 +137,7 @@ export default function ContactSection({
                 </div>
 
                 {data.lineQrCode && (
-                  <div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur">
+                  <div className="flex items-center gap-5 rounded-2xl border border-[rgba(15,118,110,0.18)] bg-[linear-gradient(145deg,rgba(244,251,248,0.96),rgba(245,248,253,0.94))] p-4 shadow-sm backdrop-blur">
                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[rgba(46,207,196,0.42)] bg-white">
                       <Image
                         src={data.lineQrCode.src}

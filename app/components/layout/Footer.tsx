@@ -76,18 +76,18 @@ export default function Footer({ company }: FooterProps) {
 
   return (
     <footer
-      className="relative overflow-hidden border-t border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,#fefcff_0%,#f2fbff_38%,#fff1f6_100%)]"
+      className="relative overflow-hidden border-t border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,#fbfdff_0%,#f5f9ff_38%,#f8fbff_100%)]"
       aria-label="Site footer"
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(46,207,196,0.65),rgba(248,167,184,0.55),transparent)]" />
-      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#2ecfc4]/12 blur-3xl" />
-      <div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#f8a7b8]/18 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#cab8f2]/14 blur-3xl" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(15,118,110,0.32),rgba(136,181,232,0.28),transparent)]" />
+      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#0f766e]/8 blur-3xl" />
+      <div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#88b5e8]/10 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#c6d1ec]/10 blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10">
         <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">
           <section className="glass-panel rounded-[1.5rem] p-4">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+            <p className="eyebrow-label">
               {text.eyebrow}
             </p>
 
@@ -118,8 +118,8 @@ export default function Footer({ company }: FooterProps) {
             </p>
 
             <div className="mt-4 grid gap-2.5 sm:grid-cols-[1.15fr_0.85fr]">
-              <div className="rounded-[1rem] border border-[rgba(209,225,241,0.78)] bg-[linear-gradient(145deg,rgba(236,251,255,0.9),rgba(255,243,247,0.86))] p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              <div className="rounded-[1rem] border border-[rgba(209,225,241,0.78)] bg-[linear-gradient(145deg,rgba(243,248,253,0.96),rgba(248,251,255,0.92))] p-3">
+                <p className="eyebrow-label text-[11px]">
                   {text.contact}
                 </p>
                 <p className="mt-1.5 text-[13px] leading-6 text-[var(--color-ink-soft)]">
@@ -129,7 +129,7 @@ export default function Footer({ company }: FooterProps) {
                   href={GOOGLE_MAPS_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[12px] font-semibold tracking-[0.04em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[12px] font-semibold tracking-[0.04em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                 >
                   <MapPin className="h-3.5 w-3.5" />
                   <span>{text.openMap}</span>
@@ -137,18 +137,18 @@ export default function Footer({ company }: FooterProps) {
                 </a>
               </div>
 
-              <div className="rounded-[1rem] border border-[rgba(159,210,246,0.45)] bg-[linear-gradient(145deg,#7dbdf0,#baacf1)] p-3 text-white">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/88">
+              <div className="rounded-[1rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,#e5f3ef,#e6eefc)] p-3 text-[var(--color-ink)]">
+                <p className="eyebrow-label text-[11px]">
                   {text.language}
                 </p>
-                <div className="mt-2.5 inline-flex rounded-full border border-white/10 bg-white/10 p-1">
+                <div className="mt-2.5 inline-flex rounded-full border border-[rgba(205,222,241,0.86)] bg-white/78 p-1">
                   <Link
                     href={toTH}
                     hrefLang="th"
                     className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
                       !isEN
-                        ? 'bg-white text-[var(--color-ink)]'
-                        : 'text-white/70 hover:text-white'
+                        ? 'bg-[var(--color-ink)] text-white'
+                        : 'text-[#66758d] hover:text-[var(--color-ink)]'
                     }`}
                   >
                     TH
@@ -158,8 +158,8 @@ export default function Footer({ company }: FooterProps) {
                     hrefLang="en"
                     className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
                       isEN
-                        ? 'bg-white text-[var(--color-ink)]'
-                        : 'text-white/70 hover:text-white'
+                        ? 'bg-[var(--color-ink)] text-white'
+                        : 'text-[#66758d] hover:text-[var(--color-ink)]'
                     }`}
                   >
                     EN
@@ -170,7 +170,7 @@ export default function Footer({ company }: FooterProps) {
           </section>
 
           <section className="glass-panel rounded-[1.5rem] p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+            <p className="eyebrow-label text-[11px]">
               {text.navigation}
             </p>
             <nav aria-label="Footer navigation" className="mt-3">
@@ -194,7 +194,7 @@ export default function Footer({ company }: FooterProps) {
 
           <section className="glass-panel rounded-[1.5rem] p-4">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              <p className="eyebrow-label text-[11px]">
                 {text.salesDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -202,7 +202,7 @@ export default function Footer({ company }: FooterProps) {
                   <a
                     key={phone.number}
                     href={`tel:${phone.number}`}
-                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 transition-all hover:-translate-y-0.5 hover:border-[#14B8A6]"
+                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
                   >
                     {phone.label && (
                       <span className="block text-[11px] uppercase tracking-[0.12em] text-[#7f90ab]">
@@ -218,7 +218,7 @@ export default function Footer({ company }: FooterProps) {
             </div>
 
             <div className="mt-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+              <p className="eyebrow-label text-[11px]">
                 {text.emailDesk}
               </p>
               <div className="mt-3 space-y-2">
@@ -226,7 +226,7 @@ export default function Footer({ company }: FooterProps) {
                   <a
                     key={email}
                     href={`mailto:${email}`}
-                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
+                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:text-[var(--color-ink)]"
                   >
                     {email}
                   </a>
@@ -236,7 +236,7 @@ export default function Footer({ company }: FooterProps) {
 
             {company.socials.length > 0 && (
               <div className="mt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                <p className="eyebrow-label text-[11px]">
                   {text.connect}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
@@ -246,7 +246,7 @@ export default function Footer({ company }: FooterProps) {
                       href={social.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
+                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:text-[var(--color-ink)]"
                     >
                       {social.icon && (
                         <Image

@@ -34,11 +34,11 @@ function LangToggle({
       type="button"
       onClick={onToggle}
       aria-label="Toggle language"
-      className="liquid-glass-pill group inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_30px_rgba(46,207,196,0.18)]"
+      className="liquid-glass-pill group inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_26px_rgba(15,118,110,0.12)]"
     >
       <span
         className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
-          !isEN ? "text-[var(--color-ink)]" : "text-[#9eb2c5]"
+          !isEN ? "text-[var(--color-ink)]" : "text-[#7f90a6]"
         }`}
       >
         TH
@@ -46,11 +46,13 @@ function LangToggle({
 
       <span
         className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${
-          isEN ? "bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" : "bg-[linear-gradient(90deg,#a9e7c7,#cab8f2)]"
+          isEN
+            ? "bg-[linear-gradient(90deg,#dff4ef,#dce7fb)]"
+            : "bg-[linear-gradient(90deg,#e7f6f0,#e8eefb)]"
         }`}
       >
         <span
-          className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-300 ${
+          className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-[var(--color-accent)] shadow-sm transition-transform duration-300 ${
             isEN ? "translate-x-4" : "translate-x-0"
           }`}
         />
@@ -58,7 +60,7 @@ function LangToggle({
 
       <span
         className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
-          isEN ? "text-[var(--color-ink)]" : "text-[#9eb2c5]"
+          isEN ? "text-[var(--color-ink)]" : "text-[#7f90a6]"
         }`}
       >
         EN
@@ -174,8 +176,8 @@ function NavigationInner({
                 href={withLocale(item.href)}
                 className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
-                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white"
-                    : "text-[#5d6984] hover:bg-[linear-gradient(135deg,#eefcff,#f2f8ff)] hover:text-[var(--color-ink)]"
+                    ? "btn-primary-soft"
+                    : "text-[#55657d] hover:bg-white/80 hover:text-[var(--color-ink)]"
                 }`}
               >
                 {item.label[lang]}
@@ -193,7 +195,7 @@ function NavigationInner({
             type="button"
             onClick={() => setOpen((current) => !current)}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="liquid-glass-pill inline-flex h-10 w-10 items-center justify-center rounded-full text-neutral-700 transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] md:hidden"
+            className="liquid-glass-pill inline-flex h-10 w-10 items-center justify-center rounded-full text-[#4f5d74] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] md:hidden"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -216,8 +218,8 @@ function NavigationInner({
                 onClick={closeMenu}
                 className={`flex items-center justify-between rounded-2xl px-4 py-3 text-md font-medium uppercase tracking-[0.12em] transition-all ${
                   isActive(item.href)
-                    ? "bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] text-white"
-                    : "text-[#5d6984] hover:bg-white hover:text-[var(--color-ink)]"
+                    ? "btn-primary-soft"
+                    : "text-[#55657d] hover:bg-white hover:text-[var(--color-ink)]"
                 }`}
               >
                 <span>{item.label[lang]}</span>

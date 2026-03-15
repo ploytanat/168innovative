@@ -57,18 +57,18 @@ export default function HeroCarousel({ hero }: Props) {
   if (!active) return null
 
   return (
-    <section className="w-full overflow-hidden border-y border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(241,251,255,0.82)_46%,rgba(242,247,255,0.78))]">
+    <section className="w-full overflow-hidden border-y border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(246,250,255,0.92)_46%,rgba(247,250,254,0.94))]">
 
       {/* ───────────────────── MOBILE (< lg) ───────────────────── */}
       <div className="flex flex-col lg:hidden">
 
         {/* IMAGE */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
+        <div className="relative w-full aspect-[4/3] overflow-hidden bg-[linear-gradient(145deg,#f4f8fc,#eef4fb)]">
           <div
-            className="absolute inset-0 opacity-40 pointer-events-none"
+            className="absolute inset-0 opacity-28 pointer-events-none"
             style={{
               backgroundImage:
-                'linear-gradient(#e5e5e5 1px, transparent 1px), linear-gradient(90deg,#e5e5e5 1px, transparent 1px)',
+                'linear-gradient(#d9e1ec 1px, transparent 1px), linear-gradient(90deg,#d9e1ec 1px, transparent 1px)',
               backgroundSize: '60px 60px',
             }}
           />
@@ -167,7 +167,7 @@ export default function HeroCarousel({ hero }: Props) {
           <div className="mt-8 flex flex-wrap items-center gap-5">
             <Link
               href={active.ctaPrimary.href}
-              className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-6 py-3 font-body text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_14px_32px_rgba(46,207,196,0.24)] transition hover:brightness-105"
+              className="btn-primary-soft flex items-center gap-2 px-6 py-3 font-body text-[13px] font-semibold uppercase tracking-[0.1em]"
             >
               {active.ctaPrimary.label}
               <ArrowRight />
@@ -176,7 +176,7 @@ export default function HeroCarousel({ hero }: Props) {
             {active.ctaSecondary?.label && (
               <Link
                 href={active.ctaSecondary.href}
-                className="border-b border-transparent pb-1 font-body text-[13px] uppercase tracking-[0.1em] text-[#596b87] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
+                className="btn-secondary-link pb-1 font-body text-[13px] uppercase tracking-[0.1em]"
               >
                 {active.ctaSecondary.label}
               </Link>
@@ -232,7 +232,7 @@ export default function HeroCarousel({ hero }: Props) {
             <div className="mt-12 flex items-center gap-6">
               <Link
                 href={active.ctaPrimary.href}
-                className="flex items-center gap-2 border border-transparent bg-[linear-gradient(135deg,#2ecfc4,#8ebcf5)] px-8 py-4 font-body text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_18px_36px_rgba(46,207,196,0.24)] transition hover:brightness-105"
+                className="btn-primary-soft flex items-center gap-2 px-8 py-4 font-body text-[13px] font-semibold uppercase tracking-[0.1em]"
               >
                 {active.ctaPrimary.label}
                 <ArrowRight />
@@ -241,7 +241,7 @@ export default function HeroCarousel({ hero }: Props) {
               {active.ctaSecondary?.label && (
                 <Link
                   href={active.ctaSecondary.href}
-                  className="border-b border-transparent pb-1 font-body text-[13px] uppercase tracking-[0.1em] text-[#596b87] hover:border-[#8ebcf5] hover:text-[var(--color-ink)]"
+                  className="btn-secondary-link pb-1 font-body text-[13px] uppercase tracking-[0.1em]"
                 >
                   {active.ctaSecondary.label}
                 </Link>
@@ -266,13 +266,13 @@ export default function HeroCarousel({ hero }: Props) {
         </div>
 
         {/* RIGHT - CSS fade instead of Framer Motion */}
-        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
+        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#f4f8fc,#eef4fb)]">
 
           <div
-            className="absolute inset-0 opacity-40 pointer-events-none"
+            className="absolute inset-0 opacity-28 pointer-events-none"
             style={{
               backgroundImage:
-                'linear-gradient(#e5e5e5 1px, transparent 1px), linear-gradient(90deg,#e5e5e5 1px, transparent 1px)',
+                'linear-gradient(#d9e1ec 1px, transparent 1px), linear-gradient(90deg,#d9e1ec 1px, transparent 1px)',
               backgroundSize: '80px 80px',
             }}
           />

@@ -57,7 +57,7 @@ function getTone(locale: 'th' | 'en') {
       searchPlaceholder: 'placeholder:text-[#9A8E84]',
       clearButton: 'text-[#7E746C] hover:bg-[#F4F1ED]',
       idleButton:
-        'border-[#DED8D1] bg-white/85 text-[#70665E] hover:border-[#14B8A6] hover:text-[#1A2535]',
+        'border-[#DED8D1] bg-white/85 text-[#70665E] hover:border-[var(--color-accent)] hover:text-[#1A2535]',
       countBorder: 'border-[#E6E0D9]',
       countBg: 'bg-white/82',
       mutedText: 'text-[#81766E]',
@@ -85,7 +85,7 @@ function getTone(locale: 'th' | 'en') {
     searchPlaceholder: 'placeholder:text-[#AA9D92]',
     clearButton: 'text-[#7B6F66] hover:bg-[#F3EEE8]',
     idleButton:
-      'border-[#DDD4CC] bg-white/85 text-[#6F655D] hover:border-[#14B8A6] hover:text-[#1A2535]',
+      'border-[#DDD4CC] bg-white/85 text-[#6F655D] hover:border-[var(--color-accent)] hover:text-[#1A2535]',
     countBorder: 'border-[#E3DBD3]',
     countBg: 'bg-white/82',
     mutedText: 'text-[#8A7E74]',
@@ -173,7 +173,7 @@ export default function ProductGrid({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t.searchPlaceholder}
-              className={`w-full rounded-full border ${tone.searchBorder} ${tone.searchBg} py-3 pl-11 pr-11 text-sm text-[#1A2535] shadow-sm outline-none transition-all ${tone.searchPlaceholder} backdrop-blur focus:border-[#14B8A6] focus:ring-4 focus:ring-[#14B8A6]/10`}
+              className={`w-full rounded-full border ${tone.searchBorder} ${tone.searchBg} py-3 pl-11 pr-11 text-sm text-[#1A2535] shadow-sm outline-none transition-all ${tone.searchPlaceholder} backdrop-blur focus:border-[var(--color-accent)] focus:ring-4 focus:ring-[rgba(15,118,110,0.12)]`}
             />
             {query && (
               <button
@@ -193,7 +193,7 @@ export default function ProductGrid({
               onClick={cycleSort}
               className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] transition-all ${
                 sort !== 'default'
-                  ? 'border-[#14B8A6] bg-[#EAF9F7] text-[#0E7C72]'
+                  ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
                   : tone.idleButton
               }`}
             >
@@ -230,7 +230,7 @@ export default function ProductGrid({
                   setQuery('')
                   setSort('default')
                 }}
-                className="font-semibold text-[#14B8A6] underline underline-offset-4"
+                className="font-semibold text-[var(--color-accent)] underline underline-offset-4"
               >
                 {t.clearFilters}
               </button>
@@ -273,11 +273,11 @@ export default function ProductGrid({
                 </div>
 
                 <div className="px-2.5 pb-4 pt-4.5 md:px-3 md:pb-4.5 md:pt-5">
-                  <h2 className="text-sm font-semibold leading-[1.5] text-[#1A2535] transition-colors group-hover:text-[#14B8A6]">
+                  <h2 className="text-sm font-semibold leading-[1.5] text-[#1A2535] transition-colors group-hover:text-[var(--color-accent)]">
                     {product.name}
                   </h2>
                   <div
-                    className={`mt-3.5 h-px w-10 ${tone.divider} transition-all duration-300 group-hover:w-16 group-hover:bg-[#14B8A6]`}
+                    className={`mt-3.5 h-px w-10 ${tone.divider} transition-all duration-300 group-hover:w-16 group-hover:bg-[var(--color-accent)]`}
                   />
                 </div>
               </Link>

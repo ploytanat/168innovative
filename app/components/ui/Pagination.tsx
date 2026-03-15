@@ -48,7 +48,7 @@ function PageLink({
       className={`inline-flex min-w-10 items-center justify-center rounded-full border px-3.5 py-2 text-xs font-semibold transition-all ${
         active
           ? 'border-[#1A2535] bg-[#1A2535] text-white shadow-[0_12px_28px_rgba(26,37,53,0.16)]'
-          : 'border-[#E1D8CF] bg-white/82 text-[#6B625C] hover:border-[#14B8A6] hover:text-[#1A2535] backdrop-blur'
+          : 'border-[#E1D8CF] bg-white/82 text-[#6B625C] hover:border-[var(--color-accent)] hover:text-[#1A2535] backdrop-blur'
       }`}
     >
       {label}

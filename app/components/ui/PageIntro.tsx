@@ -24,7 +24,7 @@ export default function PageIntro({
       <Breadcrumb items={breadcrumbs} />
       <div className="liquid-glass-panel mt-7 rounded-[2rem] px-6 py-8 md:mt-8 md:px-8 md:py-10 lg:px-10">
         {eyebrow ? (
-          <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-[var(--color-accent)]">
+          <p className="eyebrow-label">
             {eyebrow}
           </p>
         ) : null}

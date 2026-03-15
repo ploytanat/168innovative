@@ -1,3 +1,4 @@
+import { HOME_PRODUCT_SPOTLIGHT_ORDER } from "../config/home-product-spotlight"
 import { getCategories } from "./categories"
 import { getCompany } from "./company"
 import { getHeroSlides } from "./hero"
@@ -19,12 +20,6 @@ async function loadWithFallback<T>(
 }
 
 export async function getHomeSections(locale: Locale) {
-
-  const SPOTLIGHT = [
-    "spout-sm18-a",
-    "coffee-bag-valve-hl400-40mm",
-  ]
-
   const [heroSlides, spoutProducts, allProducts, categories, whys, company] =
     await Promise.all([
       loadWithFallback(getHeroSlides(locale), [], `hero slides (${locale})`),
@@ -44,33 +39,16 @@ export async function getHomeSections(locale: Locale) {
       loadWithFallback(getCompany(locale), null, `company (${locale})`),
     ])
 
-  /* ─────────────────────────────
-     merge spotlight products
-  ───────────────────────────── */
+  const spotlightProducts = HOME_PRODUCT_SPOTLIGHT_ORDER.flatMap((slug) => {
+    const match = allProducts.find((product) => product.slug === slug)
+    return match ? [match] : []
+  })
 
-const spotlightProducts = allProducts.filter(p =>
-  SPOTLIGHT.includes(p.slug)
-)
-
-const mergedProducts = [
-  ...spotlightProducts,
-  ...spoutProducts
-]
-
-const uniqueProducts = Array.from(
-  new Map(mergedProducts.map(p => [p.slug, p])).values()
-)
-console.log(
-  "allProducts:",
-  allProducts.length,
-  allProducts.map(p => p.slug)
-)
-
-console.log(
-  "spotlightProducts:",
-  spotlightProducts.map(p => p.slug)
-)
-const homeProducts = uniqueProducts.slice(0, 12)
+  const mergedProducts = [...spotlightProducts, ...spoutProducts]
+  const uniqueProducts = Array.from(
+    new Map(mergedProducts.map((product) => [product.slug, product])).values()
+  )
+  const homeProducts = uniqueProducts.slice(0, 12)
 
   return {
     heroSlides,
@@ -79,6 +57,4 @@ const homeProducts = uniqueProducts.slice(0, 12)
     whys,
     company,
   }
-
-  
 }

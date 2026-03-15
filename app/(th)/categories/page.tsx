@@ -91,7 +91,7 @@ export default async function CategoriesPage() {
             aria-label="Category insights"
           >
             <header className="mb-10">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--color-accent)]">
+              <p className="eyebrow-label text-[11px]">
                 Product Knowledge
               </p>
               <h2 className="mt-3 font-heading text-2xl text-[var(--color-ink)] md:text-3xl">
@@ -103,7 +103,7 @@ export default async function CategoriesPage() {
               {seoCategories.map((category) => (
                 <article
                   key={category.id}
-                  className="rounded-[1.5rem] border border-[rgba(221,211,201,0.76)] bg-white/84 p-5 shadow-[0_12px_32px_rgba(26,37,53,0.04)] transition-colors hover:border-[#14B8A6]/40"
+                  className="rounded-[1.5rem] border border-[rgba(221,211,201,0.76)] bg-white/84 p-5 shadow-[0_12px_32px_rgba(26,37,53,0.04)] transition-colors hover:border-[rgba(15,118,110,0.26)]"
                 >
                   <Link href={`/categories/${category.slug}`} prefetch={false}>
                     <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">

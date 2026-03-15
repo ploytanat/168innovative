@@ -244,7 +244,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="bg-[linear-gradient(165deg,rgba(248,241,233,0.76),rgba(231,245,241,0.66))] p-8 lg:p-12">
             <Link
               href={`/en/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] backdrop-blur transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6]"
+              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] backdrop-blur transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               {category.name}
@@ -274,7 +274,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </h1>
 
             <div className="my-6 flex items-center gap-2.5">
-              <div className="h-[3px] w-10 rounded-full bg-[#14B8A6]" />
+              <div className="h-[3px] w-10 rounded-full bg-[var(--color-accent)]" />
               <div className="h-[3px] w-4 rounded-full bg-[#B9EAE5]" />
             </div>
 
@@ -311,7 +311,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/en/contact?product=${encodeURIComponent(product.name)}`}
-                className="group inline-flex items-center justify-center gap-2 rounded-[1.1rem] bg-[var(--color-ink)] px-7 py-4 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(26,37,53,0.16)] transition-all hover:bg-[#14B8A6] active:scale-[0.98]"
+                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1.1rem] px-7 py-4 text-sm font-semibold active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 Request a Quote
@@ -325,7 +325,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   className="rounded-[1rem] border border-[rgba(221,211,201,0.82)] bg-white/72 p-3 text-center backdrop-blur"
                 >
                   <Icon
-                    className="mx-auto h-4 w-4 text-[#14B8A6]"
+                    className="mx-auto h-4 w-4 text-[var(--color-accent)]"
                     strokeWidth={1.8}
                   />
                   <span className="mt-2 block text-[11px] font-medium leading-tight text-[#6E7D8D]">
@@ -374,7 +374,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <ul className="mt-4 space-y-3 text-sm text-[var(--color-ink-soft)]">
               {supportCopy.bullets.map((bullet) => (
                 <li key={bullet} className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-[#14B8A6]" />
+                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
                   <span>{bullet}</span>
                 </li>
               ))}
@@ -393,7 +393,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <section className="mt-24" aria-label="Related Products">
             <div className="mb-10 flex items-end justify-between border-b border-[rgba(222,214,205,0.88)] pb-6">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#14B8A6]">
+                <p className="eyebrow-label text-[11px]">
                   Discover More
                 </p>
                 <h2 className="mt-2 font-heading text-2xl font-semibold text-[#1A2535] md:text-3xl">
@@ -404,7 +404,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <Link
                 href={`/en/categories/${slug}`}
                 prefetch={false}
-                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2.5 text-sm font-semibold text-[#637284] backdrop-blur transition-colors hover:border-[#14B8A6] hover:text-[#14B8A6] md:flex"
+                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2.5 text-sm font-semibold text-[#637284] backdrop-blur transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:flex"
               >
                 View All <ChevronRight size={14} />
               </Link>
@@ -429,10 +429,10 @@ export default async function ProductDetailPage({ params }: Props) {
                   </div>
 
                   <div className="px-2 pb-3 pt-4">
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[#14B8A6]">
+                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                       {item.name}
                     </h3>
-                    <div className="mt-3 h-px w-10 bg-[#D8E1EA] transition-all duration-300 group-hover:w-16 group-hover:bg-[#14B8A6]" />
+                    <div className="mt-3 h-px w-10 bg-[#D8E1EA] transition-all duration-300 group-hover:w-16 group-hover:bg-[var(--color-accent)]" />
                   </div>
                 </Link>
               ))}
