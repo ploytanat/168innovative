@@ -1,4 +1,5 @@
 import type { CompanyView } from "@/app/lib/types/view"
+import { COLORS } from "@/app/components/ui/designSystem"
 
 type ContactPhoneListProps = {
   phones: CompanyView["phones"]
@@ -28,24 +29,24 @@ export default function ContactPhoneList({
     <div className="w-full">
       {officePhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold text-[var(--color-ink)]">{phone.number}</p>
-          <p className="text-base font-medium text-[var(--color-ink-soft)]">{phone.label}</p>
+          <p className="text-2xl font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
+          <p className="text-base font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
         </div>
       ))}
 
       {officePhones.length > 0 && salesPhones.length > 0 && (
         <div className="mb-4 mt-7">
-          <p className="text-[12px] font-black tracking-[0.16em] text-[#7586a1]">
+          <p className="text-[12px] font-black tracking-[0.16em]" style={{ color: COLORS.soft }}>
             {salesHeading}
           </p>
-          <div className="mt-3 h-px w-14 bg-[rgba(28,40,66,0.14)]" />
+          <div className="mt-3 h-px w-14" style={{ background: "rgba(30,40,60,0.10)" }} />
         </div>
       )}
 
       {salesPhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold text-[var(--color-ink)]">{phone.number}</p>
-          <p className="text-base font-medium text-[var(--color-ink-soft)]">{phone.label}</p>
+          <p className="text-2xl font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
+          <p className="text-base font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
         </div>
       ))}
     </div>

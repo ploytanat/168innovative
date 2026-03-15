@@ -1,4 +1,5 @@
 import Image from "next/image"
+import { COLORS, GLASS, PAGE_BG, SOFT_IMAGE_BG } from "../ui/designSystem"
 
 export default function WhoWeAre({ data }: {
   data: {
@@ -8,12 +9,12 @@ export default function WhoWeAre({ data }: {
   }
 }) {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20" style={{ background: PAGE_BG }}>
       <div className="mx-auto max-w-7xl px-4 grid grid-cols-1 gap-12 lg:grid-cols-12 items-center">
 
         {/* IMAGE */}
         <div className="lg:col-span-6">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl" style={{ ...GLASS.primary, background: SOFT_IMAGE_BG }}>
             <Image
               src={data.image.src}
               alt={data.image.alt}
@@ -26,11 +27,11 @@ export default function WhoWeAre({ data }: {
 
         {/* TEXT */}
         <div className="lg:col-span-6">
-          <h2 className="text-2xl font-semibold text-gray-900">
+          <h2 className="text-2xl font-semibold" style={{ color: COLORS.dark }}>
             {data.title}
           </h2>
 
-          <p className="mt-6 text-gray-600 leading-relaxed">
+          <p className="mt-6 leading-relaxed" style={{ color: COLORS.mid }}>
             {data.content}
           </p>
         </div>

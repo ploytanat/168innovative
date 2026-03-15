@@ -1,347 +1,366 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useEffectEvent, useState } from 'react'
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
+
 import { HomeHeroView } from '@/app/lib/types/view'
 
-// Replace lucide icons with inline SVG
+// ─── Icons ────────────────────────────────────────────────────────────────────
+
 const ChevronLeft = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 19l-7-7 7-7" />
   </svg>
 )
-
 const ChevronRight = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 5l7 7-7 7" />
+  </svg>
+)
+const ArrowRight = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 7l5 5m0 0l-5 5m5-5H6" />
   </svg>
 )
 
-const ArrowRight = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-  </svg>
-)
+// ─── Exact gradient palette (eyedropped from reference image) ─────────────────
+//
+//   Base wash:          #dde4ec  (cool blue-gray)
+//   Center highlight:   #e8edf3  (near-white, brightest point)
+//   Top-right blob:     #9fb3cc  (steel blue, fairly saturated)
+//   Left mid blob:      #b8c4d8  (muted periwinkle-blue)
+//   Pink-lavender orb:  #d4b8cc  (bottom-left, warm violet-pink)
+//   Pink core:          #e0c0d4  (hot center of orb)
+//
+//   UI colors on top:
+//   Ink dark:   #1a2232
+//   Ink mid:    #3a4a5c
+//   Ink soft:   #5a6a7c
+//   Border:     rgba(30,40,60,0.18)  — charcoal, low opacity
+//   Accent CTA: #3a7bd5 → #2ab8b0
 
 const AUTOPLAY_MS = 6000
 
-interface Props {
-  hero: HomeHeroView
+// ─── Shared gradient CSS ──────────────────────────────────────────────────────
+// Replicate the 4-blob composition from the reference:
+//   1. Base: flat #dde4ec
+//   2. Top-right: large steel-blue radial
+//   3. Center: soft white highlight
+//   4. Left: periwinkle blob
+//   5. Bottom-left: pink-lavender orb with warm core
+
+export const HERO_BG = `
+  radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc 0%, transparent 65%),
+  radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8 0%, transparent 60%),
+  radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 0%, #d4b8cc 30%, transparent 65%),
+  radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3 0%, transparent 70%),
+  #dde4ec
+`.trim().replace(/\n\s+/g, ' ')
+
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
+
+function ProgressBar({ index, active, duration, onClick }: {
+  index: number; active: boolean; duration: number; onClick: () => void
+}) {
+  return (
+    <button
+      type="button" onClick={onClick}
+      aria-label={`Go to slide ${index + 1}`} aria-pressed={active}
+      className="relative h-[3px] flex-1 min-w-[24px] max-w-[80px] overflow-hidden rounded-full"
+      style={{ background: 'rgba(30,40,60,0.15)' }}
+    >
+      {active && (
+        <span
+          key={index}
+          className="absolute inset-y-0 left-0 rounded-full"
+          style={{ background: 'linear-gradient(90deg,#3a7bd5,#2ab8b0)', animation: `fillBar ${duration}ms linear forwards` }}
+        />
+      )}
+    </button>
+  )
 }
+
+// ─── Thumbnail Strip (≥5 slides) ─────────────────────────────────────────────
+
+function ThumbnailStrip({ slides, current, onJump }: {
+  slides: HomeHeroView['slides']; current: number; onJump: (i: number) => void
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current?.children[current] as HTMLElement
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [current])
+
+  return (
+    <div ref={ref} className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
+      {slides.map((slide, i) => (
+        <button
+          key={slide.id} type="button" onClick={() => onJump(i)}
+          aria-label={`Go to slide ${i + 1}`}
+          className="relative flex-shrink-0 h-12 w-16 overflow-hidden rounded-lg transition-all duration-300"
+          style={{
+            border: i === current ? '2px solid rgba(30,40,60,0.50)' : '2px solid rgba(30,40,60,0.18)',
+            opacity: i === current ? 1 : 0.45,
+          }}
+        >
+          <Image src={slide.image.src} alt={slide.image.alt} fill sizes="64px" className="object-cover" />
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+interface Props { hero: HomeHeroView }
 
 export default function HeroCarousel({ hero }: Props) {
   const slides = hero.slides ?? []
   const [current, setCurrent] = useState(0)
-  const hasMultiple = slides.length > 1
-  const safeCurrent = current < slides.length ? current : 0
+  const [animDir, setAnimDir] = useState<'left' | 'right'>('right')
+  const [animKey, setAnimKey] = useState(0)
+  const total = slides.length
+  const hasMultiple = total > 1
+  const safeCurrent = current < total ? current : 0
   const active = slides[safeCurrent]
+  const useThumbnails = total >= 5
 
-  const next = useEffectEvent(() => {
-    setCurrent((c) => (c + 1) % slides.length)
-  })
+  const go = (index: number, dir: 'left' | 'right') => {
+    setAnimDir(dir); setAnimKey(k => k + 1); setCurrent(index)
+  }
+  const advance  = () => { if (!total) return; go((safeCurrent + 1) % total, 'right') }
+  const previous = () => { if (!total) return; go((safeCurrent - 1 + total) % total, 'left') }
+  const jumpTo   = (i: number) => go(i, i > safeCurrent ? 'right' : 'left')
 
   useEffect(() => {
     if (!hasMultiple) return
-
-    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)")
-    if (motionPreference.matches) return
-
-    const id = window.setInterval(() => {
-      next()
-    }, AUTOPLAY_MS)
-
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(advance, AUTOPLAY_MS)
     return () => window.clearInterval(id)
-  }, [hasMultiple, slides.length])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasMultiple, safeCurrent, total])
 
   if (!active) return null
 
+  const subtitle = active.subtitle || 'Featured'
+
   return (
-    <section className="w-full overflow-hidden border-y border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(246,250,255,0.92)_46%,rgba(247,250,254,0.94))]">
+    <>
+      <style>{`
+        @keyframes fillBar  { from{width:0%} to{width:100%} }
+        @keyframes slideInR { from{opacity:0;transform:translateX(26px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes slideInL { from{opacity:0;transform:translateX(-26px)} to{opacity:1;transform:translateX(0)} }
+        @keyframes fadeUp   { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .slide-r { animation: slideInR 0.42s cubic-bezier(.22,1,.36,1) both }
+        .slide-l { animation: slideInL 0.42s cubic-bezier(.22,1,.36,1) both }
+        .fu1 { animation: fadeUp 0.42s 0.05s cubic-bezier(.22,1,.36,1) both }
+        .fu2 { animation: fadeUp 0.42s 0.11s cubic-bezier(.22,1,.36,1) both }
+        .fu3 { animation: fadeUp 0.42s 0.18s cubic-bezier(.22,1,.36,1) both }
+        .fu4 { animation: fadeUp 0.42s 0.26s cubic-bezier(.22,1,.36,1) both }
+        .fu5 { animation: fadeUp 0.42s 0.34s cubic-bezier(.22,1,.36,1) both }
+      `}</style>
 
-      {/* ───────────────────── MOBILE (< lg) ───────────────────── */}
-      <div className="flex flex-col lg:hidden">
+      <section className="relative py-8 lg:py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-        {/* IMAGE */}
-        <div className="relative w-full aspect-[4/3] overflow-hidden bg-[linear-gradient(145deg,#f4f8fc,#eef4fb)]">
+          {/* ── Shell: exact reference gradient ─────────────────────── */}
           <div
-            className="absolute inset-0 opacity-28 pointer-events-none"
+            className="relative overflow-hidden rounded-[1.2rem]"
             style={{
-              backgroundImage:
-                'linear-gradient(#d9e1ec 1px, transparent 1px), linear-gradient(90deg,#d9e1ec 1px, transparent 1px)',
-              backgroundSize: '60px 60px',
+              background: HERO_BG,
+              border: '1px solid rgba(30,40,60,0.14)',
+              boxShadow: '0 2px 0 rgba(255,255,255,0.50) inset, 0 8px 24px rgba(30,40,60,0.08), 0 24px 56px rgba(30,40,60,0.05)',
             }}
-          />
+          >
+            {/* Top shimmer */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px"
+              style={{ background: 'linear-gradient(90deg,transparent,rgba(255,255,255,0.70),transparent)' }} />
 
-          {/* CSS-based crossfade instead of Framer Motion */}
-          <div className="absolute inset-0 flex items-center justify-center p-8 transition-opacity duration-300">
-            <div className="relative w-full h-full">
-              <Image
-                src={active.image.src}
-                alt={active.image.alt}
-                fill
-                priority
-                sizes="100vw"
-                className="object-contain"
-              />
-            </div>
-          </div>
+            <div className="grid items-stretch lg:grid-cols-[1fr_1.15fr]">
 
-          {/* ARROWS */}
-          {hasMultiple && (
-            <>
-              <button
-                type="button"
-                aria-label="Previous slide"
-                onClick={() =>
-                  setCurrent((c) => (c - 1 + slides.length) % slides.length)
-                }
-                className="liquid-glass-pill absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
+              {/* ── Content panel ── */}
+              <div
+                className="order-2 flex flex-col justify-between px-7 py-9 sm:px-10 lg:order-1 lg:px-12 lg:py-12"
+                style={{ borderRight: '1px solid rgba(30,40,60,0.10)' }}
               >
-                <ChevronLeft />
-              </button>
-
-              <button
-                type="button"
-                aria-label="Next slide"
-                onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="liquid-glass-pill absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
-              >
-                <ChevronRight />
-              </button>
-            </>
-          )}
-
-          {/* DOTS */}
-          {hasMultiple && (
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-              {slides.map((_, i) => (
-                <button
-                  type="button"
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  className="p-2 transition-all duration-300"
-                  aria-label={`Go to slide ${i + 1}`}
-                  aria-pressed={i === safeCurrent}
-                >
-                  <span
-                    className={`block rounded-full transition-all duration-300 ${
-                      i === safeCurrent
-                        ? 'h-[3px] w-6 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]'
-                        : 'h-[6px] w-[6px] bg-[#b9c4de]'
-                    }`}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* CONTENT */}
-        <div className="border-t border-[rgba(205,222,241,0.72)] px-6 py-10">
-
-          {/* EYEBROW */}
-          <div className="flex items-center gap-3 mb-6">
-              <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099]">
-              {(safeCurrent + 1).toString().padStart(2, '0')}
-            </span>
-            <div className="h-px w-8 bg-[#c9d7ea]" />
-            <span className="font-body text-[12px] uppercase tracking-[0.22em] text-[#6f8099]">
-              {active.subtitle}
-            </span>
-          </div>
-
-          {/* TITLE */}
-          <h2 className="font-heading text-3xl leading-tight tracking-tight text-[var(--color-ink)]">
-            {active.title}
-          </h2>
-
-          <div className="my-6 h-px w-10 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" />
-
-          {/* DESCRIPTION */}
-          <p className="font-body text-base leading-8 text-[var(--color-ink-soft)]">
-            {active.description}
-          </p>
-
-          {/* CTA */}
-          <div className="mt-8 flex flex-wrap items-center gap-5">
-            <Link
-              href={active.ctaPrimary.href}
-              className="btn-primary-soft flex items-center gap-2 px-6 py-3 font-body text-[13px] font-semibold uppercase tracking-[0.1em]"
-            >
-              {active.ctaPrimary.label}
-              <ArrowRight />
-            </Link>
-
-            {active.ctaSecondary?.label && (
-              <Link
-                href={active.ctaSecondary.href}
-                className="btn-secondary-link pb-1 font-body text-[13px] uppercase tracking-[0.1em]"
-              >
-                {active.ctaSecondary.label}
-              </Link>
-            )}
-          </div>
-
-          {/* STATS */}
-          {active.stats && (
-            <div className="mt-8 flex gap-8 overflow-x-auto border-t border-[rgba(205,222,241,0.72)] pt-6 no-scrollbar">
-              {active.stats.map((s, i) => (
-                <div key={i} className="shrink-0">
-                  <div className="font-heading text-2xl text-[var(--color-ink)]">
-                    {s.value}
-                  </div>
-                  <div className="mt-1 font-body text-[12px] uppercase tracking-[0.16em] text-[#6f8099]">
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ───────────────────── DESKTOP (>= lg) ───────────────────── */}
-        <div className="hidden min-h-[calc(100vh-80px)] lg:grid lg:grid-cols-2">
-
-        {/* LEFT */}
-        <div className="flex flex-col justify-between border-r border-[rgba(205,222,241,0.72)] px-20 py-16">
-
-          <div className="flex flex-col justify-center flex-1">
-
-            <div className="flex items-center gap-4 mb-10">
-              <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099]">
-                {(safeCurrent + 1).toString().padStart(2, '0')}
-              </span>
-              <div className="h-px w-10 bg-[#c9d7ea]" />
-              <span className="font-body text-[12px] uppercase tracking-[0.24em] text-[#6f8099]">
-                {active.subtitle}
-              </span>
-            </div>
-
-            <h2 className="font-heading text-[clamp(2.8rem,5vw,5.5rem)] leading-[1.05] tracking-tight text-[var(--color-ink)]">
-              {active.title}
-            </h2>
-
-            <div className="my-10 h-px w-12 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]" />
-
-            <p className="font-body max-w-sm text-base leading-8 text-[var(--color-ink-soft)]">
-              {active.description}
-            </p>
-
-            <div className="mt-12 flex items-center gap-6">
-              <Link
-                href={active.ctaPrimary.href}
-                className="btn-primary-soft flex items-center gap-2 px-8 py-4 font-body text-[13px] font-semibold uppercase tracking-[0.1em]"
-              >
-                {active.ctaPrimary.label}
-                <ArrowRight />
-              </Link>
-
-              {active.ctaSecondary?.label && (
-                <Link
-                  href={active.ctaSecondary.href}
-                  className="btn-secondary-link pb-1 font-body text-[13px] uppercase tracking-[0.1em]"
-                >
-                  {active.ctaSecondary.label}
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {active.stats && (
-            <div className="flex gap-12 border-t border-[rgba(205,222,241,0.72)] pt-12">
-              {active.stats.map((s, i) => (
-                <div key={i}>
-                  <div className="font-heading text-xl text-[var(--color-ink)]">
-                    {s.value}
-                  </div>
-                  <div className="mt-1 font-body text-[12px] uppercase tracking-[0.16em] text-[#6f8099]">
-                    {s.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* RIGHT - CSS fade instead of Framer Motion */}
-        <div className="relative overflow-hidden bg-[linear-gradient(145deg,#f4f8fc,#eef4fb)]">
-
-          <div
-            className="absolute inset-0 opacity-28 pointer-events-none"
-            style={{
-              backgroundImage:
-                'linear-gradient(#d9e1ec 1px, transparent 1px), linear-gradient(90deg,#d9e1ec 1px, transparent 1px)',
-              backgroundSize: '80px 80px',
-            }}
-          />
-
-          {/* Simple CSS-based image transition */}
-          <div className="absolute inset-0 z-10 transition-opacity duration-300">
-            <Image
-              src={active.image.src}
-              alt={active.image.alt}
-              fill
-              priority
-              sizes="50vw"
-              className="object-contain p-10"
-            />
-          </div>
-
-          {hasMultiple && (
-            <>
-              <button
-                type="button"
-                aria-label="Previous slide"
-                onClick={() =>
-                  setCurrent((c) => (c - 1 + slides.length) % slides.length)
-                }
-                className="liquid-glass-pill absolute left-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
-              >
-                <ChevronLeft />
-              </button>
-
-              <button
-                type="button"
-                aria-label="Next slide"
-                onClick={() => setCurrent((c) => (c + 1) % slides.length)}
-                className="liquid-glass-pill absolute right-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full transition hover:bg-white"
-              >
-                <ChevronRight />
-              </button>
-
-              <div className="absolute bottom-5 left-8 right-8 z-20 flex items-center justify-between rounded-full px-5 py-3 liquid-glass-pill">
-                <span className="font-body text-[12px] tracking-[0.16em] text-[#6f8099] tabular-nums">
-                  {(safeCurrent + 1).toString().padStart(2, '0')} /
-                  {slides.length.toString().padStart(2, '0')}
-                </span>
-
-                <div className="flex items-center gap-2">
-                  {slides.map((_, i) => (
-                    <button
-                      type="button"
-                      key={i}
-                      onClick={() => setCurrent(i)}
-                      className="p-2 transition-all duration-300"
-                      aria-label={`Go to slide ${i + 1}`}
-             
+                <div>
+                  {/* Eyebrow */}
+                  <div key={`ey-${animKey}`} className="fu1 mb-6 flex items-center gap-3">
+                    <span
+                      className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                      style={{
+                        background: 'rgba(255,255,255,0.45)',
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(30,40,60,0.14)',
+                        color: '#3a4a5c',
+                      }}
                     >
-                      <span
-                        className={`block rounded-full transition-all duration-300 ${
-                          i === safeCurrent
-                            ? 'h-[3px] w-6 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)]'
-                            : 'h-[6px] w-[6px] bg-[#b9c4de]'
-                        }`}
+                      {(safeCurrent + 1).toString().padStart(2, '0')} — {subtitle}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h2
+                    key={`ti-${animKey}`}
+                    className="fu2 font-black leading-[0.93] tracking-[-0.03em] text-[clamp(2.4rem,5.5vw,4.6rem)]"
+                    style={{ color: '#1a2232' }}
+                  >
+                    {active.title}
+                  </h2>
+
+                  {/* Accent divider */}
+                  <div key={`di-${animKey}`} className="fu3 my-6 h-[3px] w-12 rounded-full lg:my-7"
+                    style={{ background: 'linear-gradient(90deg,#3a7bd5,#2ab8b0)' }} />
+
+                  {/* Description */}
+                  <p key={`de-${animKey}`} className="fu3 max-w-md text-[0.95rem] leading-[1.85]"
+                    style={{ color: '#3a4a5c' }}>
+                    {active.description}
+                  </p>
+
+                  {/* CTAs */}
+                  <div key={`ct-${animKey}`} className="fu4 mt-8 flex flex-wrap items-center gap-3 lg:mt-9">
+                    <Link
+                      href={active.ctaPrimary.href}
+                      className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] text-white transition-opacity hover:opacity-90"
+                      style={{ background: 'linear-gradient(135deg,#3a7bd5,#2ab8b0)', boxShadow: '0 4px 16px rgba(58,123,213,0.28)' }}
+                    >
+                      {active.ctaPrimary.label}
+                      <span className="transition-transform group-hover:translate-x-1"><ArrowRight /></span>
+                    </Link>
+
+                    {active.ctaSecondary?.label && (
+                      <Link
+                        href={active.ctaSecondary.href}
+                        className="inline-flex items-center gap-1.5 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] transition-colors"
+                        style={{
+                          background: 'rgba(255,255,255,0.45)',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(30,40,60,0.16)',
+                          color: '#1a2232',
+                        }}
+                      >
+                        {active.ctaSecondary.label}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+
+                {/* Stats */}
+                {active.stats?.length ? (
+                  <div
+                    key={`st-${animKey}`}
+                    className="fu5 mt-8 grid grid-cols-2 gap-4 border-t pt-6 sm:grid-cols-3 lg:mt-10"
+                    style={{ borderColor: 'rgba(30,40,60,0.10)' }}
+                  >
+                    {active.stats.map((stat, i) => (
+                      <div key={i}>
+                        <div className="font-black text-2xl leading-none tracking-tight" style={{ color: '#1a2232' }}>{stat.value}</div>
+                        <div className="mt-1.5 text-[10.5px] uppercase tracking-[0.16em]" style={{ color: '#5a6a7c' }}>{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                {/* Navigation */}
+                {hasMultiple && (
+                  <div className="mt-8 flex items-center gap-4 lg:mt-10">
+                    <div className="flex items-center gap-1.5">
+                      {([
+                        { label: 'Previous slide', fn: previous, Icon: ChevronLeft },
+                        { label: 'Next slide',     fn: advance,  Icon: ChevronRight },
+                      ] as const).map(({ label, fn, Icon }) => (
+                        <button
+                          key={label} type="button" aria-label={label} onClick={fn}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-xl transition-colors"
+                          style={{
+                            background: 'rgba(255,255,255,0.50)',
+                            backdropFilter: 'blur(8px)',
+                            border: '1px solid rgba(30,40,60,0.16)',
+                            color: '#3a4a5c',
+                          }}
+                        >
+                          <Icon />
+                        </button>
+                      ))}
+                    </div>
+
+                    <span className="text-[11px] font-semibold tabular-nums" style={{ color: '#5a6a7c' }}>
+                      {(safeCurrent + 1).toString().padStart(2, '0')}
+                      <span className="mx-1 opacity-40">/</span>
+                      {total.toString().padStart(2, '0')}
+                    </span>
+
+                    {useThumbnails ? (
+                      <div className="flex-1 overflow-hidden">
+                        <ThumbnailStrip slides={slides} current={safeCurrent} onJump={jumpTo} />
+                      </div>
+                    ) : (
+                      <div className="flex flex-1 items-center gap-1.5">
+                        {slides.map((slide, i) => (
+                          <ProgressBar key={slide.id} index={i} active={i === safeCurrent}
+                            duration={AUTOPLAY_MS} onClick={() => jumpTo(i)} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* ── Image panel: same gradient, no separate background ── */}
+              <div className="order-1 relative lg:order-2">
+                <div
+                  className="relative overflow-hidden"
+                  style={{
+                    // Reuse the same base gradient — image panel feels continuous,
+                    // just nudge it cooler (less pink) by shifting blob positions
+                    background: `
+                      radial-gradient(ellipse 60% 80% at 100% 0%,  #9fb3cc 0%, transparent 60%),
+                      radial-gradient(ellipse 50% 60% at 0%   50%,  #b8c4d8 0%, transparent 55%),
+                      radial-gradient(ellipse 60% 50% at 50%  55%,  #e8edf3 0%, transparent 65%),
+                      #dde4ec
+                    `.trim().replace(/\n\s+/g, ' '),
+                    minHeight: 'clamp(260px,42vw,600px)',
+                    borderBottom: '1px solid rgba(30,40,60,0.08)',
+                  }}
+                >
+                  {/* Slide image */}
+                  <div
+                    key={`img-${animKey}`}
+                    className={`absolute inset-0 p-6 sm:p-8 lg:p-10 ${animDir === 'right' ? 'slide-r' : 'slide-l'}`}
+                  >
+                    <div className="relative h-full w-full">
+                      <Image
+                        src={active.image.src} alt={active.image.alt}
+                        fill priority sizes="(max-width:1024px) 100vw, 55vw"
+                        className="object-contain"
+                        style={{ filter: 'drop-shadow(0 8px 24px rgba(30,40,60,0.12))' }}
                       />
-                    </button>
-                  ))}
+                    </div>
+                  </div>
+
+                  {/* Slide counter badge */}
+                  {hasMultiple && (
+                    <div
+                      className="absolute top-4 left-4 z-10 rounded-lg px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+                      style={{
+                        background: 'rgba(255,255,255,0.52)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(30,40,60,0.14)',
+                        color: '#3a4a5c',
+                      }}
+                    >
+                      {(safeCurrent + 1).toString().padStart(2, '0')} / {total.toString().padStart(2, '0')}
+                    </div>
+                  )}
                 </div>
               </div>
-            </>
-          )}
+
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }

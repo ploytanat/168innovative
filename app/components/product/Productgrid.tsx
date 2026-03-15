@@ -6,6 +6,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { ArrowDownAZ, ArrowUpAZ, Search, X } from 'lucide-react'
 
 import { ProductView } from '@/app/lib/types/view'
+import {
+  COLORS,
+  CTA_GRADIENT,
+  GLASS,
+  NAV_ACTIVE_PILL_STYLE,
+  PAGE_BG,
+  SOFT_IMAGE_BG,
+} from '@/app/components/ui/designSystem'
 
 interface Props {
   products: ProductView[]
@@ -46,61 +54,19 @@ const i18n = {
   },
 } as const
 
-function getTone(locale: 'th' | 'en') {
-  if (locale === 'en') {
-    return {
-      shell:
-        'rounded-[2rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(248,240,234,0.86)_55%,rgba(231,246,242,0.78))] p-5 shadow-[0_24px_65px_rgba(26,37,53,0.06)] md:p-6',
-      searchIcon: 'text-[#847A71]',
-      searchBorder: 'border-[#DED8D1]',
-      searchBg: 'bg-white/90',
-      searchPlaceholder: 'placeholder:text-[#9A8E84]',
-      clearButton: 'text-[#7E746C] hover:bg-[#F4F1ED]',
-      idleButton:
-        'border-[#DED8D1] bg-white/85 text-[#70665E] hover:border-[var(--color-accent)] hover:text-[#1A2535]',
-      countBorder: 'border-[#E6E0D9]',
-      countBg: 'bg-white/82',
-      mutedText: 'text-[#81766E]',
-      emptyBorder: 'border-[#E8E2DB]',
-      emptyBg: 'bg-white/85',
-      emptyIconBg: 'bg-[#F6F2EE]',
-      emptyIcon: 'text-[#8E837A]',
-      cardBorder: 'border-[rgba(224,214,205,0.82)]',
-      cardBg: 'bg-white/92',
-      cardShadow: 'shadow-[0_14px_36px_rgba(26,37,53,0.06)]',
-      cardHoverShadow: 'hover:shadow-[0_26px_60px_rgba(26,37,53,0.12)]',
-      imageBg: 'bg-[linear-gradient(160deg,#fbf5ef,#eef8f5)]',
-      imageFallback: 'text-[#A2958A]',
-      divider: 'bg-[#E4DCD3]',
-      glow: 'from-[#f8dcca]/35 via-transparent to-[#d9f0ea]/30',
-    }
-  }
-
+function getTone() {
   return {
-    shell:
-      'rounded-[2rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(249,241,234,0.88)_52%,rgba(228,245,240,0.76))] p-5 shadow-[0_24px_65px_rgba(26,37,53,0.06)] md:p-6',
-    searchIcon: 'text-[#8A7E74]',
-    searchBorder: 'border-[#DDD4CC]',
-    searchBg: 'bg-white/90',
-    searchPlaceholder: 'placeholder:text-[#AA9D92]',
-    clearButton: 'text-[#7B6F66] hover:bg-[#F3EEE8]',
-    idleButton:
-      'border-[#DDD4CC] bg-white/85 text-[#6F655D] hover:border-[var(--color-accent)] hover:text-[#1A2535]',
-    countBorder: 'border-[#E3DBD3]',
-    countBg: 'bg-white/82',
-    mutedText: 'text-[#8A7E74]',
-    emptyBorder: 'border-[#E6DED6]',
-    emptyBg: 'bg-white/85',
-    emptyIconBg: 'bg-[#F4EEE8]',
-    emptyIcon: 'text-[#8D8177]',
-    cardBorder: 'border-[rgba(226,216,207,0.88)]',
-    cardBg: 'bg-white/92',
-    cardShadow: 'shadow-[0_14px_36px_rgba(26,37,53,0.06)]',
-    cardHoverShadow: 'hover:shadow-[0_26px_60px_rgba(26,37,53,0.12)]',
-    imageBg: 'bg-[linear-gradient(160deg,#f8f1e9,#e7f5f2)]',
-    imageFallback: 'text-[#A3968C]',
-    divider: 'bg-[#E2D7CE]',
-    glow: 'from-[#f7dcc8]/35 via-transparent to-[#d7eee9]/30',
+    shell: 'rounded-[1rem] p-4 md:p-5',
+    searchIcon: 'text-[#8a9aac]',
+    searchPlaceholder: 'placeholder:text-[#8d98a9]',
+    clearButton: 'text-[#5a6a7c] hover:bg-white/40',
+    idleButton: 'text-[#597197]',
+    mutedText: 'text-[#8a9aac]',
+    emptyIconBg: 'bg-white/35',
+    emptyIcon: 'text-[#8a95a4]',
+    cardShadow: 'hover:shadow-[0_18px_36px_rgba(30,40,60,0.10)]',
+    imageFallback: 'text-[#9aa4b2]',
+    glow: 'from-white/10 via-transparent to-white/5',
   }
 }
 
@@ -115,7 +81,7 @@ export default function ProductGrid({
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortOrder>('default')
   const t = i18n[locale]
-  const tone = getTone(locale)
+  const tone = getTone()
 
   const filtered = useMemo(() => {
     const source = query.trim() ? searchProducts : products
@@ -160,7 +126,7 @@ export default function ProductGrid({
   }, [isSearching, onSearchStateChange])
 
   return (
-    <div className={`relative overflow-hidden ${tone.shell}`}>
+    <div className={`relative overflow-hidden ${tone.shell}`} style={{ ...GLASS.secondary, background: PAGE_BG }}>
       <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.glow}`} />
       <div className="relative">
         <div className="mb-10 flex flex-col gap-4 md:mb-12 lg:flex-row lg:items-center lg:justify-between">
@@ -173,14 +139,15 @@ export default function ProductGrid({
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t.searchPlaceholder}
-              className={`w-full rounded-full border ${tone.searchBorder} ${tone.searchBg} py-3 pl-11 pr-11 text-sm text-[#1A2535] shadow-sm outline-none transition-all ${tone.searchPlaceholder} backdrop-blur focus:border-[var(--color-accent)] focus:ring-4 focus:ring-[rgba(15,118,110,0.12)]`}
+              className={`w-full rounded-[1rem] py-3 pl-11 pr-11 text-sm shadow-sm outline-none transition-all ${tone.searchPlaceholder}`}
+              style={{ ...GLASS.card, color: COLORS.dark }}
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
                 aria-label={t.clearSearch}
-                className={`absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 transition-colors ${tone.clearButton} hover:text-[#1A2535]`}
+                className={`absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 transition-colors ${tone.clearButton}`}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -191,18 +158,16 @@ export default function ProductGrid({
             <button
               type="button"
               onClick={cycleSort}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] transition-all ${
-                sort !== 'default'
-                  ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]'
-                  : tone.idleButton
-              }`}
+              className={`inline-flex items-center gap-2 rounded-[1rem] px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] transition-all ${sort === 'default' ? tone.idleButton : ''}`}
+              style={sort !== 'default' ? NAV_ACTIVE_PILL_STYLE : GLASS.card}
             >
               <SortIcon className="h-4 w-4" />
               {sortLabel}
             </button>
 
             <div
-              className={`rounded-full border ${tone.countBorder} ${tone.countBg} px-4 py-3 text-[13px] font-semibold text-[#1A2535] shadow-sm backdrop-blur`}
+              className="rounded-[1rem] px-4 py-3 text-[13px] font-semibold shadow-sm"
+              style={{ ...GLASS.stats, color: COLORS.dark }}
             >
               {displayCount}
               <span className={`ml-1 font-medium ${tone.mutedText}`}>
@@ -214,14 +179,15 @@ export default function ProductGrid({
 
         {filtered.length === 0 && (
           <div
-            className={`rounded-[2rem] border ${tone.emptyBorder} ${tone.emptyBg} px-6 py-24 text-center shadow-sm backdrop-blur`}
+            className="rounded-[1rem] px-6 py-24 text-center shadow-sm"
+            style={GLASS.stats}
           >
             <div
               className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${tone.emptyIconBg}`}
             >
               <Search className={`h-6 w-6 ${tone.emptyIcon}`} />
             </div>
-            <p className="text-sm font-semibold text-[#1A2535]">{t.noProducts}</p>
+            <p className="text-sm font-semibold" style={{ color: COLORS.dark }}>{t.noProducts}</p>
             <p className={`mt-2 text-sm ${tone.mutedText}`}>
               {t.emptyHint}
               <button
@@ -230,7 +196,8 @@ export default function ProductGrid({
                   setQuery('')
                   setSort('default')
                 }}
-                className="font-semibold text-[var(--color-accent)] underline underline-offset-4"
+                className="font-semibold underline underline-offset-4"
+                style={{ color: COLORS.brandNavy }}
               >
                 {t.clearFilters}
               </button>
@@ -249,10 +216,12 @@ export default function ProductGrid({
                     : `/categories/${categorySlug}/${product.slug}`
                 }
                 prefetch={false}
-                className={`group overflow-hidden rounded-[1.75rem] border ${tone.cardBorder} ${tone.cardBg} p-2.5 ${tone.cardShadow} transition-all duration-500 hover:-translate-y-1.5 ${tone.cardHoverShadow} backdrop-blur`}
+                className={`group overflow-hidden rounded-[1rem] p-2 transition-all duration-500 hover:-translate-y-1 ${tone.cardShadow}`}
+                style={GLASS.card}
               >
                 <div
-                  className={`relative aspect-square overflow-hidden rounded-[1.25rem] ${tone.imageBg}`}
+                  className="relative aspect-square overflow-hidden rounded-[0.85rem]"
+                  style={{ background: SOFT_IMAGE_BG }}
                 >
                   {product.image?.src ? (
                     <Image
@@ -273,11 +242,12 @@ export default function ProductGrid({
                 </div>
 
                 <div className="px-2.5 pb-4 pt-4.5 md:px-3 md:pb-4.5 md:pt-5">
-                  <h2 className="text-sm font-semibold leading-[1.5] text-[#1A2535] transition-colors group-hover:text-[var(--color-accent)]">
+                  <h2 className="text-sm font-semibold leading-[1.5] transition-colors group-hover:text-[#24457c]" style={{ color: COLORS.dark }}>
                     {product.name}
                   </h2>
                   <div
-                    className={`mt-3.5 h-px w-10 ${tone.divider} transition-all duration-300 group-hover:w-16 group-hover:bg-[var(--color-accent)]`}
+                    className="mt-3.5 h-px w-10 transition-all duration-300 group-hover:w-16"
+                    style={{ background: CTA_GRADIENT }}
                   />
                 </div>
               </Link>

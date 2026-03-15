@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import type { ArticleBlockView } from "@/app/lib/types/view"
+import { COLORS, CTA_BUTTON_STYLE, GLASS } from "@/app/components/ui/designSystem"
 
 type Props = {
   blocks: ArticleBlockView[]
@@ -30,7 +31,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
                 </p>
               ) : null}
               {block.heading ? (
-                <h2 className="font-heading text-3xl font-semibold tracking-tight text-[#122033] md:text-[2rem]">
+                <h2 className="font-heading text-3xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
                   {block.heading}
                 </h2>
               ) : null}
@@ -47,13 +48,14 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
             <section
               key={`${block.type}-${index}`}
               id={blockSectionId(block.anchorId)}
-              className="article-block article-block--checklist rounded-[1.75rem] border border-[#DDE7EE] bg-[#F9FBFC] p-6 md:p-8"
+              className="article-block article-block--checklist rounded-[1rem] p-6 md:p-8"
+              style={GLASS.secondary}
             >
-              <h2 className="font-heading text-2xl font-semibold tracking-tight text-[#122033] md:text-[2rem]">
+              <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
                 {block.heading}
               </h2>
               {block.intro ? (
-                <p className="mt-4 text-sm leading-7 text-[#5A6A7E] md:text-base">
+                <p className="mt-4 text-sm leading-7 md:text-base" style={{ color: COLORS.mid }}>
                   {block.intro}
                 </p>
               ) : null}
@@ -61,7 +63,8 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
                 {block.items.map((item) => (
                   <li
                     key={item}
-                    className="rounded-[1.15rem] border border-[#D8E8E5] bg-white px-4 py-3 text-sm font-medium leading-6 text-[#23414D]"
+                    className="rounded-[0.9rem] px-4 py-3 text-sm font-medium leading-6"
+                    style={{ ...GLASS.card, color: COLORS.mid }}
                   >
                     {item}
                   </li>
@@ -72,22 +75,14 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
         }
 
         if (block.type === "callout") {
-          const styleClass =
-            block.style === "warning"
-              ? "border-[#F6D9AF] bg-[#FFF8ED] text-[#6F4A11]"
-              : block.style === "success"
-                ? "border-[#CDE9DB] bg-[#F3FBF6] text-[#1F5B3E]"
-                : block.style === "note"
-                  ? "border-[#E4E7F5] bg-[#F7F8FD] text-[#39467A]"
-                  : "border-[#CDE7F1] bg-[#F4FAFD] text-[#204C61]"
-
           return (
             <section
               key={`${block.type}-${index}`}
-              className={`article-block article-block--callout rounded-[1.5rem] border px-6 py-5 ${styleClass}`.trim()}
+              className="article-block article-block--callout rounded-[1rem] px-6 py-5"
+              style={GLASS.stats}
             >
               {block.heading ? (
-                <h2 className="font-heading text-xl font-semibold tracking-tight">
+                <h2 className="font-heading text-xl font-semibold tracking-tight" style={{ color: COLORS.dark }}>
                   {block.heading}
                 </h2>
               ) : null}
@@ -103,9 +98,10 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
           return (
             <section
               key={`${block.type}-${index}`}
-              className="article-block article-block--table rounded-[1.75rem] border border-[#DDE7EE] bg-white p-6 md:p-8"
+              className="article-block article-block--table rounded-[1rem] p-6 md:p-8"
+              style={GLASS.card}
             >
-              <h2 className="font-heading text-2xl font-semibold tracking-tight text-[#122033] md:text-[2rem]">
+              <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
                 {block.heading}
               </h2>
               <div className="mt-6 overflow-x-auto">
@@ -135,22 +131,16 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
         return (
           <section
             key={`${block.type}-${index}`}
-            className={`article-block article-block--cta rounded-[1.75rem] px-6 py-7 text-center md:px-8 ${
-              block.style === "soft"
-                ? "border border-[#DDE7EE] bg-[#F8FBFC]"
-                : block.style === "accent"
-                  ? "bg-[linear-gradient(135deg,#FFF7ED_0%,#FFF1D6_100%)] text-[#6F4512]"
-                  : "bg-[linear-gradient(135deg,#122033_0%,#1C314A_100%)] text-white"
-            }`.trim()}
+            className="article-block article-block--cta rounded-[1rem] px-6 py-7 text-center md:px-8"
+            style={block.style === "soft" ? GLASS.card : GLASS.secondary}
           >
-            <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]">
+            <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
               {block.heading}
             </h2>
             {block.body ? (
               <p
-                className={`mx-auto mt-4 max-w-2xl text-sm leading-7 md:text-base ${
-                  block.style === "dark" ? "text-white/80" : ""
-                }`.trim()}
+                className="mx-auto mt-4 max-w-2xl text-sm leading-7 md:text-base"
+                style={{ color: COLORS.mid }}
               >
                 {block.body}
               </p>
@@ -158,11 +148,8 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
             {block.buttonLabel && block.buttonUrl ? (
               <Link
                 href={block.buttonUrl}
-                className={`mt-6 inline-flex rounded-full px-5 py-3 text-sm font-semibold transition ${
-                  block.style === "dark"
-                    ? "bg-white text-[#122033] hover:bg-[var(--color-accent)] hover:text-white"
-                    : "bg-[#122033] text-white hover:bg-[var(--color-accent)]"
-                }`.trim()}
+                className="mt-6 inline-flex rounded-full px-5 py-3 text-sm font-semibold text-white transition"
+                style={CTA_BUTTON_STYLE}
               >
                 {block.buttonLabel}
               </Link>

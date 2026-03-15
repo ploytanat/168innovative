@@ -52,9 +52,9 @@ export default async function CategoriesPage() {
                 key={category.id}
                 href={`/categories/${category.slug}`}
                 prefetch={false}
-                className="group overflow-hidden rounded-[1.75rem] border border-[rgba(222,214,205,0.86)] bg-white/88 p-2 shadow-[0_14px_36px_rgba(26,37,53,0.06)] backdrop-blur transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_26px_60px_rgba(26,37,53,0.12)]"
+                className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
               >
-                <div className="relative aspect-square overflow-hidden rounded-[1.25rem] bg-[linear-gradient(160deg,#f8f1e9,#e6f4f0)]">
+                <div className="relative aspect-square overflow-hidden rounded-[0.85rem] bg-[linear-gradient(160deg,#eef4fb,#f5f7fa)]">
                   {category.image?.src ? (
                     <Image
                       src={category.image.src}
@@ -87,7 +87,7 @@ export default async function CategoriesPage() {
 
         {seoCategories.length > 0 && (
           <section
-            className="mt-20 rounded-[2.25rem] border border-[rgba(153,184,178,0.2)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(247,240,233,0.88)_56%,rgba(231,246,242,0.78))] px-6 py-10 shadow-[0_24px_70px_rgba(26,37,53,0.06)] sm:px-8 lg:px-10"
+            className="mt-16 border-t border-[rgba(211,217,225,0.96)] pt-6"
             aria-label="Category insights"
           >
             <header className="mb-10">
@@ -103,7 +103,7 @@ export default async function CategoriesPage() {
               {seoCategories.map((category) => (
                 <article
                   key={category.id}
-                  className="rounded-[1.5rem] border border-[rgba(221,211,201,0.76)] bg-white/84 p-5 shadow-[0_12px_32px_rgba(26,37,53,0.04)] transition-colors hover:border-[rgba(15,118,110,0.26)]"
+                  className="deck-card rounded-[1rem] p-5 transition-colors hover:border-[rgba(34,74,107,0.26)]"
                 >
                   <Link href={`/categories/${category.slug}`} prefetch={false}>
                     <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">

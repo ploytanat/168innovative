@@ -5,32 +5,31 @@ import Image from "next/image"
 
 import type { AboutHeroView, ImageView } from "@/app/lib/types/view"
 import Breadcrumb from "../ui/Breadcrumb"
+import { COLORS, GLASS, PAGE_BG, SOFT_IMAGE_BG, SOFT_IMAGE_BG_ALT } from "../ui/designSystem"
 
 interface AboutHeroProps {
   hero: AboutHeroView
 }
 
-// ─── Decorative background blobs ─────────────────────────────────────────────
 function PastelBlobs() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
       <div
         className="absolute -right-20 -top-32 h-[580px] w-[580px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(62,207,184,0.13) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(154,191,231,0.16) 0%, transparent 70%)" }}
       />
       <div
         className="absolute -bottom-24 -left-16 h-[420px] w-[420px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(240,120,138,0.10) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(215,223,232,0.18) 0%, transparent 70%)" }}
       />
       <div
         className="absolute left-[38%] top-[38%] h-[300px] w-[300px] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(106,180,232,0.08) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(198,208,221,0.14) 0%, transparent 70%)" }}
       />
     </div>
   )
 }
 
-// ─── Photo panel (right column) ───────────────────────────────────────────────
 function PhotoPanel({
   image,
   extraImages,
@@ -46,97 +45,89 @@ function PhotoPanel({
       transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col gap-3"
     >
-      {/* ── Main frame ── */}
-      <div className="relative">
-        {/* Corner accent dots */}
-        <div className="absolute -left-2.5 -top-2.5 z-10 h-7 w-7 rounded-lg bg-[#f0788a] shadow-[0_4px_12px_rgba(240,120,138,0.35)]" />
-        <div className="absolute -bottom-2.5 -right-2.5 z-10 h-5 w-5 rounded-md bg-[#6ab4e8] shadow-[0_4px_10px_rgba(106,180,232,0.35)]" />
-
-        <div className="overflow-hidden rounded-[1.75rem] shadow-[0_24px_64px_rgba(26,22,20,0.12),0_4px_16px_rgba(26,22,20,0.06)]">
-          <div className="relative aspect-[4/3] w-full bg-[#b8d0c8]">
-            {image ? (
-              <Image
-                src={image.src}
-                alt={image.alt}
-                fill
-                priority
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            ) : (
-              /* Warehouse placeholder */
-              <div
-                className="relative h-full w-full overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(160deg, #d4e8e0 0%, #b8d4c8 20%, #c8dcd4 40%, #a8c4bc 60%, #b4ccc4 80%, #9ab8b0 100%)",
-                }}
-              >
-                <div className="absolute inset-x-0 top-0 h-[18%] bg-gradient-to-b from-[#a0b8b0] to-transparent" />
-                {[20, 50, 80].map((l) => (
-                  <div
-                    key={l}
-                    className="absolute top-0 h-[55%] w-[3px] rounded-b-full bg-gradient-to-b from-white/70 to-transparent"
-                    style={{ left: `${l}%` }}
-                  />
-                ))}
-                {[28, 54, 76].map((t) => (
-                  <div key={t} className="absolute inset-x-0 h-px bg-white/30" style={{ top: `${t}%` }} />
-                ))}
-                {[22, 44, 66].map((l) => (
-                  <div key={l} className="absolute inset-y-0 w-px bg-white/20" style={{ left: `${l}%` }} />
-                ))}
-                {[
-                  { l: 24, t: 30, w: 16, h: 20, o: 0.22 },
-                  { l: 46, t: 30, w: 18, h: 20, o: 0.18 },
-                  { l: 68, t: 30, w: 13, h: 20, o: 0.25 },
-                  { l: 24, t: 56, w: 12, h: 18, o: 0.20 },
-                  { l: 46, t: 56, w: 20, h: 18, o: 0.15 },
-                  { l: 68, t: 56, w: 16, h: 18, o: 0.22 },
-                ].map((b, i) => (
-                  <div
-                    key={i}
-                    className="absolute rounded-sm border border-white/35"
-                    style={{
-                      left: `${b.l}%`, top: `${b.t}%`,
-                      width: `${b.w}%`, height: `${b.h}%`,
-                      background: `rgba(255,255,255,${b.o})`,
-                    }}
-                  />
-                ))}
-                <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black/22 to-transparent" />
+      <div className="overflow-hidden rounded-[1.15rem] p-2" style={GLASS.secondary}>
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[0.95rem]" style={{ background: SOFT_IMAGE_BG }}>
+          {image ? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              priority
+              sizes="(max-width:1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          ) : (
+            <div
+              className="relative h-full w-full overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(160deg, #eef4fb 0%, #d7e5f5 20%, #ecf2f8 44%, #d3e2f2 68%, #e5eef8 100%)",
+              }}
+            >
+              <div className="absolute inset-x-0 top-0 h-[18%] bg-gradient-to-b from-[#c5d0db] to-transparent" />
+              {[20, 50, 80].map((l) => (
                 <div
-                  className="absolute inset-0"
+                  key={l}
+                  className="absolute top-0 h-[55%] w-[3px] rounded-b-full bg-gradient-to-b from-white/70 to-transparent"
+                  style={{ left: `${l}%` }}
+                />
+              ))}
+              {[28, 54, 76].map((t) => (
+                <div key={t} className="absolute inset-x-0 h-px bg-white/30" style={{ top: `${t}%` }} />
+              ))}
+              {[22, 44, 66].map((l) => (
+                <div key={l} className="absolute inset-y-0 w-px bg-white/20" style={{ left: `${l}%` }} />
+              ))}
+              {[
+                { l: 24, t: 30, w: 16, h: 20, o: 0.22 },
+                { l: 46, t: 30, w: 18, h: 20, o: 0.18 },
+                { l: 68, t: 30, w: 13, h: 20, o: 0.25 },
+                { l: 24, t: 56, w: 12, h: 18, o: 0.2 },
+                { l: 46, t: 56, w: 20, h: 18, o: 0.15 },
+                { l: 68, t: 56, w: 16, h: 18, o: 0.22 },
+              ].map((block, index) => (
+                <div
+                  key={index}
+                  className="absolute rounded-sm border border-white/35"
                   style={{
-                    background:
-                      "radial-gradient(ellipse 90% 90% at 50% 50%, transparent 50%, rgba(60,40,30,0.18) 100%)",
+                    left: `${block.l}%`,
+                    top: `${block.t}%`,
+                    width: `${block.w}%`,
+                    height: `${block.h}%`,
+                    background: `rgba(255,255,255,${block.o})`,
                   }}
                 />
-              </div>
-            )}
-
-            {/* Est. badge */}
-            <div className="absolute right-3 top-3 z-10 rounded-xl bg-[#3ecfb8] px-3.5 py-2 shadow-[0_4px_16px_rgba(62,207,184,0.4)]">
-              <p className="font-mono text-[9px] font-bold uppercase tracking-[0.16em] text-white">
-                Est. 2022
-              </p>
+              ))}
+              <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-black/22 to-transparent" />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 90% 90% at 50% 50%, transparent 50%, rgba(60,40,30,0.18) 100%)",
+                }}
+              />
             </div>
+          )}
+
+          <div className="absolute right-3 top-3 z-10 rounded-[0.9rem] px-3 py-1.5 shadow-[0_8px_18px_rgba(24,35,56,0.10)]" style={GLASS.card}>
+            <p className="font-mono text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: COLORS.dark }}>
+              Est. 2022
+            </p>
           </div>
         </div>
       </div>
 
-      {/* ── Mini photo strip ── */}
       {extraImages && extraImages.length > 0 && (
         <div className={`grid gap-2.5 ${extraImages.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
-          {extraImages.slice(0, 3).map((img, i) => (
+          {extraImages.slice(0, 3).map((img, index) => (
             <motion.div
-              key={i}
+              key={index}
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.28 + i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(26,22,20,0.08)]"
-              style={{ aspectRatio: "4/3" }}
+              transition={{ duration: 0.5, delay: 0.28 + index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="group relative overflow-hidden rounded-[0.95rem]"
+              style={{ ...GLASS.card, aspectRatio: "4/3", background: SOFT_IMAGE_BG_ALT }}
             >
               <Image
                 src={img.src}
@@ -145,7 +136,7 @@ function PhotoPanel({
                 sizes="(max-width:1024px) 33vw, 16vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-[#3ecfb8]/0 transition-colors duration-300 group-hover:bg-[#3ecfb8]/10" />
+              <div className="absolute inset-0 bg-[#9abfe7]/0 transition-colors duration-300 group-hover:bg-[#9abfe7]/12" />
             </motion.div>
           ))}
         </div>
@@ -154,121 +145,118 @@ function PhotoPanel({
   )
 }
 
-// ─── Root ─────────────────────────────────────────────────────────────────────
 export default function AboutHero({ hero }: AboutHeroProps) {
   const words = hero.title.split(" ")
 
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section className="relative overflow-hidden px-4 pb-10 pt-4 sm:px-6 lg:px-8 lg:pb-16" style={{ background: PAGE_BG }}>
       <PastelBlobs />
 
-      {/* Breadcrumb */}
-      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-6 lg:px-10">
-        <Breadcrumb />
-      </div>
-
-      {/* Split grid */}
-      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 py-12 lg:grid-cols-2 lg:gap-16 lg:px-10 lg:py-20">
-
-        {/* ── Left: text ── */}
-        <div>
-          <div
-            className="absolute bottom-[12%] right-1/2 top-[12%] hidden w-px lg:block"
-            style={{
-              background:
-                "linear-gradient(to bottom, transparent, rgba(62,207,184,0.3) 30%, rgba(62,207,184,0.3) 70%, transparent)",
-            }}
-          />
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-5 inline-flex items-center gap-2.5"
-          >
-            <span
-              className="h-2 w-2 rounded-full bg-[#3ecfb8]"
-              style={{ boxShadow: "0 0 0 3px rgba(62,207,184,0.2)" }}
-            />
-            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-[#3ecfb8]">
-              About our company
-            </span>
-          </motion.div>
-
-          <h1
-            className="mb-0 text-[1.9rem] font-bold leading-[1.18] tracking-[-0.02em] text-[#1a1614] sm:text-[2.4rem] lg:text-[3rem]"
-            style={{ fontFamily: "'Cormorant Garamond', 'Georgia', serif" }}
-          >
-            {words.map((word, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55, delay: 0.08 + i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                className="mr-[0.18em] inline-block last:mr-0"
-              >
-                {i === 1 ? (
-                  <em style={{ fontStyle: "italic", color: "#3ecfb8" }}>{word}</em>
-                ) : (
-                  word
-                )}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.46, ease: [0.16, 1, 0.3, 1] }}
-            style={{ originX: 0 }}
-            className="mb-5 mt-4 flex items-center gap-2"
-          >
-            <div className="h-[1.5px] w-11 rounded-full bg-[#1a1614]" />
-            <div className="h-[1.5px] w-[18px] rounded-full bg-[#3ecfb8]" />
-            <div className="h-[5px] w-[5px] rounded-full bg-[#f0788a]" />
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.65, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-9 max-w-[38rem] text-[0.95rem] font-light leading-[1.82] tracking-[0.005em] text-[#5a524c] sm:text-[1rem]"
-          >
-            {hero.description}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap gap-2"
-          >
-            {[
-              { label: "Product Sourcing", cls: "bg-[#1a1614] text-[#fafaf8] shadow-[0_4px_16px_rgba(26,22,20,0.2)]" },
-              { label: "Quality Control", cls: "border border-[rgba(62,207,184,0.35)] bg-[#e6faf6] text-[#0a8a78] shadow-[0_2px_8px_rgba(62,207,184,0.12)]" },
-              { label: "Supply Chain", cls: "border border-[rgba(240,120,138,0.3)] bg-[#fef0f2] text-[#c0384c] shadow-[0_2px_8px_rgba(240,120,138,0.10)]" },
-            ].map(({ label, cls }) => (
-              <span
-                key={label}
-                className={`rounded-full px-[18px] py-2 text-xs font-medium tracking-[0.02em] transition-transform duration-200 hover:-translate-y-px ${cls}`}
-              >
-                {label}
-              </span>
-            ))}
-          </motion.div>
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="px-2 pb-6">
+          <Breadcrumb />
         </div>
 
-        {/* ── Right: photo panel ── */}
-        <div className="relative">
-          <PhotoPanel
-            image={hero.image1}
-            extraImages={[hero.image2].filter(Boolean) as ImageView[]}
-          />
+        <div className="relative px-2 py-2 lg:px-0 lg:py-4">
+          <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <div
+                className="absolute bottom-[12%] right-1/2 top-[12%] hidden w-px lg:block"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent, rgba(154,191,231,0.3) 30%, rgba(154,191,231,0.3) 70%, transparent)",
+                }}
+              />
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="mb-5 inline-flex items-center gap-2.5"
+              >
+                <span
+                  className="h-2 w-2 rounded-full bg-[#182338]"
+                  style={{ boxShadow: "0 0 0 3px rgba(154,191,231,0.18)" }}
+                />
+                <span className="font-body text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: COLORS.soft }}>
+                  About our company
+                </span>
+              </motion.div>
+
+              <h1 className="font-heading mb-0 text-[2rem] leading-[1.1] tracking-tight sm:text-[2.6rem] lg:text-[3.4rem]" style={{ color: COLORS.dark }}>
+                {words.map((word, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, y: 22 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.55, delay: 0.08 + index * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                    className="mr-[0.18em] inline-block last:mr-0"
+                  >
+                    {index === 1 ? (
+                      <em style={{ fontStyle: "normal", color: COLORS.brandNavy }}>{word}</em>
+                    ) : (
+                      word
+                    )}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.46, ease: [0.16, 1, 0.3, 1] }}
+                style={{ originX: 0 }}
+                className="mb-5 mt-4 flex items-center gap-2"
+              >
+                <div className="h-[1.5px] w-11 rounded-full" style={{ background: COLORS.dark }} />
+                <div className="h-[1.5px] w-[18px] rounded-full bg-[#9abfe7]" />
+                <div className="h-[5px] w-[5px] rounded-full bg-[#dbe3ec]" />
+              </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.65, delay: 0.52, ease: [0.16, 1, 0.3, 1] }}
+                className="mb-9 max-w-[38rem] text-[0.98rem] leading-[1.9] tracking-[0.005em] sm:text-[1rem]"
+                style={{ color: COLORS.mid }}
+              >
+                {hero.description}
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-wrap gap-2.5"
+              >
+                {[
+                  { label: "Product Sourcing", style: { ...GLASS.card, color: COLORS.dark } },
+                  { label: "Quality Control", style: { ...GLASS.card, color: COLORS.brandNavy, background: SOFT_IMAGE_BG } },
+                  { label: "Supply Chain", style: { ...GLASS.card, color: COLORS.brandMuted, background: SOFT_IMAGE_BG_ALT } },
+                ].map(({ label, style }) => (
+                  <span
+                    key={label}
+                    className="rounded-[0.9rem] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                    style={style}
+                  >
+                    {label}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="relative">
+              <PhotoPanel
+                image={hero.image1}
+                extraImages={[hero.image2].filter(Boolean) as ImageView[]}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

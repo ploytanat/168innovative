@@ -48,12 +48,12 @@ export default async function ArticlesPage() {
         />
 
         {featured && (
-          <section className="mt-10 mb-20">
+          <section className="mt-10 mb-20 border-t border-[rgba(211,217,225,0.96)] pt-6">
             <Link
               href={`/articles/${featured.slug}`}
-              className="group grid overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(241,251,255,0.84)_54%,rgba(242,247,255,0.78))] shadow-[0_20px_54px_rgba(28,40,66,0.07)] transition-shadow hover:shadow-[0_28px_70px_rgba(28,40,66,0.12)] lg:grid-cols-[1.1fr_1fr]"
+              className="deck-card-soft group grid overflow-hidden rounded-[1.15rem] transition-shadow hover:shadow-[0_22px_44px_rgba(28,40,66,0.1)] lg:grid-cols-[1.1fr_1fr]"
             >
-              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[380px]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] lg:aspect-auto lg:min-h-[360px] lg:rounded-r-none">
                 <Image
                   src={featured.coverImage?.src || "/placeholder.jpg"}
                   alt={featured.coverImage?.alt || featured.title}
@@ -64,8 +64,8 @@ export default async function ArticlesPage() {
                 />
               </div>
 
-              <div className="flex flex-col justify-center p-8 md:p-12">
-                <span className="inline-flex w-fit items-center rounded-full border border-[rgba(15,118,110,0.18)] bg-[var(--color-accent-soft)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
+              <div className="flex flex-col justify-center p-6 md:p-8">
+                <span className="inline-flex w-fit items-center rounded-[0.9rem] border border-[rgba(108,131,162,0.2)] bg-[var(--color-accent-soft)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
                   บทความแนะนำ
                 </span>
 
@@ -99,8 +99,8 @@ export default async function ArticlesPage() {
 
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {others.map((article) => (
-            <Link key={article.id} href={`/articles/${article.slug}`} className="group flex flex-col rounded-[1.6rem] border border-[rgba(205,222,241,0.78)] bg-white/76 p-3 shadow-[0_14px_36px_rgba(28,40,66,0.06)] backdrop-blur">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[1.1rem] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]">
+            <Link key={article.id} href={`/articles/${article.slug}`} className="deck-card group flex flex-col rounded-[1rem] p-2.5">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-[0.95rem] bg-[linear-gradient(145deg,#eef4fb,#f6f9ff)]">
                 {article.coverImage ? (
                   <Image
                     src={article.coverImage.src}
@@ -110,7 +110,7 @@ export default async function ArticlesPage() {
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#eefbff,#f3f8ff)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(145deg,#eef2f6,#f5f7fa)]" />
                 )}
               </div>
 
@@ -133,7 +133,7 @@ export default async function ArticlesPage() {
                 {article.excerpt}
               </p>
 
-              <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2ecfc4,#9ddcf6)] transition-all duration-300 group-hover:w-10" />
+              <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)] transition-all duration-300 group-hover:w-10" />
             </Link>
           ))}
         </div>

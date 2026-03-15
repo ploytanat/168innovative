@@ -3,6 +3,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import {
+  COLORS,
+  NAV_ACTIVE_PILL_STYLE,
+  NAV_SHELL_STYLE,
+} from './designSystem'
+
 export type BreadcrumbItem = {
   label: string
   href?: string
@@ -13,7 +19,8 @@ const ChevronRightIcon = () => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    className="h-3.5 w-3.5 text-[#9aa9bd]"
+    className="h-3.5 w-3.5"
+    style={{ color: COLORS.hint }}
   >
     <path
       strokeLinecap="round"
@@ -63,11 +70,15 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="liquid-glass-pill inline-flex flex-wrap items-center gap-2 rounded-full px-4 py-2.5 text-[12px] font-medium text-[#627189]">
+      <ol
+        className="inline-flex flex-wrap items-center gap-1.5 rounded-full px-2 py-2 text-[11px] font-semibold uppercase tracking-[0.12em]"
+        style={NAV_SHELL_STYLE}
+      >
         <li>
           <Link
             href={isEn ? '/en' : '/'}
-            className="transition-colors hover:text-[#1A2535]"
+            className="rounded-full px-3 py-1.5 transition-colors"
+            style={{ color: COLORS.brandMuted }}
           >
             {isEn ? 'Home' : 'หน้าหลัก'}
           </Link>
@@ -80,13 +91,18 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
             <li key={`${item.label}-${index}`} className="inline-flex items-center gap-2">
               <ChevronRightIcon />
               {isLast ? (
-                <span className="font-semibold text-[#1A2535]" aria-current="page">
+                <span
+                  className="rounded-full px-3 py-1.5"
+                  style={NAV_ACTIVE_PILL_STYLE}
+                  aria-current="page"
+                >
                   {item.label}
                 </span>
               ) : (
                 <Link
                   href={item.href || '#'}
-                  className="transition-colors hover:text-[#1A2535]"
+                  className="rounded-full px-3 py-1.5 transition-colors"
+                  style={{ color: COLORS.brandMuted }}
                 >
                   {item.label}
                 </Link>

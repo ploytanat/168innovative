@@ -240,11 +240,11 @@ export default async function ProductDetailPage({ params }: Props) {
           ]}
         />
 
-        <section className="mt-6 grid grid-cols-1 overflow-hidden rounded-[2.2rem] border border-[rgba(153,184,178,0.22)] bg-[linear-gradient(145deg,rgba(255,255,255,0.95),rgba(247,240,233,0.9)_54%,rgba(230,246,241,0.8))] shadow-[0_28px_80px_rgba(26,37,53,0.07)] lg:grid-cols-2">
-          <div className="bg-[linear-gradient(165deg,rgba(248,241,233,0.76),rgba(231,245,241,0.66))] p-8 lg:p-12">
+        <section className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div className="deck-card-soft rounded-[1.1rem] p-8 lg:p-10">
             <Link
               href={`/en/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] backdrop-blur transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               {category.name}
@@ -256,15 +256,15 @@ export default async function ProductDetailPage({ params }: Props) {
             />
 
             <div className="mt-8 flex items-center gap-3">
-              <div className="h-px flex-1 bg-[rgba(210,200,190,0.9)]" />
-              <span className="rounded-full border border-[rgba(210,200,190,0.9)] bg-white/82 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#728092] backdrop-blur">
+              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
+              <span className="rounded-full border border-[rgba(211,217,225,0.96)] bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#728092]">
                 {product.slug}
               </span>
-              <div className="h-px flex-1 bg-[rgba(210,200,190,0.9)]" />
+              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
             </div>
           </div>
 
-          <div className="flex flex-col justify-center border-t border-[rgba(220,211,201,0.82)] p-8 lg:border-l lg:border-t-0 lg:p-12">
+          <div className="flex flex-col justify-center p-2 lg:p-0">
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
               Product Detail
             </p>
@@ -275,7 +275,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
             <div className="my-6 flex items-center gap-2.5">
               <div className="h-[3px] w-10 rounded-full bg-[var(--color-accent)]" />
-              <div className="h-[3px] w-4 rounded-full bg-[#B9EAE5]" />
+              <div className="h-[3px] w-4 rounded-full bg-[#dbe3ec]" />
             </div>
 
             <p className="text-sm leading-7 text-[var(--color-ink-soft)] md:text-[15px]">
@@ -288,7 +288,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   Specifications
                 </p>
 
-                <div className="overflow-hidden rounded-[1.4rem] border border-[rgba(221,211,201,0.82)] bg-white/76 backdrop-blur">
+                <div className="overflow-hidden rounded-[1rem] border border-[rgba(211,217,225,0.92)] bg-white">
                   {product.specs.map((spec, index) => (
                     <div
                       key={index}
@@ -311,7 +311,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/en/contact?product=${encodeURIComponent(product.name)}`}
-                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1.1rem] px-7 py-4 text-sm font-semibold active:scale-[0.98]"
+                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1rem] px-7 py-4 text-sm font-semibold active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 Request a Quote
@@ -322,7 +322,7 @@ export default async function ProductDetailPage({ params }: Props) {
               {TRUST_BADGES.map(({ icon: Icon, text }) => (
                 <div
                   key={text}
-                  className="rounded-[1rem] border border-[rgba(221,211,201,0.82)] bg-white/72 p-3 text-center backdrop-blur"
+                  className="rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white p-3 text-center"
                 >
                   <Icon
                     className="mx-auto h-4 w-4 text-[var(--color-accent)]"
@@ -355,7 +355,7 @@ export default async function ProductDetailPage({ params }: Props) {
           />
         ) : null}
 
-        <section className="mt-8 rounded-[2rem] border border-[rgba(153,184,178,0.2)] bg-[linear-gradient(145deg,rgba(255,255,255,0.95),rgba(248,241,235,0.88)_56%,rgba(230,246,241,0.78))] px-6 py-8 shadow-[0_24px_64px_rgba(26,37,53,0.06)]">
+        <section className="deck-card-soft mt-8 rounded-[1.1rem] px-6 py-8">
           <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
             {supportCopy.eyebrow}
           </p>
@@ -367,7 +367,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <div className="mt-6 rounded-[1.5rem] border border-[rgba(221,211,201,0.82)] bg-white/74 p-5 backdrop-blur">
+          <div className="deck-card mt-6 rounded-[1rem] p-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7E8C9B]">
               {supportCopy.bulletsTitle}
             </p>
@@ -404,7 +404,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <Link
                 href={`/en/categories/${slug}`}
                 prefetch={false}
-                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(221,211,201,0.88)] bg-white/82 px-4 py-2.5 text-sm font-semibold text-[#637284] backdrop-blur transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:flex"
+                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-sm font-semibold text-[#637284] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:flex"
               >
                 View All <ChevronRight size={14} />
               </Link>
@@ -416,9 +416,9 @@ export default async function ProductDetailPage({ params }: Props) {
                   key={item.id}
                   href={`/en/categories/${slug}/${item.slug}`}
                   prefetch={false}
-                  className="group overflow-hidden rounded-[1.6rem] border border-[rgba(221,211,201,0.82)] bg-white/86 p-2 shadow-[0_14px_36px_rgba(26,37,53,0.06)] backdrop-blur transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_55px_rgba(15,23,42,0.12)]"
+                  className="deck-card group overflow-hidden rounded-[1rem] p-2 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_14px_28px_rgba(32,36,43,0.06)]"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[linear-gradient(160deg,#f8f1e9,#e6f4f0)]">
+                  <div className="relative aspect-square overflow-hidden rounded-[0.9rem] bg-[linear-gradient(160deg,#eef2f6,#e7edf4)]">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt}

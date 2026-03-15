@@ -3,6 +3,12 @@
 import Image from 'next/image'
 import { useState, useEffect, useCallback } from 'react'
 import { X, ZoomIn } from 'lucide-react'
+import {
+  COLORS,
+  GLASS,
+  PAGE_BG,
+  SOFT_IMAGE_BG_ALT,
+} from '@/app/components/ui/designSystem'
 
 interface Props {
   src: string
@@ -34,8 +40,8 @@ export default function ProductImageGallery({ src, alt }: Props) {
         <button
           onClick={() => setIsOpen(true)}
           aria-label="ขยายรูปภาพสินค้า"
-          className="group relative w-full aspect-square cursor-zoom-in overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(145deg,#eefbff,#f3f8ff)] shadow-[0_18px_40px_rgba(28,40,66,0.08)] transition-all hover:shadow-[0_26px_55px_rgba(28,40,66,0.12)] active:scale-[0.98]"
-          style={{ maxWidth: 'min(100%, 28rem)' }}
+          className="group relative w-full aspect-square cursor-zoom-in overflow-hidden rounded-[1.1rem] transition-all hover:shadow-[0_14px_28px_rgba(32,36,43,0.06)] active:scale-[0.98]"
+          style={{ ...GLASS.card, background: SOFT_IMAGE_BG_ALT, maxWidth: 'min(100%, 28rem)' }}
         >
           <Image
             src={src}
@@ -49,8 +55,11 @@ export default function ProductImageGallery({ src, alt }: Props) {
           {/* Overlay & Icon */}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_40%,rgba(28,40,66,0.08)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           
-          <div className="absolute bottom-6 right-6 flex h-12 w-12 translate-y-2 items-center justify-center rounded-full border border-[rgba(205,222,241,0.92)] bg-white/90 opacity-0 shadow-lg backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <ZoomIn className="h-6 w-6 text-[var(--color-ink)]" />
+          <div
+            className="absolute bottom-6 right-6 flex h-12 w-12 translate-y-2 items-center justify-center rounded-[0.85rem] opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+            style={GLASS.card}
+          >
+            <ZoomIn className="h-6 w-6" style={{ color: COLORS.dark }} />
           </div>
         </button>
       </div>
@@ -58,17 +67,18 @@ export default function ProductImageGallery({ src, alt }: Props) {
       {/* Modal - ใช้ Portal จะดีที่สุด แต่ในเบื้องต้นปรับปรุง Logic เดิมก่อน */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[radial-gradient(circle_at_top,rgba(157,220,246,0.2),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(248,167,184,0.18),transparent_28%),rgba(20,26,42,0.94)] p-4 backdrop-blur-sm animate-in fade-in duration-300"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm animate-in fade-in duration-300"
           onClick={() => setIsOpen(false)}
           role="dialog"
           aria-modal="true"
-          style={{ width: '100dvw', height: '100dvh' }}
+          style={{ width: '100dvw', height: '100dvh', background: PAGE_BG }}
         >
           {/* ปุ่มปิด (ปรับให้กดง่ายขึ้นและลบ text 'x' ส่วนเกินออก) */}
           <button
-            className="absolute top-6 right-6 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-all z-[110] min-w-[48px] min-h-[48px] flex items-center justify-center"
+            className="absolute right-6 top-6 z-[110] flex min-h-[48px] min-w-[48px] items-center justify-center rounded-[0.85rem] p-2 transition-all"
             onClick={() => setIsOpen(false)}
             aria-label="ปิดหน้าต่างขยายรูป"
+            style={{ ...GLASS.card, color: COLORS.mid }}
           >
             <X size={32} />
           </button>

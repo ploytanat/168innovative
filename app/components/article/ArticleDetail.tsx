@@ -75,19 +75,18 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
   const categoryLabel = article.category || copy.noCategory
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,#f7fbfb_0%,#ffffff_22%,#ffffff_100%)]">
+    <main className="min-h-screen bg-transparent">
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10">
         <Link
           href={listHref}
-          className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          className="inline-flex items-center gap-2 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
         >
           <ArrowLeft size={14} />
           {copy.backToList}
         </Link>
 
-        <section className="liquid-glass-panel relative mt-6 rounded-[2rem]">
-          <div className="absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top_left,rgba(20,184,166,0.18),transparent_55%),radial-gradient(circle_at_top_right,rgba(245,158,11,0.14),transparent_45%)]" />
-          <div className="relative grid gap-10 px-6 py-8 lg:grid-cols-[minmax(0,1.2fr)_360px] lg:px-10 lg:py-10">
+        <section className="mt-6 border-t border-[rgba(211,217,225,0.96)] pt-8">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_360px]">
             <div>
               <p className="eyebrow-label">
                 {copy.eyebrow}
@@ -102,30 +101,30 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
               ) : null}
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#55667d]">
                   <CalendarDays size={14} />
                   {publishedAt}
                 </div>
-                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#244f51]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#55667d]">
                   <BookOpen size={14} />
                   {locale === "th" ? `อ่าน ${readingTime} นาที` : `${readingTime} min read`}
                 </div>
-                <div className="liquid-glass-pill inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#8b5414]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#697384]">
                   <Tag size={14} />
                   {categoryLabel}
                 </div>
               </div>
             </div>
 
-            <aside className="glass-panel rounded-[1.75rem] p-6">
+            <aside className="deck-card rounded-[1rem] p-6">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
+                <div className="deck-card-soft rounded-[0.95rem] p-4">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.published}
                   </p>
                   <p className="mt-3 text-sm font-medium text-[#1A2535]">{publishedAt}</p>
                 </div>
-                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
+                <div className="deck-card-soft rounded-[0.95rem] p-4">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.readingTime}
                   </p>
@@ -133,7 +132,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                     {locale === "th" ? `${readingTime} นาที` : `${readingTime} minutes`}
                   </p>
                 </div>
-                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
+                <div className="deck-card-soft rounded-[0.95rem] p-4">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.author}
                   </p>
@@ -141,7 +140,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                     {article.authorName || "168 Innovative"}
                   </p>
                 </div>
-                <div className="glass-panel rounded-[1.25rem] p-4 shadow-sm">
+                <div className="deck-card-soft rounded-[0.95rem] p-4">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
                     {copy.tags}
                   </p>
@@ -150,13 +149,13 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                       article.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="liquid-glass-pill rounded-full px-3 py-1.5 text-[13px] font-medium text-[#0F766E]"
+                          className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 text-[13px] font-medium text-[#697384]"
                         >
                           {tag.name}
                         </span>
                       ))
                     ) : (
-                      <span className="liquid-glass-pill rounded-full px-3 py-1.5 text-[13px] font-medium text-[#46576f]">
+                      <span className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 text-[13px] font-medium text-[#46576f]">
                         {categoryLabel}
                       </span>
                     )}
@@ -168,7 +167,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
         </section>
 
         {article.coverImage ? (
-          <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[2rem] border border-[#DDE7EE] bg-[#EAF1F4] shadow-[0_24px_70px_rgba(15,23,42,0.12)]">
+          <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[1.1rem] border border-[#DDE7EE] bg-[#EAF1F4] shadow-[0_12px_26px_rgba(32,36,43,0.06)]">
             <Image
               src={article.coverImage.src}
               alt={article.coverImage.alt || article.title}
@@ -183,7 +182,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
 
         <section className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
-            <div className="overflow-hidden rounded-[2rem] border border-[#E3EAF1] bg-white shadow-[0_24px_70px_rgba(15,23,42,0.06)]">
+            <div className="overflow-hidden rounded-[1.1rem] border border-[#E3EAF1] bg-white shadow-[0_12px_26px_rgba(32,36,43,0.05)]">
               <div className="border-b border-[#EEF3F6] px-6 py-5 md:px-10 md:py-6">
                 <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   <Clock size={14} />
@@ -204,7 +203,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
             </div>
 
             {internalLinks ? (
-              <section className="rounded-[2rem] border border-[#E7E1D9] bg-[#FCFBF8] px-6 py-8 shadow-sm md:px-8">
+              <section className="rounded-[1.1rem] border border-[#E3E8EE] bg-[#F7F8FA] px-6 py-8 shadow-sm md:px-8">
                 <div className="max-w-3xl">
                   <p className="eyebrow-label text-[12px]">
                     {copy.internalLinks}
@@ -221,7 +220,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                   {internalLinks.groups.map((group) => (
                     <div
                       key={group.title}
-                      className="rounded-[1.5rem] border border-[#E7E1D9] bg-white p-5"
+                      className="rounded-[1rem] border border-[#E3E8EE] bg-white p-5"
                     >
                       <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-600">
                         {group.title}
@@ -252,7 +251,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
 
           <aside className="space-y-6">
             <div className="xl:sticky xl:top-28">
-              <div className="rounded-[1.75rem] border border-[#DCE6ED] bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)]">
+              <div className="deck-card rounded-[1rem] p-6">
                 <p className="eyebrow-label">
                   {copy.category}
                 </p>

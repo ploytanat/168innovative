@@ -2,6 +2,14 @@ import Image from "next/image"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { WhyItemView } from "@/app/lib/types/view"
+import {
+  COLORS,
+  EYEBROW_PILL_STYLE,
+  GLASS,
+  SECTION_BORDER,
+  SOFT_IMAGE_BG,
+  SOFT_IMAGE_BG_ALT,
+} from "@/app/components/ui/designSystem"
 
 interface WhyChooseUsProps {
   items: WhyItemView[]
@@ -12,65 +20,74 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   if (!items.length) return null
 
   return (
-    <section className="relative overflow-hidden bg-transparent py-14 sm:py-16 md:py-24">
-      <div className="absolute inset-0">
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/75 to-transparent" />
-        <div className="absolute left-[-8rem] top-12 h-56 w-56 rounded-full bg-[#edf7f3]/80 blur-3xl" />
-        <div className="absolute right-[-5rem] top-20 h-48 w-48 rounded-full bg-[#eef3fb]/80 blur-3xl" />
-      </div>
-
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-heading mb-10 text-center text-xl font-semibold tracking-tight text-[var(--color-ink)] sm:mb-12 sm:text-2xl md:text-3xl">
-          {uiText.whyChooseUs.title[locale]}
-        </h2>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4 lg:gap-8">
-          {items.map((item, index) => (
-            <div
-              key={index}
-              className="group relative flex flex-col items-center overflow-hidden rounded-3xl border border-[rgba(205,222,241,0.76)] bg-[linear-gradient(145deg,rgba(255,255,255,0.94),rgba(246,250,255,0.9),rgba(244,248,252,0.88))] px-5 py-6 text-center shadow-[0_16px_36px_rgba(28,40,66,0.08)] transition-all duration-300 sm:p-7 lg:p-8 lg:hover:-translate-y-2 lg:hover:shadow-[0_22px_48px_rgba(28,40,66,0.12)]"
-            >
-              <div className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#2ecfc4]/45 to-transparent" />
-
-              <div className="mb-4 flex h-16 w-16 items-center justify-center sm:mb-5 sm:h-18 sm:w-18">
-                {item.image?.src ? (
-                  <div className="relative h-[72px] w-[72px]">
-                    <Image
-                      src={item.image.src}
-                      alt={item.image.alt || item.title}
-                      fill
-                      sizes="72px"
-                      className="object-contain transition-transform duration-300 lg:group-hover:scale-110"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center rounded-2xl bg-[#f7fbff] text-[#b9c4de]">
-                    <svg
-                      className="h-8 w-8"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-
-              <h3 className="mb-2 text-sm font-bold text-[var(--color-ink)] sm:text-base md:text-lg">
-                {item.title}
-              </h3>
-
-              <p className="text-xs leading-relaxed text-[var(--color-ink-soft)] sm:text-sm">
-                {item.description}
-              </p>
+    <section className="relative overflow-hidden py-14 sm:py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="border-t pt-6" style={{ borderColor: SECTION_BORDER }}>
+          <div className="mb-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+            <div>
+              <p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE}>Core Strengths</p>
+              <h2 className="font-heading mt-3 text-[clamp(1.9rem,3vw,3.2rem)] leading-[1.04]" style={{ color: COLORS.dark }}>
+                {uiText.whyChooseUs.title[locale]}
+              </h2>
             </div>
-          ))}
+            <p className="max-w-2xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: COLORS.mid }}>
+              {locale === "th"
+                ? "จัดข้อมูลความแข็งแรงของทีมให้อยู่ในภาษาภาพที่คมขึ้น อ่านง่ายขึ้น และมีจังหวะ light/dark แบบ deck presentation"
+                : "A cleaner light-dark presentation of the capabilities that support sourcing, communication, and production."}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {items.map((item, index) => {
+              const iconBg = index % 2 === 0 ? SOFT_IMAGE_BG : SOFT_IMAGE_BG_ALT
+
+              return (
+                <div
+                  key={index}
+                  className="group relative overflow-hidden rounded-[0.95rem] p-5 sm:p-6"
+                  style={index % 3 === 0 ? GLASS.secondary : index % 3 === 1 ? GLASS.stats : GLASS.card}
+                >
+                  <div
+                    className="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,rgba(52,54,59,0.84),rgba(95,143,216,0.82),rgba(223,228,234,0.96))]"
+                  />
+
+                  <div
+                    className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-[0.95rem] border"
+                    style={{ ...GLASS.card, background: iconBg }}
+                  >
+                    {item.image?.src ? (
+                      <div className="relative h-10 w-10">
+                        <Image
+                          src={item.image.src}
+                          alt={item.image.alt || item.title}
+                          fill
+                          sizes="40px"
+                          className="object-contain transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                        />
+                      </svg>
+                    )}
+                  </div>
+
+                  <h3 className="text-lg font-semibold leading-tight" style={{ color: COLORS.dark }}>
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7" style={{ color: COLORS.mid }}>
+                    {item.description}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

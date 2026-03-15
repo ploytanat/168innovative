@@ -6,351 +6,427 @@ import { uiText } from "@/app/lib/i18n/ui"
 import { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
-const PRIMARY_META = {
-  badge: { th: "สินค้าเด่น", en: "Featured Pick" },
-  accentText: "#1e6645",
-  accentBg: "#ddf0ea",
-  imageBg: "linear-gradient(145deg, #edf8f2 0%, #fbfdfc 100%)",
-  glow: "rgba(125, 196, 165, 0.24)",
-}
+// ─── Design system ────────────────────────────────────────────────────────────
+//
+//  Background gradient (same as HeroCarousel):
+//    radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc, transparent 65%),
+//    radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8, transparent 60%),
+//    radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 → #d4b8cc, transparent 65%),
+//    radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3, transparent 70%),
+//    #dde4ec
+//
+//  ALL cards use glass/frost treatment — rgba(255,255,255,α) + backdrop-blur.
+//  No dark islands. Cards feel like frosted panels floating on the gradient.
+//
+//  Card tiers:
+//    Primary showcase  → glass 0.58 opacity, white border 0.80, strong blur
+//    Secondary card    → glass 0.70 opacity, white border 0.80, medium blur
+//    Stats / snapshot  → glass 0.42 opacity, white border 0.65, subtle blur
+//    Product grid card → glass 0.52 opacity, white border 0.72
+//
+//  Ink:
+//    --ink-dark:  #1a2232
+//    --ink-mid:   #3a4a5c
+//    --ink-soft:  #5a6a7c
+//    --ink-hint:  #8a9aac
+//  Accent:
+//    linear-gradient(90deg, #3a7bd5, #2ab8b0)  (divider + CTA button only)
 
-const SECONDARY_META = {
-  badge: { th: "แนะนำเพิ่มเติม", en: "Also Recommended" },
-  accentText: "#7a4a1e",
-  accentBg: "#f2e9dc",
-  imageBg: "linear-gradient(145deg, #f8f0e5 0%, #fdfbf8 100%)",
-  glow: "rgba(205, 160, 111, 0.22)",
-}
+const PAGE_BG = [
+  "radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc 0%, transparent 65%)",
+  "radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8 0%, transparent 60%)",
+  "radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 0%, #d4b8cc 30%, transparent 65%)",
+  "radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3 0%, transparent 70%)",
+  "#dde4ec",
+].join(", ")
 
-const SECTION_COPY = {
-  eyebrow: {
-    th: "Product Focus",
-    en: "Product Focus",
+// Glass card presets
+const GLASS = {
+  primary: {
+    background: "rgba(255,255,255,0.58)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+    border: "1px solid rgba(255,255,255,0.80)",
+    boxShadow: "0 8px 32px rgba(30,40,60,0.10), inset 0 1px 0 rgba(255,255,255,0.90)",
   },
-  summary: {
-    th: "คัดสินค้าบรรจุภัณฑ์เด่นให้ดูง่ายขึ้นในทุกหน้าจอ พร้อมลำดับความสำคัญที่ชัดและกดดูรายละเอียดได้เร็ว",
-    en: "A cleaner, faster product showcase with clearer hierarchy and stronger visibility across every screen size.",
+  secondary: {
+    background: "rgba(255,255,255,0.70)",
+    backdropFilter: "blur(14px)",
+    WebkitBackdropFilter: "blur(14px)",
+    border: "1px solid rgba(255,255,255,0.82)",
+    boxShadow: "0 4px 20px rgba(30,40,60,0.08), inset 0 1px 0 rgba(255,255,255,0.95)",
   },
-  spoutSummary: {
-    th: "รวมจุกและวาล์วสำหรับงานซองบรรจุอาหาร เครื่องดื่ม และงาน OEM ที่ต้องการภาพลักษณ์พร้อมขาย",
-    en: "A focused selection of spouts and valves for food, beverage, and OEM pouch packaging.",
+  stats: {
+    background: "rgba(255,255,255,0.42)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    border: "1px solid rgba(255,255,255,0.65)",
+    boxShadow: "0 4px 16px rgba(30,40,60,0.06), inset 0 1px 0 rgba(255,255,255,0.80)",
   },
-  collectionSnapshot: {
-    th: "ภาพรวมคอลเลกชัน",
-    en: "Collection Snapshot",
-  },
-  curatedItems: {
-    th: "รายการคัดสรร",
-    en: "Curated items",
-  },
-  productGroups: {
-    th: "กลุ่มสินค้า",
-    en: "Product groups",
-  },
-  additionalProducts: {
-    th: "สินค้าเพิ่มเติม",
-    en: "More Products",
-  },
-  additionalSummary: {
-    th: "เลือกดูสินค้าอื่นที่พร้อมต่อยอดเป็นคอลเลกชันเดียวกัน",
-    en: "Explore the rest of the collection in a cleaner, easier-to-scan grid.",
-  },
-  viewProduct: {
-    th: "ดูรายละเอียดสินค้า",
-    en: "View product",
-  },
-  remainingCount: {
-    th: "รายการเพิ่มเติม",
-    en: "more items",
-  },
-  curatedCount: {
-    th: "รายการแนะนำ",
-    en: "featured items",
+  card: {
+    background: "rgba(255,255,255,0.52)",
+    backdropFilter: "blur(10px)",
+    WebkitBackdropFilter: "blur(10px)",
+    border: "1px solid rgba(255,255,255,0.72)",
+    boxShadow: "0 4px 16px rgba(30,40,60,0.07), inset 0 1px 0 rgba(255,255,255,0.88)",
   },
 } as const
 
-type Locale = "th" | "en"
+const PRIMARY_META = {
+  badge:     { th: "สินค้าเด่น",       en: "Featured Pick" },
+  accentText: "#3a4a5c",
+  accentBg:   "rgba(30,40,60,0.07)",
+  imageBg:    "radial-gradient(circle at 82% 16%,rgba(159,179,204,0.28) 0%,transparent 26%), linear-gradient(145deg,rgba(255,255,255,0.60),rgba(232,240,250,0.40))",
+  glow:       "rgba(159,179,204,0.25)",
+}
+
+const SECONDARY_META = {
+  badge:     { th: "แนะนำเพิ่มเติม",   en: "Also Recommended" },
+  accentText: "#3a4a5c",
+  accentBg:   "rgba(30,40,60,0.07)",
+  imageBg:    "radial-gradient(circle at 82% 16%,rgba(159,179,204,0.20) 0%,transparent 24%), linear-gradient(145deg,rgba(255,255,255,0.70),rgba(232,240,250,0.50))",
+  glow:       "rgba(159,179,204,0.18)",
+}
+
+const SECTION_COPY = {
+  eyebrow:            { th: "Product Focus",                                                                           en: "Product Focus" },
+  summary:            { th: "คัดสินค้าบรรจุภัณฑ์เด่นให้ดูง่ายขึ้นในทุกหน้าจอ พร้อมลำดับความสำคัญที่ชัดและกดดูรายละเอียดได้เร็ว", en: "A cleaner, faster product showcase with clearer hierarchy and stronger visibility across every screen size." },
+  spoutSummary:       { th: "รวมจุกและวาล์วสำหรับงานซองบรรจุอาหาร เครื่องดื่ม และงาน OEM ที่ต้องการภาพลักษณ์พร้อมขาย",              en: "A focused selection of spouts and valves for food, beverage, and OEM pouch packaging." },
+  collectionSnapshot: { th: "ภาพรวมคอลเลกชัน",                                                                        en: "Collection Snapshot" },
+  curatedItems:       { th: "รายการคัดสรร",                                                                             en: "Curated items" },
+  productGroups:      { th: "กลุ่มสินค้า",                                                                              en: "Product groups" },
+  additionalProducts: { th: "สินค้าเพิ่มเติม",                                                                          en: "More Products" },
+  additionalSummary:  { th: "เลือกดูสินค้าอื่นที่พร้อมต่อยอดเป็นคอลเลกชันเดียวกัน",                                     en: "Explore the rest of the collection in a cleaner, easier-to-scan grid." },
+  viewProduct:        { th: "ดูรายละเอียดสินค้า",                                                                        en: "View product" },
+  remainingCount:     { th: "รายการเพิ่มเติม",                                                                          en: "more items" },
+  curatedCount:       { th: "รายการแนะนำ",                                                                              en: "featured items" },
+} as const
+
+type Locale       = "th" | "en"
 type ShowcaseMeta = typeof PRIMARY_META
 
-interface ProductMarqueeProps {
-  items: ProductView[]
-  locale: Locale
-}
+interface ProductMarqueeProps { items: ProductView[]; locale: Locale }
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   if (!items.length) return null
 
-  const isSpoutShowcase = items.every((item) => item.categorySlug === "spout")
+  const isSpoutShowcase = items.every(i => i.categorySlug === "spout")
   const { primaryItem, secondaryItem, gridItems } = resolveShowcaseItems(items)
   const visibleGridItems = gridItems.slice(0, 8)
-  const categoryCount = new Set(items.map((item) => item.categorySlug)).size
+  const categoryCount    = new Set(items.map(i => i.categorySlug)).size
 
   if (!primaryItem) return null
 
-  const ctaHref = isSpoutShowcase ? "/categories/spout" : "/categories"
-  const ctaLabel = isSpoutShowcase
-    ? uiText.viewAllSpoutProducts[locale]
-    : uiText.viewAllProducts[locale]
-  const sectionTitle = isSpoutShowcase
-    ? uiText.spoutProducts[locale]
-    : uiText.featuredProducts[locale]
-  const sectionSummary = isSpoutShowcase
-    ? SECTION_COPY.spoutSummary[locale]
-    : SECTION_COPY.summary[locale]
+  const ctaHref        = isSpoutShowcase ? "/categories/spout" : "/categories"
+  const ctaLabel       = isSpoutShowcase ? uiText.viewAllSpoutProducts[locale] : uiText.viewAllProducts[locale]
+  const sectionTitle   = isSpoutShowcase ? uiText.spoutProducts[locale]         : uiText.featuredProducts[locale]
+  const sectionSummary = isSpoutShowcase ? SECTION_COPY.spoutSummary[locale]    : SECTION_COPY.summary[locale]
 
   return (
-    <section className="relative overflow-hidden py-14 sm:py-16 lg:py-24">
-      <div className="pointer-events-none absolute left-0 top-8 h-40 w-40 rounded-full bg-[rgba(46,207,196,0.1)] blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[rgba(184,200,242,0.14)] blur-3xl" />
+    <section
+      className="relative overflow-hidden py-14 sm:py-16 lg:py-24"
+      style={{ background: PAGE_BG }}
+    >
+      {/* Top edge shimmer */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)" }}
+      />
 
       <div className="mx-auto container px-6">
-        <div className="relative overflow-hidden rounded-[2.2rem] border border-[rgba(205,222,241,0.78)] bg-[linear-gradient(155deg,rgba(255,255,255,0.95),rgba(246,251,255,0.88)_48%,rgba(242,248,255,0.8)_100%)] px-5 py-6 shadow-[0_24px_65px_rgba(28,40,66,0.08)] sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(46,207,196,0.12),transparent_24%),radial-gradient(circle_at_85%_18%,rgba(184,200,242,0.18),transparent_22%)]" />
+        <div className="relative border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.55)" }}>
 
-          <div className="relative">
-            <div className="mb-8 flex flex-col gap-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-              <div className="max-w-2xl">
-                <p className="eyebrow-label font-body">
-                  {SECTION_COPY.eyebrow[locale]}
-                </p>
-                <h2 className="font-heading mt-3 text-[clamp(2rem,4vw,3.6rem)] leading-[1.05] tracking-tight text-[var(--color-ink)]">
-                  {sectionTitle}
-                </h2>
-                <p className="font-body mt-4 max-w-xl text-sm leading-7 text-[var(--color-ink-soft)] sm:text-base sm:leading-8">
-                  {sectionSummary}
-                </p>
+          {/* ── Section header ─────────────────────────────────────── */}
+          <div className="mb-8 flex flex-col gap-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              {/* Eyebrow pill */}
+              <span
+                className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
+                style={{
+                  background: "rgba(255,255,255,0.55)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.75)",
+                  color: "#3a4a5c",
+                }}
+              >
+                {SECTION_COPY.eyebrow[locale]}
+              </span>
+
+              <h2
+                className="font-heading mt-4 text-[clamp(2rem,4vw,3.6rem)] leading-[1.05] tracking-tight"
+                style={{ color: "#1a2232" }}
+              >
+                {sectionTitle}
+              </h2>
+
+              {/* Accent divider */}
+              <div
+                className="my-5 h-[3px] w-12 rounded-full"
+                style={{ background: "linear-gradient(90deg,#3a7bd5,#2ab8b0)" }}
+              />
+
+              <p className="max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: "#3a4a5c" }}>
+                {sectionSummary}
+              </p>
+            </div>
+
+            {/* Right cluster */}
+            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+              <div
+                className="rounded-xl px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em]"
+                style={{
+                  background: "rgba(255,255,255,0.52)",
+                  backdropFilter: "blur(8px)",
+                  WebkitBackdropFilter: "blur(8px)",
+                  border: "1px solid rgba(255,255,255,0.72)",
+                  color: "#3a4a5c",
+                }}
+              >
+                {items.length} {SECTION_COPY.curatedCount[locale]}
               </div>
 
-              <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-                <div className="liquid-glass-pill rounded-full px-4 py-2.5 font-body text-[12px] font-semibold uppercase tracking-[0.14em] text-[#5c6c85]">
-                  {items.length} {SECTION_COPY.curatedCount[locale]}
+              <Link
+                href={withLocalePath(ctaHref, locale)}
+                className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] text-white transition-opacity hover:opacity-90"
+                style={{
+                  background: "linear-gradient(135deg,#3a7bd5,#2ab8b0)",
+                  boxShadow: "0 4px 16px rgba(58,123,213,0.25)",
+                }}
+              >
+                <span>{ctaLabel}</span>
+                <ArrowRightIcon />
+              </Link>
+            </div>
+          </div>
+
+          {/* ── Showcase grid ──────────────────────────────────────── */}
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:gap-5">
+
+            <ShowcaseCard
+              item={primaryItem} locale={locale} href={getProductHref(primaryItem, locale)}
+              meta={PRIMARY_META} actionLabel={SECTION_COPY.viewProduct[locale]} priority variant="primary"
+            />
+
+            <div className={`grid gap-4 ${secondaryItem ? "sm:grid-cols-2 xl:grid-cols-1" : ""}`}>
+              {secondaryItem && (
+                <ShowcaseCard
+                  item={secondaryItem} locale={locale} href={getProductHref(secondaryItem, locale)}
+                  meta={SECONDARY_META} actionLabel={SECTION_COPY.viewProduct[locale]} variant="secondary"
+                />
+              )}
+
+              {/* Stats / snapshot — glass tier 3 */}
+              <div className="relative overflow-hidden rounded-2xl p-5 sm:p-6" style={GLASS.stats}>
+                {/* Top shimmer */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px"
+                  style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.90),transparent)" }}
+                />
+
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-[0.20em]"
+                  style={{ color: "#5a6a7c" }}
+                >
+                  {SECTION_COPY.collectionSnapshot[locale]}
+                </p>
+
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <StatCard value={items.length}  label={SECTION_COPY.curatedItems[locale]} />
+                  <StatCard value={categoryCount} label={SECTION_COPY.productGroups[locale]} />
                 </div>
+
+                <p className="mt-5 text-sm leading-7" style={{ color: "#3a4a5c" }}>
+                  {gridItems.length > 0
+                    ? locale === "th"
+                      ? `แสดงสินค้าเพิ่มเติม ${visibleGridItems.length} รายการด้านล่าง พร้อมทางลัดไปดูคอลเลกชันทั้งหมดได้ทันที`
+                      : `Showing ${visibleGridItems.length} additional products below, with a direct path to the full collection.`
+                    : locale === "th"
+                      ? "เลือกดูรายละเอียดสินค้าเด่นหรือเปิดดูทั้งคอลเลกชันเพื่อไปยังหน้าสินค้าเต็มรูปแบบ"
+                      : "Open a featured product or jump into the full collection for the complete catalog view."}
+                </p>
+
                 <Link
                   href={withLocalePath(ctaHref, locale)}
-                  className="btn-primary-soft group inline-flex items-center gap-2 rounded-full px-5 py-3 font-body text-[12px] font-semibold uppercase tracking-[0.12em]"
+                  className="group mt-6 inline-flex items-center gap-2 border-b pb-1 text-[13px] font-semibold uppercase tracking-[0.12em] transition-opacity hover:opacity-70"
+                  style={{ borderColor: "rgba(30,40,60,0.20)", color: "#2a3a52" }}
                 >
                   <span>{ctaLabel}</span>
                   <ArrowRightIcon />
                 </Link>
               </div>
             </div>
+          </div>
 
-            <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:gap-5">
-              <ShowcaseCard
-                item={primaryItem}
-                locale={locale}
-                href={getProductHref(primaryItem, locale)}
-                meta={PRIMARY_META}
-                actionLabel={SECTION_COPY.viewProduct[locale]}
-                priority
-                variant="primary"
-              />
-
-              <div className={`grid gap-4 ${secondaryItem ? "sm:grid-cols-2 xl:grid-cols-1" : ""}`}>
-                {secondaryItem ? (
-                  <ShowcaseCard
-                    item={secondaryItem}
-                    locale={locale}
-                    href={getProductHref(secondaryItem, locale)}
-                    meta={SECONDARY_META}
-                    actionLabel={SECTION_COPY.viewProduct[locale]}
-                    variant="secondary"
-                  />
-                ) : null}
-
-                <div className="relative overflow-hidden rounded-[1.8rem] border border-white/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(246,250,255,0.82)_100%)] p-5 shadow-[0_18px_44px_rgba(28,40,66,0.08)] sm:p-6">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(46,207,196,0.12),transparent_28%)]" />
-                  <div className="relative">
-                    <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6f8099]">
-                      {SECTION_COPY.collectionSnapshot[locale]}
-                    </p>
-
-                    <div className="mt-5 grid grid-cols-2 gap-3">
-                      <StatCard value={items.length} label={SECTION_COPY.curatedItems[locale]} />
-                      <StatCard value={categoryCount} label={SECTION_COPY.productGroups[locale]} />
-                    </div>
-
-                    {gridItems.length > 0 ? (
-                      <p className="font-body mt-5 text-sm leading-7 text-[var(--color-ink-soft)]">
-                        {locale === "th"
-                          ? `แสดงสินค้าเพิ่มเติม ${visibleGridItems.length} รายการด้านล่าง พร้อมทางลัดไปดูคอลเลกชันทั้งหมดได้ทันที`
-                          : `Showing ${visibleGridItems.length} additional products below, with a direct path to the full collection.`}
-                      </p>
-                    ) : (
-                      <p className="font-body mt-5 text-sm leading-7 text-[var(--color-ink-soft)]">
-                        {locale === "th"
-                          ? "เลือกดูรายละเอียดสินค้าเด่นหรือเปิดดูทั้งคอลเลกชันเพื่อไปยังหน้าสินค้าเต็มรูปแบบ"
-                          : "Open a featured product or jump into the full collection for the complete catalog view."}
-                      </p>
-                    )}
-
-                    <Link
-                      href={withLocalePath(ctaHref, locale)}
-                      className="group mt-6 inline-flex items-center gap-2 border-b border-[#b7c8dd] pb-1 font-body text-[13px] font-semibold uppercase tracking-[0.12em] text-[#51627c] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-ink)]"
-                    >
-                      <span>{ctaLabel}</span>
-                      <ArrowRightIcon />
-                    </Link>
-                  </div>
+          {/* ── Additional product grid ─────────────────────────────── */}
+          {visibleGridItems.length > 0 && (
+            <div
+              className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8"
+              style={{ borderColor: "rgba(255,255,255,0.55)" }}
+            >
+              <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p
+                    className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+                    style={{ color: "#5a6a7c" }}
+                  >
+                    {SECTION_COPY.additionalProducts[locale]}
+                  </p>
+                  <h3
+                    className="font-heading mt-2 text-lg tracking-tight sm:text-[1.6rem]"
+                    style={{ color: "#1a2232" }}
+                  >
+                    {SECTION_COPY.additionalSummary[locale]}
+                  </h3>
                 </div>
+                <p className="text-sm" style={{ color: "#5a6a7c" }}>
+                  {visibleGridItems.length} {SECTION_COPY.remainingCount[locale]}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+                {visibleGridItems.map(item => (
+                  <ProductCard key={item.id} item={item} locale={locale} />
+                ))}
               </div>
             </div>
-
-            {visibleGridItems.length > 0 ? (
-              <div className="mt-6 rounded-[1.9rem] border border-[rgba(214,228,242,0.86)] bg-white/78 p-4 shadow-[0_18px_44px_rgba(28,40,66,0.06)] backdrop-blur sm:mt-7 sm:p-6">
-                <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="font-body text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6f8099]">
-                      {SECTION_COPY.additionalProducts[locale]}
-                    </p>
-                    <h3 className="font-heading mt-2 text-xl tracking-tight text-[var(--color-ink)] sm:text-2xl">
-                      {SECTION_COPY.additionalSummary[locale]}
-                    </h3>
-                  </div>
-                  <div className="font-body text-sm text-[#6f8099]">
-                    {visibleGridItems.length} {SECTION_COPY.remainingCount[locale]}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                  {visibleGridItems.map((item) => (
-                    <ProductCard key={item.id} item={item} locale={locale} />
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </div>
+          )}
         </div>
       </div>
     </section>
   )
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 function resolveShowcaseItems(items: ProductView[]) {
-  const orderedSpotlights = [
-    items.find((item) => item.slug === HOME_PRODUCT_SPOTLIGHT.primary),
-    items.find((item) => item.slug === HOME_PRODUCT_SPOTLIGHT.secondary),
-  ].filter((item): item is ProductView => Boolean(item))
+  const spotlights = [
+    items.find(i => i.slug === HOME_PRODUCT_SPOTLIGHT.primary),
+    items.find(i => i.slug === HOME_PRODUCT_SPOTLIGHT.secondary),
+  ].filter((i): i is ProductView => Boolean(i))
 
-  const fallbackItems = items.filter(
-    (item) => !orderedSpotlights.some((spotlight) => spotlight.id === item.id)
-  )
-
-  const primaryItem = orderedSpotlights[0] ?? items[0] ?? null
-  const secondaryItem =
-    orderedSpotlights[1] ??
-    fallbackItems.find((item) => item.id !== primaryItem?.id) ??
-    null
-
-  const selectedIds = new Set(
+  const fallbacks     = items.filter(i => !spotlights.some(s => s.id === i.id))
+  const primaryItem   = spotlights[0] ?? items[0] ?? null
+  const secondaryItem = spotlights[1] ?? fallbacks.find(i => i.id !== primaryItem?.id) ?? null
+  const selectedIds   = new Set(
     [primaryItem?.id, secondaryItem?.id].filter((id): id is string => Boolean(id))
   )
-
-  return {
-    primaryItem,
-    secondaryItem,
-    gridItems: items.filter((item) => !selectedIds.has(item.id)),
-  }
+  return { primaryItem, secondaryItem, gridItems: items.filter(i => !selectedIds.has(i.id)) }
 }
 
+function getProductHref(item: ProductView, locale: Locale) {
+  return withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
+}
+
+// ─── ShowcaseCard ─────────────────────────────────────────────────────────────
+
 function ShowcaseCard({
-  item,
-  locale,
-  href,
-  meta,
-  actionLabel,
-  priority = false,
-  variant,
+  item, locale, href, meta, actionLabel, priority = false, variant,
 }: {
-  item: ProductView
-  locale: Locale
-  href: string
-  meta: ShowcaseMeta
-  actionLabel: string
-  priority?: boolean
-  variant: "primary" | "secondary"
+  item: ProductView; locale: Locale; href: string; meta: ShowcaseMeta
+  actionLabel: string; priority?: boolean; variant: "primary" | "secondary"
 }) {
   const isPrimary = variant === "primary"
+  const glassStyle = isPrimary ? GLASS.primary : GLASS.secondary
 
   return (
     <Link
       href={href}
-      className="group relative isolate overflow-hidden rounded-[1.9rem] border border-white/70 bg-[linear-gradient(145deg,rgba(255,255,255,0.92),rgba(246,250,255,0.82)_100%)] p-4 shadow-[0_18px_44px_rgba(28,40,66,0.08)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_26px_60px_rgba(28,40,66,0.12)] sm:p-5"
+      className="group relative isolate overflow-hidden rounded-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,40,60,0.14)]"
+      style={glassStyle}
     >
+      {/* Subtle glow behind image area */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-90"
-        style={{
-          background: `radial-gradient(circle at top right, ${meta.glow} 0%, transparent 34%), linear-gradient(145deg, rgba(255,255,255,0.94) 0%, rgba(246,250,255,0.82) 100%)`,
-        }}
+        className="pointer-events-none absolute -top-12 -right-12 h-56 w-56 rounded-full"
+        style={{ background: meta.glow, filter: "blur(52px)" }}
+      />
+      {/* Top shimmer */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px"
+        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.95),transparent)" }}
       />
 
       <div
-        className={`relative grid gap-5 ${
+        className={`relative p-5 sm:p-6 grid gap-5 ${
           isPrimary
             ? "lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center"
             : "md:grid-cols-[auto_minmax(0,1fr)] md:items-center"
         }`}
       >
+        {/* Image */}
         <div
-          className={`relative overflow-hidden rounded-[1.6rem] border border-white/75 ${
-            isPrimary
-              ? "aspect-[5/4] sm:aspect-square lg:order-2"
-              : "aspect-square w-full md:w-40"
+          className={`relative overflow-hidden rounded-xl ${
+            isPrimary ? "aspect-[5/4] sm:aspect-square lg:order-2" : "aspect-square w-full md:w-40"
           }`}
+          style={{
+            background: meta.imageBg,
+            border: "1px solid rgba(255,255,255,0.70)",
+          }}
         >
-          <div className="absolute inset-0" style={{ background: meta.imageBg }} />
-          <div className="absolute inset-x-8 top-6 h-16 rounded-full bg-white/45 blur-2xl" />
+          <div className="absolute inset-x-8 top-6 h-14 rounded-full blur-2xl bg-white/60" />
           <Image
             src={item.image.src}
             alt={item.image.alt || item.name}
             fill
             sizes={
               isPrimary
-                ? "(max-width: 640px) 100vw, (max-width: 1280px) 48vw, 34vw"
-                : "(max-width: 768px) 100vw, 22vw"
+                ? "(max-width:640px) 100vw, (max-width:1280px) 48vw, 34vw"
+                : "(max-width:768px) 100vw, 22vw"
             }
             className="object-contain p-[12%] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
             priority={priority}
           />
         </div>
 
+        {/* Text */}
         <div className={isPrimary ? "lg:order-1" : "min-w-0"}>
+          {/* Badge */}
           <span
-            className="inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 font-body text-[10px] font-semibold uppercase tracking-[0.16em]"
-            style={{ background: meta.accentBg, color: meta.accentText }}
+            className="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em]"
+            style={{
+              background: meta.accentBg,
+              color: meta.accentText,
+              border: "1px solid rgba(30,40,60,0.12)",
+            }}
           >
-            {!isPrimary ? (
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />
-            ) : null}
+            {!isPrimary && <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />}
             {meta.badge[locale]}
           </span>
 
+          {/* Title */}
           <h3
-            className={`font-heading mt-4 tracking-tight text-[var(--color-ink)] ${
-              isPrimary
-                ? "text-2xl leading-tight sm:text-[2rem]"
-                : "text-xl leading-tight"
+            className={`font-heading mt-4 tracking-tight ${
+              isPrimary ? "text-2xl leading-tight sm:text-[2rem]" : "text-xl leading-tight"
             }`}
+            style={{ color: "#1a2232" }}
           >
             {item.name}
           </h3>
 
-          {item.description ? (
+          {/* Accent divider — primary only */}
+          {isPrimary && (
+            <div
+              className="my-4 h-[3px] w-10 rounded-full"
+              style={{ background: "linear-gradient(90deg,#3a7bd5,#2ab8b0)" }}
+            />
+          )}
+
+          {/* Description */}
+          {item.description && (
             <p
-              className={`font-body mt-3 text-[var(--color-ink-soft)] ${
-                isPrimary
-                  ? "max-w-lg text-sm leading-7 sm:text-base sm:leading-8"
-                  : "line-clamp-3 text-sm leading-7"
-              }`}
+              className={`text-sm leading-7 ${isPrimary ? "max-w-lg sm:text-base sm:leading-8" : "line-clamp-3 mt-2"}`}
+              style={{ color: "#3a4a5c" }}
             >
               {item.description}
             </p>
-          ) : null}
+          )}
 
+          {/* CTA */}
           <div
-            className={`font-body mt-5 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] ${
-              isPrimary ? "text-[var(--color-ink)]" : "text-[#5f6f88]"
-            }`}
+            className="mt-5 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em]"
+            style={{ color: "#2a3a52" }}
           >
             <span>{actionLabel}</span>
             <ArrowRightIcon />
@@ -361,59 +437,80 @@ function ShowcaseCard({
   )
 }
 
-function ProductCard({
-  item,
-  locale,
-}: {
-  item: ProductView
-  locale: Locale
-}) {
+// ─── ProductCard ──────────────────────────────────────────────────────────────
+
+function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
   return (
     <Link
       href={getProductHref(item, locale)}
-      className="group overflow-hidden rounded-[1.5rem] border border-[rgba(214,228,242,0.92)] bg-white/92 p-2.5 shadow-[0_14px_34px_rgba(28,40,66,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_56px_rgba(28,40,66,0.1)]"
+      className="group overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,40,60,0.10)]"
+      style={GLASS.card}
     >
-      <div className="relative aspect-square overflow-hidden rounded-[1.2rem] bg-[linear-gradient(155deg,#f4f8fb_0%,#eef6fb_100%)]">
-        <div className="absolute inset-x-6 top-4 h-10 rounded-full bg-white/60 blur-xl" />
+      {/* Image area */}
+      <div
+        className="relative aspect-square overflow-hidden rounded-t-xl"
+        style={{
+          background:
+            "radial-gradient(circle at 80% 18%,rgba(159,179,204,0.18),transparent 22%), linear-gradient(155deg,rgba(255,255,255,0.80) 0%,rgba(232,240,250,0.60) 100%)",
+        }}
+      >
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.95),transparent)" }}
+        />
+        <div className="absolute inset-x-6 top-4 h-10 rounded-full bg-white/80 blur-xl" />
         <Image
           src={item.image.src}
           alt={item.image.alt || item.name}
           fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
           className="object-contain p-[12%] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
         />
       </div>
 
-      <div className="px-2 py-4 sm:px-2.5">
-        <h4 className="font-body text-sm font-semibold leading-6 text-[var(--color-ink)] transition-colors group-hover:text-[#179ea3]">
+      {/* Text */}
+      <div className="px-3 py-4 sm:px-3.5">
+        <h4 className="text-sm font-semibold leading-6" style={{ color: "#1a2232" }}>
           {item.name}
         </h4>
-        {item.description ? (
-          <p className="font-body mt-2 line-clamp-2 text-[13px] leading-6 text-[#6f8099]">
+        {item.description && (
+          <p className="mt-1.5 line-clamp-2 text-[13px] leading-6" style={{ color: "#3a4a5c" }}>
             {item.description}
           </p>
-        ) : null}
+        )}
       </div>
     </Link>
   )
 }
 
+// ─── StatCard ─────────────────────────────────────────────────────────────────
+
 function StatCard({ value, label }: { value: number; label: string }) {
   return (
-    <div className="rounded-[1.3rem] border border-[rgba(214,228,242,0.92)] bg-white/88 px-4 py-4 shadow-[0_10px_24px_rgba(28,40,66,0.04)]">
-      <div className="font-heading text-2xl leading-none text-[var(--color-ink)]">
+    <div
+      className="rounded-xl px-4 py-4"
+      style={{
+        background: "rgba(255,255,255,0.55)",
+        border: "1px solid rgba(255,255,255,0.72)",
+      }}
+    >
+      <div
+        className="font-heading text-2xl font-black leading-none"
+        style={{ color: "#1a2232" }}
+      >
         {value}
       </div>
-      <div className="font-body mt-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6f8099]">
+      <div
+        className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em]"
+        style={{ color: "#5a6a7c" }}
+      >
         {label}
       </div>
     </div>
   )
 }
 
-function getProductHref(item: ProductView, locale: Locale) {
-  return withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
-}
+// ─── Icon ─────────────────────────────────────────────────────────────────────
 
 function ArrowRightIcon() {
   return (

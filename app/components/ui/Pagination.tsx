@@ -2,6 +2,12 @@
 
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import {
+  COLORS,
+  GLASS,
+  NAV_ACTIVE_PILL_STYLE,
+  NAV_SHELL_STYLE,
+} from '@/app/components/ui/designSystem'
 
 interface Props {
   currentPage: number
@@ -45,11 +51,15 @@ function PageLink({
       href={href}
       prefetch={false}
       aria-current={active ? 'page' : undefined}
-      className={`inline-flex min-w-10 items-center justify-center rounded-full border px-3.5 py-2 text-xs font-semibold transition-all ${
+      className="inline-flex min-w-10 items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold transition-all"
+      style={
         active
-          ? 'border-[#1A2535] bg-[#1A2535] text-white shadow-[0_12px_28px_rgba(26,37,53,0.16)]'
-          : 'border-[#E1D8CF] bg-white/82 text-[#6B625C] hover:border-[var(--color-accent)] hover:text-[#1A2535] backdrop-blur'
-      }`}
+          ? NAV_ACTIVE_PILL_STYLE
+          : {
+              ...GLASS.card,
+              color: COLORS.brandMuted,
+            }
+      }
     >
       {label}
     </Link>
@@ -69,17 +79,24 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
       {currentPage > 1 ? (
         <PageLink href={`${basePath}?page=${currentPage - 1}`} label="Previous" />
       ) : (
-        <span className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full border border-[#EEE7E0] bg-[#F7F3EE]/90 px-3.5 py-2 text-xs font-semibold text-[#B8ADA2]">
+        <span
+          className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold"
+          style={{ ...GLASS.stats, color: COLORS.hint }}
+        >
           Previous
         </span>
       )}
 
-      <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-[rgba(221,211,201,0.85)] bg-white/82 px-2 py-2 shadow-[0_16px_36px_rgba(26,37,53,0.06)] backdrop-blur">
+      <div
+        className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full px-2 py-2"
+        style={NAV_SHELL_STYLE}
+      >
         {pages.map((page, index) =>
           page === '...' ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-2 text-xs font-semibold text-[#BAAEA3]"
+              className="px-2 text-xs font-semibold"
+              style={{ color: COLORS.hint }}
             >
               ...
             </span>
@@ -97,7 +114,10 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
       {currentPage < totalPages ? (
         <PageLink href={`${basePath}?page=${currentPage + 1}`} label="Next" />
       ) : (
-        <span className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full border border-[#EEE7E0] bg-[#F7F3EE]/90 px-3.5 py-2 text-xs font-semibold text-[#B8ADA2]">
+        <span
+          className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold"
+          style={{ ...GLASS.stats, color: COLORS.hint }}
+        >
           Next
         </span>
       )}

@@ -15,53 +15,129 @@ interface NavigationProps {
 }
 
 const NAV_MENU = [
-  { href: "/", label: { th: "หน้าหลัก", en: "Home" } },
+  { href: "/",           label: { th: "หน้าหลัก",     en: "Home" } },
   { href: "/categories", label: { th: "สินค้าของเรา", en: "Products" } },
-  { href: "/articles", label: { th: "บทความของเรา", en: "Articles" } },
-  { href: "/about", label: { th: "เกี่ยวกับเรา", en: "About" } },
-  { href: "/contact", label: { th: "ติดต่อเรา", en: "Contact" } },
+  { href: "/articles",   label: { th: "บทความของเรา", en: "Articles" } },
+  { href: "/about",      label: { th: "เกี่ยวกับเรา", en: "About" } },
+  { href: "/contact",    label: { th: "ติดต่อเรา",    en: "Contact" } },
 ] as const
 
-function LangToggle({
-  isEN,
-  onToggle,
-}: {
-  isEN: boolean
-  onToggle: () => void
-}) {
+// ─── Brand palette ─────────────────────────────────────────────────────────────
+const BRAND_NAVY  = "#24457c"
+const BRAND_MUTED = "#597197"
+
+// Active pill: soft mint→sky gradient — keeps brand feel, stays light
+const ACTIVE_MINT   = "rgba(225,244,235,0.96)"
+const ACTIVE_SKY    = "rgba(232,240,252,0.96)"
+const ACTIVE_BORDER = "rgba(165,196,202,0.82)"
+
+// ─── Style tokens ───────────────────────────────────────────────────────────────
+
+const NAV_SHELL_STYLE = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(16px)",
+  WebkitBackdropFilter: "blur(16px)",
+  borderBottom: "1px solid rgba(255,255,255,0.70)",
+  boxShadow: "0 2px 16px rgba(30,40,60,0.07), inset 0 -1px 0 rgba(255,255,255,0.50)",
+} as const
+
+const NAV_LINK_ACTIVE_STYLE = {
+  background: `linear-gradient(135deg, ${ACTIVE_MINT} 0%, rgba(236,248,242,0.97) 42%, ${ACTIVE_SKY} 100%)`,
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  border: `1px solid ${ACTIVE_BORDER}`,
+  borderRadius: 9999,
+  boxShadow: "0 10px 22px rgba(132,170,178,0.16), inset 0 1px 0 rgba(255,255,255,0.95)",
+  color: "#2f3f58",
+  fontWeight: 600,
+} as const
+
+const LANG_TOGGLE_STYLE = {
+  background: "rgba(255,255,255,0.42)",
+  backdropFilter: "blur(8px)",
+  WebkitBackdropFilter: "blur(8px)",
+  border: "1px solid rgba(36,69,124,0.18)",
+  borderRadius: 9999,
+} as const
+
+const LANG_TOGGLE_TRACK_STYLE = {
+  background: "rgba(36,69,124,0.10)",
+  borderRadius: 9999,
+} as const
+
+// ← changed: white frost indicator instead of heavy navy gradient
+const LANG_TOGGLE_INDICATOR_STYLE = {
+  background: "rgba(255,255,255,0.95)",
+  borderRadius: 9999,
+  boxShadow: "0 1px 6px rgba(30,40,60,0.16)",
+} as const
+
+const MOBILE_MENU_BUTTON_STYLE = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(10px)",
+  WebkitBackdropFilter: "blur(10px)",
+  border: "1px solid rgba(36,69,124,0.16)",
+  borderRadius: 12,
+  color: BRAND_NAVY,
+} as const
+
+const MOBILE_DROPDOWN_STYLE = {
+  background: "rgba(255,255,255,0.72)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
+  border: "1px solid rgba(255,255,255,0.80)",
+  borderRadius: 16,
+  boxShadow: "0 8px 32px rgba(30,40,60,0.10)",
+} as const
+
+const MOBILE_PANEL_ROW_STYLE = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(10px)",
+  WebkitBackdropFilter: "blur(10px)",
+  border: "1px solid rgba(255,255,255,0.72)",
+  borderRadius: 16,
+  boxShadow: "0 4px 16px rgba(30,40,60,0.07), inset 0 1px 0 rgba(255,255,255,0.88)",
+} as const
+
+// Active dot accent — matches project accent gradient
+const ACTIVE_DOT_STYLE = {
+  background: "linear-gradient(135deg,#3a7bd5,#2ab8b0)",
+  borderRadius: 9999,
+  width: 6,
+  height: 6,
+  flexShrink: 0,
+} as const
+
+// ─── LangToggle ─────────────────────────────────────────────────────────────────
+
+function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void }) {
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-label="Toggle language"
-      className="liquid-glass-pill group inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-all hover:border-[var(--color-accent)] hover:shadow-[0_12px_26px_rgba(15,118,110,0.12)]"
+      className="group inline-flex items-center gap-2 rounded-full px-2.5 py-1.5 transition-all"
+      style={LANG_TOGGLE_STYLE}
     >
       <span
-        className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
-          !isEN ? "text-[var(--color-ink)]" : "text-[#7f90a6]"
-        }`}
+        className="text-[11px] uppercase tracking-[0.14em] transition-colors"
+        style={{ color: !isEN ? BRAND_NAVY : BRAND_MUTED, fontWeight: !isEN ? 600 : 400 }}
       >
         TH
       </span>
 
-      <span
-        className={`relative h-5 w-9 rounded-full transition-colors duration-300 ${
-          isEN
-            ? "bg-[linear-gradient(90deg,#dff4ef,#dce7fb)]"
-            : "bg-[linear-gradient(90deg,#e7f6f0,#e8eefb)]"
-        }`}
-      >
+      <span className="relative h-5 w-9 rounded-full" style={LANG_TOGGLE_TRACK_STYLE}>
         <span
-          className={`absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-[var(--color-accent)] shadow-sm transition-transform duration-300 ${
+          className={`absolute left-0.5 top-0.5 h-4 w-4 transition-transform duration-300 ${
             isEN ? "translate-x-4" : "translate-x-0"
           }`}
+          style={LANG_TOGGLE_INDICATOR_STYLE}
         />
       </span>
 
       <span
-        className={`text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
-          isEN ? "text-[var(--color-ink)]" : "text-[#7f90a6]"
-        }`}
+        className="text-[11px] uppercase tracking-[0.14em] transition-colors"
+        style={{ color: isEN ? BRAND_NAVY : BRAND_MUTED, fontWeight: isEN ? 600 : 400 }}
       >
         EN
       </span>
@@ -69,9 +145,10 @@ function LangToggle({
   )
 }
 
+// ─── Navigation ─────────────────────────────────────────────────────────────────
+
 export default function Navigation(props: NavigationProps) {
   const pathname = usePathname()
-
   return <NavigationInner key={pathname} pathname={pathname} {...props} />
 }
 
@@ -79,9 +156,7 @@ function NavigationInner({
   locale,
   logo,
   pathname,
-}: NavigationProps & {
-  pathname: string
-}) {
+}: NavigationProps & { pathname: string }) {
   const router = useRouter()
 
   const [open, setOpen] = useState(false)
@@ -99,46 +174,34 @@ function NavigationInner({
     return pathname === full || pathname.startsWith(`${full}/`)
   }
 
-  const closeMenu = useCallback(() => {
-    setOpen(false)
-  }, [])
+  const closeMenu = useCallback(() => setOpen(false), [])
 
   const toggleLanguage = useCallback(() => {
     closeMenu()
-
     const nextPath = isEN
       ? pathname.replace(/^\/en/, "") || "/"
-      : pathname === "/"
-        ? "/en"
-        : `/en${pathname}`
-
+      : pathname === "/" ? "/en" : `/en${pathname}`
     router.push(nextPath)
   }, [closeMenu, isEN, pathname, router])
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
-    return () => {
-      document.body.style.overflow = ""
-    }
+    return () => { document.body.style.overflow = "" }
   }, [open])
 
   useEffect(() => {
     let frame = 0
-
     const updateScrolled = () => {
       frame = 0
       const next = window.scrollY > 8
-      setScrolled((current) => (current === next ? current : next))
+      setScrolled(c => c === next ? c : next)
     }
-
     const onScroll = () => {
       if (frame) return
       frame = window.requestAnimationFrame(updateScrolled)
     }
-
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-
     return () => {
       window.removeEventListener("scroll", onScroll)
       if (frame) window.cancelAnimationFrame(frame)
@@ -147,13 +210,13 @@ function NavigationInner({
 
   return (
     <header
-      className={`sticky top-0 z-[60] w-full border-b transition-all duration-300 ${
-        scrolled || open
-          ? "liquid-glass-shell border-[rgba(205,222,241,0.76)] shadow-[0_18px_38px_rgba(28,40,66,0.1)]"
-          : "liquid-glass-shell border-transparent"
-      }`}
+      data-elevated={scrolled || open ? "true" : "false"}
+      className="sticky top-0 z-[60] w-full transition-all duration-300"
+      style={NAV_SHELL_STYLE}
     >
       <nav className="mx-auto flex h-[4.35rem] max-w-7xl items-center justify-between px-5 sm:px-6 lg:h-[4.75rem] lg:px-8">
+
+        {/* Logo */}
         <Link
           href={withLocale("/")}
           onClick={closeMenu}
@@ -169,23 +232,30 @@ function NavigationInner({
           />
         </Link>
 
+        {/* Desktop nav */}
         <ul className="hidden items-center gap-1 md:flex">
-          {NAV_MENU.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={withLocale(item.href)}
-                className={`inline-flex rounded-full px-3.5 py-2 text-[16px] font-semibold uppercase tracking-[0.12em] transition-all ${
-                  isActive(item.href)
-                    ? "btn-primary-soft"
-                    : "text-[#55657d] hover:bg-white/80 hover:text-[var(--color-ink)]"
-                }`}
-              >
-                {item.label[lang]}
-              </Link>
-            </li>
-          ))}
+          {NAV_MENU.map((item) => {
+            const active = isActive(item.href)
+            return (
+              <li key={item.href}>
+                <Link
+                  href={withLocale(item.href)}
+                  // ← changed: text-[13px] instead of text-[16px]
+                  className={`inline-flex rounded-full border px-3.5 py-2 text-[13px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+                    active
+                      ? ""
+                      : "border-transparent bg-transparent text-[#4d6181] hover:border-[rgba(36,69,124,0.14)] hover:bg-[rgba(233,241,255,0.72)] hover:text-[#24457c]"
+                  }`}
+                  style={active ? NAV_LINK_ACTIVE_STYLE : undefined}
+                >
+                  {item.label[lang]}
+                </Link>
+              </li>
+            )
+          })}
         </ul>
 
+        {/* Right cluster */}
         <div className="flex items-center gap-3">
           <div className="hidden md:flex">
             <LangToggle isEN={isEN} onToggle={toggleLanguage} />
@@ -193,45 +263,59 @@ function NavigationInner({
 
           <button
             type="button"
-            onClick={() => setOpen((current) => !current)}
+            onClick={() => setOpen(c => !c)}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="liquid-glass-pill inline-flex h-10 w-10 items-center justify-center rounded-full text-[#4f5d74] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-ink)] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-[12px] transition-all hover:bg-[rgba(233,241,255,0.86)] hover:text-[#24457c] md:hidden"
+            style={MOBILE_MENU_BUTTON_STYLE}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </nav>
 
+      {/* Mobile dropdown */}
       <div
-        className="overflow-hidden border-t border-black/5 transition-all duration-300 ease-out md:hidden"
+        className="overflow-hidden border-t transition-all duration-300 ease-out md:hidden"
         style={{
+          borderColor: "rgba(255,255,255,0.55)",
           maxHeight: open ? "420px" : "0",
           opacity: open ? 1 : 0,
         }}
       >
-        <div className="liquid-glass-panel rounded-b-[1.75rem] border-x border-b border-[rgba(205,222,241,0.72)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(241,251,255,0.92)_48%,rgba(242,247,255,0.9)_100%)] px-5 pb-6 pt-4">
+        <div className="mx-4 my-2 px-5 pb-6 pt-4" style={MOBILE_DROPDOWN_STYLE}>
           <div className="space-y-1">
-            {NAV_MENU.map((item) => (
-              <Link
-                key={item.href}
-                href={withLocale(item.href)}
-                onClick={closeMenu}
-                className={`flex items-center justify-between rounded-2xl px-4 py-3 text-md font-medium uppercase tracking-[0.12em] transition-all ${
-                  isActive(item.href)
-                    ? "btn-primary-soft"
-                    : "text-[#55657d] hover:bg-white hover:text-[var(--color-ink)]"
-                }`}
-              >
-                <span>{item.label[lang]}</span>
-                {isActive(item.href) ? (
-                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-                ) : null}
-              </Link>
-            ))}
+            {NAV_MENU.map((item) => {
+              const active = isActive(item.href)
+              return (
+                <Link
+                  key={item.href}
+                  href={withLocale(item.href)}
+                  onClick={closeMenu}
+                  // ← changed: text-[13px] instead of text-md
+                  className={`flex items-center justify-between rounded-full border px-4 py-3 text-[13px] font-semibold uppercase tracking-[0.12em] transition-all duration-200 ${
+                    active
+                      ? ""
+                      : "border-transparent bg-transparent text-[#4d6181] hover:border-[rgba(36,69,124,0.14)] hover:bg-[rgba(233,241,255,0.72)] hover:text-[#24457c]"
+                  }`}
+                  style={active ? NAV_LINK_ACTIVE_STYLE : undefined}
+                >
+                  <span>{item.label[lang]}</span>
+                  {/* ← changed: inline style gradient dot instead of var(--color-accent) */}
+                  {active && <span style={ACTIVE_DOT_STYLE} />}
+                </Link>
+              )
+            })}
           </div>
 
-          <div className="liquid-glass-pill mt-5 flex items-center justify-between rounded-2xl px-4 py-3">
-            <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-[#66748a]">
+          {/* Language row */}
+          <div
+            className="mt-5 flex items-center justify-between px-4 py-3"
+            style={MOBILE_PANEL_ROW_STYLE}
+          >
+            <span
+              className="text-[12px] font-semibold uppercase tracking-[0.12em]"
+              style={{ color: BRAND_MUTED }}
+            >
               {isEN ? "Language" : "ภาษา"}
             </span>
             <LangToggle isEN={isEN} onToggle={toggleLanguage} />
