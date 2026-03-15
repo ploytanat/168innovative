@@ -1,4 +1,7 @@
+"use client"
+
 import Image from "next/image"
+import { motion } from "framer-motion"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { WhyItemView } from "@/app/lib/types/view"
@@ -8,6 +11,7 @@ import {
   SECTION_BACKGROUNDS,
   SECTION_BORDER,
 } from "@/app/components/ui/designSystem"
+import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "@/app/components/ui/motion"
 
 interface WhyChooseUsProps {
   items: WhyItemView[]
@@ -61,8 +65,14 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
         <div className="border-t pt-6" style={{ borderColor: SECTION_BORDER }}>
 
           {/* Header */}
-          <div className="mb-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-            <div>
+          <motion.div
+            className="mb-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr] lg:items-end"
+            variants={staggerSmall}
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION_VIEWPORT}
+          >
+            <motion.div variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
               <p
                 className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
                 style={EYEBROW_PILL_STYLE}
@@ -75,19 +85,28 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
               >
                 {uiText.whyChooseUs.title[locale]}
               </h2>
-            </div>
+            </motion.div>
            
-          </div>
+          </motion.div>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <motion.div
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            variants={staggerSmall}
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION_VIEWPORT}
+          >
             {items.map((item, index) => {
               const card = GLASS_CARDS[index % GLASS_CARDS.length]
 
               return (
-                <div
+                <motion.div
                   key={index}
                   className="group relative overflow-hidden rounded-[0.95rem] p-5 sm:p-6 transition-transform duration-300 hover:-translate-y-1"
+                  variants={fadeUp}
+                  transition={{ duration: 0.5, ease: MOTION_EASE }}
+                  whileHover={{ y: -6 }}
                   style={{
                     background: card.bg,
                     border: card.border,
@@ -144,10 +163,10 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
                   <p className="mt-2.5 text-[13px] leading-[1.75]" style={{ color: '#4a5a72' }}>
                     {item.description}
                   </p>
-                </div>
+                </motion.div>
               )
             })}
-          </div>
+          </motion.div>
 
         </div>
       </div>

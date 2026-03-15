@@ -4,8 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ExternalLink, MapPin } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 import { CompanyView } from '@/app/lib/types/view'
+import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from '@/app/components/ui/motion'
 
 interface FooterProps {
   company: CompanyView
@@ -80,13 +82,13 @@ export default function Footer({ company }: FooterProps) {
       aria-label="Site footer"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(46,207,196,0.65),rgba(248,167,184,0.55),transparent)]" />
-      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#2ecfc4]/12 blur-3xl" />
-      <div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#f8a7b8]/18 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#cab8f2]/14 blur-3xl" />
+      <motion.div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#2ecfc4]/12 blur-3xl" animate={{ x: [0, 18, 0], y: [0, -12, 0] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
+      <motion.div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#f8a7b8]/18 blur-3xl" animate={{ x: [0, -14, 0], y: [0, 16, 0] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }} />
+      <motion.div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#cab8f2]/14 blur-3xl" animate={{ x: [0, -10, 0], y: [0, 10, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
 
-      <div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10">
+      <motion.div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10" variants={staggerSmall} initial="hidden" whileInView="visible" viewport={MOTION_VIEWPORT}>
         <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">
-          <section className="glass-panel rounded-[1.5rem] p-4">
+          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
             <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
               {text.eyebrow}
             </p>
@@ -167,9 +169,9 @@ export default function Footer({ company }: FooterProps) {
                 </div>
               </div>
             </div>
-          </section>
+          </motion.section>
 
-          <section className="glass-panel rounded-[1.5rem] p-4">
+          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
               {text.navigation}
             </p>
@@ -190,9 +192,9 @@ export default function Footer({ company }: FooterProps) {
                 ))}
               </ul>
             </nav>
-          </section>
+          </motion.section>
 
-          <section className="glass-panel rounded-[1.5rem] p-4">
+          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                 {text.salesDesk}
@@ -264,18 +266,18 @@ export default function Footer({ company }: FooterProps) {
                 </div>
               </div>
             )}
-          </section>
+          </motion.section>
         </div>
 
-        <div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[11px] text-[#6f8099] sm:flex-row sm:items-center sm:justify-between">
+        <motion.div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[11px] text-[#6f8099] sm:flex-row sm:items-center sm:justify-between" variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
           <p>
             © {new Date().getFullYear()} {company.name}. {text.copyright}
           </p>
           <p className="tracking-[0.14em] uppercase text-[#8394ab]">
             Cosmetic Packaging • OEM • ODM
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   )
 }

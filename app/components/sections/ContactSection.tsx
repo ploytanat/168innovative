@@ -1,11 +1,15 @@
+"use client"
+
 import type { CSSProperties } from "react"
 
 import Image from "next/image"
+import { motion } from "framer-motion"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
 
 import BackgroundBlobs from "../ui/BackgroundBlobs"
+import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "../ui/motion"
 
 const PhoneIcon = () => (
   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
@@ -63,8 +67,14 @@ export default function ContactSection({
           </div>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,167,184,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(46,207,196,0.14),transparent_26%),radial-gradient(circle_at_bottom,rgba(202,184,242,0.16),transparent_26%)]" />
 
-          <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
-            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <motion.div
+            className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]"
+            variants={staggerSmall}
+            initial="hidden"
+            whileInView="visible"
+            viewport={MOTION_VIEWPORT}
+          >
+            <motion.div className="flex flex-col items-center text-center lg:items-start lg:text-left" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
               <div className="space-y-4">
                 <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                   Contact Desk
@@ -81,7 +91,7 @@ export default function ContactSection({
               </div>
 
               <div className="mt-10 w-full max-w-md space-y-4">
-                  <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl">
+                  <motion.div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
                   <div className="border-b border-[#eef2f6] p-6 md:p-8">
                     <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.phoneLabel[locale]}
@@ -134,10 +144,10 @@ export default function ContactSection({
                       ))}
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 {data.lineQrCode && (
-                  <div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur">
+                  <motion.div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[rgba(46,207,196,0.42)] bg-white">
                       <Image
                         src={data.lineQrCode.src}
@@ -155,20 +165,22 @@ export default function ContactSection({
                         {uiText.contact.lineDesc[locale]}
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="relative">
-              <div className="grid grid-cols-2 gap-6 md:gap-8">
+            <motion.div className="relative" variants={fadeUp} transition={{ duration: 0.6, ease: MOTION_EASE }}>
+              <motion.div className="grid grid-cols-2 gap-6 md:gap-8" variants={staggerSmall}>
                 {data.contactGallery?.slice(0, 4).map((image, index) => {
                   const zigzag = index % 2 === 1
 
                   return (
-                    <div
+                    <motion.div
                       key={image.src}
                       className={`floating-animation relative overflow-hidden rounded-3xl border border-white/10 bg-white/80 shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
+                      variants={fadeUp}
+                      transition={{ duration: 0.5, ease: MOTION_EASE }}
                       style={
                         {
                           "--floating-duration": `${6 + index * 0.4}s`,
@@ -184,12 +196,12 @@ export default function ContactSection({
                           className="object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.05]"
                         />
                       </div>
-                    </div>
+                    </motion.div>
                   )
                 })}
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

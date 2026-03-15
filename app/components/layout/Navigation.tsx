@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
+import { motion } from "framer-motion"
 
 import {
   COLORS,
@@ -13,6 +14,7 @@ import {
   NAV_SHELL_STYLE,
   SECTION_BACKGROUNDS,
 } from "@/app/components/ui/designSystem"
+import { fadeUp, MOTION_EASE, staggerSmall } from "@/app/components/ui/motion"
 
 interface NavigationProps {
   locale: string
@@ -187,27 +189,29 @@ function NavigationInner({
       <nav className="mx-auto flex h-[4.35rem] max-w-7xl items-center justify-between px-5 sm:px-6 lg:h-[4.75rem] lg:px-8">
 
         {/* Logo */}
-        <Link
-          href={withLocale("/")}
-          onClick={closeMenu}
-          className="relative shrink-0 rounded-full px-1 py-1 transition-opacity hover:opacity-85 active:opacity-70"
-        >
-          <Image
-            src={logo.src}
-            alt={logo.alt || "Logo"}
-            width={160}
-            height={50}
-            priority
-            className="h-9 w-auto object-contain md:h-10"
-          />
-        </Link>
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: MOTION_EASE }}>
+          <Link
+            href={withLocale("/")}
+            onClick={closeMenu}
+            className="relative shrink-0 rounded-full px-1 py-1 transition-opacity hover:opacity-85 active:opacity-70"
+          >
+            <Image
+              src={logo.src}
+              alt={logo.alt || "Logo"}
+              width={160}
+              height={50}
+              priority
+              className="h-9 w-auto object-contain md:h-10"
+            />
+          </Link>
+        </motion.div>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 md:flex">
+        <motion.ul className="hidden items-center gap-1 md:flex" variants={staggerSmall} initial="hidden" animate="visible">
           {NAV_MENU.map((item) => {
             const active = isActive(item.href)
             return (
-              <li key={item.href}>
+              <motion.li key={item.href} variants={fadeUp} transition={{ duration: 0.35, ease: MOTION_EASE }}>
                 <Link
                   href={withLocale(item.href)}
                   // ← changed: text-[13px] instead of text-[16px]
@@ -220,16 +224,16 @@ function NavigationInner({
                 >
                   {item.label[lang]}
                 </Link>
-              </li>
+              </motion.li>
             )
           })}
-        </ul>
+        </motion.ul>
 
         {/* Right cluster */}
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex">
+          <motion.div className="hidden md:flex" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, ease: MOTION_EASE }}>
             <LangToggle isEN={isEN} onToggle={toggleLanguage} />
-          </div>
+          </motion.div>
 
           <button
             type="button"
@@ -252,13 +256,13 @@ function NavigationInner({
           opacity: open ? 1 : 0,
         }}
       >
-        <div className="mx-4 my-2 px-5 pb-6 pt-4" style={MOBILE_DROPDOWN_STYLE}>
-          <div className="space-y-1">
+        <motion.div className="mx-4 my-2 px-5 pb-6 pt-4" style={MOBILE_DROPDOWN_STYLE} initial={false} animate={{ y: open ? 0 : -12 }} transition={{ duration: 0.3, ease: MOTION_EASE }}>
+          <motion.div className="space-y-1" variants={staggerSmall} initial="hidden" animate={open ? "visible" : "hidden"}>
             {NAV_MENU.map((item) => {
               const active = isActive(item.href)
               return (
+                <motion.div key={item.href} variants={fadeUp} transition={{ duration: 0.3, ease: MOTION_EASE }}>
                 <Link
-                  key={item.href}
                   href={withLocale(item.href)}
                   onClick={closeMenu}
                   // ← changed: text-[13px] instead of text-md
@@ -273,14 +277,18 @@ function NavigationInner({
                   {/* ← changed: inline style gradient dot instead of var(--color-accent) */}
                   {active && <span style={ACTIVE_DOT_STYLE} />}
                 </Link>
+                </motion.div>
               )
             })}
-          </div>
+          </motion.div>
 
           {/* Language row */}
-          <div
+          <motion.div
             className="mt-5 flex items-center justify-between px-4 py-3"
             style={MOBILE_PANEL_ROW_STYLE}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: open ? 1 : 0, y: open ? 0 : 10 }}
+            transition={{ duration: 0.25, ease: MOTION_EASE }}
           >
             <span
               className="text-[12px] font-semibold uppercase tracking-[0.12em]"
@@ -289,8 +297,8 @@ function NavigationInner({
               {isEN ? "Language" : "ภาษา"}
             </span>
             <LangToggle isEN={isEN} onToggle={toggleLanguage} />
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </header>
   )
