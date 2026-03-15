@@ -4,13 +4,6 @@ import Image from "next/image"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
-import {
-  COLORS,
-  GLASS,
-  PAGE_BG,
-  SOFT_IMAGE_BG,
-  SOFT_IMAGE_BG_ALT,
-} from "@/app/components/ui/designSystem"
 
 import BackgroundBlobs from "../ui/BackgroundBlobs"
 
@@ -62,34 +55,35 @@ export default function ContactSection({
   locale,
 }: ContactSectionProps) {
   return (
-    <section id="contact" className="relative py-16 md:py-24" style={{ background: PAGE_BG }}>
+    <section id="contact" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative">
-          <div className="pointer-events-none absolute inset-0 -z-10 opacity-20">
+        <div className="relative overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(135deg,#ffffff_0%,#eefbff_44%,#f2f8ff_100%)] p-6 shadow-[0_32px_90px_rgba(28,40,66,0.14)] sm:p-10 md:p-16 lg:p-20">
+          <div className="absolute inset-0 -z-10 opacity-25">
             <BackgroundBlobs />
           </div>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,167,184,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(46,207,196,0.14),transparent_26%),radial-gradient(circle_at_bottom,rgba(202,184,242,0.16),transparent_26%)]" />
+
           <div className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]">
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <div className="space-y-4">
-                <p className="eyebrow-label">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                   Contact Desk
                 </p>
-                <h2 className="font-heading text-3xl font-semibold leading-[1.08] sm:text-4xl md:text-6xl" style={{ color: COLORS.dark }}>
+                <h2 className="text-3xl font-black leading-[1.1] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
                   {uiText.contact.title[locale]} <br />
-                  <span style={{ color: COLORS.brandNavy }}>
+                  <span className="text-[#8ebcf5]">
                     {uiText.contact.subtitle[locale]}
                   </span>
                 </h2>
-                <p className="mt-6 max-w-md text-[1.05rem] leading-8 md:text-lg" style={{ color: COLORS.mid }}>
+                <p className="mt-6 max-w-md text-[1.05rem] leading-8 text-[var(--color-ink-soft)] md:text-lg">
                   {uiText.contact.desc[locale]}
                 </p>
               </div>
 
               <div className="mt-10 w-full max-w-md space-y-4">
-                <div className="overflow-hidden rounded-[1rem]" style={GLASS.secondary}>
-                  <div className="h-px bg-[linear-gradient(90deg,rgba(42,45,51,0.94)_0%,rgba(154,191,231,0.54)_100%)]" />
-                  <div className="border-b p-6 md:p-8" style={{ borderColor: "rgba(30,40,60,0.10)" }}>
-                    <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: COLORS.brandNavy }}>
+                  <div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl">
+                  <div className="border-b border-[#eef2f6] p-6 md:p-8">
+                    <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.phoneLabel[locale]}
                     </p>
 
@@ -101,14 +95,14 @@ export default function ContactSection({
                           className="group flex items-center justify-between transition-all"
                         >
                           <div className="flex items-center gap-4 text-left">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-[0.95rem] border transition-all duration-300" style={{ ...GLASS.card, color: COLORS.dark }}>
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf9f7] text-[var(--color-accent)] transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
                               <PhoneIcon />
                             </div>
                             <div>
-                              <span className="block text-[11px] font-bold uppercase tracking-[0.08em]" style={{ color: COLORS.soft }}>
+                              <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-[#7487a3]">
                                 {phone.label}
                               </span>
-                              <span className="text-xl font-bold md:text-[1.4rem]" style={{ color: COLORS.dark }}>
+                              <span className="text-xl font-bold text-[var(--color-ink)] md:text-[1.4rem]">
                                 {phone.number}
                               </span>
                             </div>
@@ -119,8 +113,8 @@ export default function ContactSection({
                     </div>
                   </div>
 
-                  <div className="p-6 md:p-8" style={GLASS.stats}>
-                    <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: COLORS.brandNavy }}>
+                  <div className="bg-[linear-gradient(145deg,#f6fdff,#fff3f7)] p-6 md:p-8">
+                    <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
                       {uiText.contact.emailLabel[locale]}
                     </p>
                     <div className="space-y-4">
@@ -130,10 +124,10 @@ export default function ContactSection({
                           href={`mailto:${email}`}
                           className="group flex items-center gap-4"
                         >
-                          <div className="flex h-10 w-10 items-center justify-center rounded-[0.85rem] border transition-all duration-300" style={{ ...GLASS.card, color: COLORS.soft }}>
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(205,222,241,0.72)] bg-white text-[#8fa2b8] transition-all duration-300 group-hover:bg-[var(--color-ink)] group-hover:text-white">
                             <MailIcon />
                           </div>
-                          <span className="break-all text-base font-bold md:text-[1.05rem]" style={{ color: COLORS.dark }}>
+                          <span className="break-all text-base font-bold text-[var(--color-ink)] md:text-[1.05rem]">
                             {email}
                           </span>
                         </a>
@@ -143,8 +137,8 @@ export default function ContactSection({
                 </div>
 
                 {data.lineQrCode && (
-                  <div className="flex items-center gap-5 rounded-[1rem] p-4" style={GLASS.card}>
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border" style={{ ...GLASS.card, background: SOFT_IMAGE_BG }}>
+                  <div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur">
+                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[rgba(46,207,196,0.42)] bg-white">
                       <Image
                         src={data.lineQrCode.src}
                         alt={data.lineQrCode.alt}
@@ -154,10 +148,10 @@ export default function ContactSection({
                       />
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-bold" style={{ color: COLORS.dark }}>
+                      <p className="text-sm font-bold text-[var(--color-ink)]">
                         {uiText.contact.lineLabel[locale]}
                       </p>
-                      <p className="text-[13px] font-medium leading-6" style={{ color: COLORS.mid }}>
+                      <p className="text-[13px] font-medium leading-6 text-[var(--color-ink-soft)]">
                         {uiText.contact.lineDesc[locale]}
                       </p>
                     </div>
@@ -167,36 +161,32 @@ export default function ContactSection({
             </div>
 
             <div className="relative">
-              <div className="rounded-[1rem] p-4 sm:p-5" style={GLASS.secondary}>
-                <div className="grid grid-cols-2 gap-6 md:gap-8">
-                  {data.contactGallery?.slice(0, 4).map((image, index) => {
-                    const zigzag = index % 2 === 1
+              <div className="grid grid-cols-2 gap-6 md:gap-8">
+                {data.contactGallery?.slice(0, 4).map((image, index) => {
+                  const zigzag = index % 2 === 1
 
-                    return (
-                      <div
-                        key={image.src}
-                        className={`floating-animation relative overflow-hidden rounded-[0.95rem] ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
-                        style={
-                          {
-                            "--floating-duration": `${6 + index * 0.4}s`,
-                            ...GLASS.card,
-                            background: index % 2 === 0 ? SOFT_IMAGE_BG : SOFT_IMAGE_BG_ALT,
-                          } as CSSProperties
-                        }
-                      >
-                        <div className="relative h-[220px] w-full sm:h-[260px] lg:h-[300px]">
-                          <Image
-                            src={image.src}
-                            alt={image.alt || "Product"}
-                            fill
-                            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 35vw, 20vw"
-                            className="object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.05]"
-                          />
-                        </div>
+                  return (
+                    <div
+                      key={image.src}
+                      className={`floating-animation relative overflow-hidden rounded-3xl border border-white/10 bg-white/80 shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
+                      style={
+                        {
+                          "--floating-duration": `${6 + index * 0.4}s`,
+                        } as CSSProperties
+                      }
+                    >
+                      <div className="relative h-[220px] w-full sm:h-[260px] lg:h-[300px]">
+                        <Image
+                          src={image.src}
+                          alt={image.alt || "Product"}
+                          fill
+                          sizes="(max-width: 640px) 45vw, (max-width: 1024px) 35vw, 20vw"
+                          className="object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.05]"
+                        />
                       </div>
-                    )
-                  })}
-                </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
