@@ -58,11 +58,11 @@
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
     background:
-      radial-gradient(circle at 82% 12%, rgba(86, 150, 237, 0.44), transparent 18%),
-      radial-gradient(circle at 84% 20%, rgba(154, 203, 255, 0.3), transparent 24%),
-      radial-gradient(circle at 12% 14%, rgba(255, 196, 142, 0.18), transparent 14%),
-      radial-gradient(circle at 18% 28%, rgba(212, 220, 230, 0.24), transparent 18%),
-      linear-gradient(180deg, #edf1f4 0%, #f3f5f7 42%, #f7f8fa 100%);
+      radial-gradient(circle at 84% 8%, rgba(100, 138, 201, 0.34), transparent 20%),
+      radial-gradient(circle at 80% 28%, rgba(170, 200, 230, 0.2), transparent 20%),
+      radial-gradient(circle at 14% 16%, rgba(244, 198, 149, 0.2), transparent 16%),
+      radial-gradient(circle at 18% 70%, rgba(229, 191, 204, 0.16), transparent 20%),
+      linear-gradient(180deg, #ecf1f5 0%, #f5f1ea 28%, #eef3f8 62%, #fafbfd 100%);
   }
 
   body {
@@ -148,9 +148,22 @@
     inset: 0;
     z-index: -2;
     background:
-      radial-gradient(circle at 82% 10%, rgba(168, 189, 214, 0.16), transparent 14%),
-      radial-gradient(circle at 12% 30%, rgba(219, 227, 236, 0.22), transparent 18%),
-      linear-gradient(180deg, #f4f5f7 0%, #f7f8fa 24%, #fbfcfd 100%);
+      radial-gradient(circle at 84% 8%, rgba(112, 147, 197, 0.2), transparent 16%),
+      radial-gradient(circle at 12% 26%, rgba(244, 204, 164, 0.16), transparent 16%),
+      radial-gradient(circle at 18% 72%, rgba(224, 189, 202, 0.12), transparent 20%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.12) 100%);
+    pointer-events: none;
+  }
+
+  .site-frame::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(115deg, rgba(255, 255, 255, 0.14) 0%, transparent 34%),
+      linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.16) 44%, transparent 100%);
+    mix-blend-mode: screen;
     pointer-events: none;
   }
 

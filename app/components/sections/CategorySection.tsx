@@ -9,6 +9,7 @@ import {
   CTA_BUTTON_STYLE,
   EYEBROW_PILL_STYLE,
   GLASS,
+  SECTION_BACKGROUNDS,
   SECTION_BORDER,
   SOFT_IMAGE_BG,
   SOFT_IMAGE_BG_ALT,
@@ -31,7 +32,7 @@ export default function CategorySection({ items = [], locale }: CategorySectionP
   const displayItems = items.slice(0, 6)
 
   return (
-    <section className="relative py-14 sm:py-16 md:py-24">
+    <section className="relative py-14 sm:py-16 md:py-24" style={{ background: SECTION_BACKGROUNDS.neutral }}>
       <div className="mx-auto max-w-7xl px-6">
         <div className="border-t pt-6" style={{ borderColor: SECTION_BORDER }}>
           <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">

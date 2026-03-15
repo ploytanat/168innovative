@@ -12,7 +12,7 @@ import {
   EYEBROW_PILL_STYLE,
   GLASS,
   NAV_ACTIVE_PILL_STYLE,
-  PAGE_BG,
+  SECTION_BACKGROUNDS,
   SECTION_BORDER,
 } from '@/app/components/ui/designSystem'
 
@@ -86,13 +86,13 @@ export default function Footer({ company }: FooterProps) {
   return (
     <footer
       className="relative overflow-hidden border-t"
-      style={{ borderColor: SECTION_BORDER, background: PAGE_BG }}
+      style={{ borderColor: SECTION_BORDER, background: SECTION_BACKGROUNDS.footer }}
       aria-label="Site footer"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{ background: CTA_GRADIENT }} />
-      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-white/12 blur-3xl" />
-      <div className="pointer-events-none absolute right-8 top-10 h-56 w-56 rounded-full bg-[#9fb3cc]/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#d4b8cc]/18 blur-3xl" />
+      <div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#fff3e8]/50 blur-3xl" />
+      <div className="pointer-events-none absolute right-8 top-10 h-56 w-56 rounded-full bg-[#9fb3cc]/24 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#dfc0cd]/20 blur-3xl" />
 
       <div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10">
         <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">

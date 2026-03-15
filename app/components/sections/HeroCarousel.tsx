@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
+import { GLASS, SECTION_BACKGROUNDS } from '@/app/components/ui/designSystem'
 import { HomeHeroView } from '@/app/lib/types/view'
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
@@ -50,13 +51,7 @@ const AUTOPLAY_MS = 6000
 //   4. Left: periwinkle blob
 //   5. Bottom-left: pink-lavender orb with warm core
 
-export const HERO_BG = `
-  radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc 0%, transparent 65%),
-  radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8 0%, transparent 60%),
-  radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 0%, #d4b8cc 30%, transparent 65%),
-  radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3 0%, transparent 70%),
-  #dde4ec
-`.trim().replace(/\n\s+/g, ' ')
+export const HERO_BG = SECTION_BACKGROUNDS.hero
 
 // ─── Progress Bar ─────────────────────────────────────────────────────────────
 
@@ -182,7 +177,10 @@ export default function HeroCarousel({ hero }: Props) {
               {/* ── Content panel ── */}
               <div
                 className="order-2 flex flex-col justify-between px-7 py-9 sm:px-10 lg:order-1 lg:px-12 lg:py-12"
-                style={{ borderRight: '1px solid rgba(30,40,60,0.10)' }}
+                style={{
+                  borderRight: '1px solid rgba(30,40,60,0.10)',
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02))',
+                }}
               >
                 <div>
                   {/* Eyebrow */}
@@ -190,8 +188,7 @@ export default function HeroCarousel({ hero }: Props) {
                     <span
                       className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
                       style={{
-                        background: 'rgba(255,255,255,0.45)',
-                        backdropFilter: 'blur(8px)',
+                        ...GLASS.stats,
                         border: '1px solid rgba(30,40,60,0.14)',
                         color: '#3a4a5c',
                       }}
@@ -235,8 +232,7 @@ export default function HeroCarousel({ hero }: Props) {
                         href={active.ctaSecondary.href}
                         className="inline-flex items-center gap-1.5 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] transition-colors"
                         style={{
-                          background: 'rgba(255,255,255,0.45)',
-                          backdropFilter: 'blur(8px)',
+                          ...GLASS.card,
                           border: '1px solid rgba(30,40,60,0.16)',
                           color: '#1a2232',
                         }}
@@ -266,26 +262,6 @@ export default function HeroCarousel({ hero }: Props) {
                 {/* Navigation */}
                 {hasMultiple && (
                   <div className="mt-8 flex items-center gap-4 lg:mt-10">
-                    <div className="flex items-center gap-1.5">
-                      {([
-                        { label: 'Previous slide', fn: previous, Icon: ChevronLeft },
-                        { label: 'Next slide',     fn: advance,  Icon: ChevronRight },
-                      ] as const).map(({ label, fn, Icon }) => (
-                        <button
-                          key={label} type="button" aria-label={label} onClick={fn}
-                          className="inline-flex h-9 w-9 items-center justify-center rounded-xl transition-colors"
-                          style={{
-                            background: 'rgba(255,255,255,0.50)',
-                            backdropFilter: 'blur(8px)',
-                            border: '1px solid rgba(30,40,60,0.16)',
-                            color: '#3a4a5c',
-                          }}
-                        >
-                          <Icon />
-                        </button>
-                      ))}
-                    </div>
-
                     <span className="text-[11px] font-semibold tabular-nums" style={{ color: '#5a6a7c' }}>
                       {(safeCurrent + 1).toString().padStart(2, '0')}
                       <span className="mx-1 opacity-40">/</span>
@@ -313,13 +289,12 @@ export default function HeroCarousel({ hero }: Props) {
                 <div
                   className="relative overflow-hidden"
                   style={{
-                    // Reuse the same base gradient — image panel feels continuous,
-                    // just nudge it cooler (less pink) by shifting blob positions
                     background: `
-                      radial-gradient(ellipse 60% 80% at 100% 0%,  #9fb3cc 0%, transparent 60%),
-                      radial-gradient(ellipse 50% 60% at 0%   50%,  #b8c4d8 0%, transparent 55%),
-                      radial-gradient(ellipse 60% 50% at 50%  55%,  #e8edf3 0%, transparent 65%),
-                      #dde4ec
+                      radial-gradient(circle at 92% 4%, rgba(114,148,198,0.30) 0%, transparent 28%),
+                      radial-gradient(circle at 12% 78%, rgba(243,204,163,0.18) 0%, transparent 22%),
+                      radial-gradient(circle at 24% 34%, rgba(190,209,229,0.22) 0%, transparent 24%),
+                      linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02)),
+                      linear-gradient(160deg, #e9f0f6 0%, #f3efe9 100%)
                     `.trim().replace(/\n\s+/g, ' '),
                     minHeight: 'clamp(260px,42vw,600px)',
                     borderBottom: '1px solid rgba(30,40,60,0.08)',
@@ -340,13 +315,44 @@ export default function HeroCarousel({ hero }: Props) {
                     </div>
                   </div>
 
+                  {/* Prev / Next buttons — left and right edges of image panel */}
+                  {hasMultiple && (
+                    <>
+                      <button
+                        type="button"
+                        aria-label="Previous slide"
+                        onClick={previous}
+                        className="absolute left-4 top-1/2 z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl transition-colors"
+                        style={{
+                          ...GLASS.card,
+                          border: '1px solid rgba(30,40,60,0.16)',
+                          color: '#3a4a5c',
+                        }}
+                      >
+                        <ChevronLeft />
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Next slide"
+                        onClick={advance}
+                        className="absolute right-4 top-1/2 z-10 inline-flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-xl transition-colors"
+                        style={{
+                          ...GLASS.card,
+                          border: '1px solid rgba(30,40,60,0.16)',
+                          color: '#3a4a5c',
+                        }}
+                      >
+                        <ChevronRight />
+                      </button>
+                    </>
+                  )}
+
                   {/* Slide counter badge */}
                   {hasMultiple && (
                     <div
-                      className="absolute top-4 left-4 z-10 rounded-lg px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
+                      className="absolute top-4 left-1/2 z-10 -translate-x-1/2 rounded-lg px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
                       style={{
-                        background: 'rgba(255,255,255,0.52)',
-                        backdropFilter: 'blur(10px)',
+                        ...GLASS.card,
                         border: '1px solid rgba(30,40,60,0.14)',
                         color: '#3a4a5c',
                       }}

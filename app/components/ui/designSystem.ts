@@ -1,10 +1,45 @@
 export const PAGE_BG = [
-  "radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc 0%, transparent 65%)",
-  "radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8 0%, transparent 60%)",
-  "radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 0%, #d4b8cc 30%, transparent 65%)",
-  "radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3 0%, transparent 70%)",
-  "#dde4ec",
+  "radial-gradient(circle at 88% -2%, rgba(110,142,196,0.36) 0%, transparent 24%)",
+  "radial-gradient(circle at 12% 18%, rgba(241,197,151,0.28) 0%, transparent 20%)",
+  "radial-gradient(circle at 78% 34%, rgba(170,197,225,0.22) 0%, transparent 18%)",
+  "radial-gradient(circle at 18% 66%, rgba(222,184,203,0.22) 0%, transparent 20%)",
+  "radial-gradient(circle at 52% 48%, rgba(255,255,255,0.56) 0%, transparent 30%)",
+  "linear-gradient(180deg, #edf2f5 0%, #f4f1eb 26%, #eef3f8 58%, #f9fbfc 100%)",
 ].join(", ")
+
+export const SECTION_BACKGROUNDS = {
+  hero: [
+    "radial-gradient(circle at 86% 4%, rgba(103,137,191,0.34) 0%, transparent 24%)",
+    "radial-gradient(circle at 14% 74%, rgba(226,173,188,0.24) 0%, transparent 24%)",
+    "radial-gradient(circle at 18% 24%, rgba(243,204,163,0.22) 0%, transparent 18%)",
+    "radial-gradient(circle at 48% 50%, rgba(255,255,255,0.54) 0%, transparent 28%)",
+    "linear-gradient(145deg, #eaf0f5 0%, #f5efe8 44%, #eef4fa 100%)",
+  ].join(", "),
+  cool: [
+    "radial-gradient(circle at 90% 12%, rgba(125,160,214,0.30) 0%, transparent 24%)",
+    "radial-gradient(circle at 8% 22%, rgba(197,213,231,0.30) 0%, transparent 22%)",
+    "radial-gradient(circle at 24% 86%, rgba(235,211,189,0.18) 0%, transparent 18%)",
+    "linear-gradient(160deg, #eef3f8 0%, #e8f0f8 42%, #f8fbfd 100%)",
+  ].join(", "),
+  warm: [
+    "radial-gradient(circle at 18% 18%, rgba(244,202,162,0.26) 0%, transparent 18%)",
+    "radial-gradient(circle at 84% 18%, rgba(172,197,227,0.22) 0%, transparent 18%)",
+    "radial-gradient(circle at 72% 78%, rgba(229,190,204,0.18) 0%, transparent 20%)",
+    "linear-gradient(160deg, #f6f0ea 0%, #eef3f7 42%, #fbfcfd 100%)",
+  ].join(", "),
+  neutral: [
+    "radial-gradient(circle at 16% 14%, rgba(255,255,255,0.54) 0%, transparent 18%)",
+    "radial-gradient(circle at 84% 24%, rgba(180,200,223,0.18) 0%, transparent 20%)",
+    "linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0))",
+  ].join(", "),
+  footer: [
+    "radial-gradient(circle at 82% 14%, rgba(109,142,192,0.26) 0%, transparent 22%)",
+    "radial-gradient(circle at 12% 24%, rgba(240,205,172,0.18) 0%, transparent 18%)",
+    "radial-gradient(circle at 26% 88%, rgba(224,188,200,0.16) 0%, transparent 20%)",
+    "linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08))",
+    "linear-gradient(160deg, #eef2f6 0%, #f7f3ee 100%)",
+  ].join(", "),
+} as const
 
 export const COLORS = {
   dark: "#1a2232",
@@ -101,7 +136,7 @@ export const NAV_SHELL_STYLE = {
 } as const
 
 export const SOFT_IMAGE_BG =
-  "radial-gradient(circle at 82% 16%,rgba(159,179,204,0.24) 0%,transparent 26%), linear-gradient(145deg,rgba(255,255,255,0.60),rgba(232,240,250,0.40))"
+  "radial-gradient(circle at 82% 16%,rgba(125,160,214,0.24) 0%,transparent 26%), radial-gradient(circle at 18% 78%,rgba(243,204,163,0.18) 0%,transparent 22%), linear-gradient(145deg,rgba(255,255,255,0.72),rgba(234,241,249,0.44))"
 
 export const SOFT_IMAGE_BG_ALT =
-  "radial-gradient(circle at 82% 16%,rgba(184,196,216,0.24) 0%,transparent 24%), linear-gradient(145deg,rgba(255,255,255,0.68),rgba(232,240,250,0.50))"
+  "radial-gradient(circle at 78% 18%,rgba(193,210,229,0.24) 0%,transparent 24%), radial-gradient(circle at 20% 70%,rgba(229,190,204,0.16) 0%,transparent 22%), linear-gradient(145deg,rgba(255,255,255,0.76),rgba(238,242,247,0.56))"

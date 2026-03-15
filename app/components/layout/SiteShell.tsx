@@ -47,7 +47,7 @@ export default async function SiteShell({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      <div className="min-h-screen">
+      <div className="site-frame min-h-screen">
         <Navigation locale={locale} logo={displayLogo} />
         <main className="min-h-screen">{children}</main>
         {company && <Footer company={company} />}

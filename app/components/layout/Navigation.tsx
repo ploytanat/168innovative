@@ -6,6 +6,14 @@ import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 
+import {
+  COLORS,
+  GLASS,
+  NAV_ACTIVE_PILL_STYLE,
+  NAV_SHELL_STYLE,
+  SECTION_BACKGROUNDS,
+} from "@/app/components/ui/designSystem"
+
 interface NavigationProps {
   locale: string
   logo: {
@@ -22,40 +30,11 @@ const NAV_MENU = [
   { href: "/contact",    label: { th: "ติดต่อเรา",    en: "Contact" } },
 ] as const
 
-// ─── Brand palette ─────────────────────────────────────────────────────────────
-const BRAND_NAVY  = "#24457c"
-const BRAND_MUTED = "#597197"
-
-// Active pill: soft mint→sky gradient — keeps brand feel, stays light
-const ACTIVE_MINT   = "rgba(225,244,235,0.96)"
-const ACTIVE_SKY    = "rgba(232,240,252,0.96)"
-const ACTIVE_BORDER = "rgba(165,196,202,0.82)"
-
-// ─── Style tokens ───────────────────────────────────────────────────────────────
-
-const NAV_SHELL_STYLE = {
-  background: "rgba(255,255,255,0.55)",
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
-  borderBottom: "1px solid rgba(255,255,255,0.70)",
-  boxShadow: "0 2px 16px rgba(30,40,60,0.07), inset 0 -1px 0 rgba(255,255,255,0.50)",
-} as const
-
-const NAV_LINK_ACTIVE_STYLE = {
-  background: `linear-gradient(135deg, ${ACTIVE_MINT} 0%, rgba(236,248,242,0.97) 42%, ${ACTIVE_SKY} 100%)`,
-  backdropFilter: "blur(12px)",
-  WebkitBackdropFilter: "blur(12px)",
-  border: `1px solid ${ACTIVE_BORDER}`,
-  borderRadius: 9999,
-  boxShadow: "0 10px 22px rgba(132,170,178,0.16), inset 0 1px 0 rgba(255,255,255,0.95)",
-  color: "#2f3f58",
-  fontWeight: 600,
-} as const
+const BRAND_NAVY = COLORS.brandNavy
+const BRAND_MUTED = COLORS.brandMuted
 
 const LANG_TOGGLE_STYLE = {
-  background: "rgba(255,255,255,0.42)",
-  backdropFilter: "blur(8px)",
-  WebkitBackdropFilter: "blur(8px)",
+  ...GLASS.stats,
   border: "1px solid rgba(36,69,124,0.18)",
   borderRadius: 9999,
 } as const
@@ -73,30 +52,21 @@ const LANG_TOGGLE_INDICATOR_STYLE = {
 } as const
 
 const MOBILE_MENU_BUTTON_STYLE = {
-  background: "rgba(255,255,255,0.55)",
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
+  ...GLASS.card,
   border: "1px solid rgba(36,69,124,0.16)",
   borderRadius: 12,
   color: BRAND_NAVY,
 } as const
 
 const MOBILE_DROPDOWN_STYLE = {
-  background: "rgba(255,255,255,0.72)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
-  border: "1px solid rgba(255,255,255,0.80)",
+  ...GLASS.primary,
+  background: SECTION_BACKGROUNDS.neutral,
   borderRadius: 16,
-  boxShadow: "0 8px 32px rgba(30,40,60,0.10)",
 } as const
 
 const MOBILE_PANEL_ROW_STYLE = {
-  background: "rgba(255,255,255,0.55)",
-  backdropFilter: "blur(10px)",
-  WebkitBackdropFilter: "blur(10px)",
-  border: "1px solid rgba(255,255,255,0.72)",
+  ...GLASS.card,
   borderRadius: 16,
-  boxShadow: "0 4px 16px rgba(30,40,60,0.07), inset 0 1px 0 rgba(255,255,255,0.88)",
 } as const
 
 // Active dot accent — matches project accent gradient
@@ -246,7 +216,7 @@ function NavigationInner({
                       ? ""
                       : "border-transparent bg-transparent text-[#4d6181] hover:border-[rgba(36,69,124,0.14)] hover:bg-[rgba(233,241,255,0.72)] hover:text-[#24457c]"
                   }`}
-                  style={active ? NAV_LINK_ACTIVE_STYLE : undefined}
+                  style={active ? NAV_ACTIVE_PILL_STYLE : undefined}
                 >
                   {item.label[lang]}
                 </Link>
@@ -297,7 +267,7 @@ function NavigationInner({
                       ? ""
                       : "border-transparent bg-transparent text-[#4d6181] hover:border-[rgba(36,69,124,0.14)] hover:bg-[rgba(233,241,255,0.72)] hover:text-[#24457c]"
                   }`}
-                  style={active ? NAV_LINK_ACTIVE_STYLE : undefined}
+                  style={active ? NAV_ACTIVE_PILL_STYLE : undefined}
                 >
                   <span>{item.label[lang]}</span>
                   {/* ← changed: inline style gradient dot instead of var(--color-accent) */}

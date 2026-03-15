@@ -1,76 +1,18 @@
 import Image from "next/image"
 import Link from "next/link"
 
+import {
+  COLORS,
+  CTA_BUTTON_STYLE,
+  CTA_GRADIENT,
+  EYEBROW_PILL_STYLE,
+  GLASS,
+  SECTION_BACKGROUNDS,
+} from "@/app/components/ui/designSystem"
 import { HOME_PRODUCT_SPOTLIGHT } from "@/app/lib/config/home-product-spotlight"
 import { uiText } from "@/app/lib/i18n/ui"
 import { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
-
-// ─── Design system ────────────────────────────────────────────────────────────
-//
-//  Background gradient (same as HeroCarousel):
-//    radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc, transparent 65%),
-//    radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8, transparent 60%),
-//    radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 → #d4b8cc, transparent 65%),
-//    radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3, transparent 70%),
-//    #dde4ec
-//
-//  ALL cards use glass/frost treatment — rgba(255,255,255,α) + backdrop-blur.
-//  No dark islands. Cards feel like frosted panels floating on the gradient.
-//
-//  Card tiers:
-//    Primary showcase  → glass 0.58 opacity, white border 0.80, strong blur
-//    Secondary card    → glass 0.70 opacity, white border 0.80, medium blur
-//    Stats / snapshot  → glass 0.42 opacity, white border 0.65, subtle blur
-//    Product grid card → glass 0.52 opacity, white border 0.72
-//
-//  Ink:
-//    --ink-dark:  #1a2232
-//    --ink-mid:   #3a4a5c
-//    --ink-soft:  #5a6a7c
-//    --ink-hint:  #8a9aac
-//  Accent:
-//    linear-gradient(90deg, #3a7bd5, #2ab8b0)  (divider + CTA button only)
-
-const PAGE_BG = [
-  "radial-gradient(ellipse 55% 70% at 95% 5%,  #9fb3cc 0%, transparent 65%)",
-  "radial-gradient(ellipse 40% 55% at 5%  45%,  #b8c4d8 0%, transparent 60%)",
-  "radial-gradient(ellipse 30% 40% at 8%  72%,  #e0c0d4 0%, #d4b8cc 30%, transparent 65%)",
-  "radial-gradient(ellipse 60% 50% at 45% 50%,  #e8edf3 0%, transparent 70%)",
-  "#dde4ec",
-].join(", ")
-
-// Glass card presets
-const GLASS = {
-  primary: {
-    background: "rgba(255,255,255,0.58)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    border: "1px solid rgba(255,255,255,0.80)",
-    boxShadow: "0 8px 32px rgba(30,40,60,0.10), inset 0 1px 0 rgba(255,255,255,0.90)",
-  },
-  secondary: {
-    background: "rgba(255,255,255,0.70)",
-    backdropFilter: "blur(14px)",
-    WebkitBackdropFilter: "blur(14px)",
-    border: "1px solid rgba(255,255,255,0.82)",
-    boxShadow: "0 4px 20px rgba(30,40,60,0.08), inset 0 1px 0 rgba(255,255,255,0.95)",
-  },
-  stats: {
-    background: "rgba(255,255,255,0.42)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255,255,255,0.65)",
-    boxShadow: "0 4px 16px rgba(30,40,60,0.06), inset 0 1px 0 rgba(255,255,255,0.80)",
-  },
-  card: {
-    background: "rgba(255,255,255,0.52)",
-    backdropFilter: "blur(10px)",
-    WebkitBackdropFilter: "blur(10px)",
-    border: "1px solid rgba(255,255,255,0.72)",
-    boxShadow: "0 4px 16px rgba(30,40,60,0.07), inset 0 1px 0 rgba(255,255,255,0.88)",
-  },
-} as const
 
 const PRIMARY_META = {
   badge:     { th: "สินค้าเด่น",       en: "Featured Pick" },
@@ -127,7 +69,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   return (
     <section
       className="relative overflow-hidden py-14 sm:py-16 lg:py-24"
-      style={{ background: PAGE_BG }}
+      style={{ background: SECTION_BACKGROUNDS.cool }}
     >
       {/* Top edge shimmer */}
       <div
@@ -144,20 +86,14 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               {/* Eyebrow pill */}
               <span
                 className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{
-                  background: "rgba(255,255,255,0.55)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  border: "1px solid rgba(255,255,255,0.75)",
-                  color: "#3a4a5c",
-                }}
+                style={EYEBROW_PILL_STYLE}
               >
                 {SECTION_COPY.eyebrow[locale]}
               </span>
 
               <h2
                 className="font-heading mt-4 text-[clamp(2rem,4vw,3.6rem)] leading-[1.05] tracking-tight"
-                style={{ color: "#1a2232" }}
+                style={{ color: COLORS.dark }}
               >
                 {sectionTitle}
               </h2>
@@ -165,10 +101,10 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               {/* Accent divider */}
               <div
                 className="my-5 h-[3px] w-12 rounded-full"
-                style={{ background: "linear-gradient(90deg,#3a7bd5,#2ab8b0)" }}
+                style={{ background: CTA_GRADIENT }}
               />
 
-              <p className="max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: "#3a4a5c" }}>
+              <p className="max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: COLORS.mid }}>
                 {sectionSummary}
               </p>
             </div>
@@ -178,11 +114,8 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               <div
                 className="rounded-xl px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em]"
                 style={{
-                  background: "rgba(255,255,255,0.52)",
-                  backdropFilter: "blur(8px)",
-                  WebkitBackdropFilter: "blur(8px)",
-                  border: "1px solid rgba(255,255,255,0.72)",
-                  color: "#3a4a5c",
+                  ...GLASS.card,
+                  color: COLORS.mid,
                 }}
               >
                 {items.length} {SECTION_COPY.curatedCount[locale]}
@@ -191,10 +124,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               <Link
                 href={withLocalePath(ctaHref, locale)}
                 className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] text-white transition-opacity hover:opacity-90"
-                style={{
-                  background: "linear-gradient(135deg,#3a7bd5,#2ab8b0)",
-                  boxShadow: "0 4px 16px rgba(58,123,213,0.25)",
-                }}
+                style={CTA_BUTTON_STYLE}
               >
                 <span>{ctaLabel}</span>
                 <ArrowRightIcon />

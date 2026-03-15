@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { COLORS, GLASS, PAGE_BG, SOFT_IMAGE_BG } from "../ui/designSystem"
+import { COLORS, GLASS, SECTION_BACKGROUNDS, SOFT_IMAGE_BG } from "../ui/designSystem"
 
 export default function WhoWeAre({ data }: {
   data: {
@@ -9,7 +9,7 @@ export default function WhoWeAre({ data }: {
   }
 }) {
   return (
-    <section className="py-20" style={{ background: PAGE_BG }}>
+    <section className="py-20" style={{ background: SECTION_BACKGROUNDS.neutral }}>
       <div className="mx-auto max-w-7xl px-4 grid grid-cols-1 gap-12 lg:grid-cols-12 items-center">
 
         {/* IMAGE */}

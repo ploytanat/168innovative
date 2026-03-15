@@ -11,7 +11,7 @@ import {
   CTA_GRADIENT,
   GLASS,
   NAV_ACTIVE_PILL_STYLE,
-  PAGE_BG,
+  SECTION_BACKGROUNDS,
   SOFT_IMAGE_BG,
 } from '@/app/components/ui/designSystem'
 
@@ -126,7 +126,7 @@ export default function ProductGrid({
   }, [isSearching, onSearchStateChange])
 
   return (
-    <div className={`relative overflow-hidden ${tone.shell}`} style={{ ...GLASS.secondary, background: PAGE_BG }}>
+    <div className={`relative overflow-hidden ${tone.shell}`} style={{ ...GLASS.secondary, background: SECTION_BACKGROUNDS.cool }}>
       <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${tone.glow}`} />
       <div className="relative">
         <div className="mb-10 flex flex-col gap-4 md:mb-12 lg:flex-row lg:items-center lg:justify-between">

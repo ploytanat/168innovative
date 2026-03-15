@@ -5,7 +5,7 @@ import Image from "next/image"
 
 import type { AboutHeroView, ImageView } from "@/app/lib/types/view"
 import Breadcrumb from "../ui/Breadcrumb"
-import { COLORS, GLASS, PAGE_BG, SOFT_IMAGE_BG, SOFT_IMAGE_BG_ALT } from "../ui/designSystem"
+import { COLORS, GLASS, SECTION_BACKGROUNDS, SOFT_IMAGE_BG, SOFT_IMAGE_BG_ALT } from "../ui/designSystem"
 
 interface AboutHeroProps {
   hero: AboutHeroView
@@ -149,7 +149,7 @@ export default function AboutHero({ hero }: AboutHeroProps) {
   const words = hero.title.split(" ")
 
   return (
-    <section className="relative overflow-hidden px-4 pb-10 pt-4 sm:px-6 lg:px-8 lg:pb-16" style={{ background: PAGE_BG }}>
+    <section className="relative overflow-hidden px-4 pb-10 pt-4 sm:px-6 lg:px-8 lg:pb-16" style={{ background: SECTION_BACKGROUNDS.warm }}>
       <PastelBlobs />
 
       <div className="relative z-10 mx-auto max-w-7xl">
