@@ -77,7 +77,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
         style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)" }}
       />
 
-      <div className="mx-auto container px-6">
+      <div className="mx-auto max-w-7xl px-6">
         <div className="relative border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.55)" }}>
 
           {/* ── Section header ─────────────────────────────────────── */}
