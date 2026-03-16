@@ -3,7 +3,7 @@ export const revalidate = 60
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import Script from "next/script"
 import {
   ChevronLeft,
@@ -71,6 +71,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "ไม่พบสินค้า" }
   }
 
+  if (product.categorySlug && product.categorySlug !== slug) {
+    permanentRedirect(`/categories/${product.categorySlug}/${productSlug}`)
+  }
+
+  if (!category || product.categoryId !== category.id) {
+    return {
+      title: product.name,
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }
+  }
+
   const canonicalPath = `/categories/${slug}/${productSlug}`
   const description = buildProductDescription(
     product.name,
@@ -129,14 +143,17 @@ export default async function ProductDetailPage({ params }: Props) {
   const { slug, productSlug } = await params
   const locale = "th"
 
-  const [category, product, related] = await Promise.all([
+  const [category, product] = await Promise.all([
     getCategoryBySlug(slug, locale),
     getProductBySlug(productSlug, locale),
-    getRelatedProducts(slug, productSlug, locale),
   ])
 
   if (!category || !product) notFound()
+  if (product.categorySlug && product.categorySlug !== slug) {
+    permanentRedirect(`/categories/${product.categorySlug}/${productSlug}`)
+  }
   if (product.categoryId !== category.id) notFound()
+  const related = await getRelatedProducts(slug, productSlug, locale)
   const hasDistinctContent = hasDistinctText(
     product.contentHtml,
     product.description
