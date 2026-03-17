@@ -31,7 +31,7 @@ import {
   shouldIndexProduct,
 } from '@/app/lib/seo/indexability'
 import { buildProductSupportCopy } from '@/app/lib/seo/product-support-copy'
-import { buildFaqJsonLd, buildProductJsonLd } from '@/app/lib/schema'
+import { buildFaqJsonLd } from '@/app/lib/schema'
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
@@ -174,10 +174,6 @@ export default async function ProductDetailPage({ params }: Props) {
   const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
   const breadcrumbId = `${productUrl}#breadcrumb`
   const faqPageId = product.faqItems?.length ? `${productUrl}#faq` : undefined
-  const relatedProducts = related.map((item) => ({
-    name: item.name,
-    url: `/en/categories/${item.categorySlug || slug}/${item.slug}`,
-  }))
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -209,23 +205,10 @@ export default async function ProductDetailPage({ params }: Props) {
       },
     ],
   }
-  const jsonLd = buildProductJsonLd({
-    locale,
-    product,
-    categoryName: category.name,
-    productUrl,
-    faqPageId,
-    relatedProducts,
-  })
   const faqJsonLd = buildFaqJsonLd(product.faqItems, { pageId: faqPageId })
 
   return (
     <main className="min-h-screen bg-transparent">
-      <Script
-        id="product-jsonld-en"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <Script
         id="breadcrumb-jsonld-en"
         type="application/ld+json"
