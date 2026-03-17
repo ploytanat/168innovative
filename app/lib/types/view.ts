@@ -218,6 +218,7 @@ export interface ArticleView {
   category?: string
   tags: TagView[]
   publishedAt: string
+  updatedAt?: string
   seoTitle?: string
   metaDescription?: string
   canonicalUrl?: string

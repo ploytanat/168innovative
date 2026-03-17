@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 
 import ArticleDetail from "@/app/components/article/ArticleDetail"
 import { buildMetadata } from "@/app/config/seo"
-import { SITE_URL } from "@/app/config/site"
+import { COMPANY_NAME, SITE_NAME, SITE_URL, withSiteUrl } from "@/app/config/site"
 import { getArticleBySlug } from "@/app/lib/api/articles"
 import { getArticleInternalLinks } from "@/app/lib/seo/article-internal-links"
 import { buildFaqJsonLd } from "@/app/lib/schema"
@@ -41,30 +41,46 @@ export default async function ArticleDetailPage({
 
   const internalLinks = getArticleInternalLinks(slug, "th")
   const articleUrl = article.canonicalUrl || `${SITE_URL}/articles/${slug}`
+  const faqPageId = article.faqItems?.length ? `${articleUrl}#faq` : undefined
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": articleUrl,
     headline: article.seoTitle ?? article.title,
     description: article.metaDescription ?? article.excerpt,
     mainEntityOfPage: articleUrl,
     url: articleUrl,
+    inLanguage: "th",
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
-    image: article.coverImage ? [article.coverImage.src] : undefined,
+    dateModified: article.updatedAt ?? article.publishedAt,
+    image: article.coverImage ? [withSiteUrl(article.coverImage.src)] : undefined,
     author: {
       "@type": "Organization",
-      name: article.authorName || "168 Innovative",
+      "@id": SITE_URL,
+      name: article.authorName || SITE_NAME,
     },
     publisher: {
       "@type": "Organization",
-      name: "168 Innovative",
+      "@id": SITE_URL,
+      name: COMPANY_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/logo.png`,
+        url: withSiteUrl("/logo.png"),
       },
     },
+    isPartOf: {
+      "@id": `${SITE_URL}#website`,
+    },
+    ...(faqPageId
+      ? {
+          subjectOf: {
+            "@type": "FAQPage",
+            "@id": faqPageId,
+          },
+        }
+      : {}),
   }
-  const faqJsonLd = buildFaqJsonLd(article.faqItems)
+  const faqJsonLd = buildFaqJsonLd(article.faqItems, { pageId: faqPageId })
 
   return (
     <>

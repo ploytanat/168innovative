@@ -216,6 +216,7 @@ function mapWPArticleToView(wp: WPArticle, locale: Locale): ArticleView {
     category,
     tags,
     publishedAt: acf.published_at || wp.date,
+    updatedAt: acf.updated_at || wp.modified || acf.published_at || wp.date,
 
     // ── Fields ใหม่ ──
     seoTitle: locale === "th" ? acf.seo_title_th : acf.seo_title_en,

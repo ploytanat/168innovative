@@ -9,13 +9,14 @@ import FaqSection from "@/app/components/ui/FaqSection"
 import PageIntro from "@/app/components/ui/PageIntro"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
+import { SITE_URL } from "@/app/config/site"
 import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsByCategory,
   getProductsByCategory,
 } from "@/app/lib/api/products"
 import { shouldIndexCategory } from "@/app/lib/seo/indexability"
-import { buildFaqJsonLd } from "@/app/lib/schema"
+import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 
 interface Props {
@@ -94,7 +95,20 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   ])
 
   if (!category) notFound()
-  const faqJsonLd = buildFaqJsonLd(category.faqItems)
+  const categoryUrl =
+    currentPage > 1
+      ? `${SITE_URL}/en/categories/${slug}?page=${currentPage}`
+      : `${SITE_URL}/en/categories/${slug}`
+  const faqPageId = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
+    [
+      { name: "Home", item: `${SITE_URL}/en` },
+      { name: "Categories", item: `${SITE_URL}/en/categories` },
+      { name: category.name, item: categoryUrl },
+    ],
+    { id: `${categoryUrl}#breadcrumb` }
+  )
+  const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
   const hasDistinctIntro =
     Boolean(category.introHtml) &&
     normalizeText(category.introHtml) !== normalizeText(category.description)
@@ -108,6 +122,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       ) : null}
+      <Script
+        id="category-breadcrumb-jsonld-en"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
         <PageIntro
           title={category.name}

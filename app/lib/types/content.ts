@@ -241,6 +241,7 @@ export interface WPArticle {
   id: number;
   slug: string;
   date: string;
+  modified?: string;
 
   acf?: {
     image?: number

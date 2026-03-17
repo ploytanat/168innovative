@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 
 import ProductImageGallery from '@/app/components/product/ProductImageGallery'
+import { SITE_URL, withSiteUrl } from '@/app/config/site'
 import Breadcrumb from '@/app/components/ui/Breadcrumb'
 import FaqSection from '@/app/components/ui/FaqSection'
 import RichTextSection from '@/app/components/ui/RichTextSection'
@@ -30,13 +31,11 @@ import {
   shouldIndexProduct,
 } from '@/app/lib/seo/indexability'
 import { buildProductSupportCopy } from '@/app/lib/seo/product-support-copy'
-import { buildFaqJsonLd } from '@/app/lib/schema'
+import { buildFaqJsonLd, buildProductJsonLd } from '@/app/lib/schema'
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
 }
-
-const SITE_URL = 'https://168innovative.co.th'
 
 const TRUST_BADGES = [
   { icon: Factory, text: 'Factory Standard' },
@@ -100,6 +99,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   )
   const keywords = [
     product.name,
+    `${product.name} OEM`,
     `${product.name} supplier`,
     `${product.name} manufacturer`,
     category?.name,
@@ -128,7 +128,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: '168 Innovative',
       images: [
         {
-          url: product.image.src,
+          url: withSiteUrl(product.image.src),
           alt: product.image.alt || product.name,
         },
       ],
@@ -137,7 +137,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: `${product.name} | 168 Innovative`,
       description,
-      images: [product.image.src],
+      images: [withSiteUrl(product.image.src)],
     },
     robots: {
       index: shouldIndex,
@@ -172,9 +172,16 @@ export default async function ProductDetailPage({ params }: Props) {
   const supportCopy = buildProductSupportCopy(product, category, 'en')
 
   const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
+  const breadcrumbId = `${productUrl}#breadcrumb`
+  const faqPageId = product.faqItems?.length ? `${productUrl}#faq` : undefined
+  const relatedProducts = related.map((item) => ({
+    name: item.name,
+    url: `/en/categories/${item.categorySlug || slug}/${item.slug}`,
+  }))
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    '@id': breadcrumbId,
     itemListElement: [
       {
         '@type': 'ListItem',
@@ -202,31 +209,15 @@ export default async function ProductDetailPage({ params }: Props) {
       },
     ],
   }
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    url: productUrl,
-    mainEntityOfPage: productUrl,
-    name: product.name,
-    image: [`${SITE_URL}${product.image.src}`],
-    description: product.description,
-    sku: product.slug,
-    category: category.name,
-    brand: { '@type': 'Brand', name: '168 Innovative' },
-    manufacturer: { '@type': 'Organization', name: '168 Innovative Co., Ltd.' },
-    additionalProperty: product.specs.map((spec) => ({
-      '@type': 'PropertyValue',
-      name: spec.label,
-      value: spec.value,
-    })),
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      priceCurrency: 'THB',
-      url: productUrl,
-    },
-  }
-  const faqJsonLd = buildFaqJsonLd(product.faqItems)
+  const jsonLd = buildProductJsonLd({
+    locale,
+    product,
+    categoryName: category.name,
+    productUrl,
+    faqPageId,
+    relatedProducts,
+  })
+  const faqJsonLd = buildFaqJsonLd(product.faqItems, { pageId: faqPageId })
 
   return (
     <main className="min-h-screen bg-transparent">
@@ -242,7 +233,7 @@ export default async function ProductDetailPage({ params }: Props) {
       />
       {faqJsonLd ? (
         <Script
-          id="product-faq-jsonld-en"
+          id="product-faq-jsonld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
