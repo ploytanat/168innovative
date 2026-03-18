@@ -6,6 +6,7 @@ import {
   defaultOgImage,
   SITE_NAME,
   SITE_URL,
+  withCanonicalSiteUrl,
   withLocalePath,
   withSiteUrl,
 } from "@/app/config/site"
@@ -48,10 +49,10 @@ export function buildMetadata(input: MetadataInput): Metadata {
 
   const localizedPath = withLocalePath(path, locale)
   const canonicalPath = canonicalUrl ?? localizedPath
-  const canonical = withSiteUrl(canonicalPath)
+  const canonical = withCanonicalSiteUrl(canonicalPath)
   const languageAlternates = {
-    th: withLocalePath(alternates?.th ?? path, "th"),
-    en: withLocalePath(alternates?.en ?? path, "en"),
+    th: withCanonicalSiteUrl(withLocalePath(alternates?.th ?? path, "th")),
+    en: withCanonicalSiteUrl(withLocalePath(alternates?.en ?? path, "en")),
   }
 
   return {
@@ -64,7 +65,7 @@ export function buildMetadata(input: MetadataInput): Metadata {
       "cosmetic packaging",
     ]),
     alternates: {
-      canonical: canonicalPath,
+      canonical,
       languages: languageAlternates,
     },
     openGraph: {

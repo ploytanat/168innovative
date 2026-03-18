@@ -1,7 +1,7 @@
 import { unstable_cache } from "next/cache"
 import type { MetadataRoute } from "next"
 
-import { withSiteUrl } from "@/app/config/site"
+import { withCanonicalSiteUrl } from "@/app/config/site"
 import { getArticles } from "@/app/lib/api/articles"
 import { getCategories } from "@/app/lib/api/categories"
 import {
@@ -147,7 +147,7 @@ function getEntryLastModified(entries: MetadataRoute.Sitemap) {
 }
 
 function toAbsoluteUrl(pathOrUrl: string) {
-  return withSiteUrl(pathOrUrl)
+  return withCanonicalSiteUrl(pathOrUrl)
 }
 
 function buildPageUrl(path: string) {

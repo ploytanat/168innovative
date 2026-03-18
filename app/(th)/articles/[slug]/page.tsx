@@ -4,7 +4,13 @@ import { notFound } from "next/navigation"
 
 import ArticleDetail from "@/app/components/article/ArticleDetail"
 import { buildMetadata } from "@/app/config/seo"
-import { COMPANY_NAME, SITE_NAME, SITE_URL, withSiteUrl } from "@/app/config/site"
+import {
+  COMPANY_NAME,
+  SITE_NAME,
+  SITE_URL,
+  withCanonicalSiteUrl,
+  withSiteUrl,
+} from "@/app/config/site"
 import { getArticleBySlug } from "@/app/lib/api/articles"
 import { getArticleInternalLinks } from "@/app/lib/seo/article-internal-links"
 import { buildFaqJsonLd } from "@/app/lib/schema"
@@ -40,7 +46,9 @@ export default async function ArticleDetailPage({
   if (!article) notFound()
 
   const internalLinks = getArticleInternalLinks(slug, "th")
-  const articleUrl = article.canonicalUrl || `${SITE_URL}/articles/${slug}`
+  const articleUrl = withCanonicalSiteUrl(
+    article.canonicalUrl ?? `${SITE_URL}/articles/${slug}`
+  )
   const faqPageId = article.faqItems?.length ? `${articleUrl}#faq` : undefined
   const articleJsonLd = {
     "@context": "https://schema.org",
