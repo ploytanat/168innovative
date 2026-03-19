@@ -3,6 +3,15 @@ import type { Locale } from "@/app/lib/types/content"
 export const SITE_URL = "https://168innovative.co.th"
 export const SITE_NAME = "168 Innovative"
 export const COMPANY_NAME = "168 Innovative Co., Ltd."
+export const ORGANIZATION_DESCRIPTION: Record<Locale, string> = {
+  th: "ผู้ผลิตและจำหน่ายบรรจุภัณฑ์พลาสติก จุกซอง ฝาพลาสติก OEM/ODM",
+  en: "Manufacturer and supplier of plastic packaging, spouts, plastic caps, and OEM/ODM packaging solutions.",
+}
+export const ORGANIZATION_AVAILABLE_LANGUAGES = ["Thai", "English"] as const
+export const ORGANIZATION_SAME_AS_FALLBACK = [
+  "https://www.facebook.com/168innovative",
+  "https://line.me/ti/p/~168innovative",
+]
 
 const SITE_HOSTNAMES = new Set([
   "168innovative.co.th",

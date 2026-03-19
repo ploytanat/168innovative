@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 import BackToTop from "@/app/components/ui/BackToTop"
 import { COMPANY_NAME, SITE_NAME, SITE_URL, withSiteUrl } from "@/app/config/site"
 import { getCompany } from "@/app/lib/api/company"
+import { buildOrganizationJsonLd, buildPostalAddressJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 import Footer from "./Footer"
 import Navigation from "./Navigation"
@@ -18,7 +19,7 @@ export default async function SiteShell({
 }: SiteShellProps) {
   const company = await getCompany(locale)
   const displayLogo = company?.logo ?? {
-    src: "/fallback-logo.png",
+    src: "/logo.png",
     alt: "168 Innovative",
   }
   const socialUrls = Array.from(
@@ -40,16 +41,7 @@ export default async function SiteShell({
     "@type": "Country",
     name: "Thailand",
   }
-  const organizationJsonLd = {
-    "@type": "Organization",
-    "@id": SITE_URL,
-    name: COMPANY_NAME,
-    url: SITE_URL,
-    logo: withSiteUrl(displayLogo.src),
-    areaServed,
-    ...(contactPoint ? { contactPoint } : {}),
-    sameAs: socialUrls,
-  }
+  const organizationJsonLd = buildOrganizationJsonLd({ locale, company })
   const websiteJsonLd = {
     "@type": "WebSite",
     "@id": `${SITE_URL}#website`,
@@ -70,15 +62,8 @@ export default async function SiteShell({
     areaServed,
     ...(primaryPhone ? { telephone: primaryPhone } : {}),
     ...(contactPoint ? { contactPoint } : {}),
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "89/269 Soi Thian Thale 20",
-      addressLocality: "Bang Khun Thian",
-      addressRegion: "Bangkok",
-      postalCode: "10150",
-      addressCountry: "TH",
-    },
-    sameAs: socialUrls,
+    address: buildPostalAddressJsonLd(company?.address),
+    sameAs: socialUrls.length ? socialUrls : organizationJsonLd.sameAs,
     parentOrganization: {
       "@id": SITE_URL,
     },
