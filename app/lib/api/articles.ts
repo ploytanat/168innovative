@@ -237,16 +237,21 @@ function mapWPArticleToView(wp: WPArticle, locale: Locale): ArticleView {
 async function fetchArticlesFromWP(
   params: Record<string, string>
 ): Promise<WPArticle[]> {
-  const url = new URL("/wp-json/wp/v2/article", WP_URL)
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.set(key, value)
-  )
-  const res = await fetch(url.toString(), fetchConfig)
-  if (!res.ok) {
-    console.error("WP fetch failed:", res.status)
+  try {
+    const url = new URL("/wp-json/wp/v2/article", WP_URL)
+    Object.entries(params).forEach(([key, value]) =>
+      url.searchParams.set(key, value)
+    )
+    const res = await fetch(url.toString(), fetchConfig)
+    if (!res.ok) {
+      console.error("WP article fetch failed:", res.status, url.toString())
+      return []
+    }
+    return res.json()
+  } catch (error) {
+    console.error("WP article fetch failed:", error)
     return []
   }
-  return res.json()
 }
 
 export async function getArticles(locale: Locale): Promise<ArticleView[]> {

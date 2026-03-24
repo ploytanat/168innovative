@@ -38,16 +38,26 @@ interface WPProductCategory {
 
 /* ================= Helper ================= */
 
-async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, {
-    next: { revalidate: 300 },
-  });
+async function fetchJSON<T>(
+  url: string,
+  fallback: T,
+  label: string
+): Promise<T> {
+  try {
+    const res = await fetch(url, {
+      next: { revalidate: 300 },
+    });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${url}`);
+    if (!res.ok) {
+      console.error(`Failed to fetch ${label}: ${res.status} ${url}`);
+      return fallback;
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error(`Failed to fetch ${label}:`, error);
+    return fallback;
   }
-
-  return res.json();
 }
 
 /* ================= All Categories ================= */
@@ -56,7 +66,9 @@ export function getCategories(locale: Locale): Promise<CategoryView[]> {
   return unstable_cache(
     async () => {
       const data = await fetchJSON<WPProductCategory[]>(
-        `${BASE}/wp-json/wp/v2/product_category?per_page=100&_fields=${CATEGORY_FIELDS}`
+        `${BASE}/wp-json/wp/v2/product_category?per_page=100&_fields=${CATEGORY_FIELDS}`,
+        [],
+        `categories (${locale})`
       );
       return data.map((wp) => mapCategory(wp, locale));
     },
@@ -69,7 +81,9 @@ export function getAllCategorySlugs(): Promise<string[]> {
   return unstable_cache(
     async () => {
       const data = await fetchJSON<Array<{ slug?: string }>>(
-        `${BASE}/wp-json/wp/v2/product_category?_fields=slug&per_page=100`
+        `${BASE}/wp-json/wp/v2/product_category?_fields=slug&per_page=100`,
+        [],
+        "category slugs"
       );
       return data
         .map((item) => item.slug)
@@ -86,7 +100,9 @@ function getCategoryRawBySlug(slug: string): Promise<WPProductCategory | null> {
   return unstable_cache(
     async () => {
       const data = await fetchJSON<WPProductCategory[]>(
-        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&per_page=1&_fields=${CATEGORY_FIELDS}`
+        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&per_page=1&_fields=${CATEGORY_FIELDS}`,
+        [],
+        `category ${slug}`
       );
       return data[0] ?? null;
     },

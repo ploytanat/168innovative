@@ -17,10 +17,22 @@ const PRODUCT_FIELDS =
    Fetch helpers
 ───────────────────────────── */
 
-async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: 60 } })
-  if (!res.ok) throw new Error(`Fetch failed: ${url}`)
-  return res.json()
+async function fetchJSON<T>(
+  url: string,
+  fallback: T,
+  label: string
+): Promise<T> {
+  try {
+    const res = await fetch(url, { next: { revalidate: 60 } })
+    if (!res.ok) {
+      console.error(`Fetch failed for ${label}: ${res.status} ${url}`)
+      return fallback
+    }
+    return res.json()
+  } catch (error) {
+    console.error(`Fetch failed for ${label}:`, error)
+    return fallback
+  }
 }
 
 /* ─────────────────────────────
@@ -87,7 +99,9 @@ function formatSpecLabel(key: string, locale: Locale) {
 const _getCategoryMap = unstable_cache(
   async (): Promise<Record<number, string>> => {
     const terms = await fetchJSON<{ id: number; slug: string }[]>(
-      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`
+      `${BASE}/wp-json/wp/v2/product_category?_fields=id,slug&per_page=100`,
+      [],
+      "product category map"
     )
     return Object.fromEntries(terms.map((t) => [t.id, t.slug]))
   },
@@ -102,7 +116,9 @@ const _getCategoryMap = unstable_cache(
 const _getProductsRaw = unstable_cache(
   async (): Promise<WPProduct[]> =>
     fetchJSON<WPProduct[]>(
-      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS}`
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS}`,
+      [],
+      "all products"
     ),
   ["products-home-v6"],
   { revalidate: 3600, tags: ["products"] }
@@ -118,21 +134,27 @@ function _getProductsByCategoryId(
 ): Promise<{ data: WPProduct[]; totalPages: number; totalCount: number }> {
   return unstable_cache(
     async () => {
-      const res = await fetch(
-        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
-        { next: { revalidate: 3600 } }
-      )
+      try {
+        const res = await fetch(
+          `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
+          { next: { revalidate: 3600 } }
+        )
 
-      if (!res.ok) {
-        throw new Error(`Fetch failed: category ${categoryId} page ${page}`)
+        if (!res.ok) {
+          console.error(`Fetch failed: category ${categoryId} page ${page}`)
+          return { data: [], totalPages: 1, totalCount: 0 }
+        }
+
+        const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
+        const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
+
+        const data = (await res.json()) as WPProduct[]
+
+        return { data, totalPages, totalCount }
+      } catch (error) {
+        console.error(`Fetch failed: category ${categoryId} page ${page}`, error)
+        return { data: [], totalPages: 1, totalCount: 0 }
       }
-
-      const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
-      const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
-
-      const data = (await res.json()) as WPProduct[]
-
-      return { data, totalPages, totalCount }
     },
     [`products-category-${categoryId}-p${page}-v2`],
     { revalidate: 3600, tags: ["products"] }
@@ -146,22 +168,31 @@ function _getProductsByCategoryBatch(
 ): Promise<{ data: WPProduct[]; totalPages: number; totalCount: number }> {
   return unstable_cache(
     async () => {
-      const res = await fetch(
-        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
-        { next: { revalidate: 3600 } }
-      )
-
-      if (!res.ok) {
-        throw new Error(
-          `Fetch failed: category ${categoryId} page ${page} per_page ${perPage}`
+      try {
+        const res = await fetch(
+          `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
+          { next: { revalidate: 3600 } }
         )
+
+        if (!res.ok) {
+          console.error(
+            `Fetch failed: category ${categoryId} page ${page} per_page ${perPage}`
+          )
+          return { data: [], totalPages: 1, totalCount: 0 }
+        }
+
+        const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
+        const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
+        const data = (await res.json()) as WPProduct[]
+
+        return { data, totalPages, totalCount }
+      } catch (error) {
+        console.error(
+          `Fetch failed: category ${categoryId} page ${page} per_page ${perPage}`,
+          error
+        )
+        return { data: [], totalPages: 1, totalCount: 0 }
       }
-
-      const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
-      const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
-      const data = (await res.json()) as WPProduct[]
-
-      return { data, totalPages, totalCount }
     },
     [`products-category-${categoryId}-p${page}-pp${perPage}-v1`],
     { revalidate: 3600, tags: ["products"] }
@@ -176,7 +207,9 @@ function _getProductRaw(slug: string): Promise<WPProduct[]> {
   return unstable_cache(
     async () =>
       fetchJSON<WPProduct[]>(
-        `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`
+        `${BASE}/wp-json/wp/v2/product?slug=${slug}&_fields=${PRODUCT_FIELDS}`,
+        [],
+        `product ${slug}`
       ),
     [`product-single-${slug}-v2`],
     { revalidate: 3600, tags: ["products"] }
@@ -191,7 +224,9 @@ function _getRelatedRaw(categoryId: number): Promise<WPProduct[]> {
   return unstable_cache(
     async () =>
       fetchJSON<WPProduct[]>(
-        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`
+        `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=5&_fields=${PRODUCT_FIELDS}`,
+        [],
+        `related products for category ${categoryId}`
       ),
     [`products-related-${categoryId}-v2`],
     { revalidate: 3600, tags: ["products"] }
@@ -248,7 +283,9 @@ function mapWPToProductView(
 export async function getAllProductsForSitemap() {
   const [products, catMap] = await Promise.all([
     fetchJSON<{ slug: string; modified: string; product_category: number[] }[]>(
-      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,modified,product_category`
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,modified,product_category`,
+      [],
+      "products for sitemap"
     ),
     _getCategoryMap(),
   ])
@@ -274,7 +311,9 @@ export async function getAllProductsForSitemap() {
 export async function getIndexableProductsForSitemap() {
   const [products, catMap] = await Promise.all([
     fetchJSON<Array<WPProduct & { modified: string }>>(
-      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS},modified`
+      `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS},modified`,
+      [],
+      "indexable products for sitemap"
     ),
     _getCategoryMap(),
   ])
