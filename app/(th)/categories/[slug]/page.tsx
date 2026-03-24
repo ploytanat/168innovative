@@ -95,23 +95,32 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   ])
 
   if (!category) notFound()
+  const resolvedCategory = category
   const categoryUrl =
     currentPage > 1
       ? `${SITE_URL}/categories/${slug}?page=${currentPage}`
       : `${SITE_URL}/categories/${slug}`
-  const faqPageId = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
+  const faqPageId = resolvedCategory.faqItems?.length ? `${categoryUrl}#faq` : undefined
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
       { name: "หน้าแรก", item: SITE_URL },
       { name: "หมวดหมู่สินค้า", item: `${SITE_URL}/categories` },
-      { name: category.name, item: categoryUrl },
+      { name: resolvedCategory.name, item: categoryUrl },
     ],
     { id: `${categoryUrl}#breadcrumb` }
   )
-  const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
+  const faqJsonLd = buildFaqJsonLd(resolvedCategory.faqItems, { pageId: faqPageId })
   const hasDistinctIntro =
-    Boolean(category.introHtml) &&
-    normalizeText(category.introHtml) !== normalizeText(category.description)
+    Boolean(resolvedCategory.introHtml) &&
+    normalizeText(resolvedCategory.introHtml) !== normalizeText(resolvedCategory.description)
+  const categoryIntroSection = hasDistinctIntro ? (
+    <RichTextSection
+      className="mt-12"
+      eyebrow="รายละเอียดหมวดสินค้า"
+      title="ข้อมูลเพิ่มเติมในหมวดนี้"
+      html={resolvedCategory.introHtml ?? ""}
+    />
+  ) : null
 
   return (
     <main className="min-h-screen bg-transparent">
@@ -130,11 +139,11 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
       <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
         <PageIntro
-          title={category.name}
-          description={category.description}
+          title={resolvedCategory.name}
+          description={resolvedCategory.description}
           breadcrumbs={[
             { label: "หมวดหมู่สินค้า", href: "/categories" },
-            { label: category.name },
+            { label: resolvedCategory.name },
           ]}
           actions={
             <Link
@@ -146,15 +155,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
             </Link>
           }
         />
-
-        {hasDistinctIntro ? (
-          <RichTextSection
-            className="mt-12"
-            eyebrow="รายละเอียดหมวดสินค้า"
-            title="ข้อมูลเพิ่มเติมในหมวดนี้"
-            html={category.introHtml ?? ""}
-          />
-        ) : null}
 
         <CategoryProductsSection
           slug={slug}
@@ -171,8 +171,9 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           className="mt-12"
           eyebrow="คำถามที่พบบ่อย"
           title="FAQ"
-          items={category.faqItems}
+          items={resolvedCategory.faqItems}
         />
+        {categoryIntroSection}
       </div>
     </main>
   )
