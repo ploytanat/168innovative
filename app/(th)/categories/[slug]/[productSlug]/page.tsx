@@ -342,19 +342,6 @@ export default async function ProductDetailPage({ params }: Props) {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <div className="deck-card mt-6 rounded-[1rem] p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
-              {supportCopy.bulletsTitle}
-            </p>
-            <ul className="mt-4 space-y-3 text-sm text-[var(--color-ink-soft)]">
-              {supportCopy.bullets.map((bullet) => (
-                <li key={bullet} className="flex items-start gap-3">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
-                  <span>{bullet}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
         </section>
 
         <FaqSection

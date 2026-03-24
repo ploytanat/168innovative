@@ -5,8 +5,6 @@ type ProductSupportCopy = {
   eyebrow: string
   title: string
   paragraphs: string[]
-  bulletsTitle: string
-  bullets: string[]
 }
 
 function getTopSpecs(product: ProductView, limit = 3) {
@@ -33,12 +31,6 @@ export function buildProductSupportCopy(
           ? `Key specs on this page include ${topSpecs.join(", ")}. These details help teams shortlist the right item faster before requesting samples or quotations.`
           : `This page is structured to support early product evaluation, quotation requests, and comparison against other items in the same category.`,
       ],
-      bulletsTitle: "Why this page matters",
-      bullets: [
-        `Links back to the ${category.name} category for broader product comparison.`,
-        "Includes structured product data, specifications, and contact intent for quotation workflow.",
-        "Supports internal linking between product, category, and related content pages.",
-      ],
     }
   }
 
@@ -50,12 +42,6 @@ export function buildProductSupportCopy(
       topSpecs.length > 0
         ? `ข้อมูลสำคัญที่ใช้ตัดสินใจในหน้านี้ เช่น ${topSpecs.join(", ")} ช่วยให้คัดตัวเลือกเบื้องต้นได้เร็วขึ้นก่อนขอตัวอย่างหรือสอบถามราคา`
         : `หน้านี้รองรับการประเมินสินค้าเบื้องต้น การขอใบเสนอราคา และการเปรียบเทียบกับสินค้าตัวอื่นในหมวดเดียวกัน`,
-    ],
-    bulletsTitle: "จุดที่หน้านี้ช่วยในการตัดสินใจ",
-    bullets: [
-      `เชื่อมกลับไปยังหมวด ${category.name} เพื่อดูสินค้าที่ใกล้เคียงกัน`,
-      "มีข้อมูลสเปก โครงสร้างหน้าแบบสินค้า และช่องทางติดต่อเพื่อรองรับการขอราคา",
-      "ช่วยส่ง internal links ระหว่างหน้า product, category และ content ที่เกี่ยวข้อง",
     ],
   }
 }

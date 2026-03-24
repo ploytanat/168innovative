@@ -16,6 +16,7 @@ type Props = {
   title: string
   items?: FAQItemView[] | null
   className?: string
+  sectionId?: string
 }
 
 export default function FaqSection({
@@ -23,11 +24,13 @@ export default function FaqSection({
   title,
   items,
   className = "",
+  sectionId = "faq",
 }: Props) {
   if (!Array.isArray(items) || items.length === 0) return null
 
   return (
     <motion.section
+      id={sectionId}
       className={className}
       variants={staggerSmall}
       initial="hidden"
@@ -44,9 +47,9 @@ export default function FaqSection({
           {title}
         </motion.h2>
         <motion.div className="mt-7 space-y-4 md:mt-8 md:space-y-5" variants={staggerSmall}>
-          {items.map((item) => (
+          {items.map((item, index) => (
             <motion.details
-              key={item.question}
+              key={`${item.question}-${index}`}
               className="group rounded-[1rem] p-5 md:p-6"
               style={GLASS.card}
               variants={fadeUp}
