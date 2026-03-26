@@ -11,9 +11,14 @@ import {
   withCanonicalSiteUrl,
   withSiteUrl,
 } from "@/app/config/site"
-import { getArticleBySlug } from "@/app/lib/api/articles"
+import { getAllArticleSlugs, getArticleBySlug } from "@/app/lib/api/articles"
 import { getArticleInternalLinks } from "@/app/lib/seo/article-internal-links"
 import { buildFaqJsonLd } from "@/app/lib/schema"
+
+export async function generateStaticParams() {
+  const slugs = await getAllArticleSlugs()
+  return slugs.map((slug) => ({ slug }))
+}
 
 export async function generateMetadata({
   params,

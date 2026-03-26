@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache"
 import type { MetadataRoute } from "next"
 
 import { withCanonicalSiteUrl } from "@/app/config/site"
-import { getArticles } from "@/app/lib/api/articles"
+import { getArticlesForSitemap } from "@/app/lib/api/articles"
 import { getCategories } from "@/app/lib/api/categories"
 import {
   getAboutLastModified,
@@ -21,8 +21,8 @@ type SupportedLanguage = "th" | "en"
 
 type SitemapData = {
   categories: Awaited<ReturnType<typeof getCategories>>
-  articlesTh: Awaited<ReturnType<typeof getArticles>>
-  articlesEn: Awaited<ReturnType<typeof getArticles>>
+  articlesTh: Awaited<ReturnType<typeof getArticlesForSitemap>>
+  articlesEn: Awaited<ReturnType<typeof getArticlesForSitemap>>
   allProducts: Awaited<ReturnType<typeof getAllProductsForSitemap>>
   indexableProducts: Awaited<ReturnType<typeof getIndexableProductsForSitemap>>
   aboutLastModified: string | null
@@ -168,8 +168,8 @@ const getSitemapData = unstable_cache(
       whyLastModified,
     ] = await Promise.all([
       getCategories("th"),
-      getArticles("th"),
-      getArticles("en"),
+      getArticlesForSitemap("th"),
+      getArticlesForSitemap("en"),
       getAllProductsForSitemap(),
       getIndexableProductsForSitemap(),
       getAboutLastModified(),
@@ -190,8 +190,8 @@ const getSitemapData = unstable_cache(
       whyLastModified,
     }
   },
-  ["sitemap-data-v1"],
-  { revalidate: 300, tags: ["categories", "company", "products"] }
+  ["sitemap-data-v2"],
+  { revalidate: 300, tags: ["articles", "categories", "company", "products"] }
 )
 
 export async function getCategorySitemapEntries(): Promise<MetadataRoute.Sitemap> {

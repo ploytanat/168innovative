@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache"
+
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
 import {
   Locale,
@@ -14,13 +16,25 @@ import {
 } from "../types/view"
 
 const WP_URL = process.env.WP_API_URL
+const ARTICLE_LIST_PARAMS = {
+  _embed: "1",
+  per_page: "100",
+  orderby: "date",
+  order: "desc",
+} as const
+const ARTICLE_SITEMAP_PARAMS = {
+  _fields: "slug,date,modified,acf",
+  per_page: "100",
+  orderby: "date",
+  order: "desc",
+} as const
 
 if (!WP_URL) {
   throw new Error("WP_API_URL is not defined")
 }
 
 const fetchConfig: RequestInit = {
-  next: { revalidate: 120 },
+  next: { revalidate: 300 },
   headers: { "Content-Type": "application/json" },
 }
 
@@ -234,9 +248,29 @@ function mapWPArticleToView(wp: WPArticle, locale: Locale): ArticleView {
   }
 }
 
-async function fetchArticlesFromWP(
+export type ArticleSitemapView = Pick<
+  ArticleView,
+  "slug" | "canonicalUrl" | "publishedAt" | "updatedAt"
+>
+
+function mapWPArticleToSitemapView(
+  wp: WPArticle,
+  locale: Locale
+): ArticleSitemapView {
+  const acf = wp.acf ?? {}
+
+  return {
+    slug: wp.slug,
+    canonicalUrl:
+      locale === "th" ? acf.canonical_url_th : acf.canonical_url_en,
+    publishedAt: acf.published_at || wp.date,
+    updatedAt: acf.updated_at || wp.modified || acf.published_at || wp.date,
+  }
+}
+
+async function fetchArticlesFromWP<T = WPArticle[]>(
   params: Record<string, string>
-): Promise<WPArticle[]> {
+): Promise<T> {
   try {
     const url = new URL("/wp-json/wp/v2/article", WP_URL)
     Object.entries(params).forEach(([key, value]) =>
@@ -245,23 +279,71 @@ async function fetchArticlesFromWP(
     const res = await fetch(url.toString(), fetchConfig)
     if (!res.ok) {
       console.error("WP article fetch failed:", res.status, url.toString())
-      return []
+      return [] as T
     }
-    return res.json()
+    return res.json() as Promise<T>
   } catch (error) {
     console.error("WP article fetch failed:", error)
-    return []
+    return [] as T
   }
 }
 
+const getArticlesRaw = unstable_cache(
+  async (): Promise<WPArticle[]> => fetchArticlesFromWP({ ...ARTICLE_LIST_PARAMS }),
+  ["articles-raw-v1"],
+  { revalidate: 300, tags: ["articles"] }
+)
+const getArticlesSitemapRaw = unstable_cache(
+  async (): Promise<WPArticle[]> =>
+    fetchArticlesFromWP({ ...ARTICLE_SITEMAP_PARAMS }),
+  ["articles-sitemap-raw-v1"],
+  { revalidate: 300, tags: ["articles"] }
+)
+
+function getArticleRawBySlug(slug: string): Promise<WPArticle | null> {
+  return unstable_cache(
+    async () => {
+      const data = await fetchArticlesFromWP<WPArticle[]>({
+        slug,
+        _embed: "1",
+      })
+
+      return data[0] ?? null
+    },
+    [`article-raw-${slug}-v1`],
+    { revalidate: 300, tags: ["articles"] }
+  )()
+}
+
+export function getAllArticleSlugs(): Promise<string[]> {
+  return unstable_cache(
+    async () => {
+      const data = await fetchArticlesFromWP<Array<{ slug?: string }>>({
+        _fields: "slug",
+        per_page: "100",
+        orderby: "date",
+        order: "desc",
+      })
+
+      return data
+        .map((item) => item.slug)
+        .filter((slug): slug is string => Boolean(slug))
+    },
+    ["article-slugs-v1"],
+    { revalidate: 300, tags: ["articles"] }
+  )()
+}
+
 export async function getArticles(locale: Locale): Promise<ArticleView[]> {
-  const data = await fetchArticlesFromWP({
-    _embed: "1",
-    per_page: "100",
-    orderby: "date",
-    order: "desc",
-  })
+  const data = await getArticlesRaw()
   return data.map((a) => mapWPArticleToView(a, locale))
+}
+
+export async function getArticlesForSitemap(
+  locale: Locale
+): Promise<ArticleSitemapView[]> {
+  const data = await getArticlesSitemapRaw()
+  return data.map((article) => mapWPArticleToSitemapView(article, locale))
 }
 
 
@@ -272,15 +354,10 @@ export async function getArticleBySlug(
   slug: string,
   locale: Locale
 ): Promise<ArticleView | null> {
-
   if (!slug) return null
 
-  const data = await fetchArticlesFromWP({
-    slug,
-    _embed: "1",
-  })
+  const article = await getArticleRawBySlug(slug)
+  if (!article) return null
 
-  if (!data.length) return null
-
-  return mapWPArticleToView(data[0], locale)
+  return mapWPArticleToView(article, locale)
 }

@@ -1,9 +1,6 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, BookOpen, CalendarDays, Clock, Tag } from "lucide-react"
-import { motion } from "framer-motion"
 
 import ArticleBlocks from "@/app/components/article/ArticleBlocks"
 import ArticleBody from "@/app/components/ui/ArticleBody"
@@ -11,7 +8,6 @@ import FaqSection from "@/app/components/ui/FaqSection"
 import type { ArticleView } from "@/app/lib/types/view"
 import type { Locale } from "@/app/lib/types/content"
 import type { ArticleLinkContent } from "@/app/lib/seo/article-internal-links"
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerMedium, staggerSmall } from "@/app/components/ui/motion"
 
 type Props = {
   article: ArticleView
@@ -80,26 +76,20 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
 
   return (
     <main className="min-h-screen bg-transparent">
-      <motion.div
-        className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10"
-        variants={staggerSmall}
-        initial="hidden"
-        whileInView="visible"
-        viewport={MOTION_VIEWPORT}
-      >
-        <motion.div variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
+      <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10">
+        <div>
           <Link
-          href={listHref}
-          className="inline-flex items-center gap-2 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-        >
-          <ArrowLeft size={14} />
-          {copy.backToList}
-        </Link>
-        </motion.div>
+            href={listHref}
+            className="inline-flex items-center gap-2 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          >
+            <ArrowLeft size={14} />
+            {copy.backToList}
+          </Link>
+        </div>
 
-        <motion.section className="mt-6 border-t border-[rgba(211,217,225,0.96)] pt-8" variants={staggerSmall}>
+        <section className="mt-6 border-t border-[rgba(211,217,225,0.96)] pt-8">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_360px]">
-            <motion.div variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+            <div>
               <p className="eyebrow-label">
                 {copy.eyebrow}
               </p>
@@ -112,7 +102,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                 </p>
               ) : null}
 
-              <motion.div className="mt-8 flex flex-wrap gap-3" variants={staggerSmall}>
+              <div className="mt-8 flex flex-wrap gap-3">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#55667d]">
                   <CalendarDays size={14} />
                   {publishedAt}
@@ -125,10 +115,10 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                   <Tag size={14} />
                   {categoryLabel}
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
 
-            <motion.aside className="deck-card rounded-[1rem] p-6" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+            <aside className="deck-card rounded-[1rem] p-6">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <div className="deck-card-soft rounded-[0.95rem] p-4">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
@@ -174,12 +164,12 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                   </div>
                 </div>
               </div>
-            </motion.aside>
+            </aside>
           </div>
-        </motion.section>
+        </section>
 
         {article.coverImage ? (
-          <motion.div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[1.1rem] border border-[#DDE7EE] bg-[#EAF1F4] shadow-[0_12px_26px_rgba(32,36,43,0.06)]" variants={fadeUp} transition={{ duration: 0.6, ease: MOTION_EASE }}>
+          <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[1.1rem] border border-[#DDE7EE] bg-[#EAF1F4] shadow-[0_12px_26px_rgba(32,36,43,0.06)]">
             <Image
               src={article.coverImage.src}
               alt={article.coverImage.alt || article.title}
@@ -189,12 +179,12 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
               className="object-cover"
             />
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,24,38,0.02),rgba(12,24,38,0.18))]" />
-          </motion.div>
+          </div>
         ) : null}
 
-        <motion.section className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]" variants={staggerMedium}>
+        <section className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="min-w-0 space-y-8">
-            <motion.div className="overflow-hidden rounded-[1.1rem] border border-[#E3EAF1] bg-white shadow-[0_12px_26px_rgba(32,36,43,0.05)]" variants={fadeUp} transition={{ duration: 0.6, ease: MOTION_EASE }}>
+            <div className="overflow-hidden rounded-[1.1rem] border border-[#E3EAF1] bg-white shadow-[0_12px_26px_rgba(32,36,43,0.05)]">
               <div className="border-b border-[#EEF3F6] px-6 py-5 md:px-10 md:py-6">
                 <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
                   <Clock size={14} />
@@ -212,10 +202,10 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                   <ArticleBody html={article.content} />
                 )}
               </div>
-            </motion.div>
+            </div>
 
             {internalLinks ? (
-              <motion.section className="rounded-[1.1rem] border border-[#E3E8EE] bg-[#F7F8FA] px-6 py-8 shadow-sm md:px-8" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+              <section className="rounded-[1.1rem] border border-[#E3E8EE] bg-[#F7F8FA] px-6 py-8 shadow-sm md:px-8">
                 <div className="max-w-3xl">
                   <p className="eyebrow-label text-[12px]">
                     {copy.internalLinks}
@@ -228,13 +218,11 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                   </p>
                 </div>
 
-                <motion.div className="mt-8 grid gap-5 md:grid-cols-2" variants={staggerSmall}>
+                <div className="mt-8 grid gap-5 md:grid-cols-2">
                   {internalLinks.groups.map((group) => (
-                    <motion.div
+                    <div
                       key={group.title}
                       className="rounded-[1rem] border border-[#E3E8EE] bg-white p-5"
-                      variants={fadeUp}
-                      transition={{ duration: 0.45, ease: MOTION_EASE }}
                     >
                       <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-600">
                         {group.title}
@@ -250,10 +238,10 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                           </Link>
                         ))}
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
-              </motion.section>
+                </div>
+              </section>
             ) : null}
 
             <FaqSection
@@ -263,7 +251,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
             />
           </div>
 
-          <motion.aside className="space-y-6" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+          <aside className="space-y-6">
             <div className="xl:sticky xl:top-28">
               <div className="deck-card rounded-[1rem] p-6">
                 <p className="eyebrow-label">
@@ -286,9 +274,9 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                 </Link>
               </div>
             </div>
-          </motion.aside>
-        </motion.section>
-      </motion.div>
+          </aside>
+        </section>
+      </div>
     </main>
   )
 }
