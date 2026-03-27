@@ -7,27 +7,35 @@ import {
   CTA_GRADIENT,
   EYEBROW_PILL_STYLE,
   GLASS,
-  SECTION_BACKGROUNDS,
 } from "@/app/components/ui/designSystem"
 import { HOME_PRODUCT_SPOTLIGHT } from "@/app/lib/config/home-product-spotlight"
 import { uiText } from "@/app/lib/i18n/ui"
 import { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
+const MARQUEE_PALETTE = {
+  cloud: "#F8F9FB",
+  white: "#FFFFFF",
+  blushHint: "#F5F0F2",
+  steel: "#E2E8EE",
+} as const
+
+const MARQUEE_SECTION_BG = `linear-gradient(160deg, ${MARQUEE_PALETTE.cloud} 0%, ${MARQUEE_PALETTE.blushHint} 56%, ${MARQUEE_PALETTE.white} 100%)`
+
 const PRIMARY_META = {
   badge:     { th: "สินค้าเด่น",       en: "Featured Pick" },
   accentText: "#3a4a5c",
-  accentBg:   "rgba(30,40,60,0.07)",
-  imageBg:    "radial-gradient(circle at 82% 16%,rgba(159,179,204,0.28) 0%,transparent 26%), linear-gradient(145deg,rgba(255,255,255,0.60),rgba(232,240,250,0.40))",
-  glow:       "rgba(159,179,204,0.25)",
+  accentBg:   MARQUEE_PALETTE.steel,
+  imageBg:    `radial-gradient(circle at 82% 16%,${MARQUEE_PALETTE.steel} 0%,transparent 26%), linear-gradient(145deg,${MARQUEE_PALETTE.white},${MARQUEE_PALETTE.cloud})`,
+  glow:       "rgba(226,232,238,0.90)",
 }
 
 const SECONDARY_META = {
   badge:     { th: "แนะนำเพิ่มเติม",   en: "Also Recommended" },
   accentText: "#3a4a5c",
-  accentBg:   "rgba(30,40,60,0.07)",
-  imageBg:    "radial-gradient(circle at 82% 16%,rgba(159,179,204,0.20) 0%,transparent 24%), linear-gradient(145deg,rgba(255,255,255,0.70),rgba(232,240,250,0.50))",
-  glow:       "rgba(159,179,204,0.18)",
+  accentBg:   MARQUEE_PALETTE.blushHint,
+  imageBg:    `radial-gradient(circle at 82% 16%,${MARQUEE_PALETTE.blushHint} 0%,transparent 24%), linear-gradient(145deg,${MARQUEE_PALETTE.white},${MARQUEE_PALETTE.cloud})`,
+  glow:       "rgba(245,240,242,0.90)",
 }
 
 const SECTION_COPY = {
@@ -69,16 +77,16 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
   return (
     <section
       className="relative overflow-hidden py-14 sm:py-16 lg:py-24"
-      style={{ background: SECTION_BACKGROUNDS.cool }}
+      style={{ background: MARQUEE_SECTION_BG }}
     >
       {/* Top edge shimmer */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.65),transparent)" }}
+        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.85),transparent)" }}
       />
 
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative border-t pt-6" style={{ borderColor: "rgba(255,255,255,0.55)" }}>
+        <div className="relative border-t pt-6" style={{ borderColor: MARQUEE_PALETTE.steel }}>
 
           {/* ── Section header ─────────────────────────────────────── */}
           <div className="mb-8 flex flex-col gap-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
@@ -86,7 +94,11 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               {/* Eyebrow pill */}
               <span
                 className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={EYEBROW_PILL_STYLE}
+                style={{
+                  ...EYEBROW_PILL_STYLE,
+                  background: MARQUEE_PALETTE.white,
+                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
+                }}
               >
                 {SECTION_COPY.eyebrow[locale]}
               </span>
@@ -115,6 +127,8 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                 className="rounded-xl px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em]"
                 style={{
                   ...GLASS.card,
+                  background: MARQUEE_PALETTE.white,
+                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
                   color: COLORS.mid,
                 }}
               >
@@ -149,7 +163,14 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
               )}
 
               {/* Stats / snapshot — glass tier 3 */}
-              <div className="relative overflow-hidden rounded-2xl p-5 sm:p-6" style={GLASS.stats}>
+              <div
+                className="relative overflow-hidden rounded-2xl p-5 sm:p-6"
+                style={{
+                  ...GLASS.stats,
+                  background: MARQUEE_PALETTE.cloud,
+                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
+                }}
+              >
                 {/* Top shimmer */}
                 <div
                   className="pointer-events-none absolute inset-x-0 top-0 h-px"
@@ -181,7 +202,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
                 <Link
                   href={withLocalePath(ctaHref, locale)}
                   className="group mt-6 inline-flex items-center gap-2 border-b pb-1 text-[13px] font-semibold uppercase tracking-[0.12em] transition-opacity hover:opacity-70"
-                  style={{ borderColor: "rgba(30,40,60,0.20)", color: "#2a3a52" }}
+                  style={{ borderColor: MARQUEE_PALETTE.steel, color: "#2a3a52" }}
                 >
                   <span>{ctaLabel}</span>
                   <ArrowRightIcon />
@@ -194,7 +215,7 @@ export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
           {visibleGridItems.length > 0 && (
             <div
               className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8"
-              style={{ borderColor: "rgba(255,255,255,0.55)" }}
+              style={{ borderColor: MARQUEE_PALETTE.steel }}
             >
               <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -265,7 +286,11 @@ function ShowcaseCard({
     <Link
       href={href}
       className="group relative isolate overflow-hidden rounded-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,40,60,0.14)]"
-      style={glassStyle}
+      style={{
+        ...glassStyle,
+        background: isPrimary ? MARQUEE_PALETTE.white : MARQUEE_PALETTE.cloud,
+        border: `1px solid ${MARQUEE_PALETTE.steel}`,
+      }}
     >
       {/* Subtle glow behind image area */}
       <div
@@ -292,7 +317,7 @@ function ShowcaseCard({
           }`}
           style={{
             background: meta.imageBg,
-            border: "1px solid rgba(255,255,255,0.70)",
+            border: `1px solid ${MARQUEE_PALETTE.steel}`,
           }}
         >
           <div className="absolute inset-x-8 top-6 h-14 rounded-full blur-2xl bg-white/60" />
@@ -318,7 +343,7 @@ function ShowcaseCard({
             style={{
               background: meta.accentBg,
               color: meta.accentText,
-              border: "1px solid rgba(30,40,60,0.12)",
+              border: `1px solid ${MARQUEE_PALETTE.steel}`,
             }}
           >
             {!isPrimary && <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />}
@@ -374,14 +399,18 @@ function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
     <Link
       href={getProductHref(item, locale)}
       className="group overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,40,60,0.10)]"
-      style={GLASS.card}
+      style={{
+        ...GLASS.card,
+        background: MARQUEE_PALETTE.white,
+        border: `1px solid ${MARQUEE_PALETTE.steel}`,
+      }}
     >
       {/* Image area */}
       <div
         className="relative aspect-square overflow-hidden rounded-t-xl"
         style={{
           background:
-            "radial-gradient(circle at 80% 18%,rgba(159,179,204,0.18),transparent 22%), linear-gradient(155deg,rgba(255,255,255,0.80) 0%,rgba(232,240,250,0.60) 100%)",
+            `radial-gradient(circle at 80% 18%,${MARQUEE_PALETTE.blushHint},transparent 22%), linear-gradient(155deg,${MARQUEE_PALETTE.white} 0%,${MARQUEE_PALETTE.cloud} 100%)`,
         }}
       >
         <div
@@ -420,8 +449,8 @@ function StatCard({ value, label }: { value: number; label: string }) {
     <div
       className="rounded-xl px-4 py-4"
       style={{
-        background: "rgba(255,255,255,0.55)",
-        border: "1px solid rgba(255,255,255,0.72)",
+        background: MARQUEE_PALETTE.white,
+        border: `1px solid ${MARQUEE_PALETTE.steel}`,
       }}
     >
       <div
