@@ -186,22 +186,22 @@ function NavigationInner({
       className="sticky top-0 z-[60] w-full transition-all duration-300"
       style={NAV_SHELL_STYLE}
     >
-      <nav className="mx-auto flex h-[4.35rem] max-w-7xl items-center justify-between px-5 sm:px-6 lg:h-[4.75rem] lg:px-8">
+      <nav className="mx-auto flex h-[5rem] max-w-7xl items-center justify-between px-4 sm:h-[5.25rem] sm:px-6 lg:h-[5.75rem] lg:px-8">
 
         {/* Logo */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: MOTION_EASE }}>
           <Link
             href={withLocale("/")}
             onClick={closeMenu}
-            className="relative shrink-0 rounded-full px-1 py-1 transition-opacity hover:opacity-85 active:opacity-70"
+            className="relative flex h-12 w-[7.25rem] shrink-0 items-center rounded-[1.5rem] px-1 py-1 transition-opacity hover:opacity-85 active:opacity-70 sm:h-14 sm:w-[8.5rem] lg:h-16 lg:w-[9.5rem]"
           >
             <Image
               src={logo.src}
               alt={logo.alt || "Logo"}
-              width={160}
-              height={50}
+              fill
               priority
-              className="h-9 w-auto object-contain md:h-10"
+              sizes="(min-width: 1024px) 152px, (min-width: 640px) 136px, 116px"
+              className="object-contain object-left"
             />
           </Link>
         </motion.div>
@@ -239,7 +239,7 @@ function NavigationInner({
             type="button"
             onClick={() => setOpen(c => !c)}
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-[12px] transition-all hover:bg-[rgba(233,241,255,0.86)] hover:text-[#24457c] md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[12px] transition-all hover:bg-[rgba(233,241,255,0.86)] hover:text-[#24457c] md:hidden"
             style={MOBILE_MENU_BUTTON_STYLE}
           >
             {open ? <X size={18} /> : <Menu size={18} />}

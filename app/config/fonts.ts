@@ -1,43 +1,34 @@
 import {
-  Cormorant_Garamond,
-  Manrope,
-  Noto_Serif_Thai,
-  Sarabun,
+  Inter,
+  Noto_Sans_Thai,
+  Plus_Jakarta_Sans,
 } from "next/font/google"
 
-const headingEn = Cormorant_Garamond({
+const headingLatin = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-heading-en",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-heading-latin",
   display: "swap",
 })
 
-const headingTh = Noto_Serif_Thai({
+const bodyLatin = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-body-latin",
+  display: "swap",
+})
+
+const thaiSans = Noto_Sans_Thai({
   subsets: ["thai"],
-  weight: ["400", "700"],
-  variable: "--font-heading-th",
-  display: "swap",
-})
-
-const bodyEn = Manrope({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-body-en",
-  display: "swap",
-})
-
-const bodyTh = Sarabun({
-  subsets: ["thai", "latin"],
-  weight: ["400", "600"],
-  variable: "--font-body-th",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-thai",
   display: "swap",
 })
 
 export const rootBodyClassName = [
-  headingEn.variable,
-  headingTh.variable,
-  bodyEn.variable,
-  bodyTh.variable,
+  headingLatin.variable,
+  bodyLatin.variable,
+  thaiSans.variable,
   "font-body",
   "antialiased",
 ].join(" ")

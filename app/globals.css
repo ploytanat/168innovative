@@ -52,6 +52,17 @@
       0 1px 0 rgba(255, 255, 255, 0.56) inset,
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
       inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    --font-heading-stack: var(--font-heading-latin), var(--font-thai), sans-serif;
+    --font-body-stack: var(--font-body-latin), var(--font-thai), sans-serif;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
   }
 
   html {
@@ -66,19 +77,33 @@
   }
 
   body {
-    font-family: var(--font-body-th), sans-serif;
+    font-family: var(--font-body-stack);
+    font-size: var(--text-base);
+    line-height: 1.7;
     color: var(--color-ink);
+    text-rendering: optimizeLegibility;
     -webkit-overflow-scrolling: touch;
     overflow-x: clip;
     background: transparent;
   }
 
-  html[lang="en"] body {
-    font-family: var(--font-body-en), sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading-stack);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
 
-  html[lang="th"] body {
-    font-family: var(--font-body-th), sans-serif;
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 
   /* Safari/iPad Fix */
@@ -107,28 +132,12 @@
 ───────────────────────────── */
 @layer components {
   .font-body {
-    font-family: var(--font-body-th), sans-serif;
-  }
-
-  html[lang="en"] .font-body {
-    font-family: var(--font-body-en), sans-serif;
-  }
-
-  html[lang="th"] .font-body {
-    font-family: var(--font-body-th), sans-serif;
+    font-family: var(--font-body-stack);
   }
 
   .font-heading {
-    font-family: var(--font-body-th), sans-serif;
-    letter-spacing: -0.04em;
-  }
-
-  html[lang="en"] .font-heading {
-    font-family: var(--font-body-en), sans-serif;
-  }
-
-  html[lang="th"] .font-heading {
-    font-family: var(--font-body-th), sans-serif;
+    font-family: var(--font-heading-stack);
+    letter-spacing: -0.035em;
   }
 
   .hero-gradient-card {
@@ -354,16 +363,10 @@
   .rich-content h3,
   .rich-content h4 {
     color: #1c2842;
-    font-family: var(--font-heading-th), serif;
-    font-weight: 600;
-    line-height: 1.2;
+    font-family: var(--font-heading-stack);
+    font-weight: 700;
+    line-height: 1.18;
     scroll-margin-top: 7rem;
-  }
-
-  html[lang="en"] .rich-content h2,
-  html[lang="en"] .rich-content h3,
-  html[lang="en"] .rich-content h4 {
-    font-family: var(--font-heading-en), serif;
   }
 
   .rich-content h2 {
@@ -387,7 +390,7 @@
 
   .rich-content p:first-child {
     color: #2e3d56;
-    font-size: 1.12rem;
+    font-size: var(--text-lg);
     line-height: 2;
   }
 
@@ -505,14 +508,10 @@
   .article-body__content > p:first-child::first-letter {
     float: left;
     margin-right: 0.35rem;
-    font-family: var(--font-heading-th), serif;
+    font-family: var(--font-heading-stack);
     font-size: 3.6rem;
     line-height: 0.9;
     color: #1c2842;
-  }
-
-  html[lang="en"] .article-body__content > p:first-child::first-letter {
-    font-family: var(--font-heading-en), serif;
   }
 
   .article-body__content pre {
