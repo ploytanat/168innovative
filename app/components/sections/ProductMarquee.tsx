@@ -52,8 +52,14 @@ const SECTION_COPY = {
   curatedCount:       { th: "รายการแนะนำ",                                                                              en: "featured items" },
 } as const
 
-type Locale       = "th" | "en"
-type ShowcaseMeta = typeof PRIMARY_META
+type Locale = "th" | "en"
+type ShowcaseMeta = {
+  badge: { th: string; en: string }
+  accentText: string
+  accentBg: string
+  imageBg: string
+  glow: string
+}
 
 interface ProductMarqueeProps { items: ProductView[]; locale: Locale }
 
