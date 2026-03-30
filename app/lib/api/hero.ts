@@ -1,6 +1,8 @@
 // lib/api/hero.ts
 
 import { pickLocalizedText } from "./acf"
+import { fetchWithDevCache } from "./dev-cache"
+import { getMockHeroSlides, isMockModeEnabled } from "../mock/runtime"
 import { Locale, WPFeaturedMedia } from "../types/content"
 
 const BASE = process.env.WP_API_URL
@@ -33,9 +35,14 @@ type WPHeroSlide = {
 }
 
 export async function getHeroSlides(locale: Locale) {
-  const res = await fetch(
+  if (isMockModeEnabled()) {
+    return getMockHeroSlides(locale)
+  }
+
+  const res = await fetchWithDevCache(
     `${BASE}/wp-json/wp/v2/hero_slide?_embed`,
-    { next: { revalidate: 60 } }
+    { next: { revalidate: 60 } },
+    60
   )
 
   if (!res.ok) {

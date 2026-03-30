@@ -2,8 +2,18 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { resolveLegacyProductRedirect } from "@/app/lib/seo/legacy-redirects"
 
+function isMockModeEnabled() {
+  const value = process.env.NEXT_PUBLIC_USE_MOCK
+
+  if (!value) return false
+
+  const normalized = value.trim().toLowerCase()
+  return normalized === "true" || normalized === "1" || normalized === "yes"
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl
+  const mockModeEnabled = isMockModeEnabled()
 
   if (pathname === "/index" || pathname === "/index.html") {
     return NextResponse.redirect(new URL("/", request.url), { status: 301 })
@@ -12,7 +22,7 @@ export async function proxy(request: NextRequest) {
   if (pathname === "/category") {
     const legacyCategoryId = searchParams.get("category")
 
-    if (legacyCategoryId) {
+    if (legacyCategoryId && !mockModeEnabled) {
       try {
         const res = await fetch(
           `https://wb.168innovative.co.th/wp-json/wp/v2/product_category/${legacyCategoryId}?_fields=slug`
@@ -57,25 +67,27 @@ export async function proxy(request: NextRequest) {
       })
     }
 
-    try {
-      const res = await fetch(
-        `https://wb.168innovative.co.th/api/products/slug/${productSlug}`
-      )
+    if (!mockModeEnabled) {
+      try {
+        const res = await fetch(
+          `https://wb.168innovative.co.th/api/products/slug/${productSlug}`
+        )
 
-      if (res.ok) {
-        const product = await res.json()
-        const categorySlug = product?.categorySlug ?? product?.category?.slug
+        if (res.ok) {
+          const product = await res.json()
+          const categorySlug = product?.categorySlug ?? product?.category?.slug
 
-        if (categorySlug) {
-          const response = NextResponse.redirect(
-            new URL(`/categories/${categorySlug}/${productSlug}`, request.url),
-            { status: 301 }
-          )
-          return response
+          if (categorySlug) {
+            const response = NextResponse.redirect(
+              new URL(`/categories/${categorySlug}/${productSlug}`, request.url),
+              { status: 301 }
+            )
+            return response
+          }
         }
+      } catch {
+        // Fall through to the categories page when the legacy lookup fails.
       }
-    } catch {
-      // Fall through to the categories page when the legacy lookup fails.
     }
 
     const response = NextResponse.redirect(new URL("/categories", request.url), {

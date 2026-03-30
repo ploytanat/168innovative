@@ -2,6 +2,14 @@
 
 import { unstable_cache } from "next/cache";
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf";
+import { fetchWithDevCache } from "./dev-cache";
+import {
+  getMockAllCategorySlugs,
+  getMockCategories,
+  getMockCategoryBySlug,
+  getMockCategoryIdBySlug,
+  isMockModeEnabled,
+} from "../mock/runtime";
 import { Locale } from "../types/content";
 import { CategoryView } from "../types/view";
 
@@ -44,9 +52,13 @@ async function fetchJSON<T>(
   label: string
 ): Promise<T> {
   try {
-    const res = await fetch(url, {
-      next: { revalidate: 300 },
-    });
+    const res = await fetchWithDevCache(
+      url,
+      {
+        next: { revalidate: 300 },
+      },
+      300
+    );
 
     if (!res.ok) {
       console.error(`Failed to fetch ${label}: ${res.status} ${url}`);
@@ -63,6 +75,10 @@ async function fetchJSON<T>(
 /* ================= All Categories ================= */
 
 export function getCategories(locale: Locale): Promise<CategoryView[]> {
+  if (isMockModeEnabled()) {
+    return Promise.resolve(getMockCategories(locale));
+  }
+
   return unstable_cache(
     async () => {
       const data = await fetchJSON<WPProductCategory[]>(
@@ -78,6 +94,10 @@ export function getCategories(locale: Locale): Promise<CategoryView[]> {
 }
 
 export function getAllCategorySlugs(): Promise<string[]> {
+  if (isMockModeEnabled()) {
+    return Promise.resolve(getMockAllCategorySlugs());
+  }
+
   return unstable_cache(
     async () => {
       const data = await fetchJSON<Array<{ slug?: string }>>(
@@ -112,6 +132,10 @@ function getCategoryRawBySlug(slug: string): Promise<WPProductCategory | null> {
 }
 
 export async function getCategoryIdBySlug(slug: string): Promise<number | null> {
+  if (isMockModeEnabled()) {
+    return getMockCategoryIdBySlug(slug);
+  }
+
   const category = await getCategoryRawBySlug(slug);
   return category?.id ?? null;
 }
@@ -120,6 +144,10 @@ export function getCategoryBySlug(
   slug: string,
   locale: Locale
 ): Promise<CategoryView | null> {
+  if (isMockModeEnabled()) {
+    return Promise.resolve(getMockCategoryBySlug(slug, locale));
+  }
+
   return unstable_cache(
     async () => {
       const category = await getCategoryRawBySlug(slug);

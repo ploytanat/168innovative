@@ -1,6 +1,14 @@
 import { unstable_cache } from "next/cache"
 
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
+import { fetchWithDevCache } from "./dev-cache"
+import {
+  getMockAllArticleSlugs,
+  getMockArticleBySlug,
+  getMockArticles,
+  getMockArticlesForSitemap,
+  isMockModeEnabled,
+} from "../mock/runtime"
 import {
   Locale,
   WPArticle,
@@ -276,7 +284,7 @@ async function fetchArticlesFromWP<T = WPArticle[]>(
     Object.entries(params).forEach(([key, value]) =>
       url.searchParams.set(key, value)
     )
-    const res = await fetch(url.toString(), fetchConfig)
+    const res = await fetchWithDevCache(url.toString(), fetchConfig, 300)
     if (!res.ok) {
       console.error("WP article fetch failed:", res.status, url.toString())
       return [] as T
@@ -316,6 +324,10 @@ function getArticleRawBySlug(slug: string): Promise<WPArticle | null> {
 }
 
 export function getAllArticleSlugs(): Promise<string[]> {
+  if (isMockModeEnabled()) {
+    return Promise.resolve(getMockAllArticleSlugs())
+  }
+
   return unstable_cache(
     async () => {
       const data = await fetchArticlesFromWP<Array<{ slug?: string }>>({
@@ -335,6 +347,10 @@ export function getAllArticleSlugs(): Promise<string[]> {
 }
 
 export async function getArticles(locale: Locale): Promise<ArticleView[]> {
+  if (isMockModeEnabled()) {
+    return getMockArticles(locale)
+  }
+
   const data = await getArticlesRaw()
   return data.map((a) => mapWPArticleToView(a, locale))
 }
@@ -342,6 +358,10 @@ export async function getArticles(locale: Locale): Promise<ArticleView[]> {
 export async function getArticlesForSitemap(
   locale: Locale
 ): Promise<ArticleSitemapView[]> {
+  if (isMockModeEnabled()) {
+    return getMockArticlesForSitemap(locale)
+  }
+
   const data = await getArticlesSitemapRaw()
   return data.map((article) => mapWPArticleToSitemapView(article, locale))
 }
@@ -355,6 +375,10 @@ export async function getArticleBySlug(
   locale: Locale
 ): Promise<ArticleView | null> {
   if (!slug) return null
+
+  if (isMockModeEnabled()) {
+    return getMockArticleBySlug(slug, locale)
+  }
 
   const article = await getArticleRawBySlug(slug)
   if (!article) return null

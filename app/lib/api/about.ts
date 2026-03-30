@@ -2,6 +2,8 @@
 
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
+import { fetchWithDevCache } from "./dev-cache"
+import { getMockAbout, isMockModeEnabled } from "../mock/runtime"
 import { AboutView } from "../types/view"
 
 const BASE = process.env.WP_API_URL!
@@ -46,11 +48,12 @@ async function getMediaMap(ids: number[]) {
   if (!uniqueIds.length) return {}
 
   try {
-    const res = await fetch(
+    const res = await fetchWithDevCache(
       `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
       {
         next: { revalidate: 3600 },
-      }
+      },
+      3600
     )
 
     if (!res.ok) return {}
@@ -76,10 +79,18 @@ async function getMediaMap(ids: number[]) {
 export async function getAbout(
   locale: Locale
 ): Promise<Omit<AboutView, "why"> | null> {
+  if (isMockModeEnabled()) {
+    return getMockAbout(locale)
+  }
+
   try {
-    const res = await fetch(`${BASE}/wp-json/wp/v2/about?per_page=1`, {
-      next: { revalidate: 3600 },
-    })
+    const res = await fetchWithDevCache(
+      `${BASE}/wp-json/wp/v2/about?per_page=1`,
+      {
+        next: { revalidate: 3600 },
+      },
+      3600
+    )
 
     if (!res.ok) return null
 

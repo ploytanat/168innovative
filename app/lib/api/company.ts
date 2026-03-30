@@ -2,6 +2,8 @@ import { unstable_cache } from "next/cache"
 
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
+import { fetchWithDevCache } from "./dev-cache"
+import { getMockCompany, isMockModeEnabled } from "../mock/runtime"
 import { CompanyView } from "../types/view"
 
 const BASE = process.env.WP_API_URL
@@ -64,9 +66,13 @@ type RawCompanyData = {
 
 const getCompanyData = unstable_cache(
   async (): Promise<RawCompanyData> => {
-    const res = await fetch(`${BASE}/wp-json/wp/v2/company?per_page=1`, {
-      next: { revalidate: COMPANY_REVALIDATE_SECONDS, tags: ["company"] },
-    })
+    const res = await fetchWithDevCache(
+      `${BASE}/wp-json/wp/v2/company?per_page=1`,
+      {
+        next: { revalidate: COMPANY_REVALIDATE_SECONDS, tags: ["company"] },
+      },
+      COMPANY_REVALIDATE_SECONDS
+    )
 
     if (!res.ok) {
       return null
@@ -96,14 +102,15 @@ const getCompanyData = unstable_cache(
 
     if (imageIds.length > 0) {
       const uniqueIds = Array.from(new Set(imageIds))
-      const mediaRes = await fetch(
+      const mediaRes = await fetchWithDevCache(
         `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
         {
           next: {
             revalidate: COMPANY_REVALIDATE_SECONDS,
             tags: ["company"],
           },
-        }
+        },
+        COMPANY_REVALIDATE_SECONDS
       )
 
       if (mediaRes.ok) {
@@ -140,6 +147,10 @@ function getPhonePriority(label: string) {
 }
 
 export async function getCompany(locale: Locale): Promise<CompanyView | null> {
+  if (isMockModeEnabled()) {
+    return getMockCompany(locale)
+  }
+
   try {
     const data = await getCompanyData()
 

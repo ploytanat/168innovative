@@ -1,3 +1,5 @@
+import { fetchWithDevCache } from "./dev-cache";
+
 const WP = process.env.WP_API_URL;
 
 if (!WP) {
@@ -5,9 +7,13 @@ if (!WP) {
 }
 
 export async function getPosts() {
-  const res = await fetch(`${WP}/wp-json/wp/v2/posts`, {
-    next: { revalidate: 60 },
-  });
+  const res = await fetchWithDevCache(
+    `${WP}/wp-json/wp/v2/posts`,
+    {
+      next: { revalidate: 60 },
+    },
+    60
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch WordPress posts");

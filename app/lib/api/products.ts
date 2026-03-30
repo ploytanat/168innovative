@@ -2,6 +2,17 @@
 
 import { unstable_cache } from "next/cache"
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
+import { fetchWithDevCache } from "./dev-cache"
+import {
+  getMockAllProductsByCategory,
+  getMockAllProductsForSitemap,
+  getMockIndexableProductsForSitemap,
+  getMockProductBySlug,
+  getMockProducts,
+  getMockProductsByCategory,
+  getMockRelatedProducts,
+  isMockModeEnabled,
+} from "../mock/runtime"
 import { getCategoryIdBySlug } from "./categories"
 import { shouldIndexProduct } from "../seo/indexability"
 import { Locale, WPProduct } from "../types/content"
@@ -23,7 +34,11 @@ async function fetchJSON<T>(
   label: string
 ): Promise<T> {
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } })
+    const res = await fetchWithDevCache(
+      url,
+      { next: { revalidate: 60 } },
+      60
+    )
     if (!res.ok) {
       console.error(`Fetch failed for ${label}: ${res.status} ${url}`)
       return fallback
@@ -135,9 +150,10 @@ function _getProductsByCategoryId(
   return unstable_cache(
     async () => {
       try {
-        const res = await fetch(
+        const res = await fetchWithDevCache(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 3600 } },
+          3600
         )
 
         if (!res.ok) {
@@ -169,9 +185,10 @@ function _getProductsByCategoryBatch(
   return unstable_cache(
     async () => {
       try {
-        const res = await fetch(
+        const res = await fetchWithDevCache(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 3600 } },
+          3600
         )
 
         if (!res.ok) {
@@ -281,6 +298,10 @@ function mapWPToProductView(
 ───────────────────────────── */
 
 export async function getAllProductsForSitemap() {
+  if (isMockModeEnabled()) {
+    return getMockAllProductsForSitemap()
+  }
+
   const [products, catMap] = await Promise.all([
     fetchJSON<{ slug: string; modified: string; product_category: number[] }[]>(
       `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=slug,modified,product_category`,
@@ -309,6 +330,10 @@ export async function getAllProductsForSitemap() {
 }
 
 export async function getIndexableProductsForSitemap() {
+  if (isMockModeEnabled()) {
+    return getMockIndexableProductsForSitemap()
+  }
+
   const [products, catMap] = await Promise.all([
     fetchJSON<Array<WPProduct & { modified: string }>>(
       `${BASE}/wp-json/wp/v2/product?per_page=100&_fields=${PRODUCT_FIELDS},modified`,
@@ -356,6 +381,10 @@ export async function getIndexableProductsForSitemap() {
 ───────────────────────────── */
 
 export async function getProducts(locale: Locale) {
+  if (isMockModeEnabled()) {
+    return getMockProducts(locale)
+  }
+
   const [raw, catMap] = await Promise.all([
     _getProductsRaw(),
     _getCategoryMap(),
@@ -369,6 +398,10 @@ export async function getProductsByCategory(
   locale: Locale,
   page: number = 1
 ) {
+  if (isMockModeEnabled()) {
+    return getMockProductsByCategory(slug, locale, page)
+  }
+
   const [categoryId, catMap] = await Promise.all([
     getCategoryIdBySlug(slug),
     _getCategoryMap(),
@@ -389,6 +422,10 @@ export async function getProductsByCategory(
 }
 
 export async function getAllProductsByCategory(slug: string, locale: Locale) {
+  if (isMockModeEnabled()) {
+    return getMockAllProductsByCategory(slug, locale)
+  }
+
   const [categoryId, catMap] = await Promise.all([
     getCategoryIdBySlug(slug),
     _getCategoryMap(),
@@ -415,6 +452,10 @@ export async function getAllProductsByCategory(slug: string, locale: Locale) {
 }
 
 export async function getProductBySlug(slug: string, locale: Locale) {
+  if (isMockModeEnabled()) {
+    return getMockProductBySlug(slug, locale)
+  }
+
   const [raw, catMap] = await Promise.all([
     _getProductRaw(slug),
     _getCategoryMap(),
@@ -430,6 +471,10 @@ export async function getRelatedProducts(
   currentProductId: string,
   locale: Locale
 ) {
+  if (isMockModeEnabled()) {
+    return getMockRelatedProducts(categorySlug, currentProductId, locale)
+  }
+
   const [categoryId, catMap] = await Promise.all([
     getCategoryIdBySlug(categorySlug),
     _getCategoryMap(),
