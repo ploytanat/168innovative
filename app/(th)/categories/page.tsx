@@ -6,6 +6,21 @@ import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
 
+/** Maps WordPress category slugs that already have B2B catalog data.
+ *  Clicking these will go to /products pre-filtered instead of /categories/[slug]. */
+const CATALOG_CATEGORY_MAP: Record<string, string> = {
+  'spout': 'Tube Stoppers',
+  'lipstick-packaging': 'Lip Gloss Tubes',
+}
+
+function getCategoryHref(slug: string): string {
+  const catalogCategory = CATALOG_CATEGORY_MAP[slug]
+  if (catalogCategory) {
+    return `/products?category=${encodeURIComponent(catalogCategory)}`
+  }
+  return `/categories/${slug}`
+}
+
 export const metadata: Metadata = buildMetadata({
   locale: "th",
   title: "หมวดหมู่สินค้า",
@@ -50,7 +65,7 @@ export default async function CategoriesPage() {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                href={`/categories/${category.slug}`}
+                href={getCategoryHref(category.slug)}
                 prefetch={false}
                 className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
               >
@@ -105,7 +120,7 @@ export default async function CategoriesPage() {
                   key={category.id}
                   className="deck-card rounded-[1rem] p-5 transition-colors hover:border-[rgba(34,74,107,0.26)]"
                 >
-                  <Link href={`/categories/${category.slug}`} prefetch={false}>
+                  <Link href={getCategoryHref(category.slug)} prefetch={false}>
                     <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                       {category.seoTitle || category.name}
                     </h3>

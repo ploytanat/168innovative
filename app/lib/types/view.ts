@@ -63,6 +63,40 @@ export type ProductSpecView = {
   value: string
 }
 
+export type ProductVariantOptionView = {
+  groupKey: string
+  groupLabel: string
+  valueKey: string
+  valueLabel: string
+}
+
+export type ProductVariantView = {
+  id: string
+  slug: string
+  sku?: string
+  name: string
+  description?: string
+  image: ImageView
+  gallery: ImageView[]
+  specs: ProductSpecView[]
+  options: ProductVariantOptionView[]
+  availabilityStatus?: string
+  moq?: string
+  leadTime?: string
+}
+
+export type ProductVariantGroupValueView = {
+  valueKey: string
+  valueLabel: string
+  variantSlug: string
+}
+
+export type ProductVariantGroupView = {
+  key: string
+  label: string
+  values: ProductVariantGroupValueView[]
+}
+
 export type ProductView = {
   id: string
   slug: string
@@ -74,11 +108,24 @@ export type ProductView = {
   }
   categoryId: string
   categorySlug: string
+  gallery: ImageView[]
   specs: ProductSpecView[]
   contentHtml?: string
   applicationHtml?: string
   faqItems: FAQItemView[]
   price?: number
+  sku?: string
+  availabilityStatus?: string
+  moq?: string
+  leadTime?: string
+  familySlug?: string
+  familyName?: string
+  variantCount: number
+  variantSummary?: string
+  variantGroups: ProductVariantGroupView[]
+  variants: ProductVariantView[]
+  defaultVariantSlug?: string
+  searchText?: string
 }
 
 // == Why Choose Us ==

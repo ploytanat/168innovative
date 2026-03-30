@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":300\")",
+      "WebFetch(domain:docs.google.com)",
+      "WebFetch(domain:doc-0c-1c-sheets.googleusercontent.com)"
+    ]
+  }
+}

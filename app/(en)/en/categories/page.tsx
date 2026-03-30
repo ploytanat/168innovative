@@ -1,10 +1,30 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 
 import PageIntro from "@/app/components/ui/PageIntro"
 import LocalizedLink from "@/app/components/ui/LocalizedLink"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
+
+/** Same mapping as the TH page — WP slug → catalog category filter value. */
+const CATALOG_CATEGORY_MAP: Record<string, string> = {
+  'spout': 'Tube Stoppers',
+  'lipstick-packaging': 'Lip Gloss Tubes',
+}
+
+/** Returns href and which Link component to use.
+ *  Catalog links use plain `Link` (no locale prefix); others use `LocalizedLink`. */
+function getCategoryLink(slug: string): { href: string; toCatalog: boolean } {
+  const catalogCategory = CATALOG_CATEGORY_MAP[slug]
+  if (catalogCategory) {
+    return {
+      href: `/products?category=${encodeURIComponent(catalogCategory)}`,
+      toCatalog: true,
+    }
+  }
+  return { href: `/categories/${slug}`, toCatalog: false }
+}
 
 export const metadata: Metadata = buildMetadata({
   locale: "en",
@@ -47,10 +67,13 @@ export default async function CategoriesPage() {
 
         <section aria-label="Product Categories" className="mt-10">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {categories.map((category) => (
-              <LocalizedLink
+            {categories.map((category) => {
+              const { href, toCatalog } = getCategoryLink(category.slug)
+              const CardLink = toCatalog ? Link : LocalizedLink
+              return (
+              <CardLink
                 key={category.id}
-                href={`/categories/${category.slug}`}
+                href={href}
                 prefetch={false}
                 className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
               >
@@ -80,8 +103,9 @@ export default async function CategoriesPage() {
                     </p>
                   )}
                 </div>
-              </LocalizedLink>
-            ))}
+              </CardLink>
+              )
+            })}
           </div>
         </section>
 
@@ -105,7 +129,7 @@ export default async function CategoriesPage() {
                   key={category.id}
                   className="deck-card rounded-[1rem] p-5 transition-colors hover:border-[rgba(34,74,107,0.26)]"
                 >
-                  <LocalizedLink href={`/categories/${category.slug}`} prefetch={false}>
+                  <LocalizedLink href={getCategoryLink(category.slug).href} prefetch={false}>
                     <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                       {category.seoTitle || category.name}
                     </h3>

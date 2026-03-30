@@ -91,8 +91,9 @@ export default function ProductGrid({
       const normalized = query.trim().toLowerCase()
       result = result.filter(
         (product) =>
-          product.name.toLowerCase().includes(normalized) ||
-          product.slug.toLowerCase().includes(normalized)
+          (product.searchText ?? `${product.name} ${product.slug}`)
+            .toLowerCase()
+            .includes(normalized)
       )
     }
 
@@ -242,6 +243,11 @@ export default function ProductGrid({
                 </div>
 
                 <div className="px-2.5 pb-4 pt-4.5 md:px-3 md:pb-4.5 md:pt-5">
+                  {product.variantCount > 1 && product.variantSummary ? (
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B8897]">
+                      {product.variantSummary}
+                    </p>
+                  ) : null}
                   <h2 className="text-sm font-semibold leading-[1.5] transition-colors group-hover:text-[#24457c]" style={{ color: COLORS.dark }}>
                     {product.name}
                   </h2>
