@@ -5,19 +5,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import Script from "next/script"
-import {
-  ChevronLeft,
-  ChevronRight,
-  Factory,
-  Package,
-  Send,
-  ShieldCheck,
-  Truck,
-} from "lucide-react"
+import { ChevronRight, Factory, Package, Send, ShieldCheck, Truck } from "lucide-react"
 
-import ProductImageGallery from "@/app/components/product/ProductImageGallery"
+import CatalogDetailGallery from "@/app/components/product/CatalogDetailGallery"
+import CatalogDetailSpecs from "@/app/components/product/CatalogDetailSpecs"
+import ProductVariantSelector from "@/app/components/product/ProductVariantSelector"
 import { SITE_URL, withSiteUrl } from "@/app/config/site"
-import Breadcrumb from "@/app/components/ui/Breadcrumb"
 import FaqSection from "@/app/components/ui/FaqSection"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { getCategoryBySlug } from "@/app/lib/api/categories"
@@ -35,6 +28,7 @@ import { buildFaqJsonLd } from "@/app/lib/schema"
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
+  searchParams?: Promise<{ v?: string }>
 }
 
 function buildProductDescription(
@@ -138,9 +132,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductDetailPage({ params }: Props) {
+export default async function ProductDetailPage({ params, searchParams }: Props) {
   const { slug, productSlug } = await params
   const locale = "th"
+  const selectedVariantSlug = (await searchParams)?.v
 
   const [category, product] = await Promise.all([
     getCategoryBySlug(slug, locale),
@@ -152,11 +147,16 @@ export default async function ProductDetailPage({ params }: Props) {
     permanentRedirect(`/categories/${product.categorySlug}/${productSlug}`)
   }
   if (product.categoryId !== category.id) notFound()
+
+  const selectedVariant =
+    product.variants.find((variant) => variant.slug === selectedVariantSlug) ??
+    product.variants.find((variant) => variant.slug === product.defaultVariantSlug) ??
+    product.variants[0]
+  const activeSpecs = selectedVariant?.specs ?? product.specs
+  const activeGallery = selectedVariant?.gallery ?? product.gallery
+  const activeDescription = selectedVariant?.description || product.description
   const related = await getRelatedProducts(slug, productSlug, locale)
-  const hasDistinctContent = hasDistinctText(
-    product.contentHtml,
-    product.description
-  )
+  const hasDistinctContent = hasDistinctText(product.contentHtml, product.description)
   const hasDistinctApplication = hasDistinctText(product.applicationHtml, [
     product.description,
     product.contentHtml,
@@ -164,19 +164,13 @@ export default async function ProductDetailPage({ params }: Props) {
   const supportCopy = buildProductSupportCopy(product, category, "th")
 
   const productUrl = `${SITE_URL}/categories/${slug}/${productSlug}`
-  const breadcrumbId = `${productUrl}#breadcrumb`
   const faqPageId = product.faqItems?.length ? `${productUrl}#faq` : undefined
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "@id": breadcrumbId,
+    "@id": `${productUrl}#breadcrumb`,
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "หน้าแรก",
-        item: SITE_URL,
-      },
+      { "@type": "ListItem", position: 1, name: "หน้าแรก", item: SITE_URL },
       {
         "@type": "ListItem",
         position: 2,
@@ -197,10 +191,9 @@ export default async function ProductDetailPage({ params }: Props) {
       },
     ],
   }
-
   const faqJsonLd = buildFaqJsonLd(product.faqItems, { pageId: faqPageId })
 
-  const TRUST_BADGES = [
+  const trustBadges = [
     { icon: Factory, text: "มาตรฐานโรงงาน" },
     { icon: ShieldCheck, text: "Food Grade" },
     { icon: Package, text: "บรรจุกันกระแทก" },
@@ -222,75 +215,49 @@ export default async function ProductDetailPage({ params }: Props) {
         />
       ) : null}
 
-      <div className="mx-auto max-w-7xl px-6 pb-28 pt-6 lg:px-8">
-        <Breadcrumb
-          items={[
-            { label: "หมวดหมู่สินค้า", href: "/categories" },
-            { label: category.name, href: `/categories/${slug}` },
-            { label: product.name },
-          ]}
-        />
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <Link
+            href={`/categories/${slug}`}
+            className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-950"
+          >
+            Back to Category
+          </Link>
+        </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="deck-card-soft rounded-[1.1rem] p-8 lg:p-10">
-            <Link
-              href={`/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#697384] hover:text-[var(--color-accent)]"
-            >
-              <ChevronLeft className="h-3 w-3" />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px]">
+          <CatalogDetailGallery images={activeGallery} name={product.name} />
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
               {category.name}
-            </Link>
-
-            <ProductImageGallery
-              src={product.image.src}
-              alt={product.image.alt}
-            />
-
-            <div className="mt-8 flex items-center gap-3">
-              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
-              <p className="rounded-full border border-[rgba(211,217,225,0.96)] bg-white px-4 py-1.5 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600">
-                {product.slug}
-              </p>
-              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-center p-2 lg:p-0">
-            <h1 className="break-words font-heading text-3xl font-semibold tracking-tight text-[var(--color-ink)] md:text-4xl">
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold text-slate-950">
               {product.name}
             </h1>
 
-            <div className="my-6 h-px w-12 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)]" />
+            <div className="mt-5 inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
+              SKU: {selectedVariant?.sku ?? product.sku ?? product.slug}
+            </div>
 
-            <p className="break-words text-sm leading-relaxed text-[var(--color-ink-soft)]">
-              {product.description}
-            </p>
+            <ProductVariantSelector
+              categorySlug={slug}
+              productSlug={productSlug}
+              selectedVariantSlug={selectedVariant?.slug}
+              variants={product.variants}
+              locale={locale}
+            />
 
-            {product.specs.length > 0 ? (
-              <div className="mt-10">
-                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
-                  ข้อมูลจำเพาะ
-                </p>
+            <div className="mt-8 border-t border-slate-200 pt-8">
+              <h2 className="text-lg font-semibold text-slate-950">Description</h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                {activeDescription}
+              </p>
+            </div>
 
-                <div className="divide-y divide-[rgba(221,227,235,0.92)] rounded-[1rem] border border-[rgba(211,217,225,0.92)] bg-white">
-                  {product.specs.map((spec, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-2 gap-4 px-5 py-4 text-sm"
-                    >
-                      <div className="break-words text-slate-600">{spec.label}</div>
-                      <div className="break-words text-right font-medium text-[var(--color-ink)]">
-                        {spec.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            <div className="mt-10 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <Link
-                href={`/contact?product=${encodeURIComponent(product.name)}`}
+                href={`/contact?product=${encodeURIComponent(selectedVariant?.name || product.name)}`}
                 className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1rem] px-8 py-4 text-sm font-medium tracking-wide active:scale-[0.98]"
               >
                 <Send className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -299,7 +266,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {TRUST_BADGES.map(({ icon: Icon, text }) => (
+              {trustBadges.map(({ icon: Icon, text }) => (
                 <div
                   key={text}
                   className="flex flex-col items-center gap-1.5 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white p-3 text-center"
@@ -309,8 +276,17 @@ export default async function ProductDetailPage({ params }: Props) {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         </div>
+
+        {activeSpecs.length > 0 ? (
+          <section className="mt-10">
+            <h2 className="mb-4 text-2xl font-semibold text-slate-950">
+              Specifications
+            </h2>
+            <CatalogDetailSpecs specs={activeSpecs} />
+          </section>
+        ) : null}
 
         {product.contentHtml && hasDistinctContent ? (
           <RichTextSection
@@ -331,9 +307,7 @@ export default async function ProductDetailPage({ params }: Props) {
         ) : null}
 
         <section className="deck-card-soft mt-8 rounded-[1.1rem] px-6 py-8">
-          <p className="eyebrow-label text-xs">
-            {supportCopy.eyebrow}
-          </p>
+          <p className="eyebrow-label text-xs">{supportCopy.eyebrow}</p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-ink)]">
             {supportCopy.title}
           </h2>
@@ -355,9 +329,7 @@ export default async function ProductDetailPage({ params }: Props) {
           <section className="mt-24" aria-label="สินค้าที่เกี่ยวข้อง">
             <div className="mb-10 flex items-end justify-between border-b border-[rgba(222,214,205,0.88)] pb-6">
               <div>
-                <p className="eyebrow-label text-xs">
-                  Discover More
-                </p>
+                <p className="eyebrow-label text-xs">Discover More</p>
                 <h2 className="mt-2 font-heading text-2xl font-bold text-[var(--color-ink)]">
                   สินค้าที่คุณอาจสนใจ
                 </h2>
@@ -366,7 +338,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <Link
                 href={`/categories/${slug}`}
                 prefetch={false}
-                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 md:flex"
+                className="hidden items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 md:flex"
               >
                 ดูทั้งหมด <ChevronRight size={13} />
               </Link>

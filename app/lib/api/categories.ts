@@ -1,74 +1,66 @@
-// lib/api/categories.ts
+// lib/api/categories.ts — MariaDB backend
 
-import { unstable_cache } from "next/cache";
-import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf";
-import { fetchWithDevCache } from "./dev-cache";
+import { unstable_cache } from 'next/cache'
+import { normalizeRichText, pickLocalizedText } from './acf'
 import {
   getMockAllCategorySlugs,
   getMockCategories,
   getMockCategoryBySlug,
   getMockCategoryIdBySlug,
   isMockModeEnabled,
-} from "../mock/runtime";
-import { Locale } from "../types/content";
-import { CategoryView } from "../types/view";
+} from '../mock/runtime'
+import {
+  queryCategories,
+  queryCategoryBySlug,
+  queryAllCategorySlugs,
+  queryFaqItemsByOwner,
+} from '../db/categories'
+import type { Locale } from '../types/content'
+import type { CategoryView, FAQItemView } from '../types/view'
+import type { DBCategory, DBFaqItem } from '../db/types'
 
-const BASE = process.env.WP_API_URL;
-const CATEGORY_FIELDS = "id,slug,name,image_url,acf";
+/* ================= Mapper ================= */
 
-if (!BASE) {
-  throw new Error("WP_API_URL is not defined");
+function mapDbFaqItems(
+  faqRows: DBFaqItem[],
+  ownerId: number,
+  locale: Locale
+): FAQItemView[] {
+  return faqRows
+    .filter((f) => f.owner_id === ownerId)
+    .map((f) => ({
+      question: pickLocalizedText(locale, f.question_th, f.question_en),
+      answer: normalizeRichText(locale === 'th' ? f.answer_th : f.answer_en) ?? '',
+    }))
+    .filter((f) => f.question && f.answer)
 }
 
-interface CategoryAcf {
-  name_th?: string
-  name_en?: string
-  description_th?: string
-  description_en?: string
-  image_alt_th?: string
-  image_alt_en?: string
-  intro_html_th?: string
-  intro_html_en?: string
-  faq_items?: unknown
-  seo_title_th?: string
-  seo_title_en?: string
-  seo_description_th?: string
-  seo_description_en?: string
-}
-
-interface WPProductCategory {
-  id: number
-  slug: string
-  name: string
-  image_url?: string
-  acf?: CategoryAcf
-}
-
-/* ================= Helper ================= */
-
-async function fetchJSON<T>(
-  url: string,
-  fallback: T,
-  label: string
-): Promise<T> {
-  try {
-    const res = await fetchWithDevCache(
-      url,
-      {
-        next: { revalidate: 300 },
-      },
-      300
-    );
-
-    if (!res.ok) {
-      console.error(`Failed to fetch ${label}: ${res.status} ${url}`);
-      return fallback;
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error(`Failed to fetch ${label}:`, error);
-    return fallback;
+function mapDbCategory(
+  row: DBCategory,
+  faqRows: DBFaqItem[],
+  locale: Locale
+): CategoryView {
+  return {
+    id: String(row.id),
+    slug: row.slug,
+    name: pickLocalizedText(locale, row.name_th, row.name_en, row.name_th),
+    description: pickLocalizedText(locale, row.description_th, row.description_en) || undefined,
+    image: row.image_url
+      ? {
+          src: row.image_url,
+          alt: pickLocalizedText(locale, row.image_alt_th, row.image_alt_en, row.name_th),
+        }
+      : undefined,
+    introHtml: normalizeRichText(
+      locale === 'th' ? row.intro_html_th : row.intro_html_en
+    ),
+    faqItems: mapDbFaqItems(faqRows, row.id, locale),
+    seoTitle: pickLocalizedText(locale, row.seo_title_th, row.seo_title_en, row.name_th),
+    seoDescription: pickLocalizedText(
+      locale,
+      row.seo_description_th,
+      row.seo_description_en
+    ),
   }
 }
 
@@ -76,68 +68,48 @@ async function fetchJSON<T>(
 
 export function getCategories(locale: Locale): Promise<CategoryView[]> {
   if (isMockModeEnabled()) {
-    return Promise.resolve(getMockCategories(locale));
+    return Promise.resolve(getMockCategories(locale))
   }
 
   return unstable_cache(
     async () => {
-      const data = await fetchJSON<WPProductCategory[]>(
-        `${BASE}/wp-json/wp/v2/product_category?per_page=100&_fields=${CATEGORY_FIELDS}`,
-        [],
-        `categories (${locale})`
-      );
-      return data.map((wp) => mapCategory(wp, locale));
+      const rows = await queryCategories()
+      const ids = rows.map((r) => r.id)
+      const faqRows = await queryFaqItemsByOwner('category', ids)
+      return rows.map((row) => mapDbCategory(row, faqRows, locale))
     },
-    [`categories-${locale}-v2`],
-    { revalidate: 300, tags: ["categories"] }
-  )();
+    [`categories-db-${locale}-v1`],
+    { revalidate: 300, tags: ['categories'] }
+  )()
 }
 
 export function getAllCategorySlugs(): Promise<string[]> {
   if (isMockModeEnabled()) {
-    return Promise.resolve(getMockAllCategorySlugs());
+    return Promise.resolve(getMockAllCategorySlugs())
   }
 
   return unstable_cache(
-    async () => {
-      const data = await fetchJSON<Array<{ slug?: string }>>(
-        `${BASE}/wp-json/wp/v2/product_category?_fields=slug&per_page=100`,
-        [],
-        "category slugs"
-      );
-      return data
-        .map((item) => item.slug)
-        .filter((slug): slug is string => Boolean(slug));
-    },
-    ["category-slugs-v1"],
-    { revalidate: 300, tags: ["categories"] }
-  )();
+    async () => queryAllCategorySlugs(),
+    ['category-slugs-db-v1'],
+    { revalidate: 300, tags: ['categories'] }
+  )()
 }
 
 /* ================= Single Category ================= */
 
-function getCategoryRawBySlug(slug: string): Promise<WPProductCategory | null> {
-  return unstable_cache(
-    async () => {
-      const data = await fetchJSON<WPProductCategory[]>(
-        `${BASE}/wp-json/wp/v2/product_category?slug=${slug}&per_page=1&_fields=${CATEGORY_FIELDS}`,
-        [],
-        `category ${slug}`
-      );
-      return data[0] ?? null;
-    },
-    [`category-raw-${slug}-v1`],
-    { revalidate: 300, tags: ["categories"] }
-  )();
-}
-
 export async function getCategoryIdBySlug(slug: string): Promise<number | null> {
   if (isMockModeEnabled()) {
-    return getMockCategoryIdBySlug(slug);
+    return getMockCategoryIdBySlug(slug)
   }
 
-  const category = await getCategoryRawBySlug(slug);
-  return category?.id ?? null;
+  return unstable_cache(
+    async () => {
+      const row = await queryCategoryBySlug(slug)
+      return row?.id ?? null
+    },
+    [`category-id-db-${slug}-v1`],
+    { revalidate: 300, tags: ['categories'] }
+  )()
 }
 
 export function getCategoryBySlug(
@@ -145,59 +117,17 @@ export function getCategoryBySlug(
   locale: Locale
 ): Promise<CategoryView | null> {
   if (isMockModeEnabled()) {
-    return Promise.resolve(getMockCategoryBySlug(slug, locale));
+    return Promise.resolve(getMockCategoryBySlug(slug, locale))
   }
 
   return unstable_cache(
     async () => {
-      const category = await getCategoryRawBySlug(slug);
-      if (!category) return null;
-      return mapCategory(category, locale);
+      const row = await queryCategoryBySlug(slug)
+      if (!row) return null
+      const faqRows = await queryFaqItemsByOwner('category', [row.id])
+      return mapDbCategory(row, faqRows, locale)
     },
-    [`category-${slug}-${locale}-v2`],
-    { revalidate: 300, tags: ["categories"] }
-  )();
-}
-
-/* ================= Mapper ================= */
-
-function mapCategory(wp: WPProductCategory, locale: Locale): CategoryView {
-  return {
-    id: String(wp.id),
-    slug: wp.slug,
-
-    name: pickLocalizedText(locale, wp.acf?.name_th, wp.acf?.name_en, wp.name),
-
-    description: pickLocalizedText(
-      locale,
-      wp.acf?.description_th,
-      wp.acf?.description_en
-    ),
-
-    image: wp.image_url
-      ? {
-          src: wp.image_url,
-          alt: pickLocalizedText(
-            locale,
-            wp.acf?.image_alt_th,
-            wp.acf?.image_alt_en,
-            wp.name
-          ),
-        }
-      : undefined,
-    introHtml: normalizeRichText(
-      locale === "th" ? wp.acf?.intro_html_th : wp.acf?.intro_html_en
-    ),
-    faqItems: mapFaqItems(wp.acf?.faq_items, locale),
-
-    seoTitle:
-      locale === "th"
-        ? wp.acf?.seo_title_th ?? wp.name
-        : wp.acf?.seo_title_en ?? wp.name,
-
-    seoDescription:
-      locale === "th"
-        ? wp.acf?.seo_description_th ?? ""
-        : wp.acf?.seo_description_en ?? "",
-  };
+    [`category-db-${slug}-${locale}-v1`],
+    { revalidate: 300, tags: ['categories'] }
+  )()
 }

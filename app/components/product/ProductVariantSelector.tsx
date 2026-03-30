@@ -69,15 +69,13 @@ export default function ProductVariantSelector({
   const basePath = buildBasePath(locale, categorySlug, productSlug)
 
   return (
-    <div className="mt-8 rounded-[1rem] border border-[rgba(211,217,225,0.92)] bg-white p-5">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#7E8C9B]">
-        {t.heading}
-      </p>
+    <div className="mt-8 space-y-5 border-t border-slate-200 pt-8">
+      <p className="text-sm font-semibold text-slate-700">{t.heading}</p>
 
-      <div className="mt-5 space-y-5">
+      <div className="space-y-5">
         {groups.map((group) => (
           <div key={group.key}>
-            <p className="mb-3 text-sm font-medium text-[var(--color-ink-soft)]">
+            <p className="mb-3 text-sm font-semibold text-slate-700">
               {group.label}
             </p>
 
@@ -137,13 +135,11 @@ export default function ProductVariantSelector({
                     key={`${group.key}-${value.valueKey}`}
                     href={href}
                     prefetch={false}
-                    className="rounded-[0.9rem] border px-4 py-2.5 text-sm transition-colors"
+                    className="rounded-xl border px-4 py-2 text-sm font-medium transition"
                     style={{
-                      borderColor: isActive
-                        ? 'var(--color-accent)'
-                        : 'rgba(211,217,225,0.92)',
-                      background: isActive ? 'rgba(26,77,166,0.06)' : 'white',
-                      color: isActive ? 'var(--color-accent)' : 'var(--color-ink)',
+                      borderColor: isActive ? '#0f172a' : '#cbd5e1',
+                      background: isActive ? '#0f172a' : '#fff',
+                      color: isActive ? '#fff' : '#334155',
                     }}
                   >
                     {value.valueLabel}

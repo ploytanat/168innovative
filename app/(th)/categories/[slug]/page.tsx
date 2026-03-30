@@ -1,16 +1,17 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { ChevronLeft } from "lucide-react"
 import { notFound } from "next/navigation"
 import Script from "next/script"
 
 import CategoryProductsSection from "@/app/components/product/CategoryProductsSection"
 import FaqSection from "@/app/components/ui/FaqSection"
-import PageIntro from "@/app/components/ui/PageIntro"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
 import { SITE_URL } from "@/app/config/site"
-import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
+import {
+  getAllCategorySlugs,
+  getCategories,
+  getCategoryBySlug,
+} from "@/app/lib/api/categories"
 import {
   getAllProductsByCategory,
   getProductsByCategory,
@@ -88,39 +89,32 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const locale: Locale = "th"
   const currentPage = parsePage((await searchParams).page)
 
-  const [category, result, allProducts] = await Promise.all([
+  const [category, categories, result, allProducts] = await Promise.all([
     getCategoryBySlug(slug, locale),
+    getCategories(locale),
     getProductsByCategory(slug, locale, currentPage),
     getAllProductsByCategory(slug, locale),
   ])
 
   if (!category) notFound()
-  const resolvedCategory = category
+
   const categoryUrl =
     currentPage > 1
       ? `${SITE_URL}/categories/${slug}?page=${currentPage}`
       : `${SITE_URL}/categories/${slug}`
-  const faqPageId = resolvedCategory.faqItems?.length ? `${categoryUrl}#faq` : undefined
+  const faqPageId = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
       { name: "หน้าแรก", item: SITE_URL },
       { name: "หมวดหมู่สินค้า", item: `${SITE_URL}/categories` },
-      { name: resolvedCategory.name, item: categoryUrl },
+      { name: category.name, item: categoryUrl },
     ],
     { id: `${categoryUrl}#breadcrumb` }
   )
-  const faqJsonLd = buildFaqJsonLd(resolvedCategory.faqItems, { pageId: faqPageId })
+  const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
   const hasDistinctIntro =
-    Boolean(resolvedCategory.introHtml) &&
-    normalizeText(resolvedCategory.introHtml) !== normalizeText(resolvedCategory.description)
-  const categoryIntroSection = hasDistinctIntro ? (
-    <RichTextSection
-      className="mt-12"
-      eyebrow="รายละเอียดหมวดสินค้า"
-      title="ข้อมูลเพิ่มเติมในหมวดนี้"
-      html={resolvedCategory.introHtml ?? ""}
-    />
-  ) : null
+    Boolean(category.introHtml) &&
+    normalizeText(category.introHtml) !== normalizeText(category.description)
 
   return (
     <main className="min-h-screen bg-transparent">
@@ -137,30 +131,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
-        <PageIntro
-          title={resolvedCategory.name}
-          description={resolvedCategory.description}
-          breadcrumbs={[
-            { label: "หมวดหมู่สินค้า", href: "/categories" },
-            { label: resolvedCategory.name },
-          ]}
-          actions={
-            <Link
-              href="/categories"
-              className="inline-flex items-center gap-1 rounded-full border border-[rgba(221,211,201,0.9)] bg-white/82 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[var(--color-ink-soft)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ChevronLeft className="h-3.5 w-3.5" />
-              ดูหมวดสินค้าทั้งหมด
-            </Link>
-          }
-        />
-
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-8 lg:px-8">
         <CategoryProductsSection
           slug={slug}
           locale={locale}
           basePath={`/categories/${slug}`}
           currentPage={currentPage}
+          category={category}
+          categories={categories}
           products={result.products}
           searchProducts={allProducts}
           totalPages={result.totalPages}
@@ -171,9 +149,17 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           className="mt-12"
           eyebrow="คำถามที่พบบ่อย"
           title="FAQ"
-          items={resolvedCategory.faqItems}
+          items={category.faqItems}
         />
-        {categoryIntroSection}
+
+        {hasDistinctIntro ? (
+          <RichTextSection
+            className="mt-12"
+            eyebrow="รายละเอียดหมวดสินค้า"
+            title="ข้อมูลเพิ่มเติมในหมวดนี้"
+            html={category.introHtml ?? ""}
+          />
+        ) : null}
       </div>
     </main>
   )

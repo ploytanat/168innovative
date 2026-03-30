@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 
-import type { ProductView } from "@/app/lib/types/view"
+import type { CategoryView, ProductView } from "@/app/lib/types/view"
 
 import Pagination from "../ui/Pagination"
 import ProductGrid from "./Productgrid"
@@ -12,6 +12,8 @@ interface CategoryProductsSectionProps {
   locale: "th" | "en"
   basePath: string
   currentPage: number
+  category: CategoryView
+  categories: CategoryView[]
   products: ProductView[]
   searchProducts: ProductView[]
   totalPages: number
@@ -23,6 +25,8 @@ export default function CategoryProductsSection({
   locale,
   basePath,
   currentPage,
+  category,
+  categories,
   products,
   searchProducts,
   totalPages,
@@ -33,6 +37,8 @@ export default function CategoryProductsSection({
   return (
     <section className="mt-14 md:mt-16">
       <ProductGrid
+        category={category}
+        categories={categories}
         products={products}
         searchProducts={searchProducts}
         categorySlug={slug}

@@ -1,47 +1,41 @@
 export const revalidate = 3600
 
-import type { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import Script from 'next/script'
-import { notFound, permanentRedirect } from 'next/navigation'
-import {
-  ChevronLeft,
-  ChevronRight,
-  Factory,
-  Package,
-  Send,
-  ShieldCheck,
-  Truck,
-} from 'lucide-react'
+import type { Metadata } from "next"
+import Image from "next/image"
+import Link from "next/link"
+import Script from "next/script"
+import { notFound, permanentRedirect } from "next/navigation"
+import { ChevronRight, Factory, Package, Send, ShieldCheck, Truck } from "lucide-react"
 
-import ProductImageGallery from '@/app/components/product/ProductImageGallery'
-import { SITE_URL, withSiteUrl } from '@/app/config/site'
-import Breadcrumb from '@/app/components/ui/Breadcrumb'
-import FaqSection from '@/app/components/ui/FaqSection'
-import RichTextSection from '@/app/components/ui/RichTextSection'
-import { getCategoryBySlug } from '@/app/lib/api/categories'
+import CatalogDetailGallery from "@/app/components/product/CatalogDetailGallery"
+import CatalogDetailSpecs from "@/app/components/product/CatalogDetailSpecs"
+import ProductVariantSelector from "@/app/components/product/ProductVariantSelector"
+import { SITE_URL, withSiteUrl } from "@/app/config/site"
+import FaqSection from "@/app/components/ui/FaqSection"
+import RichTextSection from "@/app/components/ui/RichTextSection"
+import { getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsForSitemap,
   getProductBySlug,
   getRelatedProducts,
-} from '@/app/lib/api/products'
+} from "@/app/lib/api/products"
 import {
   hasDistinctText,
   shouldIndexProduct,
-} from '@/app/lib/seo/indexability'
-import { buildProductSupportCopy } from '@/app/lib/seo/product-support-copy'
-import { buildFaqJsonLd } from '@/app/lib/schema'
+} from "@/app/lib/seo/indexability"
+import { buildProductSupportCopy } from "@/app/lib/seo/product-support-copy"
+import { buildFaqJsonLd } from "@/app/lib/schema"
 
 interface Props {
   params: Promise<{ slug: string; productSlug: string }>
+  searchParams?: Promise<{ v?: string }>
 }
 
-const TRUST_BADGES = [
-  { icon: Factory, text: 'Factory Standard' },
-  { icon: ShieldCheck, text: 'Food Grade Material' },
-  { icon: Package, text: 'Secure Packaging' },
-  { icon: Truck, text: 'Nationwide Shipping' },
+const trustBadges = [
+  { icon: Factory, text: "Factory Standard" },
+  { icon: ShieldCheck, text: "Food Grade Material" },
+  { icon: Package, text: "Secure Packaging" },
+  { icon: Truck, text: "Nationwide Shipping" },
 ]
 
 function buildProductDescription(
@@ -50,7 +44,7 @@ function buildProductDescription(
   description?: string
 ) {
   const summary = description?.trim() || `${productName} from 168 Innovative`
-  const categoryText = categoryName ? ` in ${categoryName}` : ''
+  const categoryText = categoryName ? ` in ${categoryName}` : ""
   return `${productName}${categoryText} from 168 Innovative Co., Ltd. ${summary}`.slice(
     0,
     160
@@ -69,12 +63,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { productSlug, slug } = await params
   const [category, product] = await Promise.all([
-    getCategoryBySlug(slug, 'en'),
-    getProductBySlug(productSlug, 'en'),
+    getCategoryBySlug(slug, "en"),
+    getProductBySlug(productSlug, "en"),
   ])
 
   if (!product) {
-    return { title: 'Product not found' }
+    return { title: "Product not found" }
   }
 
   if (product.categorySlug && product.categorySlug !== slug) {
@@ -103,9 +97,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     `${product.name} supplier`,
     `${product.name} manufacturer`,
     category?.name,
-    '168 Innovative',
-    '168 Innovative Co., Ltd.',
-    'cosmetic packaging',
+    "168 Innovative",
+    "168 Innovative Co., Ltd.",
+    "cosmetic packaging",
   ].filter(Boolean) as string[]
   const shouldIndex = shouldIndexProduct(product)
 
@@ -121,11 +115,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     },
     openGraph: {
-      type: 'website',
+      type: "website",
       url: `${SITE_URL}${canonicalPath}`,
       title: `${product.name} | 168 Innovative`,
       description,
-      siteName: '168 Innovative',
+      siteName: "168 Innovative",
       images: [
         {
           url: withSiteUrl(product.image.src),
@@ -134,7 +128,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: `${product.name} | 168 Innovative`,
       description,
       images: [withSiteUrl(product.image.src)],
@@ -146,9 +140,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductDetailPage({ params }: Props) {
+export default async function ProductDetailPage({ params, searchParams }: Props) {
   const { slug, productSlug } = await params
-  const locale = 'en'
+  const locale = "en"
+  const selectedVariantSlug = (await searchParams)?.v
 
   const [category, product] = await Promise.all([
     getCategoryBySlug(slug, locale),
@@ -160,45 +155,44 @@ export default async function ProductDetailPage({ params }: Props) {
     permanentRedirect(`/en/categories/${product.categorySlug}/${productSlug}`)
   }
   if (product.categoryId !== category.id) notFound()
+
+  const selectedVariant =
+    product.variants.find((variant) => variant.slug === selectedVariantSlug) ??
+    product.variants.find((variant) => variant.slug === product.defaultVariantSlug) ??
+    product.variants[0]
+  const activeSpecs = selectedVariant?.specs ?? product.specs
+  const activeGallery = selectedVariant?.gallery ?? product.gallery
+  const activeDescription = selectedVariant?.description || product.description
   const related = await getRelatedProducts(slug, productSlug, locale)
-  const hasDistinctContent = hasDistinctText(
-    product.contentHtml,
-    product.description
-  )
+  const hasDistinctContent = hasDistinctText(product.contentHtml, product.description)
   const hasDistinctApplication = hasDistinctText(product.applicationHtml, [
     product.description,
     product.contentHtml,
   ])
-  const supportCopy = buildProductSupportCopy(product, category, 'en')
+  const supportCopy = buildProductSupportCopy(product, category, "en")
 
   const productUrl = `${SITE_URL}/en/categories/${slug}/${productSlug}`
-  const breadcrumbId = `${productUrl}#breadcrumb`
   const faqPageId = product.faqItems?.length ? `${productUrl}#faq` : undefined
   const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    '@id': breadcrumbId,
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${productUrl}#breadcrumb`,
     itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/en` },
       {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: `${SITE_URL}/en`,
-      },
-      {
-        '@type': 'ListItem',
+        "@type": "ListItem",
         position: 2,
-        name: 'Categories',
+        name: "Categories",
         item: `${SITE_URL}/en/categories`,
       },
       {
-        '@type': 'ListItem',
+        "@type": "ListItem",
         position: 3,
         name: category.name,
         item: `${SITE_URL}/en/categories/${slug}`,
       },
       {
-        '@type': 'ListItem',
+        "@type": "ListItem",
         position: 4,
         name: product.name,
         item: productUrl,
@@ -216,117 +210,84 @@ export default async function ProductDetailPage({ params }: Props) {
       />
       {faqJsonLd ? (
         <Script
-          id="product-faq-jsonld"
+          id="product-faq-jsonld-en"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       ) : null}
 
-      <div className="mx-auto max-w-7xl px-6 pb-28 pt-6 lg:px-8">
-        <Breadcrumb
-          items={[
-            { label: "Categories", href: "/en/categories" },
-            { label: category.name, href: `/en/categories/${slug}` },
-            { label: product.name },
-          ]}
-        />
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-6">
+          <Link
+            href={`/en/categories/${slug}`}
+            className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-950"
+          >
+            Back to Category
+          </Link>
+        </div>
 
-        <section className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="deck-card-soft rounded-[1.1rem] p-8 lg:p-10">
-            <Link
-              href={`/en/categories/${slug}`}
-              className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#687788] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ChevronLeft className="h-3.5 w-3.5" />
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px]">
+          <CatalogDetailGallery images={activeGallery} name={product.name} />
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
               {category.name}
-            </Link>
-
-            <ProductImageGallery
-              src={product.image.src}
-              alt={product.image.alt}
-            />
-
-            <div className="mt-8 flex items-center gap-3">
-              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
-              <span className="rounded-full border border-[rgba(211,217,225,0.96)] bg-white px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#728092]">
-                {product.slug}
-              </span>
-              <div className="h-px flex-1 bg-[rgba(211,217,225,0.96)]" />
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-center p-2 lg:p-0">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-              Product Detail
             </p>
-
-            <h1 className="mt-4 font-heading text-3xl font-semibold leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl lg:text-[2.55rem]">
+            <h1 className="mt-3 text-3xl font-semibold text-slate-950">
               {product.name}
             </h1>
 
-            <div className="my-6 flex items-center gap-2.5">
-              <div className="h-[3px] w-10 rounded-full bg-[var(--color-accent)]" />
-              <div className="h-[3px] w-4 rounded-full bg-[#dbe3ec]" />
+            <div className="mt-5 inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
+              SKU: {selectedVariant?.sku ?? product.sku ?? product.slug}
             </div>
 
-            <p className="text-sm leading-7 text-[var(--color-ink-soft)] md:text-[15px]">
-              {product.description}
-            </p>
+            <ProductVariantSelector
+              categorySlug={slug}
+              productSlug={productSlug}
+              selectedVariantSlug={selectedVariant?.slug}
+              variants={product.variants}
+              locale={locale}
+            />
 
-            {product.specs && product.specs.length > 0 && (
-              <div className="mt-10">
-                <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#7E8C9B]">
-                  Specifications
-                </p>
+            <div className="mt-8 border-t border-slate-200 pt-8">
+              <h2 className="text-lg font-semibold text-slate-950">Description</h2>
+              <p className="mt-3 text-sm leading-7 text-slate-600">
+                {activeDescription}
+              </p>
+            </div>
 
-                <div className="overflow-hidden rounded-[1rem] border border-[rgba(211,217,225,0.92)] bg-white">
-                  {product.specs.map((spec, index) => (
-                    <div
-                      key={index}
-                      className={`grid gap-2 px-5 py-4 text-sm sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] sm:items-center ${
-                        index !== product.specs.length - 1
-                          ? 'border-b border-[rgba(233,226,219,0.9)]'
-                          : ''
-                      }`}
-                    >
-                      <div className="text-[#7B8897]">{spec.label}</div>
-                      <div className="font-semibold text-[var(--color-ink)] sm:text-right">
-                        {spec.value}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex justify-center">
               <Link
-                href={`/en/contact?product=${encodeURIComponent(product.name)}`}
-                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1rem] px-7 py-4 text-sm font-semibold active:scale-[0.98]"
+                href={`/en/contact?product=${encodeURIComponent(selectedVariant?.name || product.name)}`}
+                className="btn-primary-soft group inline-flex items-center justify-center gap-2 rounded-[1rem] px-8 py-4 text-sm font-medium tracking-wide active:scale-[0.98]"
               >
-                <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <Send className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 Request a Quote
               </Link>
             </div>
 
-            <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {TRUST_BADGES.map(({ icon: Icon, text }) => (
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {trustBadges.map(({ icon: Icon, text }) => (
                 <div
                   key={text}
-                  className="rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white p-3 text-center"
+                  className="flex flex-col items-center gap-1.5 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white p-3 text-center"
                 >
-                  <Icon
-                    className="mx-auto h-4 w-4 text-[var(--color-accent)]"
-                    strokeWidth={1.8}
-                  />
-                  <span className="mt-2 block text-[11px] font-medium leading-tight text-[#6E7D8D]">
-                    {text}
-                  </span>
+                  <Icon className="h-4 w-4 text-[var(--color-accent)]" strokeWidth={1.5} />
+                  <span className="break-words text-xs text-slate-600">{text}</span>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
+
+        {activeSpecs.length > 0 ? (
+          <section className="mt-10">
+            <h2 className="mb-4 text-2xl font-semibold text-slate-950">
+              Specifications
+            </h2>
+            <CatalogDetailSpecs specs={activeSpecs} />
+          </section>
+        ) : null}
 
         {product.contentHtml && hasDistinctContent ? (
           <RichTextSection
@@ -367,13 +328,11 @@ export default async function ProductDetailPage({ params }: Props) {
           items={product.faqItems}
         />
 
-        {related.length > 0 && (
+        {related.length > 0 ? (
           <section className="mt-24" aria-label="Related Products">
             <div className="mb-10 flex items-end justify-between border-b border-[rgba(222,214,205,0.88)] pb-6">
               <div>
-                <p className="eyebrow-label text-[11px]">
-                  Discover More
-                </p>
+                <p className="eyebrow-label text-[11px]">Discover More</p>
                 <h2 className="mt-2 font-heading text-2xl font-semibold text-[#1A2535] md:text-3xl">
                   You May Also Like
                 </h2>
@@ -382,7 +341,7 @@ export default async function ProductDetailPage({ params }: Props) {
               <Link
                 href={`/en/categories/${slug}`}
                 prefetch={false}
-                  className="hidden items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-sm font-semibold text-[#637284] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:flex"
+                className="hidden items-center gap-1.5 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-sm font-semibold text-[#637284] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:flex"
               >
                 View All <ChevronRight size={14} />
               </Link>
@@ -416,7 +375,7 @@ export default async function ProductDetailPage({ params }: Props) {
               ))}
             </div>
           </section>
-        )}
+        ) : null}
       </div>
     </main>
   )

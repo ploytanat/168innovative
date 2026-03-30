@@ -6,18 +6,7 @@ import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
 
-/** Maps WordPress category slugs that already have B2B catalog data.
- *  Clicking these will go to /products pre-filtered instead of /categories/[slug]. */
-const CATALOG_CATEGORY_MAP: Record<string, string> = {
-  'spout': 'Tube Stoppers',
-  'lipstick-packaging': 'Lip Gloss Tubes',
-}
-
 function getCategoryHref(slug: string): string {
-  const catalogCategory = CATALOG_CATEGORY_MAP[slug]
-  if (catalogCategory) {
-    return `/products?category=${encodeURIComponent(catalogCategory)}`
-  }
   return `/categories/${slug}`
 }
 
