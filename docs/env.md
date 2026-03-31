@@ -67,6 +67,19 @@ WP_APP_PASSWORD=your-wordpress-application-password
 NEXT_PUBLIC_USE_MOCK=false
 ```
 
+### `PRERENDER_DYNAMIC_ROUTES`
+
+- controls `generateStaticParams()` for dynamic article, category, and product routes
+- default `false` skips DB reads during `next build`
+- set to `true` only when build-time slug pre-rendering should query the database
+- when `NEXT_PUBLIC_USE_MOCK=true`, static params still generate from mock data
+
+Example:
+
+```env
+PRERENDER_DYNAMIC_ROUTES=false
+```
+
 ## Recommended Setup
 
 สำหรับ development ขั้นต่ำ:
@@ -74,6 +87,7 @@ NEXT_PUBLIC_USE_MOCK=false
 ```env
 WP_API_URL=https://your-wordpress-domain.example
 NEXT_PUBLIC_USE_MOCK=false
+PRERENDER_DYNAMIC_ROUTES=false
 ```
 
 ถ้าต้องใช้ webhook revalidate:
@@ -82,6 +96,7 @@ NEXT_PUBLIC_USE_MOCK=false
 WP_API_URL=https://your-wordpress-domain.example
 REVALIDATE_SECRET=replace-with-a-long-random-string
 NEXT_PUBLIC_USE_MOCK=false
+PRERENDER_DYNAMIC_ROUTES=false
 ```
 
 ถ้าต้องใช้ server route ที่เขียนโพสต์กลับ WordPress:
@@ -92,6 +107,7 @@ WP_USERNAME=your-wordpress-username
 WP_APP_PASSWORD=your-wordpress-application-password
 REVALIDATE_SECRET=replace-with-a-long-random-string
 NEXT_PUBLIC_USE_MOCK=false
+PRERENDER_DYNAMIC_ROUTES=false
 ```
 
 ## Notes

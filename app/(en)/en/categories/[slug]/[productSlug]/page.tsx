@@ -1,4 +1,5 @@
 export const revalidate = 3600
+export const dynamicParams = true
 
 import type { Metadata } from "next"
 import Image from "next/image"
@@ -14,6 +15,7 @@ import { SITE_URL, withSiteUrl } from "@/app/config/site"
 import FaqSection from "@/app/components/ui/FaqSection"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { getCategoryBySlug } from "@/app/lib/api/categories"
+import { loadStaticParamsOrSkip } from "@/app/lib/build/static-params"
 import {
   getAllProductsForSitemap,
   getProductBySlug,
@@ -52,7 +54,10 @@ function buildProductDescription(
 }
 
 export async function generateStaticParams() {
-  const products = await getAllProductsForSitemap()
+  const products = await loadStaticParamsOrSkip(
+    getAllProductsForSitemap,
+    "/en/categories/[slug]/[productSlug]"
+  )
 
   return products.map((product) => ({
     slug: product.categorySlug,

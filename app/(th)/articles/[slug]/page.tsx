@@ -12,11 +12,17 @@ import {
   withSiteUrl,
 } from "@/app/config/site"
 import { getAllArticleSlugs, getArticleBySlug } from "@/app/lib/api/articles"
+import { loadStaticParamsOrSkip } from "@/app/lib/build/static-params"
 import { getArticleInternalLinks } from "@/app/lib/seo/article-internal-links"
 import { buildFaqJsonLd } from "@/app/lib/schema"
 
+export const dynamicParams = true
+
 export async function generateStaticParams() {
-  const slugs = await getAllArticleSlugs()
+  const slugs = await loadStaticParamsOrSkip(
+    getAllArticleSlugs,
+    "/articles/[slug]"
+  )
   return slugs.map((slug) => ({ slug }))
 }
 

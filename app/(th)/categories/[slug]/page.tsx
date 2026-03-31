@@ -23,6 +23,7 @@ import {
   buildCollectionPageJsonLd,
   buildFaqJsonLd,
 } from "@/app/lib/schema"
+import { loadStaticParamsOrSkip } from "@/app/lib/build/static-params"
 import type { Locale } from "@/app/lib/types/content"
 
 interface Props {
@@ -44,7 +45,10 @@ function parsePage(value?: string) {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllCategorySlugs()
+  const slugs = await loadStaticParamsOrSkip(
+    getAllCategorySlugs,
+    "/categories/[slug]"
+  )
   return slugs.map((slug) => ({ slug }))
 }
 
