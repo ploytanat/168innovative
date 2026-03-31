@@ -9,6 +9,8 @@ export type CatalogFacetSection = {
 
 export type CatalogFacetState = Record<string, string[]>
 
+export type SortOrder = "default" | "asc" | "desc" | "moq-asc"
+
 type FacetCandidate = CatalogFacetSection & {
   score: number
 }
@@ -180,22 +182,32 @@ export function filterCatalogProducts(
   })
 }
 
+function parseMoq(moq?: string | null): number {
+  if (!moq) return Infinity
+  const n = parseInt(moq.replace(/[^0-9]/g, ""), 10)
+  return isNaN(n) ? Infinity : n
+}
+
 export function sortCatalogProducts(
   products: ProductView[],
-  sort: "default" | "asc" | "desc",
+  sort: SortOrder,
   locale: "th" | "en"
 ) {
-  if (sort === "default") {
-    return products
+  if (sort === "default") return products
+
+  const next = [...products]
+
+  if (sort === "moq-asc") {
+    next.sort((a, b) => parseMoq(a.moq) - parseMoq(b.moq))
+    return next
   }
 
-  const nextProducts = [...products]
-  nextProducts.sort((left, right) =>
+  next.sort((left, right) =>
     sort === "asc"
       ? left.name.localeCompare(right.name, locale)
       : right.name.localeCompare(left.name, locale)
   )
-  return nextProducts
+  return next
 }
 
 export function resolveSelectedVariant(

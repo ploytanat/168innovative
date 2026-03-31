@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Script from "next/script"
 
 import CategoryProductsSection from "@/app/components/product/CategoryProductsSection"
+import RecentlyViewed from "@/app/components/product/RecentlyViewed"
 import FaqSection from "@/app/components/ui/FaqSection"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
@@ -17,7 +18,11 @@ import {
   getProductsByCategory,
 } from "@/app/lib/api/products"
 import { shouldIndexCategory } from "@/app/lib/seo/indexability"
-import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/app/lib/schema"
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildFaqJsonLd,
+} from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 
 interface Props {
@@ -43,44 +48,47 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params
   const currentPage = parsePage((await searchParams).page)
-  const category = await getCategoryBySlug(slug, "en")
+  const [category, countResult] = await Promise.all([
+    getCategoryBySlug(slug, "en"),
+    getAllProductsByCategory(slug, "en"),
+  ])
 
-  if (!category) {
-    return { title: "Category not found" }
-  }
+  if (!category) return { title: "Category not found" }
 
+  const productCount = countResult.length
   const path =
     currentPage > 1
-      ? `/categories/${slug}?page=${currentPage}`
-      : `/categories/${slug}`
+      ? `/en/categories/${slug}?page=${currentPage}`
+      : `/en/categories/${slug}`
   const title =
     currentPage > 1
       ? `${category.seoTitle || category.name} - Page ${currentPage}`
       : category.seoTitle || category.name
 
-  const metadata = buildMetadata({
-    locale: "en",
-    title,
-    description:
-      category.seoDescription ||
-      category.description ||
-      `Products in the ${category.name} category from 168 Innovative.`,
-    path,
-    keywords: [category.name, "168 Innovative", "product category"],
-  })
+  const description =
+    category.seoDescription ||
+    (productCount > 0
+      ? `${category.name} — ${productCount} products. MOQ from 100 pcs. OEM/ODM manufacturing. Nationwide delivery. 168 Innovative.`
+      : `Browse ${category.name} products from 168 Innovative. OEM/ODM packaging manufacturer.`)
+
+  const keywords = [
+    category.name,
+    `${category.name} OEM`,
+    `${category.name} wholesale`,
+    `${category.name} MOQ`,
+    "packaging",
+    "custom manufacturing",
+    "168 Innovative",
+  ]
+
+  const metadata = buildMetadata({ locale: "en", title, description, path, keywords })
 
   return {
     ...metadata,
-    robots: {
-      index: shouldIndexCategory(category, currentPage),
-      follow: true,
-    },
+    robots: { index: shouldIndexCategory(category, currentPage), follow: true },
   }
 }
 
@@ -102,34 +110,56 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     currentPage > 1
       ? `${SITE_URL}/en/categories/${slug}?page=${currentPage}`
       : `${SITE_URL}/en/categories/${slug}`
-  const faqPageId = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
+
+  const faqPageId      = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
+  const hasDistinctIntro =
+    Boolean(category.introHtml) &&
+    normalizeText(category.introHtml) !== normalizeText(category.description)
+
+  // ── JSON-LD ──────────────────────────────────────────────────────────────
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(
     [
-      { name: "Home", item: `${SITE_URL}/en` },
+      { name: "Home",       item: `${SITE_URL}/en` },
       { name: "Categories", item: `${SITE_URL}/en/categories` },
       { name: category.name, item: categoryUrl },
     ],
     { id: `${categoryUrl}#breadcrumb` }
   )
+
+  const collectionPageJsonLd = buildCollectionPageJsonLd({
+    url: categoryUrl,
+    name: category.seoTitle || category.name,
+    description: category.seoDescription || category.description,
+    locale,
+    products: allProducts.map((p) => ({
+      name: p.name,
+      url: `${SITE_URL}/en/categories/${slug}/${p.slug}`,
+      image: p.image?.src ? `${SITE_URL}${p.image.src}` : undefined,
+      description: p.description,
+    })),
+  })
+
   const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
-  const hasDistinctIntro =
-    Boolean(category.introHtml) &&
-    normalizeText(category.introHtml) !== normalizeText(category.description)
 
   return (
     <main className="min-h-screen bg-transparent">
-      {faqJsonLd ? (
-        <Script
-          id="category-faq-jsonld-en"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      ) : null}
       <Script
         id="category-breadcrumb-jsonld-en"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <Script
+        id="category-collection-jsonld-en"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
+      />
+      {faqJsonLd && (
+        <Script
+          id="category-faq-jsonld-en"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-8 lg:px-8">
         <CategoryProductsSection
@@ -145,6 +175,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           totalCount={result.totalCount}
         />
 
+        <RecentlyViewed locale={locale} />
+
         <FaqSection
           className="mt-12"
           eyebrow="Frequently Asked Questions"
@@ -152,14 +184,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           items={category.faqItems}
         />
 
-        {hasDistinctIntro ? (
+        {hasDistinctIntro && (
           <RichTextSection
             className="mt-12"
             eyebrow="Category Detail"
             title="Category Overview"
             html={category.introHtml ?? ""}
           />
-        ) : null}
+        )}
       </div>
     </main>
   )

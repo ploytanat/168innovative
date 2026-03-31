@@ -574,8 +574,12 @@ function logMockModeStatusOnce(enabled: boolean) {
 export function getMockHeroSlides(locale: Locale): HeroSlideView[] {
   return homeMock.hero.slides.map((slide) => ({
     id: slide.id,
+    theme: slide.theme,
+    badge: {
+      text: pickLocalized(locale, slide.badge.text),
+      variant: slide.badge.variant,
+    },
     title: pickLocalized(locale, slide.title),
-    subtitle: pickLocalized(locale, slide.subtitle),
     description: pickLocalized(locale, slide.description),
     image: mapLocalizedImage(locale, slide.image, pickLocalized(locale, slide.title)) ?? {
       src: "/placeholder.jpg",
@@ -590,6 +594,9 @@ export function getMockHeroSlides(locale: Locale): HeroSlideView[] {
           href: slide.ctaSecondary.href,
           label: pickLocalized(locale, slide.ctaSecondary.label),
         }
+      : undefined,
+    highlight: slide.highlight
+      ? { value: slide.highlight.value, label: pickLocalized(locale, slide.highlight.label) }
       : undefined,
   }))
 }

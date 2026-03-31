@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import Script from "next/script"
 
 import CategoryProductsSection from "@/app/components/product/CategoryProductsSection"
+import RecentlyViewed from "@/app/components/product/RecentlyViewed"
 import FaqSection from "@/app/components/ui/FaqSection"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
@@ -17,7 +18,11 @@ import {
   getProductsByCategory,
 } from "@/app/lib/api/products"
 import { shouldIndexCategory } from "@/app/lib/seo/indexability"
-import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/app/lib/schema"
+import {
+  buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
+  buildFaqJsonLd,
+} from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 
 interface Props {
@@ -43,18 +48,17 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug } = await params
   const currentPage = parsePage((await searchParams).page)
-  const category = await getCategoryBySlug(slug, "th")
+  const [category, countResult] = await Promise.all([
+    getCategoryBySlug(slug, "th"),
+    getAllProductsByCategory(slug, "th"),
+  ])
 
-  if (!category) {
-    return { title: "ไม่พบหมวดสินค้า" }
-  }
+  if (!category) return { title: "ไม่พบหมวดสินค้า" }
 
+  const productCount = countResult.length
   const path =
     currentPage > 1
       ? `/categories/${slug}?page=${currentPage}`
@@ -64,23 +68,27 @@ export async function generateMetadata({
       ? `${category.seoTitle || category.name} - หน้า ${currentPage}`
       : category.seoTitle || category.name
 
-  const metadata = buildMetadata({
-    locale: "th",
-    title,
-    description:
-      category.seoDescription ||
-      category.description ||
-      `รวมสินค้าในหมวด ${category.name} จาก 168 Innovative สำหรับงานบรรจุภัณฑ์และการผลิต`,
-    path,
-    keywords: [category.name, "168 Innovative", "หมวดหมู่สินค้า"],
-  })
+  const description =
+    category.seoDescription ||
+    (productCount > 0
+      ? `${category.name} คุณภาพสูง ${productCount} รายการ MOQ เพียง 100 ชิ้น รับผลิต OEM/ODM ส่งทั่วประเทศ — 168 Innovative`
+      : `รวมสินค้าในหมวด ${category.name} จาก 168 Innovative สำหรับงานบรรจุภัณฑ์และการผลิต OEM/ODM`)
+
+  const keywords = [
+    category.name,
+    `${category.name} OEM`,
+    `${category.name} ราคาส่ง`,
+    `${category.name} MOQ`,
+    "บรรจุภัณฑ์",
+    "รับผลิตตามสั่ง",
+    "168 Innovative",
+  ]
+
+  const metadata = buildMetadata({ locale: "th", title, description, path, keywords })
 
   return {
     ...metadata,
-    robots: {
-      index: shouldIndexCategory(category, currentPage),
-      follow: true,
-    },
+    robots: { index: shouldIndexCategory(category, currentPage), follow: true },
   }
 }
 
@@ -102,34 +110,57 @@ export default async function CategoryPage({ params, searchParams }: Props) {
     currentPage > 1
       ? `${SITE_URL}/categories/${slug}?page=${currentPage}`
       : `${SITE_URL}/categories/${slug}`
-  const faqPageId = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
-  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
-    [
-      { name: "หน้าแรก", item: SITE_URL },
-      { name: "หมวดหมู่สินค้า", item: `${SITE_URL}/categories` },
-      { name: category.name, item: categoryUrl },
-    ],
-    { id: `${categoryUrl}#breadcrumb` }
-  )
-  const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
+
+  const faqPageId      = category.faqItems?.length ? `${categoryUrl}#faq` : undefined
   const hasDistinctIntro =
     Boolean(category.introHtml) &&
     normalizeText(category.introHtml) !== normalizeText(category.description)
 
+  // ── JSON-LD ──────────────────────────────────────────────────────────────
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(
+    [
+      { name: "หน้าแรก",       item: SITE_URL },
+      { name: "หมวดหมู่สินค้า", item: `${SITE_URL}/categories` },
+      { name: category.name,    item: categoryUrl },
+    ],
+    { id: `${categoryUrl}#breadcrumb` }
+  )
+
+  // CollectionPage with ItemList — เพิ่มให้ Google เข้าใจ catalog structure
+  const collectionPageJsonLd = buildCollectionPageJsonLd({
+    url: categoryUrl,
+    name: category.seoTitle || category.name,
+    description: category.seoDescription || category.description,
+    locale,
+    products: allProducts.map((p) => ({
+      name: p.name,
+      url: `${SITE_URL}/categories/${slug}/${p.slug}`,
+      image: p.image?.src ? `${SITE_URL}${p.image.src}` : undefined,
+      description: p.description,
+    })),
+  })
+
+  const faqJsonLd = buildFaqJsonLd(category.faqItems, { pageId: faqPageId })
+
   return (
     <main className="min-h-screen bg-transparent">
-      {faqJsonLd ? (
-        <Script
-          id="category-faq-jsonld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      ) : null}
       <Script
         id="category-breadcrumb-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <Script
+        id="category-collection-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
+      />
+      {faqJsonLd && (
+        <Script
+          id="category-faq-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-8 lg:px-8">
         <CategoryProductsSection
@@ -145,6 +176,8 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           totalCount={result.totalCount}
         />
 
+        <RecentlyViewed locale={locale} />
+
         <FaqSection
           className="mt-12"
           eyebrow="คำถามที่พบบ่อย"
@@ -152,14 +185,14 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           items={category.faqItems}
         />
 
-        {hasDistinctIntro ? (
+        {hasDistinctIntro && (
           <RichTextSection
             className="mt-12"
             eyebrow="รายละเอียดหมวดสินค้า"
             title="ข้อมูลเพิ่มเติมในหมวดนี้"
             html={category.introHtml ?? ""}
           />
-        ) : null}
+        )}
       </div>
     </main>
   )

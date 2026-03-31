@@ -10,34 +10,41 @@ import {
   getCatalogFacetSections,
   sortCatalogProducts,
   type CatalogFacetState,
+  type SortOrder,
 } from "@/app/lib/catalog/view-model"
 import type { CategoryView, ProductView } from "@/app/lib/types/view"
 
-interface Props {
-  category: CategoryView
-  categories: CategoryView[]
-  products: ProductView[]
-  searchProducts: ProductView[]
-  categorySlug: string
-  totalCount: number
-  locale?: "th" | "en"
-  onSearchStateChange?: (isSearching: boolean) => void
-}
+// ─── Icons ────────────────────────────────────────────────────────────────────
 
-type SortOrder = "default" | "asc" | "desc"
+const GridIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+  </svg>
+)
+const ListIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+)
+
+// ─── Copy ─────────────────────────────────────────────────────────────────────
 
 const copy = {
   th: {
     eyebrow: "Product Catalog",
     title: "เลือกสินค้าในหมวดนี้",
-    categoryLabel: "Category",
+    categoryLabel: "หมวดหมู่",
     item: "รายการ",
     result: "ผลลัพธ์",
     sortDefault: "ล่าสุด",
-    sortAsc: "ก -> ฮ",
-    sortDesc: "ฮ -> ก",
+    sortAsc: "ก → ฮ",
+    sortDesc: "ฮ → ก",
+    sortMoq: "MOQ น้อย → มาก",
     emptyTitle: "ไม่พบสินค้าที่ตรงเงื่อนไข",
     emptyHint: "ลองปรับคำค้นหาหรือฟิลเตอร์เพื่อดูสินค้าเพิ่มเติม",
+    viewGrid: "แบบตาราง",
+    viewList: "แบบรายการ",
   },
   en: {
     eyebrow: "Product Catalog",
@@ -46,10 +53,13 @@ const copy = {
     item: "items",
     result: "results",
     sortDefault: "Default",
-    sortAsc: "A -> Z",
-    sortDesc: "Z -> A",
+    sortAsc: "A → Z",
+    sortDesc: "Z → A",
+    sortMoq: "MOQ: Low → High",
     emptyTitle: "No matching products",
     emptyHint: "Adjust the search term or filters to widen the result set.",
+    viewGrid: "Grid",
+    viewList: "List",
   },
 } as const
 
@@ -70,6 +80,44 @@ const categoryKeywordOverrides = {
   },
 } as const
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function getSortLabel(sort: SortOrder, t: { sortDefault: string; sortAsc: string; sortDesc: string; sortMoq: string }) {
+  if (sort === "asc")      return t.sortAsc
+  if (sort === "desc")     return t.sortDesc
+  if (sort === "moq-asc")  return t.sortMoq
+  return t.sortDefault
+}
+
+function nextSort(current: SortOrder): SortOrder {
+  const cycle: SortOrder[] = ["default", "asc", "desc", "moq-asc"]
+  const idx = cycle.indexOf(current)
+  return cycle[(idx + 1) % cycle.length]
+}
+
+function getAvailabilityOptions(products: ProductView[]): string[] {
+  const seen = new Set<string>()
+  for (const p of products) {
+    if (p.availabilityStatus) seen.add(p.availabilityStatus)
+  }
+  return Array.from(seen)
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+interface Props {
+  category: CategoryView
+  categories: CategoryView[]
+  products: ProductView[]
+  searchProducts: ProductView[]
+  categorySlug: string
+  totalCount: number
+  locale?: "th" | "en"
+  onSearchStateChange?: (isSearching: boolean) => void
+}
+
+type ViewMode = "grid" | "list"
+
 export default function ProductGrid({
   category,
   categories,
@@ -81,61 +129,66 @@ export default function ProductGrid({
   onSearchStateChange,
 }: Props) {
   const t = copy[locale]
-  const keywordOverride = categoryKeywordOverrides[locale][
-    category.slug as keyof (typeof categoryKeywordOverrides)[typeof locale]
-  ]
+  const keywordOverride =
+    categoryKeywordOverrides[locale][
+      category.slug as keyof (typeof categoryKeywordOverrides)[typeof locale]
+    ]
   const sectionTitle =
     keywordOverride?.title || category.seoTitle || category.name || t.title
   const sectionDescription =
     keywordOverride?.description || category.seoDescription || category.description
-  const [query, setQuery] = useState("")
-  const [sort, setSort] = useState<SortOrder>("default")
-  const [activeFilters, setActiveFilters] = useState<CatalogFacetState>({})
-  const sourceProducts = searchProducts.length > 0 ? searchProducts : products
-  const sections = useMemo(() => getCatalogFacetSections(sourceProducts), [sourceProducts])
-  const hasActiveFilters = Object.values(activeFilters).some((values) => values.length > 0)
-  const isInteractive = query.trim().length > 0 || hasActiveFilters
+
+  const [query,              setQuery]              = useState("")
+  const [sort,               setSort]               = useState<SortOrder>("default")
+  const [activeFilters,      setActiveFilters]      = useState<CatalogFacetState>({})
+  const [activeAvailability, setActiveAvailability] = useState<string[]>([])
+  const [viewMode,           setViewMode]           = useState<ViewMode>("grid")
+
+  const sourceProducts   = searchProducts.length > 0 ? searchProducts : products
+  const sections         = useMemo(() => getCatalogFacetSections(sourceProducts), [sourceProducts])
+  const availabilityOpts = useMemo(() => getAvailabilityOptions(sourceProducts), [sourceProducts])
+
+  const hasActiveFilters  = Object.values(activeFilters).some((v) => v.length > 0)
+  const isInteractive     = query.trim().length > 0 || hasActiveFilters || activeAvailability.length > 0
 
   const filteredProducts = useMemo(() => {
-    const scopedProducts = isInteractive ? sourceProducts : products
-    return sortCatalogProducts(
-      filterCatalogProducts(scopedProducts, query, activeFilters),
-      sort,
-      locale
-    )
-  }, [activeFilters, isInteractive, locale, products, query, sort, sourceProducts])
+    const scoped = isInteractive ? sourceProducts : products
+    const bySearch = filterCatalogProducts(scoped, query, activeFilters)
+    const byAvail =
+      activeAvailability.length > 0
+        ? bySearch.filter((p) => activeAvailability.includes(p.availabilityStatus ?? ""))
+        : bySearch
+    return sortCatalogProducts(byAvail, sort, locale)
+  }, [activeFilters, activeAvailability, isInteractive, locale, products, query, sort, sourceProducts])
 
   useEffect(() => {
     onSearchStateChange?.(isInteractive)
   }, [isInteractive, onSearchStateChange])
 
   function toggleFilter(key: string, value: string) {
-    setActiveFilters((current) => {
-      const values = current[key] ?? []
-      const nextValues = values.includes(value)
-        ? values.filter((item) => item !== value)
-        : [...values, value]
-
+    setActiveFilters((cur) => {
+      const vals = cur[key] ?? []
       return {
-        ...current,
-        [key]: nextValues,
+        ...cur,
+        [key]: vals.includes(value) ? vals.filter((v) => v !== value) : [...vals, value],
       }
     })
+  }
+
+  function toggleAvailability(value: string) {
+    setActiveAvailability((cur) =>
+      cur.includes(value) ? cur.filter((v) => v !== value) : [...cur, value]
+    )
   }
 
   function clearFilters() {
     setQuery("")
     setSort("default")
     setActiveFilters({})
+    setActiveAvailability([])
   }
 
   const displayCount = isInteractive ? filteredProducts.length : totalCount
-  const sortLabel =
-    sort === "asc"
-      ? t.sortAsc
-      : sort === "desc"
-        ? t.sortDesc
-        : t.sortDefault
 
   return (
     <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
@@ -144,81 +197,124 @@ export default function ProductGrid({
         search={query}
         activeFilters={activeFilters}
         sections={sections}
+        availabilityOptions={availabilityOpts}
+        activeAvailability={activeAvailability}
         onSearchChange={setQuery}
         onToggle={toggleFilter}
+        onToggleAvailability={toggleAvailability}
         onClear={clearFilters}
       />
 
       <section className="space-y-5">
+        {/* ── Header bar ── */}
         <div className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+            <p className="text-sm font-semibold uppercase tracking-widest text-slate-500">
               {t.eyebrow}
             </p>
-            <h2 className="mt-2 text-3xl font-semibold text-slate-950">
-              {sectionTitle}
-            </h2>
-            {sectionDescription ? (
+            <h2 className="mt-2 text-3xl font-semibold text-slate-950">{sectionTitle}</h2>
+            {sectionDescription && (
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
                 {sectionDescription}
               </p>
-            ) : null}
+            )}
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-slate-500">
-            <div>
+          <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
+            {/* Product count */}
+            <span>
               <span className="font-semibold text-slate-950">{displayCount}</span>{" "}
               {isInteractive ? t.result : t.item}
-            </div>
+            </span>
+
+            {/* Sort cycle button */}
             <button
               type="button"
-              onClick={() =>
-                setSort((current) =>
-                  current === "default" ? "asc" : current === "asc" ? "desc" : "default"
-                )
-              }
+              onClick={() => setSort(nextSort)}
               className="rounded-full border border-slate-200 px-3 py-1.5 font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-950"
             >
-              {sortLabel}
+              {getSortLabel(sort, t)}
             </button>
+
+            {/* Grid / List toggle */}
+            <div className="flex overflow-hidden rounded-full border border-slate-200">
+              <button
+                type="button"
+                aria-label={t.viewGrid}
+                onClick={() => setViewMode("grid")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition ${
+                  viewMode === "grid"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-600 hover:bg-slate-50"
+                }`}
+              >
+                <GridIcon />
+                <span className="hidden sm:inline">{t.viewGrid}</span>
+              </button>
+              <button
+                type="button"
+                aria-label={t.viewList}
+                onClick={() => setViewMode("list")}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition ${
+                  viewMode === "list"
+                    ? "bg-slate-900 text-white"
+                    : "bg-white text-slate-600 hover:bg-slate-50"
+                }`}
+              >
+                <ListIcon />
+                <span className="hidden sm:inline">{t.viewList}</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        {categories.length > 1 ? (
+        {/* ── Category tabs ── */}
+        {categories.length > 1 && (
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             <p className="text-sm font-semibold text-slate-900">{t.categoryLabel}</p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {categories.map((category) => {
+              {categories.map((cat) => {
                 const href =
                   locale === "en"
-                    ? `/en/categories/${category.slug}`
-                    : `/categories/${category.slug}`
-                const isActive = category.slug === categorySlug
-
+                    ? `/en/categories/${cat.slug}`
+                    : `/categories/${cat.slug}`
+                const isActive = cat.slug === categorySlug
                 return (
                   <Link
-                    key={category.id}
+                    key={cat.id}
                     href={href}
                     prefetch={false}
-                    className="rounded-full border px-3 py-2 text-sm transition"
-                    style={{
-                      borderColor: isActive ? "#0f172a" : "#cbd5e1",
-                      background: isActive ? "#0f172a" : "#fff",
-                      color: isActive ? "#fff" : "#334155",
-                    }}
+                    className={`rounded-full border px-3 py-2 text-sm transition ${
+                      isActive
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-slate-300 bg-white text-slate-600 hover:border-slate-400"
+                    }`}
                   >
-                    {category.name}
+                    {cat.name}
                   </Link>
                 )
               })}
             </div>
           </div>
-        ) : null}
+        )}
 
+        {/* ── Product list ── */}
         {filteredProducts.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white/80 px-6 py-16 text-center">
             <p className="text-lg font-semibold text-slate-900">{t.emptyTitle}</p>
             <p className="mt-2 text-sm text-slate-500">{t.emptyHint}</p>
+          </div>
+        ) : viewMode === "list" ? (
+          <div className="flex flex-col gap-4">
+            {filteredProducts.map((product) => (
+              <CatalogProductCard
+                key={product.id}
+                categorySlug={categorySlug}
+                locale={locale}
+                product={product}
+                view="list"
+              />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -228,6 +324,7 @@ export default function ProductGrid({
                 categorySlug={categorySlug}
                 locale={locale}
                 product={product}
+                view="grid"
               />
             ))}
           </div>

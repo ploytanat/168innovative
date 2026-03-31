@@ -60,16 +60,21 @@ export interface SEOContent {
 // Home
 // =====================================================
 
+export type HeroTheme = 'rose' | 'sky' | 'violet' | 'emerald'
+export type HeroBadgeVariant = 'hot' | 'new' | 'promo' | 'featured'
+
 export interface HomeContent {
   hero: {
     slides: {
       id: number;
+      theme: HeroTheme;
+      badge: { text: LocalizedText; variant: HeroBadgeVariant };
       title: LocalizedText;
-      subtitle: LocalizedText;
       description: LocalizedText;
       image: ImageAsset;
       ctaPrimary: CTA;
-      ctaSecondary: CTA;
+      ctaSecondary?: CTA;
+      highlight?: { value: string; label: LocalizedText };
     }[];
   };
 }

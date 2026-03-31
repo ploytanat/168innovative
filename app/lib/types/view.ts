@@ -136,12 +136,8 @@ export interface WhyItemView {
 }
 
 // == Hero (Home) ==
-export type HeroLayoutType = "split" | "fullBg"
-
-export interface HeroStatView {
-  label: string
-  value: string
-}
+export type HeroTheme = 'rose' | 'sky' | 'violet' | 'emerald'
+export type HeroBadgeVariant = 'hot' | 'new' | 'promo' | 'featured'
 
 export interface HeroCTAView {
   href: string
@@ -150,14 +146,14 @@ export interface HeroCTAView {
 
 export interface HeroSlideView {
   id: number
-  layout?: HeroLayoutType
+  theme: HeroTheme
+  badge: { text: string; variant: HeroBadgeVariant }
   title: string
-  subtitle?: string
   description: string
   image: ImageView
   ctaPrimary: HeroCTAView
   ctaSecondary?: HeroCTAView
-  stats?: HeroStatView[]
+  highlight?: { value: string; label: string }
 }
 
 export interface HomeHeroView {
