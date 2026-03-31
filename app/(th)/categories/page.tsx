@@ -5,6 +5,7 @@ import Link from "next/link"
 import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
+import { loadWithFallback } from "@/app/lib/api/load-with-fallback"
 
 function getCategoryHref(slug: string): string {
   return `/categories/${slug}`
@@ -21,7 +22,11 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function CategoriesPage() {
   const locale = "th"
-  const categories = await getCategories(locale)
+  const categories = await loadWithFallback(
+    getCategories(locale),
+    [],
+    `categories page (${locale})`
+  )
   const seoCategories = categories.filter((c) => c.seoDescription).slice(0, 6)
 
   if (!categories.length) {

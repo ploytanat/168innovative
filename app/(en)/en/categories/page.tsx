@@ -6,6 +6,7 @@ import PageIntro from "@/app/components/ui/PageIntro"
 import LocalizedLink from "@/app/components/ui/LocalizedLink"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
+import { loadWithFallback } from "@/app/lib/api/load-with-fallback"
 
 function getCategoryLink(slug: string): { href: string; toCatalog: boolean } {
   return { href: `/categories/${slug}`, toCatalog: false }
@@ -22,7 +23,11 @@ export const metadata: Metadata = buildMetadata({
 
 export default async function CategoriesPage() {
   const locale = "en"
-  const categories = await getCategories(locale)
+  const categories = await loadWithFallback(
+    getCategories(locale),
+    [],
+    `categories page (${locale})`
+  )
   const seoCategories = categories.filter((category) => category.seoDescription).slice(0, 6)
 
   if (!categories.length) {
