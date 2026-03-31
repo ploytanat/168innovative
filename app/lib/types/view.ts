@@ -151,9 +151,14 @@ export interface HeroSlideView {
   title: string
   description: string
   image: ImageView
+  subheading?: string
   ctaPrimary: HeroCTAView
   ctaSecondary?: HeroCTAView
   highlight?: { value: string; label: string }
+  stats?: Array<{ value: string; label: string }>
+  visualTitle?: string
+  visualSubtitle?: string
+  visualChips?: string[]
 }
 
 export interface HomeHeroView {

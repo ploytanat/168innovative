@@ -78,7 +78,7 @@ export default function HeroNav({ total, current, themes, animKey, onPrev, onNex
                 <span
                   key={animKey}
                   className="absolute inset-0 rounded-full"
-                  style={{ background: t.dot, animation: `fillBar ${AUTOPLAY_MS}ms linear forwards` }}
+                  style={{ background: t.accentSolid, animation: `fillBar ${AUTOPLAY_MS}ms linear forwards` }}
                 />
               )}
             </button>

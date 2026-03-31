@@ -3,288 +3,211 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ExternalLink, MapPin } from 'lucide-react'
-import { motion } from 'framer-motion'
 
-import { CompanyView } from '@/app/lib/types/view'
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from '@/app/components/ui/motion'
+import type { CompanyView } from '@/app/lib/types/view'
 
 interface FooterProps {
   company: CompanyView
 }
 
-type FooterNavItem = {
+type NavItem = {
   href: string
   label: { th: string; en: string }
-  noLocale?: boolean
 }
 
-const navigation: FooterNavItem[] = [
-  { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
-  { href: '/categories', label: { th: 'หมวดสินค้า', en: 'Products' } },
-  { href: '/categories', label: { th: 'คาตาล็อก', en: 'Catalog' } },
+const NAV_ITEMS: NavItem[] = [
+  { href: '/categories', label: { th: 'สินค้าของเรา', en: 'Products' } },
   { href: '/articles', label: { th: 'บทความ', en: 'Articles' } },
-  { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About Us' } },
+  { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About' } },
   { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
 ]
 
-const copy = {
+const COPY = {
   th: {
-    eyebrow: '168 Innovative',
-    title: 'บรรจุภัณฑ์ที่พร้อมต่อยอดสู่การขายจริง',
-    description:
-      'บรรจุภัณฑ์เครื่องสำอางจากแหล่งผลิตโดยตรง ทำงานง่ายขึ้น ตอบกลับไวขึ้น และติดต่อทีมขายได้ตรงกว่าเดิม',
-    navigation: 'Navigation',
-    contact: 'Contact',
-    connect: 'Connect',
-    language: 'Language',
-    openMap: 'เปิดใน Google Maps',
-    salesDesk: 'โทรศัพท์ติดต่อ',
-    emailDesk: 'Email',
-    copyright: 'All rights reserved.',
+    about:
+      'บรรจุภัณฑ์เครื่องสำอางและพลาสติกสำหรับงาน OEM และ ODM นำเข้าโดยตรงจากโรงงาน คุณภาพสูง ราคาโรงงาน',
+    brandTitle: '168 Innovative',
+    navTitle: 'บริษัท',
+    contactTitle: 'ติดต่อ',
+    socialTitle: 'ช่องทางออนไลน์',
+    phoneTitle: 'โทรศัพท์',
+    emailTitle: 'อีเมล',
+    addressTitle: 'ที่อยู่',
+    copyright: 'สงวนลิขสิทธิ์',
+    badges: ['Food Grade', 'Cosmetic Grade', 'OEM/ODM'],
   },
   en: {
-    eyebrow: '168 Innovative',
-    title: 'Packaging that feels ready for market',
-    description:
-      'Factory-sourced cosmetic packaging with a cleaner process, faster response, and direct contact with sales.',
-    navigation: 'Navigation',
-    contact: 'Contact',
-    connect: 'Connect',
-    language: 'Language',
-    openMap: 'Open in Google Maps',
-    salesDesk: 'Sales & Office',
-    emailDesk: 'Email',
+    about:
+      'Cosmetic and plastic packaging for OEM and ODM projects with direct factory sourcing and production-ready quality.',
+    brandTitle: '168 Innovative',
+    navTitle: 'Company',
+    contactTitle: 'Contact',
+    socialTitle: 'Online',
+    phoneTitle: 'Phone',
+    emailTitle: 'Email',
+    addressTitle: 'Address',
     copyright: 'All rights reserved.',
+    badges: ['Food Grade', 'Cosmetic Grade', 'OEM/ODM'],
   },
 } as const
 
-const GOOGLE_MAPS_URL =
-  "https://www.google.com/maps/place/168+INNOVATIVE/@13.6189889,100.4238107,16.58z/data=!4m15!1m8!3m7!1s0x30e2bcb939ac5e39:0xa5d1f39039bd8382!2zODkg4LiL4Lit4LiiIOC5gOC4l-C4teC4ouC4meC4l-C4sOC5gOC4pSAyMCDguYHguILguKfguIfguYHguKrguKHguJTguLMg4LmA4LiC4LiV4Lia4Liy4LiH4LiC4Li44LiZ4LmA4LiX4Li14Lii4LiZIOC4geC4o-C4uOC4h-C5gOC4l-C4nuC4oeC4q-C4suC4meC4hOC4oyAxMDE1MA!3b1!8m2!3d13.620821!4d100.4236494!16s%2Fg%2F11sp98b_dz!3m5!1s0x30e2bd007a6774dd:0xa3b3383a2a290b44!8m2!3d13.6174254!4d100.4232667!16s%2Fg%2F11w4sb_jqj?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D"
-
 function formatSocialLabel(type: string) {
   return type.replace(/[-_]/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+function socialAccent(type: string) {
+  const key = type.toLowerCase()
+  if (key === 'line') return '#6bbfa8'
+  if (key === 'facebook') return '#6aaae0'
+  if (key === 'shopee') return '#e8a870'
+  if (key === 'instagram') return '#e8939a'
+  return '#c96870'
 }
 
 export default function Footer({ company }: FooterProps) {
   const pathname = usePathname()
   const isEN = pathname.startsWith('/en')
   const locale = isEN ? 'en' : 'th'
-  const text = copy[locale]
+  const copy = COPY[locale]
 
   const withLocale = (path: string) =>
     isEN ? (path === '/' ? '/en' : `/en${path}`) : path
 
-  const toTH = pathname.startsWith('/en')
-    ? pathname.replace(/^\/en/, '') || '/'
-    : pathname
-
-  const toEN = pathname.startsWith('/en')
-    ? pathname
-    : `/en${pathname === '/' ? '' : pathname}`
-
   return (
-    <footer
-      className="relative overflow-hidden border-t border-[rgba(205,222,241,0.78)] bg-[linear-gradient(180deg,#fefcff_0%,#f2fbff_38%,#fff1f6_100%)]"
-      aria-label="Site footer"
-    >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(46,207,196,0.65),rgba(248,167,184,0.55),transparent)]" />
-      <motion.div className="pointer-events-none absolute -left-20 top-12 h-56 w-56 rounded-full bg-[#2ecfc4]/12 blur-3xl" animate={{ x: [0, 18, 0], y: [0, -12, 0] }} transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }} />
-      <motion.div className="pointer-events-none absolute right-8 top-10 h-48 w-48 rounded-full bg-[#f8a7b8]/18 blur-3xl" animate={{ x: [0, -14, 0], y: [0, 16, 0] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }} />
-      <motion.div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-[#cab8f2]/14 blur-3xl" animate={{ x: [0, -10, 0], y: [0, 10, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
-
-      <motion.div className="mx-auto max-w-7xl px-6 pb-5 pt-7 sm:px-8 lg:px-10" variants={staggerSmall} initial="hidden" whileInView="visible" viewport={MOTION_VIEWPORT}>
-        <div className="grid gap-4 lg:grid-cols-[1.1fr_0.78fr_0.9fr]">
-          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-              {text.eyebrow}
-            </p>
-
-            <div className="mt-3 flex items-center gap-2.5">
-              <Link
-                href={withLocale('/')}
-                className="inline-flex rounded-[1rem] border border-[rgba(209,225,241,0.88)] bg-white/88 px-2.5 py-2 transition-transform hover:-translate-y-0.5"
-              >
-                <Image
-                  src={company.logo.src}
-                  alt={company.logo.alt}
-                  width={112}
-                  height={36}
-                  sizes="112px"
-                  className="h-auto w-auto object-contain"
-                />
-              </Link>
-
+    <footer className="bg-[#2e2820] pb-7 pt-16 text-white/55">
+      <div className="mx-auto max-w-[1180px] px-6 md:px-10">
+        <div className="grid gap-12 md:grid-cols-2 xl:grid-cols-[2fr_1fr_1fr_1.15fr]">
+          <div>
+            <div className="mb-4 flex items-center gap-3">
+              <div className="rounded-lg bg-[#e8939a] px-3 py-1.5 font-serif text-[14px] font-semibold text-white">
+                168
+              </div>
               <div className="min-w-0">
-                <h2 className="font-heading text-lg leading-tight text-[var(--color-ink)] sm:text-[1.45rem]">
-                  {text.title}
-                </h2>
+                <div className="text-[15px] font-semibold text-white/90">{copy.brandTitle}</div>
+                <div className="text-[11px] text-white/45">บรรจุภัณฑ์ OEM/ODM</div>
               </div>
             </div>
 
-            <p className="mt-3 max-w-xl text-[13px] leading-6 text-[var(--color-ink-soft)]">
-              {text.description}
-            </p>
+            <div className="max-w-[420px] text-[14px] leading-8 text-white/55">
+              {copy.about}
+            </div>
 
-            <div className="mt-4 grid gap-2.5 sm:grid-cols-[1.15fr_0.85fr]">
-              <div className="rounded-[1rem] border border-[rgba(209,225,241,0.78)] bg-[linear-gradient(145deg,rgba(236,251,255,0.9),rgba(255,243,247,0.86))] p-3">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                  {text.contact}
-                </p>
-                <p className="mt-1.5 text-[13px] leading-6 text-[var(--color-ink-soft)]">
-                  {company.address}
-                </p>
+            <div className="mt-5 flex flex-wrap gap-2.5">
+              {company.socials.map((social) => (
                 <a
-                  href={GOOGLE_MAPS_URL}
+                  key={`${social.type}-${social.url}`}
+                  href={social.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-2 rounded-full border border-[rgba(205,222,241,0.86)] bg-white/88 px-3 py-2 text-[12px] font-semibold tracking-[0.04em] text-[var(--color-ink)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[#0F766E]"
+                  aria-label={formatSocialLabel(social.type)}
+                  className="grid h-9 w-9 place-items-center rounded-[10px] bg-white/10 transition hover:-translate-y-0.5"
+                  style={{ color: socialAccent(social.type) }}
                 >
-                  <MapPin className="h-3.5 w-3.5" />
-                  <span>{text.openMap}</span>
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              </div>
-
-              <div className="rounded-[1rem] border border-[rgba(159,210,246,0.45)] bg-[linear-gradient(145deg,#7dbdf0,#baacf1)] p-3 text-white">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/88">
-                  {text.language}
-                </p>
-                <div className="mt-2.5 inline-flex rounded-full border border-white/10 bg-white/10 p-1">
-                  <Link
-                    href={toTH}
-                    hrefLang="th"
-                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
-                      !isEN
-                        ? 'bg-white text-[var(--color-ink)]'
-                        : 'text-white/70 hover:text-white'
-                    }`}
-                  >
-                    TH
-                  </Link>
-                  <Link
-                    href={toEN}
-                    hrefLang="en"
-                    className={`rounded-full px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] transition-colors ${
-                      isEN
-                        ? 'bg-white text-[var(--color-ink)]'
-                        : 'text-white/70 hover:text-white'
-                    }`}
-                  >
-                    EN
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </motion.section>
-
-          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-              {text.navigation}
-            </p>
-            <nav aria-label="Footer navigation" className="mt-3">
-              <ul className="space-y-1">
-                {navigation.map((item, index) => (
-                  <li key={`${item.href}-${index}`}>
-                    <Link
-                      href={item.noLocale ? item.href : withLocale(item.href)}
-                      className="group flex items-center justify-between rounded-[0.9rem] border border-transparent px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:border-[rgba(205,222,241,0.82)] hover:bg-white hover:text-[var(--color-ink)]"
-                    >
-                      <span>{item.label[locale]}</span>
-                      <span className="text-[var(--color-accent)] opacity-0 transition-opacity group-hover:opacity-100">
-                        →
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </motion.section>
-
-          <motion.section className="glass-panel rounded-[1.5rem] p-4" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                {text.salesDesk}
-              </p>
-              <div className="mt-3 space-y-2">
-                {company.phones.map((phone) => (
-                  <a
-                    key={phone.number}
-                    href={`tel:${phone.number}`}
-                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 transition-all hover:-translate-y-0.5 hover:border-[#14B8A6]"
-                  >
-                    {phone.label && (
-                      <span className="block text-[11px] uppercase tracking-[0.12em] text-[#7f90ab]">
-                        {phone.label}
-                      </span>
-                    )}
-                    <span className="mt-1 block text-[13px] font-semibold text-[var(--color-ink)]">
-                      {phone.number}
+                  {social.icon?.src ? (
+                    <Image
+                      src={social.icon.src}
+                      alt={social.icon.alt || formatSocialLabel(social.type)}
+                      width={16}
+                      height={16}
+                      className="h-4 w-4 object-contain brightness-0 invert"
+                    />
+                  ) : (
+                    <span className="text-[13px] font-semibold text-white">
+                      {formatSocialLabel(social.type).slice(0, 1)}
                     </span>
-                  </a>
-                ))}
-              </div>
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-4 text-[14px] font-semibold text-white/80">
+              {copy.navTitle}
+            </div>
+            <div className="flex flex-col gap-2.5">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={withLocale(item.href)}
+                  className="text-[14px] text-white/45 transition hover:text-[#e8939a]"
+                >
+                  {item.label[locale]}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-4 text-[14px] font-semibold text-white/80">
+              {copy.socialTitle}
+            </div>
+            <div className="flex flex-col gap-2.5">
+              {company.socials.map((social) => (
+                <a
+                  key={`footer-${social.type}-${social.url}`}
+                  href={social.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[14px] text-white/45 transition hover:text-[#e8939a]"
+                >
+                  {formatSocialLabel(social.type)}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="mb-4 text-[14px] font-semibold text-white/80">
+              {copy.contactTitle}
             </div>
 
-            <div className="mt-5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                {text.emailDesk}
-              </p>
-              <div className="mt-3 space-y-2">
-                {company.email.map((email) => (
-                  <a
-                    key={email}
-                    href={`mailto:${email}`}
-                    className="block rounded-[0.95rem] border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
-                  >
-                    {email}
-                  </a>
-                ))}
-              </div>
+            <div className="mb-4 flex items-start gap-3">
+              <span className="mt-0.5 text-[15px]">📍</span>
+              <div className="text-[13.5px] leading-7 text-white/45">{company.address}</div>
             </div>
 
-            {company.socials.length > 0 && (
-              <div className="mt-5">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                  {text.connect}
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {company.socials.map((social) => (
-                    <a
-                      key={`${social.type}-${social.url}`}
-                      href={social.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(209,225,241,0.82)] bg-white/88 px-3 py-2 text-[13px] text-[var(--color-ink-soft)] transition-all hover:-translate-y-0.5 hover:border-[#14B8A6] hover:text-[var(--color-ink)]"
-                    >
-                      {social.icon && (
-                        <Image
-                          src={social.icon.src}
-                          alt={social.icon.alt}
-                          width={16}
-                          height={16}
-                          sizes="16px"
-                          className="h-4 w-4 object-contain"
-                        />
-                      )}
-                      <span>{formatSocialLabel(social.type)}</span>
-                    </a>
+            {company.phones.length > 0 && (
+              <div className="mb-4 flex items-start gap-3">
+                <span className="mt-0.5 text-[15px]">📞</span>
+                <div className="text-[13.5px] leading-7 text-white/45">
+                  {company.phones.map((phone) => (
+                    <div key={phone.number}>{phone.number}</div>
                   ))}
                 </div>
               </div>
             )}
-          </motion.section>
+
+            {company.email.length > 0 && (
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 text-[15px]">📧</span>
+                <div className="text-[13.5px] leading-7 text-white/45">
+                  {company.email.map((email) => (
+                    <div key={email}>{email}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        <motion.div className="mt-5 flex flex-col gap-2 border-t border-white/70 pt-4 text-[11px] text-[#6f8099] sm:flex-row sm:items-center sm:justify-between" variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
-          <p>
-            © {new Date().getFullYear()} {company.name}. {text.copyright}
-          </p>
-          <p className="tracking-[0.14em] uppercase text-[#8394ab]">
-            Cosmetic Packaging • OEM • ODM
-          </p>
-        </motion.div>
-      </motion.div>
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6">
+          <div className="text-[13px] text-white/45">
+            © {new Date().getFullYear()} {company.name}. {copy.copyright}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {copy.badges.map((badge) => (
+              <span
+                key={badge}
+                className="rounded-full bg-white/8 px-3 py-1 text-[12px] text-white/40"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
     </footer>
   )
 }

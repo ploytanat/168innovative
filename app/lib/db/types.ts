@@ -147,3 +147,146 @@ export interface DBArticleCategory extends RowDataPacket {
   article_id: number
   category_name: string
 }
+
+export interface DBCompanyProfile extends RowDataPacket {
+  id: number
+  legal_name_th: string
+  legal_name_en: string | null
+  display_name_th: string
+  display_name_en: string | null
+  tagline_th: string | null
+  tagline_en: string | null
+  address_th: string | null
+  address_en: string | null
+  logo_url: string | null
+  logo_alt_th: string | null
+  logo_alt_en: string | null
+  line_qr_url: string | null
+  line_qr_alt_th: string | null
+  line_qr_alt_en: string | null
+  contact_image_url: string | null
+  contact_image_alt_th: string | null
+  contact_image_alt_en: string | null
+  is_published: number
+}
+
+export interface DBCompanyContactMethod extends RowDataPacket {
+  id: number
+  company_id: number
+  contact_type:
+    | 'phone'
+    | 'email'
+    | 'line'
+    | 'facebook'
+    | 'instagram'
+    | 'shopee'
+    | 'whatsapp'
+    | 'wechat'
+    | 'map'
+    | 'other'
+  label_th: string | null
+  label_en: string | null
+  person_name_th: string | null
+  person_name_en: string | null
+  department_th: string | null
+  department_en: string | null
+  value: string | null
+  url: string | null
+  icon_url: string | null
+  icon_alt: string | null
+  sort_order: number
+  is_primary: number
+  is_published: number
+}
+
+export interface DBCompanyGalleryImage extends RowDataPacket {
+  id: number
+  company_id: number
+  image_url: string
+  alt_th: string | null
+  alt_en: string | null
+  sort_order: number
+  is_published: number
+}
+
+export interface DBHeroSlide extends RowDataPacket {
+  id: number
+  theme: 'rose' | 'sky' | 'violet' | 'emerald'
+  badge_variant: 'hot' | 'new' | 'promo' | 'featured'
+  badge_text_th: string
+  badge_text_en: string | null
+  title_th: string
+  title_en: string | null
+  description_th: string | null
+  description_en: string | null
+  image_url: string
+  image_alt_th: string | null
+  image_alt_en: string | null
+  cta_primary_label_th: string
+  cta_primary_label_en: string | null
+  cta_primary_href: string
+  cta_secondary_label_th: string | null
+  cta_secondary_label_en: string | null
+  cta_secondary_href: string | null
+  highlight_value: string | null
+  highlight_label_th: string | null
+  highlight_label_en: string | null
+  visual_title_th: string | null
+  visual_title_en: string | null
+  visual_subtitle_th: string | null
+  visual_subtitle_en: string | null
+  sort_order: number
+  is_published: number
+}
+
+export interface DBHeroSlideStat extends RowDataPacket {
+  id: number
+  slide_id: number
+  metric_value: string
+  label_th: string | null
+  label_en: string | null
+  sort_order: number
+}
+
+export interface DBHeroSlideChip extends RowDataPacket {
+  id: number
+  slide_id: number
+  label_th: string | null
+  label_en: string | null
+  sort_order: number
+}
+
+export interface DBWhyItem extends RowDataPacket {
+  id: number
+  page_key: string
+  section_key: string
+  icon_name: string | null
+  image_url: string | null
+  image_alt_th: string | null
+  image_alt_en: string | null
+  title_th: string
+  title_en: string | null
+  description_th: string | null
+  description_en: string | null
+  sort_order: number
+  is_published: number
+}
+
+export interface DBAboutSection extends RowDataPacket {
+  id: number
+  section_key: string
+  eyebrow_th: string | null
+  eyebrow_en: string | null
+  title_th: string
+  title_en: string | null
+  description_th: string | null
+  description_en: string | null
+  image_primary_url: string | null
+  image_primary_alt_th: string | null
+  image_primary_alt_en: string | null
+  image_secondary_url: string | null
+  image_secondary_alt_th: string | null
+  image_secondary_alt_en: string | null
+  sort_order: number
+  is_published: number
+}

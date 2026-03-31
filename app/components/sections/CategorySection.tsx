@@ -1,118 +1,101 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { uiText } from "@/app/lib/i18n/ui"
-import { CategoryView } from "@/app/lib/types/view"
-import { withLocalePath } from "@/app/lib/utils/withLocalePath"
-import {
-  COLORS,
-  CTA_BUTTON_STYLE,
-  EYEBROW_PILL_STYLE,
-  GLASS,
-  SECTION_BACKGROUNDS,
-  SECTION_BORDER,
-  SOFT_IMAGE_BG,
-  SOFT_IMAGE_BG_ALT,
-} from "@/app/components/ui/designSystem"
+import type { CategoryView } from '@/app/lib/types/view'
+import { withLocalePath } from '@/app/lib/utils/withLocalePath'
 
-const ArrowRightIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4 transition-transform group-hover:translate-x-0.5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-  </svg>
-)
+const COLOR_STYLES = [
+  { bg: '#fdeef0', accent: '#c96870' },
+  { bg: '#e4f5f0', accent: '#6bbfa8' },
+  { bg: '#ede8f8', accent: '#9e8ec4' },
+  { bg: '#fdf0e4', accent: '#e8a870' },
+  { bg: '#e4f0fc', accent: '#6aaae0' },
+  { bg: '#fdeef0', accent: '#c96870' },
+] as const
 
-interface CategorySectionProps {
+const COPY = {
+  th: {
+    eyebrow: 'หมวดหมู่สินค้า',
+    title: 'เลือกสินค้าตามประเภท\nที่คุณต้องการ',
+    desc: 'สินค้าครอบคลุมทุกความต้องการ ทั้งบรรจุภัณฑ์เครื่องสำอาง อาหาร และอุตสาหกรรม',
+    cta: 'ดูสินค้า',
+  },
+  en: {
+    eyebrow: 'Product Categories',
+    title: 'Browse by Category\nfor Your Next Project',
+    desc: 'Explore packaging collections across cosmetics, food, and industrial use.',
+    cta: 'Explore',
+  },
+} as const
+
+export default function CategorySection({
+  items = [],
+  locale,
+}: {
   items: CategoryView[]
-  locale: "th" | "en"
-}
+  locale: 'th' | 'en'
+}) {
+  if (!items.length) return null
 
-export default function CategorySection({ items = [], locale }: CategorySectionProps) {
-  if (items.length === 0) return null
-
+  const copy = COPY[locale]
   const displayItems = items.slice(0, 6)
 
   return (
-    <section className="relative py-14 sm:py-16 md:py-24" style={{ background: SECTION_BACKGROUNDS.neutral }}>
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="border-t pt-6" style={{ borderColor: SECTION_BORDER }}>
-          <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE}>Product Categories</p>
-              <h2 className="font-heading mt-3 text-[clamp(2rem,4vw,3.8rem)] leading-[1.02]" style={{ color: COLORS.dark }}>
-                {uiText.categories.title[locale]}
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: COLORS.mid }}>
-                {locale === "th"
-                  ? "จัดหมวดสินค้าให้อ่านง่ายขึ้นแบบ deck layout เพื่อให้เลือกเส้นทางเข้าสู่คอลเลกชันที่ต้องการได้เร็ว"
-                  : "A cleaner deck-style overview that makes it easier to move into the right collection quickly."}
-              </p>
-            </div>
+    <section id="categories" className="py-20">
+      <div className="mx-auto max-w-[1180px] px-6 md:px-10">
+        <div>
+          <span className="mb-2 block text-[12px] font-semibold uppercase tracking-[0.18em] text-[#c96870]">
+            {copy.eyebrow}
+          </span>
+          <h2 className="whitespace-pre-line text-[clamp(26px,3.5vw,38px)] font-bold leading-[1.25] text-[#2e2820]">
+            {copy.title}
+          </h2>
+          <p className="mt-3 max-w-[560px] text-[16px] leading-8 text-[#6e6558]">
+            {copy.desc}
+          </p>
+        </div>
 
-            <Link
-              href={withLocalePath("/categories", locale)}
-              className="group inline-flex w-fit items-center gap-2 rounded-[0.95rem] px-6 py-3 font-body text-[12px] font-semibold uppercase tracking-[0.12em] text-white"
-              style={CTA_BUTTON_STYLE}
-            >
-              <span>{uiText.categories.viewAll[locale]}</span>
-              <ArrowRightIcon />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {displayItems.map((item, index) => {
-              const imageBg = index % 2 === 0 ? SOFT_IMAGE_BG : SOFT_IMAGE_BG_ALT
-
-              return (
-                <Link
-                  key={item.id}
-                  href={withLocalePath(`/categories/${item.slug}`, locale)}
-                  aria-label={`${uiText.categories.exploreMore[locale]} ${item.name}`}
-                  className="group overflow-hidden rounded-[0.95rem] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(32,36,43,0.08)]"
-                  style={GLASS.card}
+        <div className="mt-12 grid gap-[18px] md:grid-cols-2 lg:grid-cols-3">
+          {displayItems.map((item, index) => {
+            const style = COLOR_STYLES[index % COLOR_STYLES.length]
+            return (
+              <Link
+                key={item.id}
+                href={withLocalePath(`/categories/${item.slug}`, locale)}
+                className="group flex flex-col gap-3 rounded-2xl border border-[rgba(180,150,140,.15)] bg-white p-6 text-inherit no-underline transition hover:-translate-y-1 hover:border-[#f5d0d4] hover:shadow-[0_16px_36px_rgba(150,110,100,.10)]"
+              >
+                <div className="text-[12px] font-medium uppercase tracking-[0.1em] text-[#aea49a]">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <div
+                  className="grid h-[54px] w-[54px] place-items-center overflow-hidden rounded-[14px]"
+                  style={{ background: style.bg }}
                 >
-                  <div className="relative aspect-[4/3.2] overflow-hidden rounded-[0.8rem]" style={{ background: imageBg }}>
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(52,54,59,0.84),rgba(74,134,244,0.88),rgba(223,228,234,0.96))]" />
-                  <div className="absolute left-4 top-4 text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: COLORS.soft }}>
-                    {(index + 1).toString().padStart(2, "0")}
-                  </div>
-
                   {item.image?.src ? (
-                    <Image
-                      src={item.image.src}
-                      alt={item.image.alt || item.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs" style={{ color: COLORS.hint }}>
-                      {uiText.categories.noImage[locale]}
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={item.image.src}
+                        alt={item.image.alt || item.name}
+                        fill
+                        sizes="32px"
+                        className="object-contain"
+                      />
                     </div>
+                  ) : (
+                    <span className="text-[28px]">📦</span>
                   )}
                 </div>
-
-                <div className="px-1 pb-1 pt-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
-                    {locale === "th" ? "คอลเลกชันสินค้า" : "Collection"}
-                  </p>
-                  <h3 className="font-heading mt-2 text-xl leading-tight" style={{ color: COLORS.dark }}>
-                    {item.name}
-                  </h3>
-                  {item.description ? (
-                    <p className="mt-3 line-clamp-2 text-[13px] leading-6" style={{ color: COLORS.mid }}>
-                      {item.description}
-                    </p>
-                  ) : null}
-
-                  <div className="mt-4 flex items-center gap-2 border-t pt-3 text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ borderColor: "rgba(30,40,60,0.10)", color: COLORS.brandMuted }}>
-                    {uiText.categories.exploreMore[locale]}
-                    <ArrowRightIcon />
-                  </div>
+                <div className="text-[18px] font-bold text-[#2e2820]">{item.name}</div>
+                <div className="flex-1 text-[14px] leading-7 text-[#6e6558]">{item.description}</div>
+                <div
+                  className="inline-flex items-center gap-2 text-[13.5px] font-semibold transition-[gap] group-hover:gap-3"
+                  style={{ color: style.accent }}
+                >
+                  {copy.cta} <span aria-hidden>→</span>
                 </div>
-                </Link>
-              )
-            })}
-          </div>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>
