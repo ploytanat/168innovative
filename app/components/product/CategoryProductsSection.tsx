@@ -18,7 +18,6 @@ interface CategoryProductsSectionProps {
   searchProducts: ProductView[]
   totalPages: number
   totalCount: number
-  categoryName?: string
 }
 
 export default function CategoryProductsSection({
@@ -32,7 +31,6 @@ export default function CategoryProductsSection({
   searchProducts,
   totalPages,
   totalCount,
-  categoryName,
 }: CategoryProductsSectionProps) {
   const [isSearching, setIsSearching] = useState(false)
 
@@ -44,7 +42,6 @@ export default function CategoryProductsSection({
         products={products}
         searchProducts={searchProducts}
         categorySlug={slug}
-        categoryName={categoryName}
         totalCount={totalCount}
         locale={locale}
         onSearchStateChange={setIsSearching}

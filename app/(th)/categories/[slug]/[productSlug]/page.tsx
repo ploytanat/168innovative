@@ -17,7 +17,6 @@ import { getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsForSitemap,
   getProductBySlug,
-  getProductVariants,
   getRelatedProducts,
 } from "@/app/lib/api/products"
 import {
@@ -158,6 +157,7 @@ export default async function ProductDetailPage({ params, searchParams }: Props)
     product.variants.find((variant) => variant.slug === selectedVariantSlug) ??
     product.variants.find((variant) => variant.slug === product.defaultVariantSlug) ??
     product.variants[0]
+  const variants = product.variants
   const activeSpecs = selectedVariant?.specs ?? product.specs
   const activeGallery = selectedVariant?.gallery ?? product.gallery
   const activeDescription = selectedVariant?.description || product.description

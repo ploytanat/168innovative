@@ -17,7 +17,6 @@ import { getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsForSitemap,
   getProductBySlug,
-  getProductVariants,
   getRelatedProducts,
 } from "@/app/lib/api/products"
 import {
@@ -248,38 +247,6 @@ export default async function ProductDetailPage({ params, searchParams }: Props)
                 SKU: {product.slug.toUpperCase()}
               </span>
             </div>
-
-            {/* Variant selection */}
-            {variants.length > 0 && (
-              <div className="mt-6">
-                <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
-                  Product Options
-                </p>
-                <div>
-                  <p className="mb-2 text-[11px] font-semibold text-slate-500">Size</p>
-                  <div className="flex flex-wrap gap-2">
-                    <span
-                      className="rounded-[0.6rem] px-4 py-2 text-sm font-semibold"
-                      style={{ background: '#1a2232', color: '#fff' }}
-                    >
-                      {product.slug.match(/-(\d+\s*mm?)$/i)?.[1] ?? product.slug}
-                    </span>
-                    {variants.map((v) => {
-                      const size = v.slug.match(/-(\d+\s*mm?)$/i)?.[1] ?? v.slug
-                      return (
-                        <Link
-                          key={v.id}
-                          href={`/en/categories/${slug}/${v.slug}`}
-                          className="rounded-[0.6rem] border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
-                        >
-                          {size}
-                        </Link>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div className="mt-5 inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
               SKU: {selectedVariant?.sku ?? product.sku ?? product.slug}

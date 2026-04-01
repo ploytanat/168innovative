@@ -174,7 +174,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           searchProducts={allProducts}
           totalPages={result.totalPages}
           totalCount={result.totalCount}
-          categoryName={resolvedCategory.name}
         />
 
         <RecentlyViewed locale={locale} />

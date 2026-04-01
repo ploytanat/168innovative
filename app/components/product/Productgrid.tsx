@@ -111,7 +111,6 @@ interface Props {
   products: ProductView[]
   searchProducts: ProductView[]
   categorySlug: string
-  categoryName?: string
   totalCount: number
   locale?: "th" | "en"
   onSearchStateChange?: (isSearching: boolean) => void
@@ -125,7 +124,6 @@ export default function ProductGrid({
   products,
   searchProducts,
   categorySlug,
-  categoryName,
   totalCount,
   locale = "th",
   onSearchStateChange,
