@@ -466,6 +466,28 @@ export async function getProductBySlug(slug: string, locale: Locale) {
   return mapWPToProductView(raw[0], locale, catMap)
 }
 
+// Extract size suffix from slug e.g. "spout-screw-cap-16mm" -> "16mm"
+function extractSizeFromSlug(slug: string): string | null {
+  const match = slug.match(/-(\d+\s*mm?)$/i)
+  return match ? match[1] : null
+}
+
+function getSlugBase(slug: string): string {
+  return slug.replace(/-\d+\s*mm?$/i, "")
+}
+
+export async function getProductVariants(
+  productSlug: string,
+  categorySlug: string,
+  locale: Locale
+): Promise<ProductView[]> {
+  const allProducts = await getAllProductsByCategory(categorySlug, locale)
+  const base = getSlugBase(productSlug)
+  return allProducts.filter(
+    (p) => getSlugBase(p.slug) === base && p.slug !== productSlug
+  )
+}
+
 export async function getRelatedProducts(
   categorySlug: string,
   currentProductId: string,

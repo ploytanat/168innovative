@@ -24,6 +24,7 @@ import { getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsForSitemap,
   getProductBySlug,
+  getProductVariants,
   getRelatedProducts,
 } from "@/app/lib/api/products"
 import {
@@ -152,7 +153,10 @@ export default async function ProductDetailPage({ params }: Props) {
     permanentRedirect(`/categories/${product.categorySlug}/${productSlug}`)
   }
   if (product.categoryId !== category.id) notFound()
-  const related = await getRelatedProducts(slug, productSlug, locale)
+  const [related, variants] = await Promise.all([
+    getRelatedProducts(slug, productSlug, locale),
+    getProductVariants(productSlug, slug, locale),
+  ])
   const hasDistinctContent = hasDistinctText(
     product.contentHtml,
     product.description
@@ -256,12 +260,56 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
 
           <div className="flex flex-col justify-center p-2 lg:p-0">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-ink-soft)]">
+              {category.name}
+            </p>
             <h1 className="break-words font-heading text-3xl font-semibold tracking-tight text-[var(--color-ink)] md:text-4xl">
               {product.name}
             </h1>
 
+            <div className="mt-3 inline-flex">
+              <span className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                SKU: {product.slug.toUpperCase()}
+              </span>
+            </div>
+
+            {/* Variant selection */}
+            {variants.length > 0 && (
+              <div className="mt-6">
+                <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+                  ดัวเลือกสินค้า
+                </p>
+                <div>
+                  <p className="mb-2 text-[11px] font-semibold text-slate-500">ขนาด</p>
+                  <div className="flex flex-wrap gap-2">
+                    <span
+                      className="rounded-[0.6rem] px-4 py-2 text-sm font-semibold"
+                      style={{ background: '#1a2232', color: '#fff' }}
+                    >
+                      {product.slug.match(/-(\d+\s*mm?)$/i)?.[1] ?? product.slug}
+                    </span>
+                    {variants.map((v) => {
+                      const size = v.slug.match(/-(\d+\s*mm?)$/i)?.[1] ?? v.slug
+                      return (
+                        <Link
+                          key={v.id}
+                          href={`/categories/${slug}/${v.slug}`}
+                          className="rounded-[0.6rem] border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
+                        >
+                          {size}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="my-6 h-px w-12 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)]" />
 
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">
+              Description
+            </p>
             <p className="break-words text-sm leading-relaxed text-[var(--color-ink-soft)]">
               {product.description}
             </p>
