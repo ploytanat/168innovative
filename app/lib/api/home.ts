@@ -40,7 +40,11 @@ export async function getHomeSections(locale: Locale) {
     ])
 
   const spotlightProducts = HOME_PRODUCT_SPOTLIGHT_ORDER.flatMap((slug) => {
-    const match = allProducts.find((product) => product.slug === slug)
+    const match = allProducts.find(
+      (product) =>
+        product.slug === slug ||
+        product.variants.some((variant) => variant.slug === slug)
+    )
     return match ? [match] : []
   })
 

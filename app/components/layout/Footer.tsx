@@ -13,9 +13,16 @@ interface FooterProps {
   company: CompanyView
 }
 
-const navigation = [
+type FooterNavItem = {
+  href: string
+  label: { th: string; en: string }
+  noLocale?: boolean
+}
+
+const navigation: FooterNavItem[] = [
   { href: '/', label: { th: 'หน้าหลัก', en: 'Home' } },
   { href: '/categories', label: { th: 'หมวดสินค้า', en: 'Products' } },
+  { href: '/categories', label: { th: 'คาตาล็อก', en: 'Catalog' } },
   { href: '/articles', label: { th: 'บทความ', en: 'Articles' } },
   { href: '/about', label: { th: 'เกี่ยวกับเรา', en: 'About Us' } },
   { href: '/contact', label: { th: 'ติดต่อเรา', en: 'Contact' } },
@@ -177,10 +184,10 @@ export default function Footer({ company }: FooterProps) {
             </p>
             <nav aria-label="Footer navigation" className="mt-3">
               <ul className="space-y-1">
-                {navigation.map((item) => (
-                  <li key={item.href}>
+                {navigation.map((item, index) => (
+                  <li key={`${item.href}-${index}`}>
                     <Link
-                      href={withLocale(item.href)}
+                      href={item.noLocale ? item.href : withLocale(item.href)}
                       className="group flex items-center justify-between rounded-[0.9rem] border border-transparent px-3 py-2.5 text-[13px] text-[var(--color-ink-soft)] transition-all hover:border-[rgba(205,222,241,0.82)] hover:bg-white hover:text-[var(--color-ink)]"
                     >
                       <span>{item.label[locale]}</span>

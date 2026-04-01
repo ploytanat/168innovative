@@ -7,6 +7,10 @@ import type {
   CategoryView,
   CompanyView,
   HeroSlideView,
+  ImageView,
+  ProductSpecView,
+  ProductVariantOptionView,
+  ProductVariantView,
   ProductView,
   WhyItemView,
 } from "../types/view"
@@ -62,6 +66,180 @@ function getMockProductsRaw() {
   return productsMock
 }
 
+type MockVariantOptionConfig = {
+  groupKey: string
+  groupLabel: LocalizedText
+  valueKey?: string
+  valueLabel: LocalizedText
+}
+
+type MockVariantConfig = {
+  slug: string
+  sku?: string
+  options: MockVariantOptionConfig[]
+  specs?: Array<{
+    label: LocalizedText
+    value: LocalizedText
+  }>
+}
+
+type MockProductFamilyConfig = {
+  familySlug: string
+  familyName: LocalizedText
+  description?: LocalizedText
+  members: MockVariantConfig[]
+}
+
+const MOCK_PRODUCT_FAMILIES: MockProductFamilyConfig[] = [
+  {
+    familySlug: "spout-screw-cap",
+    familyName: {
+      th: "จุกเกลียวพลาสติก",
+      en: "Plastic Screw Spout",
+    },
+    description: {
+      th: "จุกเกลียวสำหรับซองบรรจุภัณฑ์ที่เลือกขนาดคอได้ตามงานใช้งาน",
+      en: "Screw spout family for pouch packaging with selectable neck sizes.",
+    },
+    members: [
+      {
+        slug: "spout-screw-cap-16mm",
+        sku: "SP-SC-16",
+        options: [
+          {
+            groupKey: "size",
+            groupLabel: { th: "ขนาด", en: "Size" },
+            valueKey: "16mm",
+            valueLabel: { th: "16 mm", en: "16 mm" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ขนาดคอ", en: "Neck Size" },
+            value: { th: "16 mm", en: "16 mm" },
+          },
+        ],
+      },
+      {
+        slug: "spout-screw-cap-20mm",
+        sku: "SP-SC-20",
+        options: [
+          {
+            groupKey: "size",
+            groupLabel: { th: "ขนาด", en: "Size" },
+            valueKey: "20mm",
+            valueLabel: { th: "20 mm", en: "20 mm" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ขนาดคอ", en: "Neck Size" },
+            value: { th: "20 mm", en: "20 mm" },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    familySlug: "cosmetic-jar",
+    familyName: {
+      th: "กระปุกครีม",
+      en: "Cosmetic Jar",
+    },
+    description: {
+      th: "กระปุกครีมทรงเดียวกัน เลือกความจุได้หลายขนาด",
+      en: "Cosmetic jar family with multiple filling capacities.",
+    },
+    members: [
+      {
+        slug: "cosmetic-jar-50g",
+        sku: "JAR-050",
+        options: [
+          {
+            groupKey: "capacity",
+            groupLabel: { th: "ความจุ", en: "Capacity" },
+            valueKey: "50g",
+            valueLabel: { th: "50 g", en: "50 g" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ความจุ", en: "Capacity" },
+            value: { th: "50 g", en: "50 g" },
+          },
+        ],
+      },
+      {
+        slug: "cosmetic-jar-100g",
+        sku: "JAR-100",
+        options: [
+          {
+            groupKey: "capacity",
+            groupLabel: { th: "ความจุ", en: "Capacity" },
+            valueKey: "100g",
+            valueLabel: { th: "100 g", en: "100 g" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ความจุ", en: "Capacity" },
+            value: { th: "100 g", en: "100 g" },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    familySlug: "airless-bottle",
+    familyName: {
+      th: "ขวด Airless",
+      en: "Airless Bottle",
+    },
+    description: {
+      th: "ขวด Airless สำหรับเซรั่มและสกินแคร์ที่ต้องการลดการสัมผัสอากาศ",
+      en: "Airless bottle family for serums and skincare that need reduced air exposure.",
+    },
+    members: [
+      {
+        slug: "airless-bottle-30ml",
+        sku: "AIRLESS-30",
+        options: [
+          {
+            groupKey: "capacity",
+            groupLabel: { th: "ความจุ", en: "Capacity" },
+            valueKey: "30ml",
+            valueLabel: { th: "30 ml", en: "30 ml" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ความจุ", en: "Capacity" },
+            value: { th: "30 ml", en: "30 ml" },
+          },
+        ],
+      },
+      {
+        slug: "airless-bottle-50ml",
+        sku: "AIRLESS-50",
+        options: [
+          {
+            groupKey: "capacity",
+            groupLabel: { th: "ความจุ", en: "Capacity" },
+            valueKey: "50ml",
+            valueLabel: { th: "50 ml", en: "50 ml" },
+          },
+        ],
+        specs: [
+          {
+            label: { th: "ความจุ", en: "Capacity" },
+            value: { th: "50 ml", en: "50 ml" },
+          },
+        ],
+      },
+    ],
+  },
+]
+
 function getMockArticlesRaw() {
   return Array.from(new Map(articlesMock.map((article) => [article.slug, article])).values())
 }
@@ -84,26 +262,240 @@ function mapCategoryToView(category: (typeof categoriesMock)[number], locale: Lo
   }
 }
 
-function mapProductToView(product: (typeof productsMock)[number], locale: Locale): ProductView {
-  const category = findCategoryById(product.categoryId)
+function ensureGallery(image: ImageView, gallery: ImageView[] = []) {
+  return Array.from(
+    new Map([image, ...gallery].map((item) => [item.src, item])).values()
+  )
+}
 
-  return {
+function buildVariantGroups(variants: ProductVariantView[]) {
+  const groups = new Map<
+    string,
+    {
+      key: string
+      label: string
+      values: Map<string, { valueKey: string; valueLabel: string; variantSlug: string }>
+    }
+  >()
+
+  variants.forEach((variant) => {
+    variant.options.forEach((option) => {
+      const existing = groups.get(option.groupKey)
+
+      if (!existing) {
+        groups.set(option.groupKey, {
+          key: option.groupKey,
+          label: option.groupLabel,
+          values: new Map([
+            [
+              option.valueKey,
+              {
+                valueKey: option.valueKey,
+                valueLabel: option.valueLabel,
+                variantSlug: variant.slug,
+              },
+            ],
+          ]),
+        })
+        return
+      }
+
+      if (!existing.values.has(option.valueKey)) {
+        existing.values.set(option.valueKey, {
+          valueKey: option.valueKey,
+          valueLabel: option.valueLabel,
+          variantSlug: variant.slug,
+        })
+      }
+    })
+  })
+
+  return Array.from(groups.values()).map((group) => ({
+    key: group.key,
+    label: group.label,
+    values: Array.from(group.values.values()),
+  }))
+}
+
+function buildSearchText(product: ProductView) {
+  return [
+    product.slug,
+    product.name,
+    product.description,
+    ...product.variants.flatMap((variant) => [
+      variant.slug,
+      variant.sku ?? "",
+      variant.name,
+      variant.description ?? "",
+      ...variant.options.flatMap((option) => [option.groupLabel, option.valueLabel]),
+    ]),
+  ]
+    .filter(Boolean)
+    .join(" ")
+}
+
+function mapMockSpecRows(
+  locale: Locale,
+  specs?: MockVariantConfig["specs"]
+): ProductSpecView[] {
+  return (specs ?? []).map((spec) => ({
+    label: pickLocalized(locale, spec.label),
+    value: pickLocalized(locale, spec.value),
+  }))
+}
+
+function mapMockSingleProductToView(
+  product: (typeof productsMock)[number],
+  locale: Locale
+): ProductView {
+  const category = findCategoryById(product.categoryId)
+  const image =
+    mapLocalizedImage(locale, product.image, pickLocalized(locale, product.name)) ?? {
+      src: "/placeholder.jpg",
+      alt: pickLocalized(locale, product.name),
+    }
+  const variant: ProductVariantView = {
     id: product.id,
     slug: product.slug,
     name: pickLocalized(locale, product.name),
     description: pickLocalized(locale, product.description),
-    image: mapLocalizedImage(locale, product.image, pickLocalized(locale, product.name)) ?? {
-      src: "/placeholder.jpg",
-      alt: pickLocalized(locale, product.name),
-    },
+    image,
+    gallery: ensureGallery(image),
+    specs: [],
+    options: [],
+  }
+  const productView: ProductView = {
+    id: product.id,
+    slug: product.slug,
+    name: variant.name,
+    description: variant.description ?? "",
+    image,
     categoryId: product.categoryId,
     categorySlug: category?.slug ?? "",
-    specs: [],
+    gallery: variant.gallery,
+    specs: variant.specs,
     contentHtml: undefined,
     applicationHtml: undefined,
     faqItems: [],
     price: undefined,
+    sku: undefined,
+    availabilityStatus: undefined,
+    moq: undefined,
+    leadTime: undefined,
+    familySlug: product.slug,
+    familyName: variant.name,
+    variantCount: 1,
+    variantSummary: undefined,
+    variantGroups: [],
+    variants: [variant],
+    defaultVariantSlug: variant.slug,
+    searchText: "",
   }
+
+  return {
+    ...productView,
+    searchText: buildSearchText(productView),
+  }
+}
+
+function mapMockFamilyToView(
+  family: MockProductFamilyConfig,
+  locale: Locale
+): ProductView | null {
+  const memberProducts = family.members
+    .map((member) => {
+      const product = getMockProductsRaw().find((item) => item.slug === member.slug)
+      return product ? { member, product } : null
+    })
+    .filter(
+      (
+        item
+      ): item is {
+        member: MockVariantConfig
+        product: (typeof productsMock)[number]
+      } => item !== null
+    )
+
+  if (!memberProducts.length) {
+    return null
+  }
+
+  const category = findCategoryById(memberProducts[0].product.categoryId)
+  const variants = memberProducts.map<ProductVariantView>(({ member, product }) => {
+    const image =
+      mapLocalizedImage(locale, product.image, pickLocalized(locale, product.name)) ?? {
+        src: "/placeholder.jpg",
+        alt: pickLocalized(locale, product.name),
+      }
+    const options = member.options.map<ProductVariantOptionView>((option) => ({
+      groupKey: option.groupKey,
+      groupLabel: pickLocalized(locale, option.groupLabel),
+      valueKey: option.valueKey ?? pickLocalized(locale, option.valueLabel),
+      valueLabel: pickLocalized(locale, option.valueLabel),
+    }))
+
+    return {
+      id: product.id,
+      slug: product.slug,
+      sku: member.sku,
+      name: pickLocalized(locale, product.name),
+      description: pickLocalized(locale, product.description),
+      image,
+      gallery: ensureGallery(image),
+      specs: mapMockSpecRows(locale, member.specs),
+      options,
+    }
+  })
+
+  const variantGroups = buildVariantGroups(variants)
+  const defaultVariant = variants[0]
+  const productView: ProductView = {
+    id: `family-${family.familySlug}`,
+    slug: family.familySlug,
+    name: pickLocalized(locale, family.familyName),
+    description:
+      pickLocalized(locale, family.description) || defaultVariant.description || "",
+    image: defaultVariant.image,
+    categoryId: memberProducts[0].product.categoryId,
+    categorySlug: category?.slug ?? "",
+    gallery: defaultVariant.gallery,
+    specs: defaultVariant.specs,
+    contentHtml: undefined,
+    applicationHtml: undefined,
+    faqItems: [],
+    price: undefined,
+    sku: defaultVariant.sku,
+    availabilityStatus: undefined,
+    moq: undefined,
+    leadTime: undefined,
+    familySlug: family.familySlug,
+    familyName: pickLocalized(locale, family.familyName),
+    variantCount: variants.length,
+    variantSummary: variantGroups.map((group) => group.label).join(" / ") || undefined,
+    variantGroups,
+    variants,
+    defaultVariantSlug: defaultVariant.slug,
+    searchText: "",
+  }
+
+  return {
+    ...productView,
+    searchText: buildSearchText(productView),
+  }
+}
+
+function getMockProductViews(locale: Locale) {
+  const groupedVariantSlugs = new Set(
+    MOCK_PRODUCT_FAMILIES.flatMap((family) => family.members.map((member) => member.slug))
+  )
+  const familyProducts = MOCK_PRODUCT_FAMILIES.map((family) =>
+    mapMockFamilyToView(family, locale)
+  ).filter((product): product is ProductView => product !== null)
+  const singleProducts = getMockProductsRaw()
+    .filter((product) => !groupedVariantSlugs.has(product.slug))
+    .map((product) => mapMockSingleProductToView(product, locale))
+
+  return [...familyProducts, ...singleProducts]
 }
 
 function mapArticleToView(article: (typeof articlesMock)[number], locale: Locale): ArticleView {
@@ -182,8 +574,12 @@ function logMockModeStatusOnce(enabled: boolean) {
 export function getMockHeroSlides(locale: Locale): HeroSlideView[] {
   return homeMock.hero.slides.map((slide) => ({
     id: slide.id,
+    theme: slide.theme,
+    badge: {
+      text: pickLocalized(locale, slide.badge.text),
+      variant: slide.badge.variant,
+    },
     title: pickLocalized(locale, slide.title),
-    subtitle: pickLocalized(locale, slide.subtitle),
     description: pickLocalized(locale, slide.description),
     image: mapLocalizedImage(locale, slide.image, pickLocalized(locale, slide.title)) ?? {
       src: "/placeholder.jpg",
@@ -198,6 +594,9 @@ export function getMockHeroSlides(locale: Locale): HeroSlideView[] {
           href: slide.ctaSecondary.href,
           label: pickLocalized(locale, slide.ctaSecondary.label),
         }
+      : undefined,
+    highlight: slide.highlight
+      ? { value: slide.highlight.value, label: pickLocalized(locale, slide.highlight.label) }
       : undefined,
   }))
 }
@@ -221,7 +620,7 @@ export function getMockCategoryIdBySlug(slug: string) {
 }
 
 export function getMockProducts(locale: Locale): ProductView[] {
-  return getMockProductsRaw().map((product) => mapProductToView(product, locale))
+  return getMockProductViews(locale)
 }
 
 export function getMockProductsByCategory(slug: string, locale: Locale, page = 1) {
@@ -243,19 +642,26 @@ export function getMockAllProductsByCategory(slug: string, locale: Locale) {
 }
 
 export function getMockProductBySlug(slug: string, locale: Locale) {
-  const product = getMockProductsRaw().find((item) => item.slug === slug)
-  return product ? mapProductToView(product, locale) : null
+  return (
+    getMockProductViews(locale).find(
+      (product) =>
+        product.slug === slug ||
+        product.variants.some((variant) => variant.slug === slug)
+    ) ?? null
+  )
 }
 
 export function getMockRelatedProducts(
   categorySlug: string,
-  currentProductId: string,
+  currentProductSlug: string,
   locale: Locale
 ) {
   return getMockProducts(locale)
     .filter(
       (product) =>
-        product.categorySlug === categorySlug && product.id !== currentProductId
+        product.categorySlug === categorySlug &&
+        product.slug !== currentProductSlug &&
+        !product.variants.some((variant) => variant.slug === currentProductSlug)
     )
     .slice(0, 4)
 }
@@ -271,20 +677,24 @@ export function getMockAllProductsForSitemap() {
 }
 
 export function getMockIndexableProductsForSitemap() {
-  return getMockProductsRaw()
-    .map((product) => {
-      const thProduct = mapProductToView(product, "th")
-      const enProduct = mapProductToView(product, "en")
+  const productsTh = getMockProducts("th")
+  const productsEn = new Map(
+    getMockProducts("en").map((product) => [product.slug, product])
+  )
 
-      if (!thProduct.categorySlug) {
+  return productsTh
+    .map((product) => {
+      const enProduct = productsEn.get(product.slug)
+
+      if (!product.categorySlug || !enProduct) {
         return null
       }
 
       return {
         slug: product.slug,
         modified: MOCK_LAST_MODIFIED,
-        categorySlug: thProduct.categorySlug,
-        indexTh: shouldIndexProduct(thProduct),
+        categorySlug: product.categorySlug,
+        indexTh: shouldIndexProduct(product),
         indexEn: shouldIndexProduct(enProduct),
       }
     })

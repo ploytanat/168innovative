@@ -1,10 +1,15 @@
 import type { Metadata } from "next"
 import Image from "next/image"
+import Link from "next/link"
 
 import PageIntro from "@/app/components/ui/PageIntro"
 import LocalizedLink from "@/app/components/ui/LocalizedLink"
 import { buildMetadata } from "@/app/config/seo"
 import { getCategories } from "@/app/lib/api/categories"
+
+function getCategoryLink(slug: string): { href: string; toCatalog: boolean } {
+  return { href: `/categories/${slug}`, toCatalog: false }
+}
 
 export const metadata: Metadata = buildMetadata({
   locale: "en",
@@ -47,41 +52,45 @@ export default async function CategoriesPage() {
 
         <section aria-label="Product Categories" className="mt-10">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {categories.map((category) => (
-              <LocalizedLink
-                key={category.id}
-                href={`/categories/${category.slug}`}
-                prefetch={false}
-                className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
-              >
-                <div className="relative aspect-square overflow-hidden rounded-[0.85rem] bg-[linear-gradient(160deg,#eef4fb,#f5f7fa)]">
-                  {category.image?.src ? (
-                    <Image
-                      src={category.image.src}
-                      alt={category.image.alt || category.name}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-[#9B9085]">
-                      No Image
-                    </div>
-                  )}
-                </div>
+            {categories.map((category) => {
+              const { href, toCatalog } = getCategoryLink(category.slug)
+              const CardLink = toCatalog ? Link : LocalizedLink
+              return (
+                <CardLink
+                  key={category.id}
+                  href={href}
+                  prefetch={false}
+                  className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
+                >
+                  <div className="relative aspect-square overflow-hidden rounded-[0.85rem] bg-[linear-gradient(160deg,#eef4fb,#f5f7fa)]">
+                    {category.image?.src ? (
+                      <Image
+                        src={category.image.src}
+                        alt={category.image.alt || category.name}
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-xs text-[#9B9085]">
+                        No Image
+                      </div>
+                    )}
+                  </div>
 
-                <div className="px-2 pb-3 pt-4">
-                  <h2 className="text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                    {category.name}
-                  </h2>
-                  {category.description && (
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--color-ink-soft)]">
-                      {category.description}
-                    </p>
-                  )}
-                </div>
-              </LocalizedLink>
-            ))}
+                  <div className="px-2 pb-3 pt-4">
+                    <h2 className="text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                      {category.name}
+                    </h2>
+                    {category.description && (
+                      <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--color-ink-soft)]">
+                        {category.description}
+                      </p>
+                    )}
+                  </div>
+                </CardLink>
+              )
+            })}
           </div>
         </section>
 
@@ -105,7 +114,7 @@ export default async function CategoriesPage() {
                   key={category.id}
                   className="deck-card rounded-[1rem] p-5 transition-colors hover:border-[rgba(34,74,107,0.26)]"
                 >
-                  <LocalizedLink href={`/categories/${category.slug}`} prefetch={false}>
+                  <LocalizedLink href={getCategoryLink(category.slug).href} prefetch={false}>
                     <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                       {category.seoTitle || category.name}
                     </h3>

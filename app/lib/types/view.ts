@@ -63,6 +63,40 @@ export type ProductSpecView = {
   value: string
 }
 
+export type ProductVariantOptionView = {
+  groupKey: string
+  groupLabel: string
+  valueKey: string
+  valueLabel: string
+}
+
+export type ProductVariantView = {
+  id: string
+  slug: string
+  sku?: string
+  name: string
+  description?: string
+  image: ImageView
+  gallery: ImageView[]
+  specs: ProductSpecView[]
+  options: ProductVariantOptionView[]
+  availabilityStatus?: string
+  moq?: string
+  leadTime?: string
+}
+
+export type ProductVariantGroupValueView = {
+  valueKey: string
+  valueLabel: string
+  variantSlug: string
+}
+
+export type ProductVariantGroupView = {
+  key: string
+  label: string
+  values: ProductVariantGroupValueView[]
+}
+
 export type ProductView = {
   id: string
   slug: string
@@ -74,11 +108,24 @@ export type ProductView = {
   }
   categoryId: string
   categorySlug: string
+  gallery: ImageView[]
   specs: ProductSpecView[]
   contentHtml?: string
   applicationHtml?: string
   faqItems: FAQItemView[]
   price?: number
+  sku?: string
+  availabilityStatus?: string
+  moq?: string
+  leadTime?: string
+  familySlug?: string
+  familyName?: string
+  variantCount: number
+  variantSummary?: string
+  variantGroups: ProductVariantGroupView[]
+  variants: ProductVariantView[]
+  defaultVariantSlug?: string
+  searchText?: string
 }
 
 // == Why Choose Us ==
@@ -89,12 +136,8 @@ export interface WhyItemView {
 }
 
 // == Hero (Home) ==
-export type HeroLayoutType = "split" | "fullBg"
-
-export interface HeroStatView {
-  label: string
-  value: string
-}
+export type HeroTheme = 'rose' | 'sky' | 'violet' | 'emerald'
+export type HeroBadgeVariant = 'hot' | 'new' | 'promo' | 'featured'
 
 export interface HeroCTAView {
   href: string
@@ -103,14 +146,14 @@ export interface HeroCTAView {
 
 export interface HeroSlideView {
   id: number
-  layout?: HeroLayoutType
+  theme: HeroTheme
+  badge: { text: string; variant: HeroBadgeVariant }
   title: string
-  subtitle?: string
   description: string
   image: ImageView
   ctaPrimary: HeroCTAView
   ctaSecondary?: HeroCTAView
-  stats?: HeroStatView[]
+  highlight?: { value: string; label: string }
 }
 
 export interface HomeHeroView {

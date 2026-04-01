@@ -79,15 +79,6 @@ function estimateReadingMinutes(html = "") {
   return Math.max(1, Math.ceil(words / 180));
 }
 
-async function fetchJson(url, options = {}) {
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`${res.status} ${res.statusText} for ${url}\n${text}`);
-  }
-  return res.json();
-}
-
 async function fetchAll(endpoint, params = {}, perPage = 100) {
   const out = [];
   let page = 1;

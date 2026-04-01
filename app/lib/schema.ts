@@ -130,6 +130,47 @@ type BreadcrumbListItemInput = {
   item: string
 }
 
+// ─── CollectionPage + ItemList (category pages) ───────────────────────────────
+
+export function buildCollectionPageJsonLd({
+  url,
+  name,
+  description,
+  locale,
+  products,
+}: {
+  url: string
+  name: string
+  description?: string
+  locale: "th" | "en"
+  products: Array<{ name: string; url: string; image?: string; description?: string }>
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${url}#collectionpage`,
+    url,
+    name,
+    description: description ?? "",
+    inLanguage: locale === "th" ? "th-TH" : "en-US",
+    isPartOf: { "@id": `${SITE_URL}#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: products.length,
+      itemListElement: products.map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: product.name,
+        url: product.url,
+        ...(product.image ? { image: product.image } : {}),
+        ...(product.description
+          ? { description: product.description.slice(0, 200) }
+          : {}),
+      })),
+    },
+  }
+}
+
 export function buildBreadcrumbJsonLd(
   items: BreadcrumbListItemInput[],
   options?: { id?: string }

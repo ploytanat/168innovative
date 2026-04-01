@@ -60,16 +60,21 @@ export interface SEOContent {
 // Home
 // =====================================================
 
+export type HeroTheme = 'rose' | 'sky' | 'violet' | 'emerald'
+export type HeroBadgeVariant = 'hot' | 'new' | 'promo' | 'featured'
+
 export interface HomeContent {
   hero: {
     slides: {
       id: number;
+      theme: HeroTheme;
+      badge: { text: LocalizedText; variant: HeroBadgeVariant };
       title: LocalizedText;
-      subtitle: LocalizedText;
       description: LocalizedText;
       image: ImageAsset;
       ctaPrimary: CTA;
-      ctaSecondary: CTA;
+      ctaSecondary?: CTA;
+      highlight?: { value: string; label: LocalizedText };
     }[];
   };
 }
@@ -284,6 +289,68 @@ export type WPSpec = {
   spec_value?: string
 }
 
+export interface WPProductGalleryItem {
+  image?:
+    | number
+    | string
+    | {
+        url?: string
+        sizes?: {
+          large?: string
+          medium_large?: string
+          medium?: string
+          thumbnail?: string
+        }
+        alt?: string
+        alt_text?: string
+        title?: string
+      }
+  alt_th?: string
+  alt_en?: string
+  sort_order?: number
+}
+
+export interface WPProductVariantOption {
+  group_key?: string
+  group_label_th?: string
+  group_label_en?: string
+  value_key?: string
+  value_th?: string
+  value_en?: string
+}
+
+export interface WPProductVariant {
+  slug?: string
+  sku?: string
+  label_th?: string
+  label_en?: string
+  description_th?: string
+  description_en?: string
+  image?:
+    | number
+    | string
+    | {
+        url?: string
+        sizes?: {
+          large?: string
+          medium_large?: string
+          medium?: string
+          thumbnail?: string
+        }
+        alt?: string
+        alt_text?: string
+        title?: string
+      }
+  image_url?: string
+  gallery_images?: WPProductGalleryItem[]
+  specs_json?: string | Record<string, unknown>
+  options?: WPProductVariantOption[]
+  availability_status?: string
+  moq?: string
+  lead_time?: string
+  sort_order?: number
+}
+
 export interface WPProduct {
   id: number;
   slug: string;
@@ -315,6 +382,15 @@ export interface WPProduct {
     image_alt_th?: string;
     image_alt_en?: string;
     specs_json?: string;
+    sku?: string;
+    availability_status?: string;
+    moq?: string;
+    lead_time?: string;
+    gallery_images?: WPProductGalleryItem[];
+    variants?: WPProductVariant[];
+    default_variant_slug?: string;
+    family_name_th?: string;
+    family_name_en?: string;
     focus_keyword_th?: string;
     focus_keyword_en?: string;
     faq_items?: WPFaqItem[];
