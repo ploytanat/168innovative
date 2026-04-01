@@ -6,6 +6,13 @@ import {
 } from "../mock/runtime"
 import type { Locale } from "../types/content"
 import type { ArticleView } from "../types/view"
+import {
+  getWordPressAllArticleSlugs,
+  getWordPressArticleBySlug,
+  getWordPressArticles,
+  getWordPressArticlesForSitemap,
+} from "./wordpress-source"
+import { loadWithWordPressFallback } from "./wp"
 
 export type ArticleSitemapView = Pick<
   ArticleView,
@@ -13,15 +20,27 @@ export type ArticleSitemapView = Pick<
 >
 
 export async function getAllArticleSlugs() {
-  return getMockAllArticleSlugs()
+  return loadWithWordPressFallback(
+    "article slugs",
+    () => getWordPressAllArticleSlugs(),
+    () => getMockAllArticleSlugs()
+  )
 }
 
 export async function getArticles(locale: Locale) {
-  return getMockArticles(locale)
+  return loadWithWordPressFallback(
+    `articles (${locale})`,
+    () => getWordPressArticles(locale),
+    () => getMockArticles(locale)
+  )
 }
 
 export async function getArticlesForSitemap(locale: Locale): Promise<ArticleSitemapView[]> {
-  return getMockArticlesForSitemap(locale)
+  return loadWithWordPressFallback(
+    `article sitemap (${locale})`,
+    () => getWordPressArticlesForSitemap(locale),
+    () => getMockArticlesForSitemap(locale)
+  )
 }
 
 export async function getArticleBySlug(
@@ -29,5 +48,9 @@ export async function getArticleBySlug(
   locale: Locale
 ): Promise<ArticleView | null> {
   if (!slug) return null
-  return getMockArticleBySlug(slug, locale)
+  return loadWithWordPressFallback(
+    `article ${slug} (${locale})`,
+    () => getWordPressArticleBySlug(slug, locale),
+    () => getMockArticleBySlug(slug, locale)
+  )
 }

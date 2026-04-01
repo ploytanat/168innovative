@@ -141,9 +141,73 @@ function extractFaqItemsFromHtml(html: string) {
   return singleItem ? [singleItem] : []
 }
 
+function extractFaqItemsFromPlainText(value: string) {
+  const text = normalizeText(value)
+  if (!text) return []
+
+  const normalized = text.replace(/\r\n/g, "\n")
+  const blocks = normalized
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+  const items: FAQItemView[] = []
+
+  for (const block of blocks) {
+    const lines = block
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+
+    if (!lines.length) {
+      continue
+    }
+
+    let questionLine = ""
+    const answerLines: string[] = []
+
+    for (const line of lines) {
+      if (!questionLine && /^q\d*\s*(th|en)?\s*:/i.test(line)) {
+        questionLine = line
+        continue
+      }
+
+      if (/^a\d*\s*(th|en)?\s*:/i.test(line)) {
+        answerLines.push(line)
+        continue
+      }
+
+      if (!questionLine) {
+        questionLine = line
+      } else {
+        answerLines.push(line)
+      }
+    }
+
+    const question = normalizePlainText(
+      questionLine.replace(/^q\d*\s*(th|en)?\s*:/i, "").trim()
+    )
+    const answer = normalizeRichText(
+      answerLines
+        .map((line) => line.replace(/^a\d*\s*(th|en)?\s*:/i, "").trim())
+        .join("\n\n")
+    )
+
+    if (question && answer) {
+      items.push({ question, answer })
+    }
+  }
+
+  return items
+}
+
 function mapFaqItem(rawItem: unknown, locale: Locale): FAQItemView[] {
   if (typeof rawItem === "string") {
-    return extractFaqItemsFromHtml(rawItem)
+    const parsedFromHtml = extractFaqItemsFromHtml(rawItem)
+    if (parsedFromHtml.length > 0) {
+      return parsedFromHtml
+    }
+
+    return extractFaqItemsFromPlainText(rawItem)
   }
 
   if (!rawItem || typeof rawItem !== "object") {

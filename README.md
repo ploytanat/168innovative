@@ -4,6 +4,11 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 Copy `.env.example` to `.env.local` and fill in the values for your environment.
 
+Recommended behavior:
+
+- Local development: `NEXT_PUBLIC_USE_MOCK=true`
+- Vercel deploy: `NEXT_PUBLIC_USE_MOCK=false` and set `WP_API_URL`
+
 See [env.md](C:/Users/User/Desktop/168innovative/docs/env.md) for the full variable reference.
 
 ## Getting Started

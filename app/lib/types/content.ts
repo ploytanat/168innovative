@@ -247,6 +247,13 @@ export interface WPArticle {
   slug: string;
   date: string;
   modified?: string;
+  featured_media?: number;
+  title: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
 
   acf?: {
     image?: number
@@ -354,6 +361,7 @@ export interface WPProductVariant {
 export interface WPProduct {
   id: number;
   slug: string;
+  modified?: string;
 
   title: {
     rendered: string;
@@ -395,6 +403,8 @@ export interface WPProduct {
     focus_keyword_en?: string;
     faq_items?: WPFaqItem[];
   };
+
+  _embedded?: WPEmbedded;
 }
 
 
