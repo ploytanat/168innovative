@@ -4,8 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react"
 
@@ -35,53 +34,92 @@ interface QuoteContextValue {
 const QuoteContext = createContext<QuoteContextValue | null>(null)
 
 const STORAGE_KEY = "quote-items"
+const EMPTY_ITEMS: QuoteItem[] = []
+
+let cachedRawQuoteItems: string | null | undefined
+let cachedQuoteItems: QuoteItem[] = EMPTY_ITEMS
 
 function readStorage(): QuoteItem[] {
+  if (typeof window === "undefined") {
+    return EMPTY_ITEMS
+  }
+
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as QuoteItem[]
+
+    if (raw === cachedRawQuoteItems) {
+      return cachedQuoteItems
+    }
+
+    cachedRawQuoteItems = raw
+    cachedQuoteItems = raw ? (JSON.parse(raw) as QuoteItem[]) : EMPTY_ITEMS
+    return cachedQuoteItems
   } catch {}
-  return []
+  cachedRawQuoteItems = null
+  cachedQuoteItems = EMPTY_ITEMS
+  return EMPTY_ITEMS
+}
+
+function notifyQuoteChanged() {
+  if (typeof window === "undefined") return
+  window.dispatchEvent(new Event("quote:changed"))
 }
 
 function writeStorage(items: QuoteItem[]) {
+  if (typeof window === "undefined") {
+    return
+  }
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
   } catch {}
 }
 
+function subscribe(onStoreChange: () => void) {
+  if (typeof window === "undefined") {
+    return () => {}
+  }
+
+  const handleChange = () => onStoreChange()
+  window.addEventListener("storage", handleChange)
+  window.addEventListener("quote:changed", handleChange)
+
+  return () => {
+    window.removeEventListener("storage", handleChange)
+    window.removeEventListener("quote:changed", handleChange)
+  }
+}
+
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function QuoteProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<QuoteItem[]>([])
-
-  // hydrate from localStorage (client-only)
-  useEffect(() => {
-    setItems(readStorage())
-  }, [])
+  const items = useSyncExternalStore(subscribe, readStorage, readStorage)
 
   const add = useCallback((item: QuoteItem) => {
-    setItems((prev) => {
-      if (prev.some((i) => i.slug === item.slug)) return prev
-      const next = [...prev, item]
-      writeStorage(next)
-      return next
-    })
+    const current = readStorage()
+    if (current.some((entry) => entry.slug === item.slug)) {
+      return
+    }
+
+    writeStorage([...current, item])
+    notifyQuoteChanged()
   }, [])
 
   const remove = useCallback((slug: string) => {
-    setItems((prev) => {
-      const next = prev.filter((i) => i.slug !== slug)
-      writeStorage(next)
-      return next
-    })
+    const next = readStorage().filter((item) => item.slug !== slug)
+    writeStorage(next)
+    notifyQuoteChanged()
   }, [])
 
   const clear = useCallback(() => {
-    setItems([])
+    if (typeof window === "undefined") {
+      return
+    }
+
     try {
       localStorage.removeItem(STORAGE_KEY)
     } catch {}
+    notifyQuoteChanged()
   }, [])
 
   const has = useCallback(

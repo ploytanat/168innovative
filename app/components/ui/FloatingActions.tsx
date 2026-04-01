@@ -1,9 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 
 import { useQuote } from "@/app/lib/quote/QuoteContext"
 
@@ -59,18 +58,17 @@ interface Props {
   locale: "th" | "en"
 }
 
+function subscribeHydration() {
+  return () => {}
+}
+
 export default function FloatingActions({ lineUrl, locale }: Props) {
   const t = copy[locale]
   const { items, remove, clear, count } = useQuote()
   const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(subscribeHydration, () => true, () => false)
   const drawerRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
-  // avoid hydration mismatch for badge count
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // close on outside click
   useEffect(() => {

@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -18,6 +18,54 @@ export interface RecentlyViewedItem {
 
 const STORAGE_KEY = "rv-products"
 const MAX_ITEMS = 8
+const EMPTY_ITEMS: RecentlyViewedItem[] = []
+
+let cachedRawRecentlyViewed: string | null | undefined
+let cachedRecentlyViewedItems: RecentlyViewedItem[] = EMPTY_ITEMS
+
+function notifyRecentlyViewedChanged() {
+  if (typeof window === "undefined") return
+  window.dispatchEvent(new Event("recently-viewed:changed"))
+}
+
+function subscribe(onStoreChange: () => void) {
+  if (typeof window === "undefined") {
+    return () => {}
+  }
+
+  const handleChange = () => onStoreChange()
+  window.addEventListener("storage", handleChange)
+  window.addEventListener("recently-viewed:changed", handleChange)
+
+  return () => {
+    window.removeEventListener("storage", handleChange)
+    window.removeEventListener("recently-viewed:changed", handleChange)
+  }
+}
+
+function getRecentlyViewedSnapshot() {
+  if (typeof window === "undefined") {
+    return EMPTY_ITEMS
+  }
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw === cachedRawRecentlyViewed) {
+      return cachedRecentlyViewedItems
+    }
+
+    cachedRawRecentlyViewed = raw
+    cachedRecentlyViewedItems = raw
+      ? (JSON.parse(raw) as RecentlyViewedItem[])
+      : EMPTY_ITEMS
+
+    return cachedRecentlyViewedItems
+  } catch {
+    cachedRawRecentlyViewed = null
+    cachedRecentlyViewedItems = EMPTY_ITEMS
+    return EMPTY_ITEMS
+  }
+}
 
 // ─── Helpers (called client-side only) ────────────────────────────────────────
 
@@ -28,6 +76,7 @@ export function saveRecentlyViewed(item: Omit<RecentlyViewedItem, "savedAt">) {
     const filtered = existing.filter((i) => i.slug !== item.slug)
     const next = [{ ...item, savedAt: Date.now() }, ...filtered].slice(0, MAX_ITEMS)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    notifyRecentlyViewedChanged()
   } catch {}
 }
 
@@ -47,16 +96,14 @@ interface Props {
 
 export default function RecentlyViewed({ locale, currentSlug }: Props) {
   const t = copy[locale]
-  const [items, setItems] = useState<RecentlyViewedItem[]>([])
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const all: RecentlyViewedItem[] = JSON.parse(raw)
-      setItems(all.filter((i) => i.slug !== currentSlug))
-    } catch {}
-  }, [currentSlug])
+  const storedItems = useSyncExternalStore(
+    subscribe,
+    getRecentlyViewedSnapshot,
+    getRecentlyViewedSnapshot
+  )
+  const items = currentSlug
+    ? storedItems.filter((item) => item.slug !== currentSlug)
+    : storedItems
 
   if (items.length === 0) return null
 

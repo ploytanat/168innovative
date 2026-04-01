@@ -3,8 +3,10 @@ import '@/app/globals.css'
 import type { Metadata } from 'next'
 
 import RootDocument from '@/app/components/layout/RootDocument'
+import { SITE_URL } from '@/app/config/site'
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: 'Product Catalog',
   description: 'B2B product catalog system',
 }

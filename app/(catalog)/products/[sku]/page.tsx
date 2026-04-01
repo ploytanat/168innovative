@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import ProductGallery from '@/app/components/catalog/ProductGallery'
 import ProductSpecs from '@/app/components/catalog/ProductSpecs'
 import ProductVariantOptions from '@/app/components/catalog/ProductVariantOptions'
+import { SITE_URL, withSiteUrl } from '@/app/config/site'
 import {
   catalogProducts,
   getCatalogProductBySku,
@@ -29,18 +30,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!product) {
     return {
+      metadataBase: new URL(SITE_URL),
       title: 'Product Not Found',
     }
   }
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: `${product.name} | 168Innovative Product Catalog`,
     description: product.description,
     keywords: product.tags,
     openGraph: {
+      type: 'website',
+      url: `${SITE_URL}/products/${product.sku}`,
       title: product.name,
       description: product.description,
-      images: product.images[0] ? [{ url: product.images[0] }] : [],
+      images: product.images[0] ? [{ url: withSiteUrl(product.images[0]) }] : [],
     },
   }
 }

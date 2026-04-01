@@ -68,7 +68,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ])
 
   if (!product) {
-    return { title: "Product not found" }
+    return {
+      metadataBase: new URL(SITE_URL),
+      title: "Product not found",
+    }
   }
 
   if (product.categorySlug && product.categorySlug !== slug) {
@@ -77,6 +80,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!category || product.categoryId !== category.id) {
     return {
+      metadataBase: new URL(SITE_URL),
       title: product.name,
       robots: {
         index: false,
@@ -104,6 +108,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const shouldIndex = shouldIndexProduct(product)
 
   return {
+    metadataBase: new URL(SITE_URL),
     title: product.name,
     description,
     keywords,
