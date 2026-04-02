@@ -1,4 +1,5 @@
 import "./admin.css"
+import Sidebar from "./Sidebar"
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +10,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <span className="admin-header-divider">|</span>
           <span className="admin-header-label">Admin</span>
         </header>
-        <main className="admin-main">{children}</main>
+        <div className="a-app">
+          <Sidebar />
+          <main className="a-content">{children}</main>
+        </div>
       </body>
     </html>
   )

@@ -1,7 +1,7 @@
-import AdminDashboard from "./AdminDashboard"
+import ProductsPanel from "./AdminDashboard"
 
-export const metadata = { title: "Admin – 168 Innovative" }
+export const metadata = { title: "สินค้า – Admin 168 Innovative" }
 
 export default function AdminPage() {
-  return <AdminDashboard />
+  return <ProductsPanel />
 }

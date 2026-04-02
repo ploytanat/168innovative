@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { wpAdminFetch, wpHeaders, WP_BASE } from "../_lib"
+import { parseWpBody, wpAdminFetch, wpHeaders, WP_BASE } from "../_lib"
 
 export function buildWPCategoryPayload(body: Record<string, unknown>) {
   return {
@@ -27,7 +27,10 @@ export async function GET() {
     `${WP_BASE}/wp-json/wp/v2/product_category?per_page=100`,
     { next: { revalidate: 0 } }
   )
-  if (!res.ok) return NextResponse.json({ error: "WP fetch failed" }, { status: res.status })
+  if (!res.ok) {
+    const data = await parseWpBody(res)
+    return NextResponse.json(data, { status: res.status })
+  }
   return NextResponse.json(await res.json())
 }
 
@@ -41,6 +44,6 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify(buildWPCategoryPayload(body)),
   })
 
-  const data = await res.json()
+  const data = await parseWpBody(res)
   return NextResponse.json(data, { status: res.status })
 }

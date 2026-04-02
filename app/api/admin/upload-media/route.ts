@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { wpHeaders, WP_BASE } from "../_lib"
+import { parseWpBody, wpHeaders, WP_BASE } from "../_lib"
 
 // POST /api/admin/upload-media
 // Body: FormData with field "file"
@@ -31,8 +31,12 @@ export async function POST(req: NextRequest) {
   })
 
   if (!res.ok) {
-    const text = await res.text()
-    return NextResponse.json({ error: text }, { status: res.status })
+    const data = await parseWpBody(res)
+    const error =
+      typeof data === "object" && data !== null && "message" in data && typeof data.message === "string"
+        ? data.message
+        : "WordPress media upload failed"
+    return NextResponse.json({ error, details: data }, { status: res.status })
   }
 
   const data = await res.json()
