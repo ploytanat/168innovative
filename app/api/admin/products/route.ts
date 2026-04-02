@@ -1,66 +1,55 @@
-import { NextRequest, NextResponse } from "next/server"
-import { parseWpBody, wpAdminFetch, wpHeaders, WP_BASE } from "../_lib"
+import { NextRequest, NextResponse } from "next/server";
+import { parseWpBody, wpAdminFetch, wpHeaders, WP_BASE } from "../_lib";
 
 // GET  /api/admin/products
 // status=any requires Administrator role in WordPress.
 // If WP_ADMIN_ROLE=true is set (user is admin), fetch all statuses; otherwise fetch publish only.
 export async function GET() {
-  const useAny = process.env.WP_ADMIN_ROLE === "true"
-  const statuses = useAny ? ["any"] : ["publish", "draft"]
-  const results: unknown[] = []
+  const useAny = process.env.WP_ADMIN_ROLE === "true";
+  const statuses = useAny ? ["any"] : ["publish", "draft"];
+  const results: unknown[] = [];
 
   for (const status of statuses) {
-    let page = 1
-    let totalPages = 1
+    let page = 1;
+    let totalPages = 1;
 
     while (page <= totalPages) {
       const res = await wpAdminFetch(
         `${WP_BASE}/wp-json/wp/v2/product?per_page=100&page=${page}&status=${status}`,
-        { next: { revalidate: 0 } }
-      )
+        { next: { revalidate: 0 } },
+      );
       if (!res.ok) {
-        const data = await parseWpBody(res)
-        return NextResponse.json(data, { status: res.status })
+        const data = await parseWpBody(res);
+        return NextResponse.json(data, { status: res.status });
       }
-      results.push(...(await res.json()))
-      totalPages = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10)
-      page++
+      results.push(...(await res.json()));
+      totalPages = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10);
+      page++;
     }
   }
 
-  return NextResponse.json(results)
+  return NextResponse.json(results);
 }
 
 // POST /api/admin/products — create
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  const body = await req.json();
   const res = await fetch(`${WP_BASE}/wp-json/wp/v2/product`, {
     method: "POST",
     headers: wpHeaders(),
     body: JSON.stringify(buildWPProductPayload(body)),
-  })
-  const data = await parseWpBody(res)
-  return NextResponse.json(data, { status: res.status })
-}
-
-function normalizeAvailabilityStatus(value: unknown) {
-  if (value === "in_stock" || value === "preorder" || value === "out_of_stock") {
-    return value
-  }
-
-  if (value === true) return "in_stock"
-  if (value === false) return "out_of_stock"
-
-  return ""
+  });
+  const data = await parseWpBody(res);
+  return NextResponse.json(data, { status: res.status });
 }
 
 function normalizeLeadTimeDays(value: unknown) {
   if (value === "" || value === null || typeof value === "undefined") {
-    return null
+    return null;
   }
 
-  const parsed = typeof value === "number" ? value : Number(value)
-  return Number.isFinite(parsed) ? parsed : null
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
 }
 
 export function buildWPProductPayload(body: Record<string, unknown>) {
@@ -83,7 +72,6 @@ export function buildWPProductPayload(body: Record<string, unknown>) {
     dimensions: body.dimensions ?? "",
     moq: body.moq ?? "",
     lead_time_days: normalizeLeadTimeDays(body.lead_time_days),
-    availability_status: normalizeAvailabilityStatus(body.availability_status),
     canonical_url_th: body.canonical_url_th ?? "",
     canonical_url_en: body.canonical_url_en ?? "",
     seo_title_th: body.seo_title_th ?? "",
@@ -98,10 +86,10 @@ export function buildWPProductPayload(body: Record<string, unknown>) {
     og_description_en: body.og_description_en ?? "",
     robots_index: body.robots_index ?? true,
     robots_follow: body.robots_follow ?? true,
-  }
+  };
 
   if (Array.isArray(body.related_products)) {
-    acf.related_products = body.related_products
+    acf.related_products = body.related_products;
   }
 
   return {
@@ -110,5 +98,5 @@ export function buildWPProductPayload(body: Record<string, unknown>) {
     featured_media: body.featured_media ?? 0,
     product_category: body.categoryIds ?? [],
     acf,
-  }
+  };
 }

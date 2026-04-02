@@ -60,8 +60,8 @@ export interface SEOContent {
 // Home
 // =====================================================
 
-export type HeroTheme = 'rose' | 'sky' | 'violet' | 'emerald'
-export type HeroBadgeVariant = 'hot' | 'new' | 'promo' | 'featured'
+export type HeroTheme = "rose" | "sky" | "violet" | "emerald";
+export type HeroBadgeVariant = "hot" | "new" | "promo" | "featured";
 
 export interface HomeContent {
   hero: {
@@ -256,7 +256,7 @@ export interface WPArticle {
   };
 
   acf?: {
-    image?: number
+    image?: number;
     title_th?: string;
     title_en?: string;
     excerpt_th?: string;
@@ -265,23 +265,23 @@ export interface WPArticle {
     content_en?: string;
     image_alt_th?: string;
     image_alt_en?: string;
-    seo_title_th?: string
-    seo_title_en?: string
-    meta_description_th?: string
-    meta_description_en?: string
-    canonical_url_th?: string
-    canonical_url_en?: string
-    focus_keyword?: string
-    focus_keyword_th?: string
-    focus_keyword_en?: string
-    content_blocks?: WPArticleContentBlock[]
-    primary_category?: number | number[]
-    article_tags?: number[]
-    published_at?: string
-    updated_at?: string
-    author_name?: string
-    reading_time_minutes?: number
-    faq_items?: WPFaqItem[]
+    seo_title_th?: string;
+    seo_title_en?: string;
+    meta_description_th?: string;
+    meta_description_en?: string;
+    canonical_url_th?: string;
+    canonical_url_en?: string;
+    focus_keyword?: string;
+    focus_keyword_th?: string;
+    focus_keyword_en?: string;
+    content_blocks?: WPArticleContentBlock[];
+    primary_category?: number | number[];
+    article_tags?: number[];
+    published_at?: string;
+    updated_at?: string;
+    author_name?: string;
+    reading_time_minutes?: number;
+    faq_items?: WPFaqItem[];
   };
 
   _embedded?: WPEmbedded;
@@ -292,70 +292,69 @@ export interface WPArticle {
 // ---------------------------
 
 export type WPSpec = {
-  spec_label?: string
-  spec_value?: string
-}
+  spec_label?: string;
+  spec_value?: string;
+};
 
 export interface WPProductGalleryItem {
   image?:
     | number
     | string
     | {
-        url?: string
+        url?: string;
         sizes?: {
-          large?: string
-          medium_large?: string
-          medium?: string
-          thumbnail?: string
-        }
-        alt?: string
-        alt_text?: string
-        title?: string
-      }
-  alt_th?: string
-  alt_en?: string
-  sort_order?: number
+          large?: string;
+          medium_large?: string;
+          medium?: string;
+          thumbnail?: string;
+        };
+        alt?: string;
+        alt_text?: string;
+        title?: string;
+      };
+  alt_th?: string;
+  alt_en?: string;
+  sort_order?: number;
 }
 
 export interface WPProductVariantOption {
-  group_key?: string
-  group_label_th?: string
-  group_label_en?: string
-  value_key?: string
-  value_th?: string
-  value_en?: string
+  group_key?: string;
+  group_label_th?: string;
+  group_label_en?: string;
+  value_key?: string;
+  value_th?: string;
+  value_en?: string;
 }
 
 export interface WPProductVariant {
-  slug?: string
-  sku?: string
-  label_th?: string
-  label_en?: string
-  description_th?: string
-  description_en?: string
+  slug?: string;
+  sku?: string;
+  label_th?: string;
+  label_en?: string;
+  description_th?: string;
+  description_en?: string;
   image?:
     | number
     | string
     | {
-        url?: string
+        url?: string;
         sizes?: {
-          large?: string
-          medium_large?: string
-          medium?: string
-          thumbnail?: string
-        }
-        alt?: string
-        alt_text?: string
-        title?: string
-      }
-  image_url?: string
-  gallery_images?: WPProductGalleryItem[]
-  specs_json?: string | Record<string, unknown>
-  options?: WPProductVariantOption[]
-  availability_status?: string | boolean
-  moq?: string
-  lead_time?: string
-  sort_order?: number
+          large?: string;
+          medium_large?: string;
+          medium?: string;
+          thumbnail?: string;
+        };
+        alt?: string;
+        alt_text?: string;
+        title?: string;
+      };
+  image_url?: string;
+  gallery_images?: WPProductGalleryItem[];
+  specs_json?: string | Record<string, unknown>;
+  options?: WPProductVariantOption[];
+  moq?: string;
+  lead_time?: string;
+  sort_order?: number;
 }
 
 export interface WPProduct {
@@ -391,7 +390,6 @@ export interface WPProduct {
     image_alt_en?: string;
     specs_json?: string;
     sku?: string;
-    availability_status?: string | boolean;
     moq?: string;
     lead_time?: string;
     gallery_images?: WPProductGalleryItem[];
@@ -408,24 +406,22 @@ export interface WPProduct {
   _embedded?: WPEmbedded;
 }
 
-
 export type ProductContent = {
-  id: string
-  slug: string
-  name: string
-  itemCode: string
-  categorySlug: string
+  id: string;
+  slug: string;
+  name: string;
+  itemCode: string;
+  categorySlug: string;
 
-  description?: string
+  description?: string;
   images: {
-    src: string
-    alt?: string
-  }[]
+    src: string;
+    alt?: string;
+  }[];
 
   // dynamic specifications
   specs?: {
-    key: string
-    value: string
-  }[]
-}
-
+    key: string;
+    value: string;
+  }[];
+};

@@ -1,18 +1,18 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { parseWpBody, wpHeaders, WP_BASE } from "../_lib"
+import { parseWpBody, wpHeaders, WP_BASE } from "../_lib";
 
 async function readMe() {
   const res = await fetch(`${WP_BASE}/wp-json/wp/v2/users/me?context=edit`, {
     headers: wpHeaders(),
     cache: "no-store",
-  })
+  });
 
   return {
     status: res.status,
     ok: res.ok,
     body: await parseWpBody(res),
-  }
+  };
 }
 
 export async function GET() {
@@ -27,11 +27,11 @@ export async function GET() {
           appPassword: !!process.env.WP_APP_PASSWORD,
         },
       },
-      { status: 500 }
-    )
+      { status: 500 },
+    );
   }
 
-  const me = await readMe()
+  const me = await readMe();
 
   return NextResponse.json({
     ok: me.ok,
@@ -41,7 +41,7 @@ export async function GET() {
       appPassword: "<set>",
     },
     me,
-  })
+  });
 }
 
 export async function POST() {
@@ -51,11 +51,11 @@ export async function POST() {
         ok: false,
         message: "Missing WordPress admin environment variables",
       },
-      { status: 500 }
-    )
+      { status: 500 },
+    );
   }
 
-  const me = await readMe()
+  const me = await readMe();
   if (!me.ok) {
     return NextResponse.json(
       {
@@ -63,12 +63,12 @@ export async function POST() {
         stage: "auth",
         me,
       },
-      { status: me.status }
-    )
+      { status: me.status },
+    );
   }
 
-  const stamp = new Date().toISOString().replace(/[^\d]/g, "").slice(0, 14)
-  const title = `Codex Auth Probe ${stamp}`
+  const stamp = new Date().toISOString().replace(/[^\d]/g, "").slice(0, 14);
+  const title = `Codex Auth Probe ${stamp}`;
 
   const createRes = await fetch(`${WP_BASE}/wp-json/wp/v2/product`, {
     method: "POST",
@@ -97,7 +97,6 @@ export async function POST() {
         dimensions: "",
         moq: "",
         lead_time_days: null,
-        availability_status: "out_of_stock",
         canonical_url_th: "",
         canonical_url_en: "",
         seo_title_th: "",
@@ -114,10 +113,15 @@ export async function POST() {
         robots_follow: true,
       },
     }),
-  })
+  });
 
-  const createBody = await parseWpBody(createRes)
-  if (!createRes.ok || typeof createBody !== "object" || createBody === null || !("id" in createBody)) {
+  const createBody = await parseWpBody(createRes);
+  if (
+    !createRes.ok ||
+    typeof createBody !== "object" ||
+    createBody === null ||
+    !("id" in createBody)
+  ) {
     return NextResponse.json(
       {
         ok: false,
@@ -129,28 +133,34 @@ export async function POST() {
           body: createBody,
         },
       },
-      { status: createRes.status }
-    )
+      { status: createRes.status },
+    );
   }
 
-  const createdId = Number(createBody.id)
+  const createdId = Number(createBody.id);
 
-  const patchRes = await fetch(`${WP_BASE}/wp-json/wp/v2/product/${createdId}`, {
-    method: "POST",
-    headers: wpHeaders(),
-    body: JSON.stringify({
-      title: `${title} Updated`,
-    }),
-  })
-  const patchBody = await parseWpBody(patchRes)
+  const patchRes = await fetch(
+    `${WP_BASE}/wp-json/wp/v2/product/${createdId}`,
+    {
+      method: "POST",
+      headers: wpHeaders(),
+      body: JSON.stringify({
+        title: `${title} Updated`,
+      }),
+    },
+  );
+  const patchBody = await parseWpBody(patchRes);
 
-  const deleteRes = await fetch(`${WP_BASE}/wp-json/wp/v2/product/${createdId}?force=true`, {
-    method: "DELETE",
-    headers: wpHeaders(),
-  })
-  const deleteBody = await parseWpBody(deleteRes)
+  const deleteRes = await fetch(
+    `${WP_BASE}/wp-json/wp/v2/product/${createdId}?force=true`,
+    {
+      method: "DELETE",
+      headers: wpHeaders(),
+    },
+  );
+  const deleteBody = await parseWpBody(deleteRes);
 
-  const ok = createRes.ok && patchRes.ok && deleteRes.ok
+  const ok = createRes.ok && patchRes.ok && deleteRes.ok;
 
   return NextResponse.json(
     {
@@ -173,6 +183,6 @@ export async function POST() {
         body: deleteBody,
       },
     },
-    { status: ok ? 200 : 500 }
-  )
+    { status: ok ? 200 : 500 },
+  );
 }
