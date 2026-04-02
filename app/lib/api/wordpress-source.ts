@@ -266,6 +266,202 @@ function trimText(value?: string | null) {
   return typeof value === "string" && value.trim() ? value.trim() : undefined
 }
 
+function normalizeToken(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function normalizeAvailabilityStatus(value: unknown) {
+  if (value === true) {
+    return "in-stock"
+  }
+
+  if (value === false) {
+    return "out-of-stock"
+  }
+
+  const text = trimText(typeof value === "string" ? value : undefined)
+
+  if (!text) {
+    return undefined
+  }
+
+  const normalized = text.toLowerCase().replace(/_/g, "-")
+
+  if (normalized === "in-stock" || normalized === "available") {
+    return "in-stock"
+  }
+
+  if (normalized === "out-of-stock" || normalized === "unavailable") {
+    return "out-of-stock"
+  }
+
+  if (normalized === "made-to-order" || normalized === "mto") {
+    return "made-to-order"
+  }
+
+  return normalized
+}
+
+function extractRelatedProductIds(
+  value: Array<number | { ID?: number } | { id?: number }> | undefined
+) {
+  if (!Array.isArray(value)) {
+    return []
+  }
+
+  return uniqueNumbers(
+    value.map((item) => {
+      if (typeof item === "number") {
+        return item
+      }
+
+      if (item && typeof item === "object") {
+        const relation = item as { ID?: number; id?: number }
+        return typeof relation.ID === "number" ? relation.ID : relation.id
+      }
+
+      return undefined
+    })
+  )
+}
+
+function getSpecMap(specs: ProductSpecView[]) {
+  return new Map(
+    specs
+      .filter((spec) => spec.label && spec.value)
+      .map((spec) => [normalizeToken(spec.label), spec.value.trim()])
+  )
+}
+
+function chooseSyntheticVariantGroup(
+  products: ProductView[],
+  locale: Locale
+) {
+  const preferred = [
+    "model",
+    "sku",
+    "variant type",
+    "type",
+    "style",
+    "capacity",
+    "inner diameter mm",
+    "inner diameter",
+    "diameter",
+    "size",
+    "material",
+  ]
+
+  const specMaps = products.map((product) => getSpecMap(product.specs))
+
+  for (const key of preferred) {
+    const values = specMaps.map((specMap) => specMap.get(key))
+
+    if (values.some((value) => !value)) {
+      continue
+    }
+
+    if (new Set(values).size <= 1) {
+      continue
+    }
+
+    return {
+      key: key.replace(/\s+/g, "-"),
+      label:
+        key === "model"
+          ? locale === "th"
+            ? "รุ่น"
+            : "Model"
+          : products[0]?.specs.find((spec) => normalizeToken(spec.label) === key)?.label ??
+            (locale === "th" ? "ตัวเลือก" : "Option"),
+      values: new Map(products.map((product, index) => [product.id, values[index]!])),
+    }
+  }
+
+  return {
+    key: "variant",
+    label: locale === "th" ? "รุ่น" : "Variant",
+    values: new Map(
+      products.map((product) => [
+        product.id,
+        product.sku || product.name || product.slug,
+      ])
+    ),
+  }
+}
+
+function buildGroupedProductView(
+  parent: ProductView,
+  members: ProductView[],
+  locale: Locale
+) {
+  const variantGroup = chooseSyntheticVariantGroup(members, locale)
+  const variants = members.map((member) => {
+    const selectedVariant =
+      member.variants.find((variant) => variant.slug === member.defaultVariantSlug) ??
+      member.variants[0]
+
+    return {
+      id: member.id,
+      slug: member.slug,
+      sku: member.sku,
+      name: member.name,
+      description: selectedVariant?.description || member.description,
+      image: selectedVariant?.image ?? member.image,
+      gallery: selectedVariant?.gallery?.length ? selectedVariant.gallery : member.gallery,
+      specs: selectedVariant?.specs?.length ? selectedVariant.specs : member.specs,
+      options: [
+        {
+          groupKey: variantGroup.key,
+          groupLabel: variantGroup.label,
+          valueKey: member.slug,
+          valueLabel:
+            variantGroup.values.get(member.id) ?? member.sku ?? member.name ?? member.slug,
+        },
+      ],
+      availabilityStatus: normalizeAvailabilityStatus(
+        selectedVariant?.availabilityStatus ?? member.availabilityStatus
+      ),
+      moq: selectedVariant?.moq ?? member.moq,
+      leadTime: selectedVariant?.leadTime ?? member.leadTime,
+    } satisfies ProductVariantView
+  })
+
+  const defaultVariant =
+    variants.find((variant) => variant.slug === parent.slug) ?? variants[0]
+  const variantGroups = buildVariantGroups(variants)
+
+  const groupedProduct: ProductView = {
+    ...parent,
+    description: defaultVariant?.description || parent.description,
+    image: defaultVariant?.image ?? parent.image,
+    gallery: defaultVariant?.gallery?.length ? defaultVariant.gallery : parent.gallery,
+    specs: defaultVariant?.specs?.length ? defaultVariant.specs : parent.specs,
+    availabilityStatus: normalizeAvailabilityStatus(
+      defaultVariant?.availabilityStatus ?? parent.availabilityStatus
+    ),
+    moq: defaultVariant?.moq ?? parent.moq,
+    leadTime: defaultVariant?.leadTime ?? parent.leadTime,
+    familySlug: parent.slug,
+    familyName: parent.familyName || parent.name,
+    variantCount: variants.length,
+    variantSummary: variantGroups.map((group) => group.label).join(" / ") || undefined,
+    variantGroups,
+    variants,
+    defaultVariantSlug: defaultVariant?.slug,
+    searchText: "",
+  }
+
+  return {
+    ...groupedProduct,
+    searchText: buildProductSearchText(groupedProduct),
+  }
+}
+
 function normalizeImageUrl(value?: string) {
   const url = trimText(value)
   return url || undefined
@@ -975,7 +1171,7 @@ async function loadWordPressProductViews(locale: Locale) {
   )
   const mediaMap = await fetchMediaMap(mediaIds)
 
-  return rawProducts.map((product) => {
+  const mappedProducts = rawProducts.map((product) => {
     const embeddedCategory = getEmbeddedTerms(product, "product_category")[0] as
       | (WPTerm & WPCategoryTerm)
       | undefined
@@ -1072,7 +1268,7 @@ async function loadWordPressProductViews(locale: Locale) {
             gallery: variantGallery,
             specs: mapSpecs(variant.specs_json),
             options: mapVariantOptions(locale, variant.options),
-            availabilityStatus: trimText(variant.availability_status),
+            availabilityStatus: normalizeAvailabilityStatus(variant.availability_status),
             moq: trimText(variant.moq),
             leadTime: trimText(variant.lead_time),
           } satisfies ProductVariantView
@@ -1094,11 +1290,7 @@ async function loadWordPressProductViews(locale: Locale) {
             gallery,
             specs: mapSpecs(product.acf?.specs_json),
             options: [],
-            availabilityStatus: trimText(
-              typeof product.acf?.availability_status === "string"
-                ? product.acf.availability_status
-                : undefined
-            ),
+            availabilityStatus: normalizeAvailabilityStatus(product.acf?.availability_status),
             moq: trimText(product.acf?.moq),
             leadTime: trimText(product.acf?.lead_time),
           } satisfies ProductVariantView,
@@ -1152,11 +1344,7 @@ async function loadWordPressProductViews(locale: Locale) {
       faqItems: mapFaqItems(product.acf?.faq_items, locale),
       price: undefined,
       sku: trimText(product.acf?.sku),
-      availabilityStatus: trimText(
-        typeof product.acf?.availability_status === "string"
-          ? product.acf.availability_status
-          : undefined
-      ),
+      availabilityStatus: normalizeAvailabilityStatus(product.acf?.availability_status),
       moq: trimText(product.acf?.moq),
       leadTime: trimText(product.acf?.lead_time),
       familySlug: product.slug,
@@ -1170,11 +1358,45 @@ async function loadWordPressProductViews(locale: Locale) {
     }
 
     return {
-      ...productView,
-      variantSummary:
-        productView.variantGroups.map((group) => group.label).join(" / ") || undefined,
-      searchText: buildProductSearchText(productView),
+      product: {
+        ...productView,
+        variantSummary:
+          productView.variantGroups.map((group) => group.label).join(" / ") || undefined,
+        searchText: buildProductSearchText(productView),
+      },
+      relatedProductIds: extractRelatedProductIds(product.acf?.related_products),
     }
+  })
+
+  const productById = new Map(
+    mappedProducts.map((entry) => [Number(entry.product.id), entry.product])
+  )
+  const childIds = new Set(
+    mappedProducts.flatMap((entry) => entry.relatedProductIds)
+  )
+
+  return mappedProducts.flatMap((entry) => {
+    const productId = Number(entry.product.id)
+
+    if (childIds.has(productId) && entry.relatedProductIds.length === 0) {
+      return []
+    }
+
+    if (entry.relatedProductIds.length === 0) {
+      return [entry.product]
+    }
+
+    const members = [entry.product]
+
+    for (const id of entry.relatedProductIds) {
+      const relatedProduct = productById.get(id)
+
+      if (relatedProduct) {
+        members.push(relatedProduct)
+      }
+    }
+
+    return [buildGroupedProductView(entry.product, members, locale)]
   })
 }
 

@@ -352,7 +352,7 @@ export interface WPProductVariant {
   gallery_images?: WPProductGalleryItem[]
   specs_json?: string | Record<string, unknown>
   options?: WPProductVariantOption[]
-  availability_status?: string
+  availability_status?: string | boolean
   moq?: string
   lead_time?: string
   sort_order?: number
@@ -391,11 +391,12 @@ export interface WPProduct {
     image_alt_en?: string;
     specs_json?: string;
     sku?: string;
-    availability_status?: string;
+    availability_status?: string | boolean;
     moq?: string;
     lead_time?: string;
     gallery_images?: WPProductGalleryItem[];
     variants?: WPProductVariant[];
+    related_products?: Array<number | { ID?: number } | { id?: number }>;
     default_variant_slug?: string;
     family_name_th?: string;
     family_name_en?: string;

@@ -58,8 +58,8 @@ const copy = {
   },
 } as const
 
-function formatBadge(product: ProductView) {
-  return product.sku ?? product.slug
+function formatBadge(sku?: string, slug?: string) {
+  return sku ?? slug ?? ""
 }
 
 function availabilityLabel(status: string | undefined, locale: "th" | "en") {
@@ -91,18 +91,24 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
     () => resolveSelectedVariant(product, selectedVariantSlug),
     [product, selectedVariantSlug]
   )
-  const selectedImage   = selectedVariant?.image ?? product.image
+  const selectedImage = selectedVariant?.image ?? product.image
+  const selectedName = selectedVariant?.name || product.name
   const selectedDescription = selectedVariant?.description || product.description
+  const selectedMoq = selectedVariant?.moq ?? product.moq
+  const selectedLeadTime = selectedVariant?.leadTime ?? product.leadTime
   const href = buildCategoryProductHref(locale, categorySlug, product.slug, selectedVariant?.slug)
-  const avail = availabilityLabel(product.availabilityStatus, locale)
+  const avail = availabilityLabel(
+    selectedVariant?.availabilityStatus ?? product.availabilityStatus,
+    locale
+  )
 
   function handleLinkClick() {
     saveRecentlyViewed({
       slug: product.slug,
       categorySlug,
-      name: product.name,
+      name: selectedName,
       imageSrc: selectedImage?.src ?? "",
-      imageAlt: selectedImage?.alt ?? product.name,
+      imageAlt: selectedImage?.alt ?? selectedName,
       href,
     })
   }
@@ -115,10 +121,10 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
       add({
         slug: product.slug,
         categorySlug,
-        name: product.name,
+        name: selectedName,
         imageSrc: selectedImage?.src ?? "",
-        imageAlt: selectedImage?.alt ?? product.name,
-        moq: product.moq ?? selectedVariant?.moq,
+        imageAlt: selectedImage?.alt ?? selectedName,
+        moq: selectedMoq,
         variantSlug: selectedVariant?.slug,
       })
     }
@@ -133,7 +139,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
           <div className="relative h-24 w-24 overflow-hidden rounded-xl bg-slate-100">
             <Image
               src={selectedImage?.src || "/placeholder.jpg"}
-              alt={selectedImage?.alt || product.name}
+              alt={selectedImage?.alt || selectedName}
               fill
               sizes="96px"
               className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-105"
@@ -145,7 +151,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold tracking-widest text-slate-600">
-              {formatBadge(product)}
+              {formatBadge(selectedVariant?.sku ?? product.sku, product.slug)}
             </span>
             {avail && (
               <span
@@ -164,7 +170,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
 
           <Link href={href} prefetch={false} onClick={handleLinkClick}>
             <h3 className="text-sm font-bold leading-snug text-slate-950 hover:text-slate-700">
-              {product.name}
+              {selectedName}
             </h3>
           </Link>
 
@@ -174,14 +180,14 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
 
           {/* MOQ + Lead time */}
           <div className="flex flex-wrap items-center gap-2">
-            {(product.moq ?? selectedVariant?.moq) && (
+            {selectedMoq && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                {t.moq}: {product.moq ?? selectedVariant?.moq}
+                {t.moq}: {selectedMoq}
               </span>
             )}
-            {(product.leadTime ?? selectedVariant?.leadTime) && (
+            {selectedLeadTime && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-                {t.leadTime} {product.leadTime ?? selectedVariant?.leadTime} {t.leadTimeSuffix}
+                {t.leadTime} {selectedLeadTime} {t.leadTimeSuffix}
               </span>
             )}
           </div>
@@ -222,7 +228,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
         <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
           <Image
             src={selectedImage?.src || "/placeholder.jpg"}
-            alt={selectedImage?.alt || product.name}
+            alt={selectedImage?.alt || selectedName}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
             className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -247,7 +253,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
       <div className="space-y-3 p-5">
         <div className="flex items-center justify-between gap-2">
           <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold tracking-[0.12em] text-slate-600">
-            {formatBadge(product)}
+            {formatBadge(selectedVariant?.sku ?? product.sku, product.slug)}
           </span>
           {product.variantSummary && (
             <span className="text-xs font-medium text-slate-500">{product.variantSummary}</span>
@@ -257,7 +263,7 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
         <div>
           <Link href={href} prefetch={false} onClick={handleLinkClick}>
             <h3 className="text-base font-semibold leading-snug text-slate-950 hover:text-slate-700">
-              {product.name}
+              {selectedName}
             </h3>
           </Link>
           {selectedDescription && (
@@ -268,16 +274,16 @@ export default function CatalogProductCard({ categorySlug, locale, product, view
         </div>
 
         {/* MOQ + Lead time chips */}
-        {((product.moq ?? selectedVariant?.moq) || (product.leadTime ?? selectedVariant?.leadTime)) && (
+        {(selectedMoq || selectedLeadTime) && (
           <div className="flex flex-wrap gap-2">
-            {(product.moq ?? selectedVariant?.moq) && (
+            {selectedMoq && (
               <span className="inline-flex items-center rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
-                {t.moq}: {product.moq ?? selectedVariant?.moq}
+                {t.moq}: {selectedMoq}
               </span>
             )}
-            {(product.leadTime ?? selectedVariant?.leadTime) && (
+            {selectedLeadTime && (
               <span className="inline-flex items-center rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-                {t.leadTime} {product.leadTime ?? selectedVariant?.leadTime} {t.leadTimeSuffix}
+                {t.leadTime} {selectedLeadTime} {t.leadTimeSuffix}
               </span>
             )}
           </div>
