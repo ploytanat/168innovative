@@ -18,7 +18,7 @@ async function fetchAllWPProducts(): Promise<AdminProduct[]> {
     const url = `${wpBase}/wp-json/wp/v2/product?per_page=100&page=${page}`
     const res = await fetch(url, {
       headers: { Authorization: `Basic ${credentials}` },
-      next: { revalidate: 0 }, // always fresh for admin
+      next: { revalidate: 0 },
     })
 
     if (!res.ok) break
@@ -28,19 +28,16 @@ async function fetchAllWPProducts(): Promise<AdminProduct[]> {
 
     for (const item of items) {
       const acf = item.acf ?? {}
-      const related = Array.isArray(acf.related_products)
-        ? acf.related_products
-            .map((v: unknown) => (typeof v === "object" && v !== null ? (v as { ID?: number }).ID : Number(v)))
-            .filter((n: unknown) => typeof n === "number" && !isNaN(n as number))
-        : []
 
       results.push({
         id: item.id,
         slug: item.slug,
-        title: acf.name_th || item.title?.rendered || item.slug,
+        nameTh: acf.name_th || item.title?.rendered || item.slug,
+        nameEn: acf.name_en || "",
         image: item.featured_image_url ?? "",
         categoryIds: Array.isArray(item.product_category) ? item.product_category : [],
-        relatedProducts: related,
+        familyNameTh: acf.family_name_th ?? "",
+        familyNameEn: acf.family_name_en ?? "",
       })
     }
 
@@ -52,6 +49,5 @@ async function fetchAllWPProducts(): Promise<AdminProduct[]> {
 
 export default async function AdminProductsPage() {
   const products = await fetchAllWPProducts()
-
   return <ProductGroupDashboard products={products} />
 }
