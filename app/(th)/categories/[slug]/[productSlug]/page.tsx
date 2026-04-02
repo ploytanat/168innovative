@@ -1,7 +1,6 @@
 export const revalidate = 60
 
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
 import { notFound, permanentRedirect } from "next/navigation"
 import Script from "next/script"
@@ -9,6 +8,7 @@ import { ChevronRight, Factory, Package, Send, ShieldCheck, Truck } from "lucide
 
 import CatalogDetailGallery from "@/app/components/product/CatalogDetailGallery"
 import CatalogDetailSpecs from "@/app/components/product/CatalogDetailSpecs"
+import CatalogProductCard from "@/app/components/product/CatalogProductCard"
 import ProductVariantSelector from "@/app/components/product/ProductVariantSelector"
 import { SITE_URL, withSiteUrl } from "@/app/config/site"
 import FaqSection from "@/app/components/ui/FaqSection"
@@ -375,10 +375,9 @@ export default async function ProductDetailPage({ params, searchParams }: Props)
               <div>
                 <p className="eyebrow-label text-xs">Discover More</p>
                 <h2 className="mt-2 font-heading text-2xl font-bold text-[var(--color-ink)]">
-                  สินค้าที่คุณอาจสนใจ
+                  สินค้าในหมวดเดียวกัน
                 </h2>
               </div>
-
               <Link
                 href={`/categories/${slug}`}
                 prefetch={false}
@@ -387,32 +386,15 @@ export default async function ProductDetailPage({ params, searchParams }: Props)
                 ดูทั้งหมด <ChevronRight size={13} />
               </Link>
             </div>
-
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
-                <Link
+                <CatalogProductCard
                   key={item.id}
-                  href={`/categories/${slug}/${item.slug}`}
-                  prefetch={false}
-                  className="deck-card group overflow-hidden rounded-[1rem] p-2"
-                >
-                  <div className="relative aspect-square overflow-hidden rounded-[0.9rem] bg-[linear-gradient(160deg,#eef2f6,#e7edf4)]">
-                    <Image
-                      src={item.image.src}
-                      alt={item.image.alt}
-                      fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-
-                  <div className="mt-3 px-2 pb-3 pt-1">
-                    <h3 className="break-words text-sm font-medium leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">
-                      {item.name}
-                    </h3>
-                    <div className="mt-1.5 h-px w-0 bg-[var(--color-accent)] transition-all duration-300 group-hover:w-8" />
-                  </div>
-                </Link>
+                  product={item}
+                  categorySlug={slug}
+                  locale={locale}
+                  view="grid"
+                />
               ))}
             </div>
           </section>
