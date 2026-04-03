@@ -54,7 +54,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   return (
     <section className="relative z-10 mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-5 lg:py-14">
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
-        <div className="rounded-[2rem] border border-black/[0.06] bg-[linear-gradient(145deg,#ffffff_0%,#f7f3ee_100%)] p-6 shadow-[0_16px_40px_rgba(37,44,55,0.06)] sm:p-8">
+        <div className="glass-frosted rounded-4xl p-6 sm:p-8">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
             {copy.eyebrow}
           </p>
@@ -75,7 +75,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
             {items.slice(0, 4).map((item) => (
               <article
                 key={item.title}
-                className="rounded-[1.45rem] border border-black/[0.05] bg-white/85 p-4 shadow-[0_10px_24px_rgba(37,44,55,0.04)]"
+                className="glass-frosted rounded-3xl p-4"
               >
                 <div className="flex items-start gap-4">
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#f4f6f8]">

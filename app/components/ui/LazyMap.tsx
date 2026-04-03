@@ -6,9 +6,16 @@ import { COLORS, GLASS, PAGE_BG } from "@/app/components/ui/designSystem";
 interface LazyMapProps {
   src: string;
   title?: string;
+  className?: string;
+  loadingLabel?: string;
 }
 
-export default function LazyMap({ src, title = "Map" }: LazyMapProps) {
+export default function LazyMap({
+  src,
+  title = "Map",
+  className = "",
+  loadingLabel = "Loading map...",
+}: LazyMapProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,7 +37,7 @@ export default function LazyMap({ src, title = "Map" }: LazyMapProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[450px] w-full overflow-hidden rounded-[1.1rem] grayscale-[0.2] transition-all duration-700 hover:grayscale-0"
+      className={`relative h-[450px] w-full overflow-hidden rounded-[1.1rem] grayscale-[0.2] transition-all duration-700 hover:grayscale-0 ${className}`.trim()}
       style={{ ...GLASS.primary, background: PAGE_BG }}
     >
       {isLoaded ? (
@@ -46,7 +53,7 @@ export default function LazyMap({ src, title = "Map" }: LazyMapProps) {
           className="absolute inset-0 flex items-center justify-center"
           style={{ ...GLASS.stats, background: "rgba(255,255,255,0.42)" }}
         >
-          <p className="text-sm" style={{ color: COLORS.mid }}>Loading map...</p>
+          <p className="text-sm" style={{ color: COLORS.mid }}>{loadingLabel}</p>
         </div>
       )}
     </div>

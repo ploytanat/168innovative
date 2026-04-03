@@ -4,6 +4,7 @@ import Script from "next/script"
 
 import CategoryProductsSection from "@/app/components/product/CategoryProductsSection"
 import RecentlyViewed from "@/app/components/product/RecentlyViewed"
+import Breadcrumb from "@/app/components/ui/Breadcrumb"
 import FaqSection from "@/app/components/ui/FaqSection"
 import RichTextSection from "@/app/components/ui/RichTextSection"
 import { buildMetadata } from "@/app/config/seo"
@@ -162,6 +163,15 @@ export default async function CategoryPage({ params, searchParams }: Props) {
       )}
 
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-8 lg:px-8">
+        <div className="mb-7">
+          <Breadcrumb
+            items={[
+              { label: "Categories", href: "/en/categories" },
+              { label: category.name },
+            ]}
+          />
+        </div>
+
         <CategoryProductsSection
           slug={slug}
           locale={locale}

@@ -198,8 +198,10 @@
 
   .glass-panel {
     position: relative;
-    border: 1px solid rgba(211, 217, 225, 0.92);
-    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(211, 217, 225, 0.82);
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px) saturate(1.5);
+    backdrop-filter: blur(14px) saturate(1.5);
     box-shadow: 0 10px 24px rgba(32, 36, 43, 0.045);
   }
 
@@ -227,8 +229,21 @@
   .liquid-glass-panel {
     position: relative;
     border: 1px solid var(--glass-edge-strong);
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.88);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
     box-shadow: 0 12px 28px rgba(32, 36, 43, 0.05);
+  }
+
+  /* Reusable frosted-glass card — apply on any container that sits over a bg */
+  .glass-frosted {
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.72);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    box-shadow:
+      0 8px 28px rgba(32, 36, 43, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
   .liquid-glass-panel::before {

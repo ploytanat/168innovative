@@ -5,6 +5,7 @@ import CategoryBar from "@/app/components/sections/CategoryBar"
 import CategorySection from "@/app/components/sections/CategorySection"
 import ProductMarquee from "@/app/components/sections/ProductMarquee"
 import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import ClientsSection from "@/app/components/sections/ClientsSection"
 import ContactSection from "@/app/components/sections/ContactSection"
 import { buildMetadata } from "@/app/config/seo"
 import { getSideBanners } from "@/app/config/sideBanners"
@@ -51,7 +52,10 @@ export default async function HomePage() {
       {/* 5. Why Choose Us — สร้างความน่าเชื่อถือ */}
       {whys.length > 0 && <WhyChooseUs items={whys} locale={locale} />}
 
-      {/* 6. Contact / CTA — ปิดการขาย */}
+      {/* 6. Clients — แสดงแบรนด์ลูกค้าที่ไว้วางใจ */}
+      <ClientsSection locale={locale} />
+
+      {/* 7. Contact / CTA — ปิดการขาย */}
       {company && <ContactSection locale={locale} data={company} />}
     </>
   )

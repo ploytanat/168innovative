@@ -173,7 +173,7 @@ function NavigationInner({
 
   return (
     <header
-      className="sticky z-65 w-full bg-[#fefcfa] shadow-[0_1px_0_rgba(0,0,0,.06),0_2px_12px_rgba(0,0,0,.04)]"
+      className="sticky z-65 w-full bg-white/82 shadow-[0_1px_0_rgba(0,0,0,.06),0_2px_12px_rgba(0,0,0,.04)] backdrop-blur-xl"
       style={{ top: 32 }}
     >
       <nav className="mx-auto flex h-15 max-w-7xl items-center gap-2 px-4 sm:px-5">
