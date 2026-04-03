@@ -5,6 +5,46 @@ export const homeMock: HomeContent = {
   hero: {
     slides: [
       {
+        id: 0,
+        theme: 'emerald',
+        badge: {
+          text: { th: 'ยินดีต้อนรับ', en: 'Welcome' },
+          variant: 'featured',
+        },
+        title: {
+          th: '168 Innovative\nบรรจุภัณฑ์เครื่องสำอาง',
+          en: '168 Innovative\nCosmetic Packaging',
+        },
+        description: {
+          th: 'ผู้ผลิตและนำเข้าบรรจุภัณฑ์เครื่องสำอางคุณภาพสูง รองรับงาน OEM/ODM ครบวงจร ตั้งแต่ขวดปั๊ม กระปุกครีม ขวดสเปรย์ จนถึงบรรจุภัณฑ์ตามแบบ พร้อมส่งทั่วประเทศ',
+          en: 'Premium cosmetic packaging manufacturer and importer, offering end-to-end OEM/ODM solutions — pump bottles, cream jars, spray bottles, and fully custom packaging shipped nationwide.',
+        },
+        image: {
+          src: '/about/factory.png',
+          alt: { th: 'โรงงาน 168 Innovative', en: '168 Innovative factory' },
+        },
+        ctaPrimary: {
+          href: '/about',
+          label: { th: 'เกี่ยวกับเรา', en: 'About Us' },
+        },
+        ctaSecondary: {
+          href: '/contact',
+          label: { th: 'ติดต่อเรา', en: 'Contact Us' },
+        },
+        highlight: {
+          value: '500+',
+          label: { th: 'แบรนด์ที่ไว้วางใจ', en: 'Trusted Brands' },
+        },
+        benefits: {
+          th: ['นำเข้าตรงจากโรงงาน', 'รองรับ OEM / ODM', 'MOQ ยืดหยุ่น'],
+          en: ['Direct factory import', 'OEM / ODM ready', 'Flexible MOQ'],
+        },
+        trustItems: {
+          th: ['ประสบการณ์กว่า 10 ปี', 'ส่งทั่วประเทศ', 'ตัวอย่างฟรี'],
+          en: ['10+ years experience', 'Nationwide delivery', 'Free samples'],
+        },
+      },
+      {
         id: 1,
         theme: 'rose',
         badge: {

@@ -1,209 +1,132 @@
-"use client"
+import Link from "next/link"
 
-import type { CSSProperties } from "react"
-
-import Image from "next/image"
-import { motion } from "framer-motion"
-
-import { uiText } from "@/app/lib/i18n/ui"
-import { CompanyView } from "@/app/lib/types/view"
-
-import BackgroundBlobs from "../ui/BackgroundBlobs"
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "../ui/motion"
-
-const PhoneIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-    />
-  </svg>
-)
-
-const MailIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-    />
-  </svg>
-)
-
-const ArrowUpRightIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M7 16V4m0 0L3 8m4-4l10 10"
-    />
-  </svg>
-)
+import type { CompanyView } from "@/app/lib/types/view"
 
 interface ContactSectionProps {
   data: CompanyView
   locale: "th" | "en"
 }
 
-export default function ContactSection({
-  data,
-  locale,
-}: ContactSectionProps) {
+const BRANDS = ["COSMAX", "Interpack", "Thai Beauty", "BrandLab TH", "PackPro", "CosmoLine"]
+
+const COPY = {
+  th: {
+    trusted: "ลูกค้าและพาร์ทเนอร์ที่ไว้วางใจเรา",
+    title: "พร้อมเริ่มต้นกับเราแล้วหรือยัง?",
+    body: "บอกสเปค รับใบเสนอราคา เริ่มผลิต ง่ายในขั้นตอนเดียว",
+    steps: [
+      "แจ้งสเปคและปริมาณ",
+      "รับใบเสนอราคาใน 24 ชม.",
+      "ดูตัวอย่างสินค้าฟรี",
+      "ยืนยันและเริ่มผลิต",
+    ],
+    quote: "ขอใบเสนอราคาเลย",
+    line: "LINE @168innovative",
+    call: "โทรหาทีมเซลส์",
+  },
+  en: {
+    trusted: "Trusted by our customers and partners",
+    title: "Ready to start your project?",
+    body: "Share your specs, get a quote, and move into production with a simpler first step.",
+    steps: [
+      "Share specs and quantity",
+      "Receive quotation within 24 hrs",
+      "Review sample",
+      "Confirm and start production",
+    ],
+    quote: "Request a Quote",
+    line: "LINE @168innovative",
+    call: "Call Sales",
+  },
+} as const
+
+export default function ContactSection({ data, locale }: ContactSectionProps) {
+  const copy = COPY[locale]
+  const contactHref = locale === "en" ? "/en/contact" : "/contact"
+  const lineUrl = data.socials.find((social) => social.type === "line")?.url
+  const primaryPhone = data.phones[0]?.number
+
   return (
-    <section id="contact" className="relative py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-[rgba(205,222,241,0.82)] bg-[linear-gradient(135deg,#ffffff_0%,#eefbff_44%,#f2f8ff_100%)] p-6 shadow-[0_32px_90px_rgba(28,40,66,0.14)] sm:p-10 md:p-16 lg:p-20">
-          <div className="absolute inset-0 -z-10 opacity-25">
-            <BackgroundBlobs />
+    <>
+      <section className="border-t border-black/6 bg-white px-4 py-7 sm:px-5">
+        <div className="mx-auto max-w-7xl">
+          <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.14em] text-[#8896a8]">
+            {copy.trusted}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {BRANDS.map((brand) => (
+              <span
+                key={brand}
+                className="rounded-lg border border-black/7 bg-[#f7f2ee] px-4 py-2 font-heading text-[13px] font-bold text-[#4a5568]"
+              >
+                {brand}
+              </span>
+            ))}
           </div>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(248,167,184,0.16),transparent_24%),radial-gradient(circle_at_left_center,rgba(46,207,196,0.14),transparent_26%),radial-gradient(circle_at_bottom,rgba(202,184,242,0.16),transparent_26%)]" />
-
-          <motion.div
-            className="grid items-center gap-14 lg:grid-cols-[1.2fr_1fr]"
-            variants={staggerSmall}
-            initial="hidden"
-            whileInView="visible"
-            viewport={MOTION_VIEWPORT}
-          >
-            <motion.div className="flex flex-col items-center text-center lg:items-start lg:text-left" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-              <div className="space-y-4">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                  Contact Desk
-                </p>
-                <h2 className="text-3xl font-black leading-[1.1] text-[var(--color-ink)] sm:text-4xl md:text-6xl">
-                  {uiText.contact.title[locale]} <br />
-                  <span className="text-[#8ebcf5]">
-                    {uiText.contact.subtitle[locale]}
-                  </span>
-                </h2>
-                <p className="mt-6 max-w-md text-[1.05rem] leading-8 text-[var(--color-ink-soft)] md:text-lg">
-                  {uiText.contact.desc[locale]}
-                </p>
-              </div>
-
-              <div className="mt-10 w-full max-w-md space-y-4">
-                  <motion.div className="overflow-hidden rounded-[2rem] border border-[rgba(205,222,241,0.72)] bg-white/92 shadow-2xl" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-                  <div className="border-b border-[#eef2f6] p-6 md:p-8">
-                    <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
-                      {uiText.contact.phoneLabel[locale]}
-                    </p>
-
-                    <div className="space-y-5">
-                      {data.phones.map((phone) => (
-                        <a
-                          key={phone.number}
-                          href={`tel:${phone.number.replace(/-/g, "")}`}
-                          className="group flex items-center justify-between transition-all"
-                        >
-                          <div className="flex items-center gap-4 text-left">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#edf9f7] text-[var(--color-accent)] transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-white">
-                              <PhoneIcon />
-                            </div>
-                            <div>
-                              <span className="block text-[11px] font-bold uppercase tracking-[0.08em] text-[#7487a3]">
-                                {phone.label}
-                              </span>
-                              <span className="text-xl font-bold text-[var(--color-ink)] md:text-[1.4rem]">
-                                {phone.number}
-                              </span>
-                            </div>
-                          </div>
-                          <ArrowUpRightIcon />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-[linear-gradient(145deg,#f6fdff,#fff3f7)] p-6 md:p-8">
-                    <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent)]">
-                      {uiText.contact.emailLabel[locale]}
-                    </p>
-                    <div className="space-y-4">
-                      {data.email.map((email) => (
-                        <a
-                          key={email}
-                          href={`mailto:${email}`}
-                          className="group flex items-center gap-4"
-                        >
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[rgba(205,222,241,0.72)] bg-white text-[#8fa2b8] transition-all duration-300 group-hover:bg-[var(--color-ink)] group-hover:text-white">
-                            <MailIcon />
-                          </div>
-                          <span className="break-all text-base font-bold text-[var(--color-ink)] md:text-[1.05rem]">
-                            {email}
-                          </span>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-
-                {data.lineQrCode && (
-                  <motion.div className="flex items-center gap-5 rounded-2xl border border-[rgba(46,207,196,0.26)] bg-[linear-gradient(145deg,rgba(238,253,249,0.9),rgba(242,237,255,0.86))] p-4 shadow-sm backdrop-blur" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-[rgba(46,207,196,0.42)] bg-white">
-                      <Image
-                        src={data.lineQrCode.src}
-                        alt={data.lineQrCode.alt}
-                        fill
-                        sizes="4rem"
-                        className="object-contain p-1"
-                      />
-                    </div>
-                    <div className="text-left">
-                      <p className="text-sm font-bold text-[var(--color-ink)]">
-                        {uiText.contact.lineLabel[locale]}
-                      </p>
-                      <p className="text-[13px] font-medium leading-6 text-[var(--color-ink-soft)]">
-                        {uiText.contact.lineDesc[locale]}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-
-            <motion.div className="relative" variants={fadeUp} transition={{ duration: 0.6, ease: MOTION_EASE }}>
-              <motion.div className="grid grid-cols-2 gap-6 md:gap-8" variants={staggerSmall}>
-                {data.contactGallery?.slice(0, 4).map((image, index) => {
-                  const zigzag = index % 2 === 1
-
-                  return (
-                    <motion.div
-                      key={image.src}
-                      className={`floating-animation relative overflow-hidden rounded-3xl border border-white/10 bg-white/80 shadow-xl ${zigzag ? "translate-y-10 md:translate-y-14" : ""}`}
-                      variants={fadeUp}
-                      transition={{ duration: 0.5, ease: MOTION_EASE }}
-                      style={
-                        {
-                          "--floating-duration": `${6 + index * 0.4}s`,
-                        } as CSSProperties
-                      }
-                    >
-                      <div className="relative h-[220px] w-full sm:h-[260px] lg:h-[300px]">
-                        <Image
-                          src={image.src}
-                          alt={image.alt || "Product"}
-                          fill
-                          sizes="(max-width: 640px) 45vw, (max-width: 1024px) 35vw, 20vw"
-                          className="object-cover object-center transition-transform duration-700 ease-out hover:scale-[1.05]"
-                        />
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </motion.div>
-            </motion.div>
-          </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="bg-[linear-gradient(135deg,#c47b8a_0%,#a86272_100%)] px-4 py-14 text-center sm:px-5">
+        <div className="mx-auto max-w-4xl">
+          <h2
+            className={`mx-auto max-w-[24ch] text-white ${
+              locale === "th"
+                ? "font-body text-[clamp(1.4rem,2.3vw,2rem)] font-extrabold leading-[1.28]"
+                : "font-heading text-[clamp(1.9rem,3vw,2.4rem)] font-black"
+            }`}
+          >
+            {copy.title}
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-[14px] leading-[1.8] text-white/82">
+            {copy.body}
+          </p>
+
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-5">
+            {copy.steps.map((step, index) => (
+              <div key={step} className="flex items-start gap-2.5 sm:items-center">
+                <span className="mt-0.5 flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-white/18 text-[11px] font-extrabold text-white sm:mt-0">
+                  {index + 1}
+                </span>
+                <span className="text-left text-[12px] font-semibold leading-snug text-white/88 sm:text-center">
+                  {step}
+                </span>
+                {index < copy.steps.length - 1 ? (
+                  <span className="hidden text-white/28 sm:inline">→</span>
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              href={contactHref}
+              className="inline-flex items-center gap-2 rounded-[9px] bg-[#f9a825] px-6 py-3 text-[13px] font-extrabold text-[#2c2521] transition-transform hover:-translate-y-0.5"
+            >
+              {copy.quote}
+            </Link>
+
+            {lineUrl ? (
+              <a
+                href={lineUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-[9px] border-2 border-white/38 px-6 py-3 text-[13px] font-bold text-white transition-colors hover:bg-white/10"
+              >
+                {copy.line}
+              </a>
+            ) : null}
+
+            {primaryPhone ? (
+              <a
+                href={`tel:${primaryPhone.replace(/[^+\d]/g, "")}`}
+                className="inline-flex items-center gap-2 rounded-[9px] border-2 border-white/38 px-6 py-3 text-[13px] font-bold text-white transition-colors hover:bg-white/10"
+              >
+                {copy.call}
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }

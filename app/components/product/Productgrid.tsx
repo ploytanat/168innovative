@@ -125,6 +125,7 @@ interface Props {
   categorySlug: string;
   totalCount: number;
   locale?: "th" | "en";
+  initialQuery?: string;
   onSearchStateChange?: (isSearching: boolean) => void;
 }
 
@@ -138,6 +139,7 @@ export default function ProductGrid({
   categorySlug,
   totalCount,
   locale = "th",
+  initialQuery,
   onSearchStateChange,
 }: Props) {
   const t = copy[locale];
@@ -152,7 +154,7 @@ export default function ProductGrid({
     category.seoDescription ||
     category.description;
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery ?? "");
   const [sort, setSort] = useState<SortOrder>("default");
   const [activeFilters, setActiveFilters] = useState<CatalogFacetState>({});
   const [viewMode, setViewMode] = useState<ViewMode>("grid");

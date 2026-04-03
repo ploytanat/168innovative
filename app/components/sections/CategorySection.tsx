@@ -1,120 +1,322 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 import { uiText } from "@/app/lib/i18n/ui"
-import { CategoryView } from "@/app/lib/types/view"
+import type { CategoryView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
-import {
-  COLORS,
-  CTA_BUTTON_STYLE,
-  EYEBROW_PILL_STYLE,
-  GLASS,
-  SECTION_BACKGROUNDS,
-  SECTION_BORDER,
-  SOFT_IMAGE_BG,
-  SOFT_IMAGE_BG_ALT,
-} from "@/app/components/ui/designSystem"
 
-const ArrowRightIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4 transition-transform group-hover:translate-x-0.5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-  </svg>
-)
+// ─── Types ─────────────────────────────────────────────────────────────────
+
+type Locale = "th" | "en"
 
 interface CategorySectionProps {
   items: CategoryView[]
-  locale: "th" | "en"
+  locale: Locale
 }
 
-export default function CategorySection({ items = [], locale }: CategorySectionProps) {
-  if (items.length === 0) return null
+// ─── Copy ──────────────────────────────────────────────────────────────────
 
-  const displayItems = items.slice(0, 6)
+const COPY = {
+  th: {
+    eyebrow: "Category Showcase",
+    title: "เลือกเข้าแค็ตตาล็อกตามงานที่ต้องการ",
+    summary:
+      "จัดหมวดสินค้าให้เห็นคอลเลกชันหลักชัดขึ้น ทั้งกลุ่มที่ใช้บ่อยในงานเครื่องสำอาง งานแพ็กเกจรีฟิล และงานประกอบ OEM",
+    featuredLabel: "หมวดเด่น",
+    collectionLabel: "คอลเลกชัน",
+    explore: "เปิดดูหมวดนี้",
+  },
+  en: {
+    eyebrow: "Category Showcase",
+    title: "Move into the catalog by product group",
+    summary:
+      "Core packaging collections are grouped more clearly so customers can enter the right catalog path faster — from cosmetics to refill packaging and OEM support items.",
+    featuredLabel: "Featured",
+    collectionLabel: "Collection",
+    explore: "Open category",
+  },
+} as const
+
+// ─── Pill badge ─────────────────────────────────────────────────────────────
+
+function Pill({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center rounded-full bg-white/14 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm ring-1 ring-white/10">
+      {label}
+    </span>
+  )
+}
+
+// ─── Featured card (large, left column) ────────────────────────────────────
+
+function FeaturedCard({
+  item,
+  locale,
+}: {
+  item: CategoryView
+  locale: Locale
+}) {
+  const copy = COPY[locale]
 
   return (
-    <section className="relative py-14 sm:py-16 md:py-24" style={{ background: SECTION_BACKGROUNDS.neutral }}>
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="border-t pt-6" style={{ borderColor: SECTION_BORDER }}>
-          <div className="mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE}>Product Categories</p>
-              <h2 className="font-heading mt-3 text-[clamp(2rem,4vw,3.8rem)] leading-[1.02]" style={{ color: COLORS.dark }}>
-                {uiText.categories.title[locale]}
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: COLORS.mid }}>
-                {locale === "th"
-                  ? "จัดหมวดสินค้าให้อ่านง่ายขึ้นแบบ deck layout เพื่อให้เลือกเส้นทางเข้าสู่คอลเลกชันที่ต้องการได้เร็ว"
-                  : "A cleaner deck-style overview that makes it easier to move into the right collection quickly."}
-              </p>
-            </div>
+    <Link
+      href={withLocalePath(`/categories/${item.slug}`, locale)}
+      aria-label={`${copy.explore}: ${item.name}`}
+      className="group relative flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] lg:min-h-full"
+    >
+      {/* Image */}
+      {item.image?.src ? (
+        <Image
+          src={item.image.src}
+          alt={item.image.alt ?? item.name}
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 55vw"
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:scale-[1.04]"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-neutral-100" />
+      )}
 
-            <Link
-              href={withLocalePath("/categories", locale)}
-              className="group inline-flex w-fit items-center gap-2 rounded-[0.95rem] px-6 py-3 font-body text-[12px] font-semibold uppercase tracking-[0.12em] text-white"
-              style={CTA_BUTTON_STYLE}
-            >
-              <span>{uiText.categories.viewAll[locale]}</span>
-              <ArrowRightIcon />
-            </Link>
-          </div>
+      {/* Overlay — darkens more on hover */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/78
+                   transition-opacity duration-500 group-hover:opacity-90"
+      />
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {displayItems.map((item, index) => {
-              const imageBg = index % 2 === 0 ? SOFT_IMAGE_BG : SOFT_IMAGE_BG_ALT
+      {/* Decorative corner accent */}
+      <div
+        aria-hidden
+        className="absolute right-5 top-5 h-[72px] w-[72px] rounded-full border border-white/12
+                   opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
+      />
 
-              return (
-                <Link
-                  key={item.id}
-                  href={withLocalePath(`/categories/${item.slug}`, locale)}
-                  aria-label={`${uiText.categories.exploreMore[locale]} ${item.name}`}
-                  className="group overflow-hidden rounded-[0.95rem] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(32,36,43,0.08)]"
-                  style={GLASS.card}
-                >
-                  <div className="relative aspect-[4/3.2] overflow-hidden rounded-[0.8rem]" style={{ background: imageBg }}>
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(52,54,59,0.84),rgba(74,134,244,0.88),rgba(223,228,234,0.96))]" />
-                  <div className="absolute left-4 top-4 text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: COLORS.soft }}>
-                    {(index + 1).toString().padStart(2, "0")}
-                  </div>
+      {/* Content */}
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+        <Pill label={copy.featuredLabel} />
 
-                  {item.image?.src ? (
-                    <Image
-                      src={item.image.src}
-                      alt={item.image.alt || item.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs" style={{ color: COLORS.hint }}>
-                      {uiText.categories.noImage[locale]}
-                    </div>
-                  )}
-                </div>
+        <h3
+          className={`
+            mt-4 text-white
+            ${locale === "th"
+              ? "font-body text-[clamp(1.5rem,2.4vw,2.1rem)] font-extrabold leading-[1.2]"
+              : "font-heading text-[clamp(2rem,3.2vw,2.9rem)] font-black leading-[1.04]"
+            }
+            translate-y-1 transition-transform duration-300 group-hover:translate-y-0
+          `}
+        >
+          {item.name}
+        </h3>
 
-                <div className="px-1 pb-1 pt-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.14em]" style={{ color: COLORS.soft }}>
-                    {locale === "th" ? "คอลเลกชันสินค้า" : "Collection"}
-                  </p>
-                  <h3 className="font-heading mt-2 text-xl leading-tight" style={{ color: COLORS.dark }}>
-                    {item.name}
-                  </h3>
-                  {item.description ? (
-                    <p className="mt-3 line-clamp-2 text-[13px] leading-6" style={{ color: COLORS.mid }}>
-                      {item.description}
-                    </p>
-                  ) : null}
+        {item.description && (
+          <p className="mt-3 max-w-lg text-sm leading-7 text-white/75 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            {item.description}
+          </p>
+        )}
 
-                  <div className="mt-4 flex items-center gap-2 border-t pt-3 text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ borderColor: "rgba(30,40,60,0.10)", color: COLORS.brandMuted }}>
-                    {uiText.categories.exploreMore[locale]}
-                    <ArrowRightIcon />
-                  </div>
-                </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
+        <ExploreLink label={copy.explore} />
       </div>
+    </Link>
+  )
+}
+
+// ─── Small card (right grid) ────────────────────────────────────────────────
+
+function SmallCard({
+  item,
+  locale,
+  index,
+}: {
+  item: CategoryView
+  locale: Locale
+  index: number
+}) {
+  const copy = COPY[locale]
+
+  return (
+    <Link
+      href={withLocalePath(`/categories/${item.slug}`, locale)}
+      aria-label={`${copy.explore}: ${item.name}`}
+      className="group relative flex min-h-[220px] flex-col overflow-hidden rounded-[1.4rem]"
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
+      {/* Image */}
+      {item.image?.src ? (
+        <Image
+          src={item.image.src}
+          alt={item.image.alt ?? item.name}
+          fill
+          sizes="(max-width: 768px) 50vw, 22vw"
+          className="object-cover transition-transform duration-500 ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:scale-[1.06]"
+        />
+      ) : (
+        <div className="absolute inset-0 bg-neutral-100" />
+      )}
+
+      {/* Overlay */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/8 to-black/75
+                   transition-opacity duration-400 group-hover:opacity-90"
+      />
+
+      {/* Content */}
+      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+        <Pill label={copy.collectionLabel} />
+        <h3
+          className={`
+            mt-3 text-white
+            ${locale === "th"
+              ? "font-body text-[1.02rem] font-extrabold leading-[1.3]"
+              : "font-heading text-xl font-black leading-[1.1]"
+            }
+            translate-y-0.5 transition-transform duration-300 group-hover:translate-y-0
+          `}
+        >
+          {item.name}
+        </h3>
+
+        {item.description && (
+          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/70">
+            {item.description}
+          </p>
+        )}
+
+        <ExploreLink label={copy.explore} small />
+      </div>
+    </Link>
+  )
+}
+
+// ─── Explore CTA link row ───────────────────────────────────────────────────
+
+function ExploreLink({ label, small = false }: { label: string; small?: boolean }) {
+  return (
+    <span
+      className={`
+        mt-4 inline-flex items-center gap-1.5 font-semibold text-[#ffd7b8]
+        ${small ? "text-[11px]" : "text-[13px]"}
+        -translate-x-1 opacity-0 transition-all duration-300
+        group-hover:translate-x-0 group-hover:opacity-100
+      `}
+    >
+      {label}
+      <ArrowRight
+        className={small ? "h-3 w-3" : "h-4 w-4"}
+        strokeWidth={2.2}
+      />
+    </span>
+  )
+}
+
+// ─── Section header ─────────────────────────────────────────────────────────
+
+function SectionHeader({ locale, items }: { locale: Locale; items: CategoryView[] }) {
+  const copy = COPY[locale]
+
+  return (
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+      <div className="max-w-2xl">
+        {/* Eyebrow with decorative line */}
+        <div className="flex items-center gap-3">
+          <span className="h-px w-8 bg-[#8d6070]" aria-hidden />
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
+            {copy.eyebrow}
+          </p>
+        </div>
+
+        <h2
+          className={`
+            mt-3 text-[#1f2430]
+            ${locale === "th"
+              ? "font-body text-[clamp(1.35rem,2.2vw,1.9rem)] font-extrabold leading-[1.3]"
+              : "font-heading text-[clamp(1.8rem,3vw,2.8rem)] font-black leading-[1.04]"
+            }
+          `}
+        >
+          {copy.title}
+        </h2>
+
+        <p className="mt-3 max-w-xl text-sm leading-[1.85] text-neutral-500 sm:text-[15px]">
+          {copy.summary}
+        </p>
+      </div>
+
+      <Link
+        href={withLocalePath("/categories", locale)}
+        className="
+          inline-flex items-center gap-2 rounded-full border border-black/[0.08]
+          bg-white px-4 py-2.5 text-[12px] font-semibold text-[#1f2430]
+          transition-all duration-200 hover:bg-neutral-50 hover:shadow-sm
+          active:scale-[0.98]
+        "
+      >
+        {uiText.categories.viewAll[locale]}
+        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </Link>
+    </div>
+  )
+}
+
+// ─── Grid layouts by item count ─────────────────────────────────────────────
+//
+//  4 items → featured (7col) + 3 small stacked right (5col)
+//  5 items → featured (7col) + 4 small 2×2 right  (5col)  ← original
+//  6 items → featured (6col) + 5 small irregular  (6col)
+
+function CategoryGrid({ featured, rest, locale }: {
+  featured: CategoryView
+  rest: CategoryView[]
+  locale: Locale
+}) {
+  // Clamp rest to max 5 so the right column never overflows
+  const rightItems = rest.slice(0, 5)
+  const isWide = rightItems.length <= 3
+
+  return (
+    <div className={`grid gap-4 lg:grid-cols-12`}>
+      {/* Featured — wider when fewer right-side items */}
+      <div className={isWide ? "lg:col-span-8" : "lg:col-span-7"}>
+        <FeaturedCard item={featured} locale={locale} />
+      </div>
+
+      {/* Right column */}
+      <div
+        className={`
+          grid gap-4
+          ${isWide ? "lg:col-span-4" : "lg:col-span-5"}
+          ${rightItems.length >= 4 ? "sm:grid-cols-2" : "sm:grid-cols-1 lg:grid-cols-1"}
+        `}
+      >
+        {rightItems.map((item, i) => (
+          <SmallCard key={item.id} item={item} locale={locale} index={i} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Root export ────────────────────────────────────────────────────────────
+
+export default function CategorySection({
+  items = [],
+  locale,
+}: CategorySectionProps) {
+  if (items.length === 0) return null
+
+  const [featured, ...rest] = items.slice(0, 6)
+  if (!featured) return null
+
+  return (
+    <section
+      aria-labelledby="category-section-heading"
+      className="relative z-10 mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-5 lg:py-16"
+    >
+      <SectionHeader locale={locale} items={items} />
+
+      <CategoryGrid featured={featured} rest={rest} locale={locale} />
     </section>
   )
 }

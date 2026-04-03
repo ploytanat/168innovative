@@ -1,497 +1,272 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
-import {
-  COLORS,
-  CTA_BUTTON_STYLE,
-  CTA_GRADIENT,
-  EYEBROW_PILL_STYLE,
-  GLASS,
-} from "@/app/components/ui/designSystem"
-import { HOME_PRODUCT_SPOTLIGHT } from "@/app/lib/config/home-product-spotlight"
 import { uiText } from "@/app/lib/i18n/ui"
-import { ProductView } from "@/app/lib/types/view"
+import type { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
-const MARQUEE_PALETTE = {
-  cloud: "#F8F9FB",
-  white: "#FFFFFF",
-  blushHint: "#F5F0F2",
-  steel: "#E2E8EE",
-} as const
-
-const MARQUEE_SECTION_BG = `linear-gradient(160deg, ${MARQUEE_PALETTE.cloud} 0%, ${MARQUEE_PALETTE.blushHint} 56%, ${MARQUEE_PALETTE.white} 100%)`
-
-const PRIMARY_META = {
-  badge:     { th: "สินค้าเด่น",       en: "Featured Pick" },
-  accentText: "#3a4a5c",
-  accentBg:   MARQUEE_PALETTE.steel,
-  imageBg:    `radial-gradient(circle at 82% 16%,${MARQUEE_PALETTE.steel} 0%,transparent 26%), linear-gradient(145deg,${MARQUEE_PALETTE.white},${MARQUEE_PALETTE.cloud})`,
-  glow:       "rgba(226,232,238,0.90)",
-}
-
-const SECONDARY_META = {
-  badge:     { th: "แนะนำเพิ่มเติม",   en: "Also Recommended" },
-  accentText: "#3a4a5c",
-  accentBg:   MARQUEE_PALETTE.blushHint,
-  imageBg:    `radial-gradient(circle at 82% 16%,${MARQUEE_PALETTE.blushHint} 0%,transparent 24%), linear-gradient(145deg,${MARQUEE_PALETTE.white},${MARQUEE_PALETTE.cloud})`,
-  glow:       "rgba(245,240,242,0.90)",
-}
-
-const SECTION_COPY = {
-  eyebrow:            { th: "Product Focus",                                                                           en: "Product Focus" },
-  summary:            { th: "คัดสินค้าบรรจุภัณฑ์เด่นให้ดูง่ายขึ้นในทุกหน้าจอ พร้อมลำดับความสำคัญที่ชัดและกดดูรายละเอียดได้เร็ว", en: "A cleaner, faster product showcase with clearer hierarchy and stronger visibility across every screen size." },
-  spoutSummary:       { th: "รวมจุกและวาล์วสำหรับงานซองบรรจุอาหาร เครื่องดื่ม และงาน OEM ที่ต้องการภาพลักษณ์พร้อมขาย",              en: "A focused selection of spouts and valves for food, beverage, and OEM pouch packaging." },
-  collectionSnapshot: { th: "ภาพรวมคอลเลกชัน",                                                                        en: "Collection Snapshot" },
-  curatedItems:       { th: "รายการคัดสรร",                                                                             en: "Curated items" },
-  productGroups:      { th: "กลุ่มสินค้า",                                                                              en: "Product groups" },
-  additionalProducts: { th: "สินค้าเพิ่มเติม",                                                                          en: "More Products" },
-  additionalSummary:  { th: "เลือกดูสินค้าอื่นที่พร้อมต่อยอดเป็นคอลเลกชันเดียวกัน",                                     en: "Explore the rest of the collection in a cleaner, easier-to-scan grid." },
-  viewProduct:        { th: "ดูรายละเอียดสินค้า",                                                                        en: "View product" },
-  remainingCount:     { th: "รายการเพิ่มเติม",                                                                          en: "more items" },
-  curatedCount:       { th: "รายการแนะนำ",                                                                              en: "featured items" },
-} as const
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 type Locale = "th" | "en"
-type ShowcaseMeta = {
-  badge: { th: string; en: string }
-  accentText: string
-  accentBg: string
-  imageBg: string
-  glow: string
+
+interface ProductGridProps {
+  items: ProductView[]
+  locale: Locale
+  /**
+   * Max items to show. Defaults to 10 — fills 2 rows of 5 on desktop.
+   * Pass 5 for a single tight row, 15 for a fuller catalog preview.
+   */
+  limit?: number
+  /** Section heading variant */
+  variant?: "featured" | "new" | "popular"
 }
 
-interface ProductMarqueeProps { items: ProductView[]; locale: Locale }
+// ─── Static data ─────────────────────────────────────────────────────────────
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
+const BADGE_CYCLE = [
+  { label: { th: "ขายดี",  en: "Best Seller" }, style: "bg-[#c47b8a] text-white" },
+  { label: { th: "นิยม",   en: "Popular" },     style: "bg-[#d4956a] text-white" },
+  { label: { th: "OEM",    en: "OEM" },         style: "bg-[#6b94c7] text-white" },
+  { label: { th: "ใหม่",   en: "New" },         style: "bg-[#5a8e6d] text-white" },
+  { label: { th: "Custom", en: "Custom" },      style: "bg-[#9b8ec4] text-white" },
+] as const
 
-export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
-  if (!items.length) return null
+const VARIANT_COPY = {
+  featured: { th: "สินค้าแนะนำ", en: "Featured" },
+  new:      { th: "สินค้าใหม่",  en: "New arrivals" },
+  popular:  { th: "ยอดนิยม",    en: "Most popular" },
+} as const
 
-  const isSpoutShowcase = items.every(i => i.categorySlug === "spout")
-  const { primaryItem, secondaryItem, gridItems } = resolveShowcaseItems(items)
-  const visibleGridItems = gridItems.slice(0, 8)
-  const categoryCount    = new Set(items.map(i => i.categorySlug)).size
+const HEADING_COPY = {
+  featured: { th: "สินค้ายอดนิยม",     en: "Featured products" },
+  new:      { th: "สินค้าเข้าใหม่",    en: "Just arrived" },
+  popular:  { th: "สินค้าที่ขายดีที่สุด", en: "Best sellers" },
+} as const
 
-  if (!primaryItem) return null
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
-  const ctaHref        = isSpoutShowcase ? "/categories/spout" : "/categories"
-  const ctaLabel       = isSpoutShowcase ? uiText.viewAllSpoutProducts[locale] : uiText.viewAllProducts[locale]
-  const sectionTitle   = isSpoutShowcase ? uiText.spoutProducts[locale]         : uiText.featuredProducts[locale]
-  const sectionSummary = isSpoutShowcase ? SECTION_COPY.spoutSummary[locale]    : SECTION_COPY.summary[locale]
-
-  return (
-    <section
-      className="relative overflow-hidden py-14 sm:py-16 lg:py-24"
-      style={{ background: MARQUEE_SECTION_BG }}
-    >
-      {/* Top edge shimmer */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.85),transparent)" }}
-      />
-
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="relative border-t pt-6" style={{ borderColor: MARQUEE_PALETTE.steel }}>
-
-          {/* ── Section header ─────────────────────────────────────── */}
-          <div className="mb-8 flex flex-col gap-6 lg:mb-10 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              {/* Eyebrow pill */}
-              <span
-                className="inline-block rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{
-                  ...EYEBROW_PILL_STYLE,
-                  background: MARQUEE_PALETTE.white,
-                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
-                }}
-              >
-                {SECTION_COPY.eyebrow[locale]}
-              </span>
-
-              <h2
-                className="font-heading mt-4 text-[clamp(2rem,4vw,3.6rem)] leading-[1.05] tracking-tight"
-                style={{ color: COLORS.dark }}
-              >
-                {sectionTitle}
-              </h2>
-
-              {/* Accent divider */}
-              <div
-                className="my-5 h-[3px] w-12 rounded-full"
-                style={{ background: CTA_GRADIENT }}
-              />
-
-              <p className="max-w-xl text-sm leading-7 sm:text-base sm:leading-8" style={{ color: COLORS.mid }}>
-                {sectionSummary}
-              </p>
-            </div>
-
-            {/* Right cluster */}
-            <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <div
-                className="rounded-xl px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.14em]"
-                style={{
-                  ...GLASS.card,
-                  background: MARQUEE_PALETTE.white,
-                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
-                  color: COLORS.mid,
-                }}
-              >
-                {items.length} {SECTION_COPY.curatedCount[locale]}
-              </div>
-
-              <Link
-                href={withLocalePath(ctaHref, locale)}
-                className="group inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[11.5px] font-bold uppercase tracking-[0.12em] text-white transition-opacity hover:opacity-90"
-                style={CTA_BUTTON_STYLE}
-              >
-                <span>{ctaLabel}</span>
-                <ArrowRightIcon />
-              </Link>
-            </div>
-          </div>
-
-          {/* ── Showcase grid ──────────────────────────────────────── */}
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] xl:gap-5">
-
-            <ShowcaseCard
-              item={primaryItem} locale={locale} href={getProductHref(primaryItem, locale)}
-              meta={PRIMARY_META} actionLabel={SECTION_COPY.viewProduct[locale]} priority variant="primary"
-            />
-
-            <div className={`grid gap-4 ${secondaryItem ? "sm:grid-cols-2 xl:grid-cols-1" : ""}`}>
-              {secondaryItem && (
-                <ShowcaseCard
-                  item={secondaryItem} locale={locale} href={getProductHref(secondaryItem, locale)}
-                  meta={SECONDARY_META} actionLabel={SECTION_COPY.viewProduct[locale]} variant="secondary"
-                />
-              )}
-
-              {/* Stats / snapshot — glass tier 3 */}
-              <div
-                className="relative overflow-hidden rounded-2xl p-5 sm:p-6"
-                style={{
-                  ...GLASS.stats,
-                  background: MARQUEE_PALETTE.cloud,
-                  border: `1px solid ${MARQUEE_PALETTE.steel}`,
-                }}
-              >
-                {/* Top shimmer */}
-                <div
-                  className="pointer-events-none absolute inset-x-0 top-0 h-px"
-                  style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.90),transparent)" }}
-                />
-
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-[0.20em]"
-                  style={{ color: "#5a6a7c" }}
-                >
-                  {SECTION_COPY.collectionSnapshot[locale]}
-                </p>
-
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <StatCard value={items.length}  label={SECTION_COPY.curatedItems[locale]} />
-                  <StatCard value={categoryCount} label={SECTION_COPY.productGroups[locale]} />
-                </div>
-
-                <p className="mt-5 text-sm leading-7" style={{ color: "#3a4a5c" }}>
-                  {gridItems.length > 0
-                    ? locale === "th"
-                      ? `แสดงสินค้าเพิ่มเติม ${visibleGridItems.length} รายการด้านล่าง พร้อมทางลัดไปดูคอลเลกชันทั้งหมดได้ทันที`
-                      : `Showing ${visibleGridItems.length} additional products below, with a direct path to the full collection.`
-                    : locale === "th"
-                      ? "เลือกดูรายละเอียดสินค้าเด่นหรือเปิดดูทั้งคอลเลกชันเพื่อไปยังหน้าสินค้าเต็มรูปแบบ"
-                      : "Open a featured product or jump into the full collection for the complete catalog view."}
-                </p>
-
-                <Link
-                  href={withLocalePath(ctaHref, locale)}
-                  className="group mt-6 inline-flex items-center gap-2 border-b pb-1 text-[13px] font-semibold uppercase tracking-[0.12em] transition-opacity hover:opacity-70"
-                  style={{ borderColor: MARQUEE_PALETTE.steel, color: "#2a3a52" }}
-                >
-                  <span>{ctaLabel}</span>
-                  <ArrowRightIcon />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Additional product grid ─────────────────────────────── */}
-          {visibleGridItems.length > 0 && (
-            <div
-              className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8"
-              style={{ borderColor: MARQUEE_PALETTE.steel }}
-            >
-              <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p
-                    className="text-[10px] font-semibold uppercase tracking-[0.18em]"
-                    style={{ color: "#5a6a7c" }}
-                  >
-                    {SECTION_COPY.additionalProducts[locale]}
-                  </p>
-                  <h3
-                    className="font-heading mt-2 text-lg tracking-tight sm:text-[1.6rem]"
-                    style={{ color: "#1a2232" }}
-                  >
-                    {SECTION_COPY.additionalSummary[locale]}
-                  </h3>
-                </div>
-                <p className="text-sm" style={{ color: "#5a6a7c" }}>
-                  {visibleGridItems.length} {SECTION_COPY.remainingCount[locale]}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                {visibleGridItems.map(item => (
-                  <ProductCard key={item.id} item={item} locale={locale} />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function resolveShowcaseItems(items: ProductView[]) {
-  const spotlights = [
-    items.find(i => i.slug === HOME_PRODUCT_SPOTLIGHT.primary),
-    items.find(i => i.slug === HOME_PRODUCT_SPOTLIGHT.secondary),
-  ].filter((i): i is ProductView => Boolean(i))
-
-  const fallbacks     = items.filter(i => !spotlights.some(s => s.id === i.id))
-  const primaryItem   = spotlights[0] ?? items[0] ?? null
-  const secondaryItem = spotlights[1] ?? fallbacks.find(i => i.id !== primaryItem?.id) ?? null
-  const selectedIds   = new Set(
-    [primaryItem?.id, secondaryItem?.id].filter((id): id is string => Boolean(id))
-  )
-  return { primaryItem, secondaryItem, gridItems: items.filter(i => !selectedIds.has(i.id)) }
-}
-
-function getProductHref(item: ProductView, locale: Locale) {
+function productHref(item: ProductView, locale: Locale) {
   return withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
 }
 
-// ─── ShowcaseCard ─────────────────────────────────────────────────────────────
+// ─── ImageBox — handles missing src gracefully ───────────────────────────────
 
-function ShowcaseCard({
-  item, locale, href, meta, actionLabel, priority = false, variant,
+function ImageBox({
+  item,
+  href,
+  badge,
+  locale,
 }: {
-  item: ProductView; locale: Locale; href: string; meta: ShowcaseMeta
-  actionLabel: string; priority?: boolean; variant: "primary" | "secondary"
+  item: ProductView
+  href: string
+  badge: (typeof BADGE_CYCLE)[number]
+  locale: Locale
 }) {
-  const isPrimary = variant === "primary"
-  const glassStyle = isPrimary ? GLASS.primary : GLASS.secondary
-
   return (
-    <Link
-      href={href}
-      className="group relative isolate overflow-hidden rounded-2xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,40,60,0.14)]"
-      style={{
-        ...glassStyle,
-        background: isPrimary ? MARQUEE_PALETTE.white : MARQUEE_PALETTE.cloud,
-        border: `1px solid ${MARQUEE_PALETTE.steel}`,
-      }}
-    >
-      {/* Subtle glow behind image area */}
-      <div
-        className="pointer-events-none absolute -top-12 -right-12 h-56 w-56 rounded-full"
-        style={{ background: meta.glow, filter: "blur(52px)" }}
-      />
-      {/* Top shimmer */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px"
-        style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.95),transparent)" }}
-      />
-
-      <div
-        className={`relative p-5 sm:p-6 grid gap-5 ${
-          isPrimary
-            ? "lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center"
-            : "md:grid-cols-[auto_minmax(0,1fr)] md:items-center"
-        }`}
-      >
-        {/* Image */}
-        <div
-          className={`relative overflow-hidden rounded-xl ${
-            isPrimary ? "aspect-[5/4] sm:aspect-square lg:order-2" : "aspect-square w-full md:w-40"
-          }`}
-          style={{
-            background: meta.imageBg,
-            border: `1px solid ${MARQUEE_PALETTE.steel}`,
-          }}
-        >
-          <div className="absolute inset-x-8 top-6 h-14 rounded-full blur-2xl bg-white/60" />
+    <Link href={href} tabIndex={-1} aria-hidden className="block">
+      <div className="relative aspect-square overflow-hidden bg-[#f0ebe4]">
+        {item.image?.src ? (
           <Image
             src={item.image.src}
-            alt={item.image.alt || item.name}
+            alt={item.image.alt ?? item.name}
             fill
-            sizes={
-              isPrimary
-                ? "(max-width:640px) 100vw, (max-width:1280px) 48vw, 34vw"
-                : "(max-width:768px) 100vw, 22vw"
-            }
-            className="object-contain p-[12%] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-            priority={priority}
+            sizes="(max-width:640px) 100vw, (max-width:1280px) 25vw, 18vw"
+            className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.05]"
           />
-        </div>
+        ) : (
+          // Placeholder — color-matched to badge
+          <div className="absolute inset-0 flex items-center justify-center opacity-20">
+            <span className="font-body text-4xl font-black text-[#1e2535]">
+              {item.name.slice(0, 2)}
+            </span>
+          </div>
+        )}
 
-        {/* Text */}
-        <div className={isPrimary ? "lg:order-1" : "min-w-0"}>
-          {/* Badge */}
-          <span
-            className="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em]"
-            style={{
-              background: meta.accentBg,
-              color: meta.accentText,
-              border: `1px solid ${MARQUEE_PALETTE.steel}`,
-            }}
-          >
-            {!isPrimary && <span className="inline-block h-1.5 w-1.5 rounded-full bg-current" />}
-            {meta.badge[locale]}
-          </span>
+        <span
+          className={`
+            absolute left-2 top-2 rounded px-2 py-1
+            text-[9px] font-extrabold uppercase tracking-wide
+            ${badge.style}
+          `}
+        >
+          {badge.label[locale]}
+        </span>
+      </div>
+    </Link>
+  )
+}
 
-          {/* Title */}
+// ─── Feature lines ────────────────────────────────────────────────────────────
+
+function FeatureLines({ item, locale }: { item: ProductView; locale: Locale }) {
+  const lines: string[] =
+    locale === "th"
+      ? [
+          "รองรับ OEM/ODM ครบวงจร",
+          item.moq ? `MOQ ${item.moq} ชิ้น` : "มีหลายรุ่นและสเปคให้เลือก",
+          "ขอราคาและตัวอย่างได้",
+        ]
+      : [
+          "OEM/ODM support available",
+          item.moq ? `MOQ ${item.moq} pcs` : "Multiple specs and options",
+          "Quote and sample available",
+        ]
+
+  return (
+    <ul className="mb-3 flex flex-col gap-1" aria-label="Product features">
+      {lines.map((line) => (
+        <li key={line} className="flex items-start gap-1.5 text-[11px] text-[#4a5568]">
+          <span className="mt-px shrink-0 font-bold text-[#4a7c59]" aria-hidden>✓</span>
+          <span>{line}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+// ─── Product card ─────────────────────────────────────────────────────────────
+
+function ProductCard({
+  item,
+  index,
+  locale,
+}: {
+  item: ProductView
+  index: number
+  locale: Locale
+}) {
+  const href  = productHref(item, locale)
+  const badge = BADGE_CYCLE[index % BADGE_CYCLE.length]
+
+  return (
+    <article
+      className="
+        group flex flex-col overflow-hidden rounded-[10px]
+        border border-black/[0.05] bg-white
+        shadow-[0_2px_12px_rgba(0,0,0,.07)]
+        transition-all duration-200
+        hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,.11)]
+      "
+    >
+      <ImageBox item={item} href={href} badge={badge} locale={locale} />
+
+      <div className="flex flex-1 flex-col p-3">
+        {/* Name — links to product page */}
+        <Link href={href} className="mb-2 block">
           <h3
-            className={`font-heading mt-4 tracking-tight ${
-              isPrimary ? "text-2xl leading-tight sm:text-[2rem]" : "text-xl leading-tight"
-            }`}
-            style={{ color: "#1a2232" }}
+            className={`
+              min-h-[3em] text-[12px] font-semibold text-[#1e2535]
+              transition-colors duration-150 group-hover:text-[#c47b8a]
+              ${locale === "th" ? "font-body leading-[1.55]" : "leading-[1.4]"}
+            `}
           >
             {item.name}
           </h3>
+        </Link>
 
-          {/* Accent divider — primary only */}
-          {isPrimary && (
-            <div
-              className="my-4 h-[3px] w-10 rounded-full"
-              style={{ background: "linear-gradient(90deg,#3a7bd5,#2ab8b0)" }}
-            />
-          )}
+        <FeatureLines item={item} locale={locale} />
 
-          {/* Description */}
-          {item.description && (
-            <p
-              className={`text-sm leading-7 ${isPrimary ? "max-w-lg sm:text-base sm:leading-8" : "line-clamp-3 mt-2"}`}
-              style={{ color: "#3a4a5c" }}
-            >
-              {item.description}
-            </p>
-          )}
-
-          {/* CTA */}
-          <div
-            className="mt-5 inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em]"
-            style={{ color: "#2a3a52" }}
+        {/* Push CTA to bottom */}
+        <div className="mt-auto">
+          <Link
+            href={withLocalePath("/contact", locale)}
+            className="
+              block rounded-[7px] bg-[#c47b8a] px-3 py-2
+              text-center text-[11px] font-bold text-white
+              transition-opacity duration-150 hover:opacity-90
+              active:scale-[0.98]
+            "
           >
-            <span>{actionLabel}</span>
-            <ArrowRightIcon />
-          </div>
+            {locale === "th" ? "📋 ขอใบเสนอราคา" : "Request a Quote"}
+          </Link>
         </div>
       </div>
-    </Link>
+    </article>
   )
 }
 
-// ─── ProductCard ──────────────────────────────────────────────────────────────
+// ─── Section header ───────────────────────────────────────────────────────────
 
-function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
+function SectionHeader({
+  locale,
+  variant,
+  totalShown,
+  totalAvailable,
+}: {
+  locale: Locale
+  variant: NonNullable<ProductGridProps["variant"]>
+  totalShown: number
+  totalAvailable: number
+}) {
   return (
-    <Link
-      href={getProductHref(item, locale)}
-      className="group overflow-hidden rounded-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(30,40,60,0.10)]"
-      style={{
-        ...GLASS.card,
-        background: MARQUEE_PALETTE.white,
-        border: `1px solid ${MARQUEE_PALETTE.steel}`,
-      }}
-    >
-      {/* Image area */}
-      <div
-        className="relative aspect-square overflow-hidden rounded-t-xl"
-        style={{
-          background:
-            `radial-gradient(circle at 80% 18%,${MARQUEE_PALETTE.blushHint},transparent 22%), linear-gradient(155deg,${MARQUEE_PALETTE.white} 0%,${MARQUEE_PALETTE.cloud} 100%)`,
-        }}
-      >
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-px"
-          style={{ background: "linear-gradient(90deg,transparent,rgba(255,255,255,0.95),transparent)" }}
-        />
-        <div className="absolute inset-x-6 top-4 h-10 rounded-full bg-white/80 blur-xl" />
-        <Image
-          src={item.image.src}
-          alt={item.image.alt || item.name}
-          fill
-          sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
-          className="object-contain p-[12%] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-        />
-      </div>
-
-      {/* Text */}
-      <div className="px-3 py-4 sm:px-3.5">
-        <h4 className="text-sm font-semibold leading-6" style={{ color: "#1a2232" }}>
-          {item.name}
-        </h4>
-        {item.description && (
-          <p className="mt-1.5 line-clamp-2 text-[13px] leading-6" style={{ color: "#3a4a5c" }}>
-            {item.description}
-          </p>
+    <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <span className="rounded bg-[#c47b8a] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.05em] text-white">
+          {VARIANT_COPY[variant][locale]}
+        </span>
+        <h2
+          className={`text-[#1e2535] ${
+            locale === "th"
+              ? "font-body text-[1.15rem] font-extrabold leading-[1.35] sm:text-[1.25rem]"
+              : "font-heading text-[1.25rem] font-extrabold"
+          }`}
+        >
+          {HEADING_COPY[variant][locale]}
+        </h2>
+        {totalAvailable > totalShown && (
+          <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-semibold text-neutral-500">
+            {totalShown} / {totalAvailable}
+          </span>
         )}
       </div>
-    </Link>
-  )
-}
 
-// ─── StatCard ─────────────────────────────────────────────────────────────────
-
-function StatCard({ value, label }: { value: number; label: string }) {
-  return (
-    <div
-      className="rounded-xl px-4 py-4"
-      style={{
-        background: MARQUEE_PALETTE.white,
-        border: `1px solid ${MARQUEE_PALETTE.steel}`,
-      }}
-    >
-      <div
-        className="font-heading text-2xl font-black leading-none"
-        style={{ color: "#1a2232" }}
+      <Link
+        href={withLocalePath("/categories", locale)}
+        className="
+          inline-flex items-center gap-1.5 rounded-full
+          border border-black/[0.08] bg-white px-3.5 py-1.5
+          text-[12px] font-bold text-[#4a7c59]
+          transition-all duration-150 hover:bg-neutral-50 hover:shadow-sm
+          active:scale-[0.98]
+        "
       >
-        {value}
-      </div>
-      <div
-        className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em]"
-        style={{ color: "#5a6a7c" }}
-      >
-        {label}
-      </div>
+        {uiText.viewAllProducts[locale]}
+        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </Link>
     </div>
   )
 }
 
-// ─── Icon ─────────────────────────────────────────────────────────────────────
+// ─── Root ─────────────────────────────────────────────────────────────────────
 
-function ArrowRightIcon() {
+export default function ProductGrid({
+  items,
+  locale,
+  limit = 10,
+  variant = "featured",
+}: ProductGridProps) {
+  if (!items.length) return null
+
+  const shown = items.slice(0, limit)
+
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
+    <section
+      aria-labelledby="product-grid-heading"
+      className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-5 lg:py-10"
     >
-      <path
-        d="M13 7l5 5m0 0l-5 5m5-5H6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.8}
+      <SectionHeader
+        locale={locale}
+        variant={variant}
+        totalShown={shown.length}
+        totalAvailable={items.length}
       />
-    </svg>
+
+      <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {shown.map((item, index) => (
+          <ProductCard key={item.id} item={item} index={index} locale={locale} />
+        ))}
+      </div>
+    </section>
   )
 }

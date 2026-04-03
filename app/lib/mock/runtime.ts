@@ -641,6 +641,8 @@ export function getMockHeroSlides(locale: Locale): HeroSlideView[] {
           label: pickLocalized(locale, slide.highlight.label),
         }
       : undefined,
+    benefits:   slide.benefits?.[locale],
+    trustItems: slide.trustItems?.[locale],
   }));
 }
 

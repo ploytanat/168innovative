@@ -13,6 +13,11 @@ const CloseIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
   </svg>
 )
+const PhoneIcon = () => (
+  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+)
 const TrashIcon = () => (
   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -55,6 +60,7 @@ const copy = {
 
 interface Props {
   lineUrl: string
+  phoneHref: string
   locale: "th" | "en"
 }
 
@@ -62,7 +68,7 @@ function subscribeHydration() {
   return () => {}
 }
 
-export default function FloatingActions({ lineUrl, locale }: Props) {
+export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
   const t = copy[locale]
   const { items, remove, clear, count } = useQuote()
   const [open, setOpen] = useState(false)
@@ -110,21 +116,24 @@ export default function FloatingActions({ lineUrl, locale }: Props) {
           rel="noopener noreferrer"
           aria-label={t.lineLabel}
           title={t.lineLabel}
-          className="group flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          className="flex h-12 w-12 items-center justify-center rounded-full shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
           style={{ background: "#06C755" }}
         >
-          {/* LINE icon — inline SVG to avoid external fetch */}
-          <svg viewBox="0 0 48 48" className="h-8 w-8" fill="white">
+          <svg viewBox="0 0 48 48" className="h-7 w-7" fill="white">
             <path d="M24 4C12.95 4 4 11.82 4 21.48c0 6.17 3.89 11.6 9.76 14.75-.39 1.44-1.41 5.22-1.62 6.03-.26 1.01.37 1-.52.54-.89-.46-7.06-4.67-9.64-6.34C1.13 34.83 0 31.23 0 27.33 0 15.4 10.75 6 24 6s24 9.4 24 21.33c0 11.93-10.75 21.34-24 21.34-2.39 0-4.7-.3-6.86-.86l-7.38 4.09c-.52.29-1.16-.12-1.12-.71l.47-5.62C5.8 42.89 2 35.6 2 27.33" />
-            <path
-              fill="#06C755"
-              d="M24 6c13.25 0 24 9.4 24 21.33S37.25 48.67 24 48.67c-2.47 0-4.86-.34-7.1-.97l-6.27 3.47c-.53.3-1.17-.11-1.13-.71l.4-4.8C5.62 42.55 2 35.28 2 27.33 2 15.4 10.75 6 24 6z"
-            />
-            <path
-              fill="white"
-              d="M36.9 25.07H30.3a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62h6.6c.34 0 .62.28.62.62v1.62c0 .34-.28.62-.62.62h-4.36v1.54h4.36c.34 0 .62.28.62.62v1.62c0 .34-.28.62-.62.62h-4.36v1.54h4.36c.34 0 .62.28.62.62v1.62a.62.62 0 01-.62.62zm-8.9 0h-1.62a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62H28c.34 0 .62.28.62.62v9.64a.62.62 0 01-.62.62zm-3.78 0h-6.6a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62h1.62c.34 0 .62.28.62.62v7.4h4.36c.34 0 .62.28.62.62v1.62a.62.62 0 01-.62.62zm-9.2 0h-1.62a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62H15c.34 0 .62.28.62.62v9.64a.62.62 0 01-.62.62z"
-            />
+            <path fill="#06C755" d="M24 6c13.25 0 24 9.4 24 21.33S37.25 48.67 24 48.67c-2.47 0-4.86-.34-7.1-.97l-6.27 3.47c-.53.3-1.17-.11-1.13-.71l.4-4.8C5.62 42.55 2 35.28 2 27.33 2 15.4 10.75 6 24 6z" />
+            <path fill="white" d="M36.9 25.07H30.3a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62h6.6c.34 0 .62.28.62.62v1.62c0 .34-.28.62-.62.62h-4.36v1.54h4.36c.34 0 .62.28.62.62v1.62c0 .34-.28.62-.62.62h-4.36v1.54h4.36c.34 0 .62.28.62.62v1.62a.62.62 0 01-.62.62zm-8.9 0h-1.62a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62H28c.34 0 .62.28.62.62v9.64a.62.62 0 01-.62.62zm-3.78 0h-6.6a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62h1.62c.34 0 .62.28.62.62v7.4h4.36c.34 0 .62.28.62.62v1.62a.62.62 0 01-.62.62zm-9.2 0h-1.62a.62.62 0 01-.62-.62v-9.64c0-.34.28-.62.62-.62H15c.34 0 .62.28.62.62v9.64a.62.62 0 01-.62.62z" />
           </svg>
+        </a>
+
+        {/* Phone button */}
+        <a
+          href={phoneHref}
+          aria-label="Call us"
+          className="flex h-12 w-12 items-center justify-center rounded-full text-white shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          style={{ background: "#e53935" }}
+        >
+          <PhoneIcon />
         </a>
 
         {/* Quote basket button */}
@@ -133,11 +142,10 @@ export default function FloatingActions({ lineUrl, locale }: Props) {
           onClick={() => setOpen(true)}
           aria-label={t.quoteLabel}
           title={t.quoteLabel}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-slate-900 shadow-xl transition-all duration-200 hover:scale-110 hover:bg-slate-800 active:scale-95"
+          className="relative flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 shadow-xl transition-all duration-200 hover:scale-110 hover:bg-slate-800 active:scale-95"
         >
           <DocumentIcon />
           <span className="sr-only">{t.quoteLabel}</span>
-          {/* Badge count */}
           {mounted && count > 0 && (
             <span
               className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white"

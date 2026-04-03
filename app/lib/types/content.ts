@@ -75,6 +75,8 @@ export interface HomeContent {
       ctaPrimary: CTA;
       ctaSecondary?: CTA;
       highlight?: { value: string; label: LocalizedText };
+      benefits?: { th: string[]; en: string[] };
+      trustItems?: { th: string[]; en: string[] };
     }[];
   };
 }

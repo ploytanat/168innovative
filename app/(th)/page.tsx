@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 
-import CategorySection from "@/app/components/sections/CategorySection"
-import ContactSection from "@/app/components/sections/ContactSection"
 import HeroCarousel from "@/app/components/sections/HeroCarousel"
+import CategoryBar from "@/app/components/sections/CategoryBar"
+import CategorySection from "@/app/components/sections/CategorySection"
 import ProductMarquee from "@/app/components/sections/ProductMarquee"
 import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import ContactSection from "@/app/components/sections/ContactSection"
 import { buildMetadata } from "@/app/config/seo"
+import { getSideBanners } from "@/app/config/sideBanners"
 import { getHomeSections } from "@/app/lib/api/home"
 
 export const metadata: Metadata = buildMetadata({
@@ -33,12 +35,23 @@ export default async function HomePage() {
       <h1 className="sr-only">
         168 Innovative บรรจุภัณฑ์เครื่องสำอางและพลาสติกสำหรับงาน OEM และ ODM
       </h1>
-      {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} />}
+
+      {/* 1. Hero — ดึงดูดและแนะนำแบรนด์ */}
+      {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} locale={locale} sideBanners={getSideBanners(locale)} />}
+
+      {/* 2. Category Bar — นำทางด่วนไปยังหมวดสินค้า */}
+      {categories.length > 0 && <CategoryBar items={categories} locale={locale} />}
+
+      {/* 3. Category Section — แสดง editorial ของหมวดหลัก */}
+      {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
+
+      {/* 4. Product Marquee — สินค้าแนะนำพร้อมปุ่ม CTA */}
       {products.length > 0 && <ProductMarquee items={products} locale={locale} />}
-      {categories.length > 0 && (
-        <CategorySection items={categories} locale={locale} />
-      )}
+
+      {/* 5. Why Choose Us — สร้างความน่าเชื่อถือ */}
       {whys.length > 0 && <WhyChooseUs items={whys} locale={locale} />}
+
+      {/* 6. Contact / CTA — ปิดการขาย */}
       {company && <ContactSection locale={locale} data={company} />}
     </>
   )

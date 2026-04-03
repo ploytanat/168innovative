@@ -3,45 +3,40 @@ import type { ReactNode } from "react"
 import ClientProviders from "@/app/components/layout/ClientProviders"
 import BackToTop from "@/app/components/ui/BackToTop"
 import { COMPANY_NAME, ORGANIZATION_SAME_AS_FALLBACK, SITE_NAME, SITE_URL, withSiteUrl } from "@/app/config/site"
+import { getCategories } from "@/app/lib/api/categories"
 import { getCompany } from "@/app/lib/api/company"
 import { buildOrganizationJsonLd, buildPostalAddressJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
 import Footer from "./Footer"
 import Navigation from "./Navigation"
+import PromoBanner from "./PromoBanner"
 
 interface SiteShellProps {
   locale: Locale
   children: ReactNode
 }
 
-export default async function SiteShell({
-  locale,
-  children,
-}: SiteShellProps) {
-  const company = await getCompany(locale)
-  const displayLogo = company?.logo ?? {
-    src: "/logo.png",
-    alt: "168 Innovative",
-  }
+export default async function SiteShell({ locale, children }: SiteShellProps) {
+  const [company, categories] = await Promise.all([
+    getCompany(locale),
+    getCategories(locale).catch(() => [] as Awaited<ReturnType<typeof getCategories>>),
+  ])
+  const displayLogo = company?.logo ?? { src: "/logo.png", alt: "168 Innovative" }
+
   const socialUrls = Array.from(
     new Set((company?.socials ?? []).map((social) => social.url).filter(Boolean))
   )
   const primaryPhone = company?.phones?.[0]?.number
   const contactPoint = primaryPhone
-    ? [
-        {
-          "@type": "ContactPoint",
-          telephone: primaryPhone,
-          contactType: "customer service",
-          areaServed: "TH",
-          availableLanguage: ["th", "en"],
-        },
-      ]
+    ? [{
+        "@type": "ContactPoint",
+        telephone: primaryPhone,
+        contactType: "customer service",
+        areaServed: "TH",
+        availableLanguage: ["th", "en"],
+      }]
     : undefined
-  const areaServed = {
-    "@type": "Country",
-    name: "Thailand",
-  }
+  const areaServed = { "@type": "Country", name: "Thailand" }
   const organizationJsonLd = buildOrganizationJsonLd({ locale, company })
   const websiteJsonLd = {
     "@type": "WebSite",
@@ -49,9 +44,7 @@ export default async function SiteShell({
     url: SITE_URL,
     name: SITE_NAME,
     inLanguage: locale,
-    publisher: {
-      "@id": SITE_URL,
-    },
+    publisher: { "@id": SITE_URL },
   }
   const localBusinessJsonLd = {
     "@type": "LocalBusiness",
@@ -65,9 +58,7 @@ export default async function SiteShell({
     ...(contactPoint ? { contactPoint } : {}),
     address: buildPostalAddressJsonLd(company?.address),
     sameAs: socialUrls.length ? socialUrls : organizationJsonLd.sameAs,
-    parentOrganization: {
-      "@id": SITE_URL,
-    },
+    parentOrganization: { "@id": SITE_URL },
   }
 
   const schema = {
@@ -75,8 +66,9 @@ export default async function SiteShell({
     "@graph": [organizationJsonLd, websiteJsonLd, localBusinessJsonLd],
   }
 
-  const lineSocial = company?.socials?.find((s) => s.type === "line")
+  const lineSocial = company?.socials?.find((social) => social.type === "line")
   const lineUrl = lineSocial?.url ?? ORGANIZATION_SAME_AS_FALLBACK[1]
+  const phoneHref = primaryPhone ? `tel:${primaryPhone.replace(/[^+\d]/g, "")}` : "#"
 
   return (
     <>
@@ -85,11 +77,13 @@ export default async function SiteShell({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      <ClientProviders lineUrl={lineUrl} locale={locale}>
+
+      <ClientProviders lineUrl={lineUrl} phoneHref={phoneHref} locale={locale}>
         <div className="site-frame min-h-screen">
-          <Navigation locale={locale} logo={displayLogo} />
+          <PromoBanner />
+          <Navigation locale={locale} logo={displayLogo} categories={categories} />
           <main className="min-h-screen">{children}</main>
-          {company && <Footer company={company} />}
+          {company ? <Footer company={company} /> : null}
           <BackToTop />
         </div>
       </ClientProviders>

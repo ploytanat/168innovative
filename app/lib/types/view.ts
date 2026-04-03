@@ -6,6 +6,29 @@ export interface ImageView {
   alt: string;
 }
 
+// Add this to @/app/lib/types/view.ts
+
+export interface SideBannerView {
+  /** Stable unique key for React */
+  id: string
+  /** Path only — withLocalePath() will prepend the locale prefix */
+  href: string
+  image: {
+    src: string
+    alt: string
+  }
+  /** Optional pill label above the title */
+  tag?: string
+  /** Background color of the tag pill, e.g. "#1565c0" */
+  tagColor?: string
+  title: string
+  subtitle?: string
+  /**
+   * Full CSS gradient string for the overlay scrim, e.g.
+   * "linear-gradient(180deg,transparent 25%,rgba(13,27,58,.65))"
+   */
+  overlayGradient: string
+}
 export interface FAQItemView {
   question: string;
   answer: string;
@@ -147,6 +170,9 @@ export interface HeroSlideView {
   ctaPrimary: HeroCTAView;
   ctaSecondary?: HeroCTAView;
   highlight?: { value: string; label: string };
+  benefits?: string[];
+  stats?: { value: string; label: string }[];
+  trustItems?: string[];
 }
 
 export interface HomeHeroView {

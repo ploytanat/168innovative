@@ -1,34 +1,25 @@
 import {
-  Inter,
-  Noto_Sans_Thai,
-  Plus_Jakarta_Sans,
+  Kanit,
+  Sarabun,
 } from "next/font/google"
 
-const headingLatin = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-heading-latin",
+const headingFont = Kanit({
+  subsets: ["latin", "thai"],
+  weight: ["700", "800", "900"],
+  variable: "--font-heading",
   display: "swap",
 })
 
-const bodyLatin = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body-latin",
-  display: "swap",
-})
-
-const thaiSans = Noto_Sans_Thai({
-  subsets: ["thai"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-thai",
+const bodyFont = Sarabun({
+  subsets: ["latin", "thai"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-body",
   display: "swap",
 })
 
 export const rootBodyClassName = [
-  headingLatin.variable,
-  bodyLatin.variable,
-  thaiSans.variable,
+  headingFont.variable,
+  bodyFont.variable,
   "font-body",
   "antialiased",
 ].join(" ")

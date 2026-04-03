@@ -52,8 +52,8 @@
       0 1px 0 rgba(255, 255, 255, 0.56) inset,
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
       inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-    --font-heading-stack: var(--font-heading-latin), var(--font-thai), sans-serif;
-    --font-body-stack: var(--font-body-latin), var(--font-thai), sans-serif;
+    --font-heading-stack: var(--font-heading), sans-serif;
+    --font-body-stack: var(--font-body), sans-serif;
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
     --text-base: 1rem;
@@ -69,17 +69,17 @@
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
     background:
-      radial-gradient(circle at 84% 8%, rgba(100, 138, 201, 0.34), transparent 20%),
-      radial-gradient(circle at 80% 28%, rgba(170, 200, 230, 0.2), transparent 20%),
-      radial-gradient(circle at 14% 16%, rgba(244, 198, 149, 0.2), transparent 16%),
-      radial-gradient(circle at 18% 70%, rgba(229, 191, 204, 0.16), transparent 20%),
-      linear-gradient(180deg, #ecf1f5 0%, #f5f1ea 28%, #eef3f8 62%, #fafbfd 100%);
+      radial-gradient(circle at 84% 8%, rgba(196, 123, 138, 0.13), transparent 22%),
+      radial-gradient(circle at 78% 32%, rgba(196, 173, 210, 0.12), transparent 22%),
+      radial-gradient(circle at 14% 16%, rgba(212, 149, 106, 0.12), transparent 18%),
+      radial-gradient(circle at 18% 70%, rgba(90, 142, 109, 0.08), transparent 22%),
+      linear-gradient(180deg, #fdf7f2 0%, #faf4ef 28%, #f8f3f5 62%, #fdf9fb 100%);
   }
 
   body {
     font-family: var(--font-body-stack);
     font-size: var(--text-base);
-    line-height: 1.7;
+    line-height: 1.72;
     color: var(--color-ink);
     text-rendering: optimizeLegibility;
     -webkit-overflow-scrolling: touch;
@@ -96,7 +96,19 @@
     font-family: var(--font-heading-stack);
     font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.02em;
+  }
+
+  html[lang="th"] h1,
+  html[lang="th"] h2,
+  html[lang="th"] h3,
+  html[lang="th"] h4,
+  html[lang="th"] h5,
+  html[lang="th"] h6 {
+    font-family: var(--font-body-stack);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.18;
   }
 
   button,
@@ -137,7 +149,7 @@
 
   .font-heading {
     font-family: var(--font-heading-stack);
-    letter-spacing: -0.035em;
+    letter-spacing: -0.02em;
   }
 
   .hero-gradient-card {
@@ -157,9 +169,9 @@
     inset: 0;
     z-index: -2;
     background:
-      radial-gradient(circle at 84% 8%, rgba(112, 147, 197, 0.2), transparent 16%),
-      radial-gradient(circle at 12% 26%, rgba(244, 204, 164, 0.16), transparent 16%),
-      radial-gradient(circle at 18% 72%, rgba(224, 189, 202, 0.12), transparent 20%),
+      radial-gradient(circle at 84% 8%, rgba(196, 123, 138, 0.10), transparent 18%),
+      radial-gradient(circle at 12% 26%, rgba(212, 149, 106, 0.10), transparent 16%),
+      radial-gradient(circle at 18% 72%, rgba(196, 173, 210, 0.08), transparent 20%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.12) 100%);
     pointer-events: none;
   }
@@ -254,9 +266,9 @@
 
   .eyebrow-label {
     color: #666f7d;
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
@@ -347,8 +359,8 @@
 
   .rich-content {
     color: #4f5d74;
-    font-size: 1.02rem;
-    line-height: 1.85;
+    font-size: 1rem;
+    line-height: 1.9;
   }
 
   .rich-content > * + * {
