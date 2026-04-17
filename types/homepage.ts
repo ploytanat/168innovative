@@ -15,15 +15,25 @@ export interface HeroPromoCard {
   href: string
   image: ImageAsset
   bgColor: string
+  metaLabel?: string
+  price?: string
+  priceOld?: string
+  badge?: string
+  badgeVariant?: "default" | "sale" | "hot"
 }
 
 export interface HeroModel {
+  eyebrow?: string
+  centerTag?: string
   title: string
   description: string
   ctaLabel: string
   ctaHref: string
   image: ImageAsset
   bgColor: string
+  promoHeading?: string
+  promoViewAllLabel?: string
+  promoViewAllHref?: string
   promoCards: HeroPromoCard[]
 }
 

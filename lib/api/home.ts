@@ -29,22 +29,99 @@ const THEME_BG: Record<string, string> = {
 }
 
 const PROMO_CARD_COLORS = ["#c2185b", "#1565c0", "#2e7d32", "#6a1b9a"]
+const FEATURED_BADGES = [
+  { th: "แนะนำ", en: "Hot", variant: "hot" as const },
+  { th: "ใหม่", en: "New", variant: "default" as const },
+  { th: "ขายดี", en: "Top", variant: "sale" as const },
+]
+
+function formatProductPrice(price: number | undefined, locale: Locale): string {
+  if (price == null) {
+    return locale === "th" ? "ขอราคา" : "Request quote"
+  }
+
+  return new Intl.NumberFormat(locale === "th" ? "th-TH" : "en-US", {
+    style: "currency",
+    currency: locale === "th" ? "THB" : "USD",
+    maximumFractionDigits: 0,
+  }).format(price)
+}
+
+function buildHeroPromoCards(
+  products: ProductView[],
+  categories: CategoryView[],
+  locale: Locale
+): HeroPromoCard[] {
+  const featuredProducts = products.slice(0, 3).map((product, index) => {
+    const badge = FEATURED_BADGES[index]
+
+    return {
+      id: Number(product.id),
+      label: product.name,
+      exploreLabel:
+        product.categorySlug.replace(/-/g, " ") || (locale === "th" ? "สินค้าแนะนำ" : "Featured"),
+      href: withLocalePath(`/categories/${product.categorySlug}/${product.slug}`, locale),
+      image: {
+        src: product.image.src || PLACEHOLDER_IMAGE,
+        alt: product.image.alt || product.name,
+      },
+      bgColor: PROMO_CARD_COLORS[index] ?? PROMO_CARD_COLORS[0],
+      metaLabel:
+        product.moq != null && product.moq.trim() !== ""
+          ? `MOQ ${product.moq}`
+          : product.sku != null && product.sku.trim() !== ""
+            ? `SKU ${product.sku}`
+            : product.variantCount > 1
+              ? locale === "th"
+                ? `${product.variantCount} แบบ`
+                : `${product.variantCount} variants`
+              : locale === "th"
+                ? "พร้อมสั่งผลิต"
+                : "OEM ready",
+      price: formatProductPrice(product.price, locale),
+      badge: badge == null ? undefined : locale === "th" ? badge.th : badge.en,
+      badgeVariant: badge?.variant,
+    }
+  })
+
+  if (featuredProducts.length > 0) {
+    return featuredProducts
+  }
+
+  return categories.slice(0, 3).map((category, index) => ({
+    id: Number(category.id),
+    label: category.name,
+    exploreLabel: locale === "th" ? "หมวดหมู่เด่น" : "Featured category",
+    href: withLocalePath(`/categories/${category.slug}`, locale),
+    image: category.image ?? { src: PLACEHOLDER_IMAGE, alt: category.name },
+    bgColor: PROMO_CARD_COLORS[index] ?? PROMO_CARD_COLORS[0],
+    metaLabel: locale === "th" ? "ดูแคตตาล็อก" : "Browse catalog",
+    price: locale === "th" ? "ดูรายละเอียด" : "View details",
+  }))
+}
 
 function toHeroModel(
   slide: HeroSlideView,
+  products: ProductView[],
   categories: CategoryView[],
   locale: Locale
 ): HeroModel {
-  const promoCards: HeroPromoCard[] = categories.slice(0, 2).map((cat, i) => ({
+  /* const promoCards: HeroPromoCard[] = categories.slice(0, 2).map((cat, i) => ({
     id: Number(cat.id),
     label: cat.name,
     exploreLabel: locale === "th" ? "ดูเพิ่มเติม" : "Explore",
     href: withLocalePath(`/categories/${cat.slug}`, locale),
     image: cat.image ?? { src: PLACEHOLDER_IMAGE, alt: cat.name },
     bgColor: PROMO_CARD_COLORS[i] ?? PROMO_CARD_COLORS[0],
-  }))
+  })) */
+  const promoCards = buildHeroPromoCards(products, categories, locale)
 
   return {
+    eyebrow: slide.badge.text,
+    centerTag:
+      slide.highlight != null
+        ? `${slide.highlight.value} ${slide.highlight.label}`
+        : slide.badge.text,
     title: slide.title,
     description: slide.description,
     ctaLabel: slide.ctaPrimary.label,
@@ -54,6 +131,9 @@ function toHeroModel(
       alt: slide.image.alt || slide.title,
     },
     bgColor: THEME_BG[slide.theme] ?? "#b8e8e8",
+    promoHeading: locale === "th" ? "สินค้าแนะนำ" : "Featured products",
+    promoViewAllLabel: locale === "th" ? "ดูทั้งหมด" : "View all",
+    promoViewAllHref: withLocalePath("/categories", locale),
     promoCards,
   }
 }
@@ -196,8 +276,10 @@ export async function getOrganicHomepageData(
 
   const hero: HeroModel =
     heroSlides[0] != null
-      ? toHeroModel(heroSlides[0], categories, locale)
+      ? toHeroModel(heroSlides[0], products, categories, locale)
       : {
+          eyebrow: locale === "th" ? "แคตตาล็อกประจำฤดูกาล" : "Seasonal selection",
+          centerTag: locale === "th" ? "คัดสรรโดยทีม 168" : "Curated by 168",
           title: locale === "th" ? "บรรจุภัณฑ์ คุณภาพสูง" : "Premium Packaging Solutions",
           description:
             locale === "th"
@@ -207,14 +289,18 @@ export async function getOrganicHomepageData(
           ctaHref: withLocalePath("/categories", locale),
           image: { src: PLACEHOLDER_IMAGE, alt: "Hero" },
           bgColor: "#b8e8e8",
-          promoCards: categories.slice(0, 2).map((cat, i) => ({
+          promoHeading: locale === "th" ? "สินค้าแนะนำ" : "Featured products",
+          promoViewAllLabel: locale === "th" ? "ดูทั้งหมด" : "View all",
+          promoViewAllHref: withLocalePath("/categories", locale),
+          /* promoCards: categories.slice(0, 2).map((cat, i) => ({
             id: Number(cat.id),
             label: cat.name,
             exploreLabel: locale === "th" ? "ดูเพิ่มเติม" : "Explore",
             href: withLocalePath(`/categories/${cat.slug}`, locale),
             image: cat.image ?? { src: PLACEHOLDER_IMAGE, alt: cat.name },
             bgColor: PROMO_CARD_COLORS[i] ?? PROMO_CARD_COLORS[0],
-          })),
+          })), */
+          promoCards: buildHeroPromoCards(products, categories, locale),
         }
 
   const bestsellingProducts = products
