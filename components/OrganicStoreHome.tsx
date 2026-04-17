@@ -19,7 +19,11 @@ export default function OrganicStoreHome({ data }: OrganicStoreHomeProps) {
       data-organic-homepage
       className="bg-white font-[Helvetica_Neue,Helvetica,Arial,sans-serif] leading-[1.6] text-[#333]"
     >
-      <Header links={data.headerLinks} />
+      <Header
+        brandName={data.brandName}
+        searchHref={data.searchHref}
+        links={data.headerLinks}
+      />
       <HeroSection hero={data.hero} />
       <USPBar items={data.uspItems} />
       <ProductGrid

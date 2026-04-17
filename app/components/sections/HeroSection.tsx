@@ -3,8 +3,7 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
 import Placeholder from "@/app/components/ui/Placeholder"
-import type { HeroSlideView } from "@/app/lib/types/view"
-import type { CategoryView } from "@/app/lib/types/view"
+import type { CategoryView, HeroSlideView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
 type Locale = "th" | "en"
@@ -15,54 +14,150 @@ interface HeroSectionProps {
   locale: Locale
 }
 
+interface HeroCardData {
+  key: string
+  href: string
+  image?: {
+    src: string
+    alt: string
+  }
+  badge: string
+  title: string
+  description: string
+}
+
 const COPY = {
   en: {
     eyebrow: "168 Innovative Co., Ltd.",
     lines: ["PRECISION", "COSMETIC", "PACKAGING"],
-    sub: "Full OEM / ODM support — from sample selection through production-ready delivery.",
+    sub: "Full OEM / ODM support from sample selection through production-ready delivery.",
     cta: "Browse Catalog",
     ctaHref: "/en/categories",
     stats: [
       { value: "500+", label: "Partner brands" },
-      { value: "10+",  label: "Years in industry" },
-      { value: "24h",  label: "Quote turnaround" },
+      { value: "10+", label: "Years in industry" },
+      { value: "24h", label: "Quote turnaround" },
     ],
     cardLabels: ["Flagship Pick", "Top Seller", "OEM Ready"],
+    fallbackCardDescription:
+      "Explore packaging styles, materials, and production options tailored for this product line.",
+    readMore: "Read more",
   },
   th: {
     eyebrow: "168 Innovative Co., Ltd.",
     lines: ["บรรจุภัณฑ์", "เครื่องสำอาง", "คุณภาพพรีเมียม"],
-    sub: "OEM / ODM ครบวงจร ตั้งแต่เลือกรุ่นสินค้าจนถึงขั้นตอนการผลิต",
+    sub: "OEM / ODM ครบวงจร ตั้งแต่เลือกสินค้าตัวอย่างไปจนถึงขั้นตอนการผลิตพร้อมส่งมอบ",
     cta: "ดูสินค้าทั้งหมด",
     ctaHref: "/categories",
     stats: [
       { value: "500+", label: "แบรนด์คู่ค้า" },
-      { value: "10+",  label: "ปีในอุตสาหกรรม" },
-      { value: "24h",  label: "ตอบกลับใบเสนอราคา" },
+      { value: "10+", label: "ปีในอุตสาหกรรม" },
+      { value: "24h", label: "ตอบกลับใบเสนอราคา" },
     ],
     cardLabels: ["สินค้าเด่น", "ขายดี", "พร้อม OEM"],
+    fallbackCardDescription:
+      "ดูรายละเอียดรูปแบบบรรจุภัณฑ์ วัสดุ และทางเลือกการผลิตที่เหมาะกับหมวดสินค้านี้",
+    readMore: "Read more",
   },
 } as const
 
-function getImages(slides: HeroSlideView[], categories: CategoryView[]) {
-  const fromSlides = slides
-    .filter((s) => s.image?.src)
-    .slice(0, 3)
-    .map((s) => ({ src: s.image.src, alt: s.image.alt, name: s.title }))
+function trimText(text: string, maxLength: number) {
+  if (text.length <= maxLength) return text
+  return `${text.slice(0, maxLength - 3).trimEnd()}...`
+}
+
+function getCards(
+  slides: HeroSlideView[],
+  categories: CategoryView[],
+  locale: Locale
+) {
+  const copy = COPY[locale]
+
+  const fromSlides: HeroCardData[] = slides.slice(0, 3).map((slide, index) => ({
+    key: `slide-${slide.id}`,
+    href: slide.ctaPrimary?.href || "/categories",
+    image: slide.image?.src ? { src: slide.image.src, alt: slide.image.alt } : undefined,
+    badge: copy.cardLabels[index] || slide.badge.text,
+    title: trimText(slide.title, 56),
+    description: trimText(slide.description, 120),
+  }))
 
   if (fromSlides.length >= 2) return fromSlides
 
-  const fromCats = categories
-    .filter((c) => c.image?.src)
+  const fromCategories: HeroCardData[] = categories
+    .filter((category) => category.image?.src)
     .slice(0, 3)
-    .map((c) => ({ src: c.image!.src, alt: c.image!.alt, name: c.name }))
+    .map((category, index) => ({
+      key: `category-${category.id}`,
+      href: `/categories/${category.slug}`,
+      image: category.image?.src
+        ? { src: category.image.src, alt: category.image.alt }
+        : undefined,
+      badge:
+        copy.cardLabels[fromSlides.length + index] ||
+        copy.cardLabels[copy.cardLabels.length - 1],
+      title: trimText(category.name, 56),
+      description: trimText(
+        category.description || copy.fallbackCardDescription,
+        120
+      ),
+    }))
 
-  return [...fromSlides, ...fromCats].slice(0, 3)
+  return [...fromSlides, ...fromCategories].slice(0, 3)
+}
+
+function HeroCard({
+  card,
+  locale,
+  readMoreLabel,
+}: {
+  card: HeroCardData
+  locale: Locale
+  readMoreLabel: string
+}) {
+  return (
+    <Link
+      href={withLocalePath(card.href, locale)}
+      className="group flex flex-col items-center rounded-base border border-default bg-neutral-primary-soft p-6 shadow-xs transition-colors duration-200 hover:bg-white md:max-w-xl md:flex-row"
+    >
+      <div className="relative mb-4 aspect-square h-64 w-full shrink-0 overflow-hidden rounded-base bg-neutral-secondary-soft md:mb-0 md:h-auto md:w-48">
+        {card.image ? (
+          <Image
+            src={card.image.src}
+            alt={card.image.alt}
+            fill
+            sizes="(min-width: 768px) 192px, 100vw"
+            className="object-cover transition duration-300 group-hover:scale-[1.02]"
+          />
+        ) : (
+          <Placeholder label={card.badge} variant="hero" className="h-full w-full" />
+        )}
+      </div>
+
+      <div className="flex flex-1 flex-col justify-between leading-normal md:p-4">
+        <div>
+          <h3 className="mb-2 text-2xl font-bold tracking-tight text-heading">
+            {card.title}
+          </h3>
+          <p className="mb-6 text-body">
+            {card.description}
+          </p>
+        </div>
+
+        <div>
+          <span className="inline-flex w-auto items-center rounded-base border border-default-medium bg-neutral-secondary-medium px-4 py-2.5 text-sm font-medium leading-5 text-body shadow-xs transition-colors duration-200 group-hover:bg-neutral-tertiary-medium group-hover:text-heading">
+            {readMoreLabel}
+            <ArrowRight className="ms-1.5 h-4 w-4 rtl:rotate-180" strokeWidth={2} />
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
 }
 
 export default function HeroSection({ slides, categories, locale }: HeroSectionProps) {
   const copy = COPY[locale]
-  const images = getImages(slides, categories)
+  const cards = getCards(slides, categories, locale)
 
   return (
     <section
@@ -71,8 +166,6 @@ export default function HeroSection({ slides, categories, locale }: HeroSectionP
     >
       <div className="mx-auto max-w-7xl">
         <div className="grid items-end gap-6 lg:grid-cols-[1fr_42%] lg:gap-0">
-
-          {/* ── Left: staggered headline ── */}
           <div className="pb-10 lg:pb-14">
             <p className="mb-6 inline-flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.3em] text-[#4c6b35]">
               <span className="h-px w-10 bg-[#6e8a50]" />
@@ -80,10 +173,12 @@ export default function HeroSection({ slides, categories, locale }: HeroSectionP
             </p>
 
             <div className="space-y-0">
-              {copy.lines.map((line, i) => (
+              {copy.lines.map((line, index) => (
                 <div
                   key={line}
-                  className={i === 0 ? "pl-0" : i === 1 ? "pl-[11%]" : "pl-[22%]"}
+                  className={
+                    index === 0 ? "pl-0" : index === 1 ? "pl-[11%]" : "pl-[22%]"
+                  }
                 >
                   <span
                     className={`block leading-[0.88] text-[#141412] ${
@@ -116,96 +211,42 @@ export default function HeroSection({ slides, categories, locale }: HeroSectionP
             </div>
 
             <div className="mt-10 flex gap-8 border-t border-[#e3e1da] pt-7">
-              {copy.stats.map((s) => (
-                <div key={s.label}>
+              {copy.stats.map((stat) => (
+                <div key={stat.label}>
                   <p className="font-display text-[1.65rem] font-bold leading-none text-[#141412]">
-                    {s.value}
+                    {stat.value}
                   </p>
-                  <p className="mt-1 text-[11px] font-medium text-[#9a9892]">{s.label}</p>
+                  <p className="mt-1 text-[11px] font-medium text-[#9a9892]">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── Right: floating image cards ── */}
-          <div className="hidden lg:block">
-            <div className="relative h-[540px]">
-              {/* Card 1 — tall left */}
-              <div className="absolute bottom-0 left-0 top-10 w-[57%] overflow-hidden rounded-t-[1.5rem] rounded-br-[1.5rem]">
-                {images[0] ? (
-                  <div className="relative h-full w-full">
-                    <Image src={images[0].src} alt={images[0].alt} fill priority sizes="22vw" className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/45" />
-                    <span className="absolute left-4 top-4 rounded-full border border-white/30 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[#141412] backdrop-blur-sm">
-                      {copy.cardLabels[0]}
-                    </span>
-                    <p className="absolute inset-x-4 bottom-4 text-[13px] font-semibold leading-snug text-white">
-                      {images[0].name}
-                    </p>
-                  </div>
-                ) : (
-                  <Placeholder label={copy.cardLabels[0]} variant="hero" className="h-full w-full" />
-                )}
-              </div>
-
-              {/* Card 2 — top right */}
-              <div className="absolute right-0 top-0 h-[47%] w-[41%] overflow-hidden rounded-[1.3rem]">
-                {images[1] ? (
-                  <div className="relative h-full w-full">
-                    <Image src={images[1].src} alt={images[1].alt} fill sizes="16vw" className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/45" />
-                    <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-white/80 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[#141412] backdrop-blur-sm">
-                      {copy.cardLabels[1]}
-                    </span>
-                    <p className="absolute inset-x-3 bottom-3 text-[12px] font-semibold leading-snug text-white">
-                      {images[1].name}
-                    </p>
-                  </div>
-                ) : (
-                  <Placeholder label={copy.cardLabels[1]} variant="hero" className="h-full w-full" />
-                )}
-              </div>
-
-              {/* Card 3 — bottom right */}
-              <div className="absolute bottom-0 right-0 h-[47%] w-[41%] overflow-hidden rounded-[1.3rem]">
-                {images[2] ? (
-                  <div className="relative h-full w-full">
-                    <Image src={images[2].src} alt={images[2].alt} fill sizes="16vw" className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/45" />
-                    <span className="absolute left-3 top-3 rounded-full border border-white/30 bg-white/80 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[#141412] backdrop-blur-sm">
-                      {copy.cardLabels[2]}
-                    </span>
-                    <p className="absolute inset-x-3 bottom-3 text-[12px] font-semibold leading-snug text-white">
-                      {images[2].name}
-                    </p>
-                  </div>
-                ) : (
-                  <Placeholder label={copy.cardLabels[2]} variant="hero" className="h-full w-full" />
-                )}
-              </div>
-
-              {/* Gap fill */}
-              <div aria-hidden className="absolute right-[41%] top-[47%] h-[6%] w-[3%] bg-[#f8f8f4]" />
-              <div aria-hidden className="absolute -right-3 top-6 h-16 w-16 rounded-full border-2 border-[#6e8a50]/20" />
+          <div className="hidden lg:block lg:pl-10">
+            <div className="space-y-5 pb-10 lg:pb-14">
+              {cards.map((card) => (
+                <HeroCard
+                  key={card.key}
+                  card={card}
+                  locale={locale}
+                  readMoreLabel={copy.readMore}
+                />
+              ))}
             </div>
           </div>
 
-          {/* Mobile: horizontal scroll */}
-          <div className="flex gap-3 overflow-x-auto pb-6 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden">
-            {images.length > 0
-              ? images.map((img, i) => (
-                  <div key={i} className="relative h-44 w-32 shrink-0 overflow-hidden rounded-[1.1rem]">
-                    <Image src={img.src} alt={img.alt} fill sizes="128px" className="object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/45" />
-                    <p className="absolute inset-x-2.5 bottom-2.5 text-[11px] font-semibold leading-tight text-white">{img.name}</p>
-                  </div>
-                ))
-              : copy.cardLabels.map((label) => (
-                  <div key={label} className="h-44 w-32 shrink-0 overflow-hidden rounded-[1.1rem]">
-                    <Placeholder label={label} variant="hero" className="h-full w-full" />
-                  </div>
-                ))
-            }
+          <div className="flex gap-4 overflow-x-auto pb-6 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden">
+            {cards.map((card) => (
+              <div key={card.key} className="w-[22rem] shrink-0">
+                <HeroCard
+                  card={card}
+                  locale={locale}
+                  readMoreLabel={copy.readMore}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

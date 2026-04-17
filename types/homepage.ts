@@ -8,12 +8,23 @@ export interface NavLink {
   label: string
 }
 
+export interface HeroPromoCard {
+  id: number
+  label: string
+  exploreLabel: string
+  href: string
+  image: ImageAsset
+  bgColor: string
+}
+
 export interface HeroModel {
   title: string
   description: string
   ctaLabel: string
   ctaHref: string
   image: ImageAsset
+  bgColor: string
+  promoCards: HeroPromoCard[]
 }
 
 export interface ProductCardModel {
@@ -77,6 +88,8 @@ export interface ClientsSectionModel {
 }
 
 export interface OrganicHomepageData {
+  brandName: string
+  searchHref: string
   headerLinks: NavLink[]
   hero: HeroModel
   uspItems: string[]

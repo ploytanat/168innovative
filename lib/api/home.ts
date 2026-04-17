@@ -7,6 +7,7 @@ import type {
   ClientsSectionModel,
   FooterModel,
   HeroModel,
+  HeroPromoCard,
   NavLink,
   OrganicHomepageData,
   ProductCardModel,
@@ -19,7 +20,30 @@ type Locale = "th" | "en"
 
 const PLACEHOLDER_IMAGE = "/placeholder.jpg"
 
-function toHeroModel(slide: HeroSlideView): HeroModel {
+const THEME_BG: Record<string, string> = {
+  sky: "#b8e8e8",
+  emerald: "#c8f0d8",
+  rose: "#a8dbe5",
+  rosie: "#fce4ec",
+  violet: "#ede7f6",
+}
+
+const PROMO_CARD_COLORS = ["#c2185b", "#1565c0", "#2e7d32", "#6a1b9a"]
+
+function toHeroModel(
+  slide: HeroSlideView,
+  categories: CategoryView[],
+  locale: Locale
+): HeroModel {
+  const promoCards: HeroPromoCard[] = categories.slice(0, 2).map((cat, i) => ({
+    id: Number(cat.id),
+    label: cat.name,
+    exploreLabel: locale === "th" ? "ดูเพิ่มเติม" : "Explore",
+    href: withLocalePath(`/categories/${cat.slug}`, locale),
+    image: cat.image ?? { src: PLACEHOLDER_IMAGE, alt: cat.name },
+    bgColor: PROMO_CARD_COLORS[i] ?? PROMO_CARD_COLORS[0],
+  }))
+
   return {
     title: slide.title,
     description: slide.description,
@@ -29,6 +53,8 @@ function toHeroModel(slide: HeroSlideView): HeroModel {
       src: slide.image.src || PLACEHOLDER_IMAGE,
       alt: slide.image.alt || slide.title,
     },
+    bgColor: THEME_BG[slide.theme] ?? "#b8e8e8",
+    promoCards,
   }
 }
 
@@ -170,9 +196,9 @@ export async function getOrganicHomepageData(
 
   const hero: HeroModel =
     heroSlides[0] != null
-      ? toHeroModel(heroSlides[0])
+      ? toHeroModel(heroSlides[0], categories, locale)
       : {
-          title: locale === "th" ? "บรรจุภัณฑ์คุณภาพสูง" : "Premium Packaging Solutions",
+          title: locale === "th" ? "บรรจุภัณฑ์ คุณภาพสูง" : "Premium Packaging Solutions",
           description:
             locale === "th"
               ? "ผลิตภัณฑ์บรรจุภัณฑ์คุณภาพสูงสำหรับทุกอุตสาหกรรม"
@@ -180,6 +206,15 @@ export async function getOrganicHomepageData(
           ctaLabel: locale === "th" ? "ดูสินค้า" : "View Products",
           ctaHref: withLocalePath("/categories", locale),
           image: { src: PLACEHOLDER_IMAGE, alt: "Hero" },
+          bgColor: "#b8e8e8",
+          promoCards: categories.slice(0, 2).map((cat, i) => ({
+            id: Number(cat.id),
+            label: cat.name,
+            exploreLabel: locale === "th" ? "ดูเพิ่มเติม" : "Explore",
+            href: withLocalePath(`/categories/${cat.slug}`, locale),
+            image: cat.image ?? { src: PLACEHOLDER_IMAGE, alt: cat.name },
+            bgColor: PROMO_CARD_COLORS[i] ?? PROMO_CARD_COLORS[0],
+          })),
         }
 
   const bestsellingProducts = products
@@ -190,14 +225,15 @@ export async function getOrganicHomepageData(
     .slice(0, 8)
     .map((category) => toStoryModel(category, locale))
 
+  const categoryHeaderLinks = categories.map((cat) => ({
+    href: withLocalePath(`/categories/${cat.slug}`, locale),
+    label: cat.name,
+  }))
+
   return {
-    headerLinks: [
-      { href: withLocalePath("/categories", locale), label: locale === "th" ? "สินค้า" : "Shop" },
-      { href: withLocalePath("/categories", locale), label: locale === "th" ? "สินค้ายอดนิยม" : "Bestsellers" },
-      { href: withLocalePath("/about", locale), label: locale === "th" ? "เกี่ยวกับเรา" : "About Us" },
-      { href: withLocalePath("/articles", locale), label: locale === "th" ? "บทความ" : "Journal" },
-      { href: withLocalePath("/contact", locale), label: locale === "th" ? "ติดต่อ" : "Contact" },
-    ],
+    brandName: "168 INNOVATIVE",
+    searchHref: withLocalePath("/search", locale),
+    headerLinks: categoryHeaderLinks,
     hero,
     uspItems: locale === "th" ? USP_ITEMS_TH : USP_ITEMS_EN,
     bestsellingProducts,
