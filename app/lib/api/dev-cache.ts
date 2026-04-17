@@ -51,10 +51,26 @@ function buildCacheKey(url: string, init?: RequestInit) {
 }
 
 function createResponse(entry: CachedResponseEntry) {
-  return new Response(entry.body, {
-    headers: new Headers(entry.headers),
+  // Encode body as UTF-8 bytes via TextEncoder to avoid ByteString restrictions
+  // in Next.js 16.2+ / undici when the body contains non-ASCII (Thai) characters.
+  const bodyBytes = new TextEncoder().encode(entry.body)
+
+  // Build headers, carrying the original Content-Type so callers still parse JSON correctly.
+  const headers = new Headers(entry.headers)
+
+  // Ensure charset is declared so callers decode correctly.
+  if (!headers.has("content-type")) {
+    headers.set("content-type", "application/json; charset=utf-8")
+  }
+
+  return new Response(bodyBytes, {
+    headers,
     status: entry.status,
-    statusText: entry.statusText,
+    // statusText must be a valid ByteString (ASCII); fall back to empty string
+    // if the stored value somehow contains non-ASCII characters.
+    statusText: entry.statusText.split("").every((c) => c.charCodeAt(0) < 256)
+      ? entry.statusText
+      : "",
   })
 }
 

@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: process.cwd(),
+  },
   images: {
     // Keep Next/Image layout/lazy-loading behavior without using Vercel Image Optimization quota.
     unoptimized: true,

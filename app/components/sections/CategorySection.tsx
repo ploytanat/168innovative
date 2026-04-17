@@ -42,7 +42,7 @@ const COPY = {
 
 function Pill({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-white/14 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm ring-1 ring-white/10">
+    <span className="inline-flex items-center rounded-full bg-black/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/90 ring-1 ring-white/12">
       {label}
     </span>
   )
@@ -196,7 +196,7 @@ function ExploreLink({ label, small = false }: { label: string; small?: boolean 
   return (
     <span
       className={`
-        mt-4 inline-flex items-center gap-1.5 font-semibold text-[#ffd7b8]
+        mt-4 inline-flex items-center gap-1.5 font-semibold text-[#e8c898]
         ${small ? "text-[11px]" : "text-[13px]"}
         -translate-x-1 opacity-0 transition-all duration-300
         group-hover:translate-x-0 group-hover:opacity-100
@@ -217,29 +217,26 @@ function SectionHeader({ locale, items }: { locale: Locale; items: CategoryView[
   const copy = COPY[locale]
 
   return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+    <div data-animate className="mb-8 flex flex-wrap items-end justify-between gap-5">
       <div className="max-w-2xl">
-        {/* Eyebrow with decorative line */}
-        <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-[#8d6070]" aria-hidden />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
-            {copy.eyebrow}
-          </p>
-        </div>
+        {/* Eyebrow */}
+        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#9c6f3a]">
+          {copy.eyebrow}
+        </p>
 
         <h2
           className={`
-            mt-3 text-[#1f2430]
+            mt-3 text-[#1d1f22]
             ${locale === "th"
-              ? "font-body text-[clamp(1.35rem,2.2vw,1.9rem)] font-extrabold leading-[1.3]"
-              : "font-heading text-[clamp(1.8rem,3vw,2.8rem)] font-black leading-[1.04]"
+              ? "font-body text-[clamp(1.35rem,2.2vw,1.9rem)] font-extrabold leading-[1.28]"
+              : "font-display text-[clamp(1.8rem,3vw,2.7rem)] font-bold leading-[1.06]"
             }
           `}
         >
           {copy.title}
         </h2>
 
-        <p className="mt-3 max-w-xl text-sm leading-[1.85] text-neutral-500 sm:text-[15px]">
+        <p className="mt-3 max-w-[58ch] text-[14px] leading-[1.9] text-[#696e7a] sm:text-[15px]">
           {copy.summary}
         </p>
       </div>
@@ -247,9 +244,11 @@ function SectionHeader({ locale, items }: { locale: Locale; items: CategoryView[
       <Link
         href={withLocalePath("/categories", locale)}
         className="
-          inline-flex items-center gap-2 rounded-full border border-black/[0.08]
-          bg-white px-4 py-2.5 text-[12px] font-semibold text-[#1f2430]
-          transition-all duration-200 hover:bg-neutral-50 hover:shadow-sm
+          inline-flex items-center gap-2 rounded-full
+          border border-[#d4c9b8] bg-[#fffdf9] px-4 py-2.5
+          text-[12px] font-semibold text-[#3d4048]
+          shadow-[0_1px_6px_rgba(29,31,34,.05)]
+          transition-all duration-200 hover:border-[#9c6f3a] hover:text-[#9c6f3a]
           active:scale-[0.98]
         "
       >
@@ -278,13 +277,14 @@ function CategoryGrid({ featured, rest, locale }: {
   return (
     <div className={`grid gap-4 lg:grid-cols-12`}>
       {/* Featured — wider when fewer right-side items */}
-      <div className={isWide ? "lg:col-span-8" : "lg:col-span-7"}>
+      <div data-animate="slide-left" className={isWide ? "lg:col-span-8" : "lg:col-span-7"}>
         <FeaturedCard item={featured} locale={locale} />
       </div>
 
       {/* Right column */}
       <div
-        className={`
+        data-animate="slide-right"
+        className={`anim-delay-120
           grid gap-4
           ${isWide ? "lg:col-span-4" : "lg:col-span-5"}
           ${rightItems.length >= 4 ? "sm:grid-cols-2" : "sm:grid-cols-1 lg:grid-cols-1"}

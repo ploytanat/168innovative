@@ -1,8 +1,7 @@
 import Image from "next/image"
-import Link from "next/link"
+import { Star } from "lucide-react"
 
-import { ArrowRight, BadgeCheck, Clock3, Palette, ShieldCheck } from "lucide-react"
-
+import Placeholder from "@/app/components/ui/Placeholder"
 import type { WhyItemView } from "@/app/lib/types/view"
 
 interface WhyChooseUsProps {
@@ -12,131 +11,93 @@ interface WhyChooseUsProps {
 
 const COPY = {
   th: {
-    eyebrow: "Why 168 Innovative",
-    title: "เหตุผลที่แบรนด์ใช้เราเป็นจุดเริ่มต้นของงานแพ็กเกจ",
-    summary:
-      "จากการคัดรุ่นจนถึงการประสานงาน OEM หน้าแรกควรตอบให้ชัดว่าลูกค้าจะได้อะไรและติดต่ออย่างไรต่อ",
-    panelTitle: "พร้อมทำงานตั้งแต่คัดรุ่นถึงเสนอราคา",
-    panelBody:
-      "ทีมช่วยแนะนำบรรจุภัณฑ์ที่เหมาะกับสินค้า คุมการสื่อสารให้สั้นลง และผลักลูกค้าเข้าสู่ขั้นตอนสั่งตัวอย่างหรือขอราคาได้เร็วขึ้น",
-    promises: [
-      { icon: Clock3, label: "ตอบกลับไวภายใน 24 ชั่วโมง" },
-      { icon: ShieldCheck, label: "ช่วยคัดรุ่นที่เหมาะกับงานจริง" },
-      { icon: Palette, label: "รองรับงานปรับสีและโลโก้" },
-      { icon: BadgeCheck, label: "ดูแลต่อเนื่องจนถึงเริ่มผลิต" },
-    ],
-    cta: "ติดต่อทีมขาย",
+    eyebrow: "ทำไมต้องเรา",
+    title: "เหตุผลที่แบรนด์เลือกเรา",
+    sub: "จากการคัดรุ่นบรรจุภัณฑ์ ปรับแบบตามแบรนด์ ถึงการประสานงาน OEM ครบวงจร",
+    verified: "พาร์ทเนอร์ที่ยืนยันแล้ว",
   },
   en: {
-    eyebrow: "Why 168 Innovative",
-    title: "Why brands start their packaging search here",
-    summary:
-      "The homepage should answer what the company does well, how it supports OEM work, and where customers can move next without friction.",
-    panelTitle: "Built for faster selection and quotation flow",
-    panelBody:
-      "The team helps narrow suitable packaging options, reduce back-and-forth, and move customers toward sample review or quote requests faster.",
-    promises: [
-      { icon: Clock3, label: "Quote response within 24 hours" },
-      { icon: ShieldCheck, label: "Product guidance grounded in real use cases" },
-      { icon: Palette, label: "Color and logo customization support" },
-      { icon: BadgeCheck, label: "Sales follow-through into production" },
-    ],
-    cta: "Contact sales",
+    eyebrow: "Reviews with love",
+    title: "Why brands choose us",
+    sub: "From packaging selection and brand customization to full OEM coordination — one trusted partner.",
+    verified: "Verified Partner",
   },
 } as const
 
+function StarRow({ n }: { n: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star
+          key={i}
+          className="h-3.5 w-3.5"
+          strokeWidth={0}
+          fill={i < n ? "#4c6b35" : "#e3e1da"}
+        />
+      ))}
+    </div>
+  )
+}
+
+function ReviewCard({ item, index, locale }: { item: WhyItemView; index: number; locale: "th" | "en" }) {
+  const copy = COPY[locale]
+  return (
+    <article className="flex flex-col gap-4 rounded-[1.1rem] border border-[#e3e1da] bg-white p-5 sm:p-6">
+      <StarRow n={5} />
+      <p className="flex-1 text-[14px] leading-[1.75] text-[#4a4944]">
+        {item.description}
+      </p>
+      <div className="flex items-center gap-3 border-t border-[#f0efeb] pt-4">
+        {item.image?.src ? (
+          <div className="relative h-9 w-9 overflow-hidden rounded-full border border-[#e3e1da]">
+            <Image src={item.image.src} alt={item.image.alt ?? item.title} fill sizes="36px" className="object-cover" />
+          </div>
+        ) : (
+          <Placeholder label={item.title} variant="person" className="h-9 w-9 rounded-full" />
+        )}
+        <div>
+          <p className="text-[13px] font-bold leading-tight text-[#141412]">{item.title}</p>
+          <p className="text-[11px] text-[#4c6b35]">{copy.verified}</p>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   if (!items.length) return null
-
   const copy = COPY[locale]
-  const contactHref = locale === "en" ? "/en/contact" : "/contact"
 
   return (
-    <section className="relative z-10 mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-5 lg:py-14">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
-        <div className="glass-frosted rounded-4xl p-6 sm:p-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
-            {copy.eyebrow}
-          </p>
+    <section
+      aria-labelledby="why-heading"
+      className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:py-14"
+    >
+      <div className="mb-7">
+        <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#4c6b35]">
+          {copy.eyebrow}
+        </p>
+        <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <h2
-            className={`mt-3 max-w-[24ch] text-[#1f2430] ${
+            id="why-heading"
+            className={`text-[#141412] ${
               locale === "th"
-                ? "font-body text-[clamp(1.35rem,2.2vw,1.95rem)] font-extrabold leading-[1.28]"
-                : "font-heading text-[clamp(1.8rem,3vw,2.9rem)] font-black leading-[1.04]"
+                ? "font-body text-[clamp(1.4rem,2.5vw,2rem)] font-extrabold"
+                : "font-display text-[clamp(1.6rem,2.8vw,2.4rem)] font-bold"
             }`}
           >
             {copy.title}
           </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-600 sm:text-[15px]">
-            {copy.summary}
+          <p className="max-w-[52ch] text-[14px] leading-relaxed text-[#6b6b64]">
+            {copy.sub}
           </p>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {items.slice(0, 4).map((item) => (
-              <article
-                key={item.title}
-                className="glass-frosted rounded-3xl p-4"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#f4f6f8]">
-                    {item.image?.src ? (
-                      <Image
-                        src={item.image.src}
-                        alt={item.image.alt || item.title}
-                        fill
-                        sizes="56px"
-                        className="object-contain p-2"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-[#8d6070]">
-                        <BadgeCheck className="h-5 w-5" strokeWidth={1.8} />
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-[15px] font-bold leading-5 text-[#1f2430]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-[13px] leading-6 text-neutral-600">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
+      </div>
 
-        <div className="rounded-[2rem] bg-[linear-gradient(160deg,#2d3340_0%,#151922_100%)] p-6 text-white shadow-[0_20px_44px_rgba(21,25,34,0.24)] sm:p-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">
-            {copy.panelTitle}
-          </p>
-          <p className="mt-4 text-sm leading-7 text-white/72 sm:text-[15px]">
-            {copy.panelBody}
-          </p>
-
-          <div className="mt-6 space-y-3">
-            {copy.promises.map(({ icon: Icon, label }) => (
-              <div
-                key={label}
-                className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.05] px-4 py-3"
-              >
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/[0.08] text-[#f2c06b]">
-                  <Icon className="h-5 w-5" strokeWidth={1.8} />
-                </span>
-                <span className="text-sm text-white/[0.82]">{label}</span>
-              </div>
-            ))}
-          </div>
-
-          <Link
-            href={contactHref}
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#f2c06b] transition-opacity hover:opacity-80"
-          >
-            {copy.cta}
-            <ArrowRight className="h-4 w-4" strokeWidth={2} />
-          </Link>
-        </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
+        {items.slice(0, 3).map((item, i) => (
+          <ReviewCard key={item.title} item={item} index={i} locale={locale} />
+        ))}
       </div>
     </section>
   )

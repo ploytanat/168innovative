@@ -7,6 +7,7 @@ import { getCategories } from "@/app/lib/api/categories"
 import { getCompany } from "@/app/lib/api/company"
 import { buildOrganizationJsonLd, buildPostalAddressJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
+import AnimateOnScroll from "@/app/components/ui/AnimateOnScroll"
 import Footer from "./Footer"
 import Navigation from "./Navigation"
 import PromoBanner from "./PromoBanner"
@@ -82,6 +83,7 @@ export default async function SiteShell({ locale, children }: SiteShellProps) {
         <div className="site-frame min-h-screen">
           <PromoBanner />
           <Navigation locale={locale} logo={displayLogo} categories={categories} />
+          <AnimateOnScroll />
           <main className="min-h-screen">{children}</main>
           {company ? <Footer company={company} /> : null}
           <BackToTop />

@@ -10,7 +10,22 @@
       "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative/app/\\(en\\)\" -name \"page.tsx\")",
       "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative/app/\\(th\\)\" -name \"page.tsx\")",
       "Bash(npm install:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "WebFetch(domain:impeccable.style)",
+      "Bash(curl -s \"https://wb.168innovative.co.th/wp-json/wp/v2/product?per_page=2&_embed=1\")",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\);const items=JSON.parse\\(d\\);items.forEach\\(p=>console.log\\(JSON.stringify\\({id:p.id,slug:p.slug,title:p.title?.rendered,hasAcf:!!p.acf,catIds:p.product_category}\\)\\)\\)\")",
+      "Bash(curl -s \"https://wb.168innovative.co.th/wp-json/wp/v2/hero_slide?per_page=1&_embed=1\")",
+      "Bash(node -e \"process.stdin.resume\\(\\);let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const items=JSON.parse\\(d\\);items.forEach\\(s=>console.log\\(JSON.stringify\\({id:s.id,slug:s.slug,acf_keys:s.acf?Object.keys\\(s.acf\\):[]},null,2\\)\\)\\)}\\)\")",
+      "Bash(node -e \"process.stdin.resume\\(\\);let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const items=JSON.parse\\(d\\);items.forEach\\(p=>console.log\\(JSON.stringify\\({id:p.id,slug:p.slug,title:p.title?.rendered,acf_keys:p.acf?Object.keys\\(p.acf\\).slice\\(0,10\\):[],catIds:p.product_category}\\)\\)}\\)\")",
+      "Bash(curl -s \"https://wb.168innovative.co.th/wp-json/wp/v2/product_category?per_page=8\" -o /tmp/cats.json)",
+      "Bash(node -e \"const items=require\\('/tmp/cats.json'\\);items.forEach\\(c=>console.log\\(c.id,c.slug,c.name,!!\\(c.image_url\\)\\)\\)\")",
+      "Bash(curl -s \"https://wb.168innovative.co.th/wp-json/wp/v2/product_category?per_page=8\" -o \"c:/Users/User/AppData/Local/Temp/cats.json\")",
+      "Bash(node -e \"const items=require\\('c:/Users/User/AppData/Local/Temp/cats.json'\\);items.forEach\\(c=>console.log\\(c.id,c.slug,c.name,!!\\(c.image_url\\)\\)\\)\")",
+      "Bash(mv \"app/\\(th\\)/about\" \"app/\\(th\\)/\\(site\\)/about\")",
+      "Bash(mv \"app/\\(th\\)/articles\" \"app/\\(th\\)/\\(site\\)/articles\")",
+      "Bash(mv \"app/\\(th\\)/categories\" \"app/\\(th\\)/\\(site\\)/categories\")",
+      "Bash(mv \"app/\\(th\\)/contact\" \"app/\\(th\\)/\\(site\\)/contact\")",
+      "Bash(mv \"app/\\(th\\)/search\" \"app/\\(th\\)/\\(site\\)/search\")"
     ]
   }
 }

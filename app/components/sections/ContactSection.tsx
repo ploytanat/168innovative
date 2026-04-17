@@ -11,14 +11,14 @@ const BRANDS = ["COSMAX", "Interpack", "Thai Beauty", "BrandLab TH", "PackPro", 
 
 const COPY = {
   th: {
-    trusted: "ลูกค้าและพาร์ทเนอร์ที่ไว้วางใจเรา",
+    trusted: "แบรนด์และพาร์ทเนอร์ที่ร่วมงานกับเรา",
     title: "พร้อมเริ่มต้นกับเราแล้วหรือยัง?",
-    body: "บอกสเปค รับใบเสนอราคา เริ่มผลิต ง่ายในขั้นตอนเดียว",
+    body: "บอกสเปค รับใบเสนอราคา เริ่มผลิต — ง่ายในขั้นตอนเดียว",
     steps: [
-      "แจ้งสเปคและปริมาณ",
-      "รับใบเสนอราคาใน 24 ชม.",
-      "ดูตัวอย่างสินค้าฟรี",
-      "ยืนยันและเริ่มผลิต",
+      { num: "01", label: "แจ้งสเปคและปริมาณ" },
+      { num: "02", label: "รับใบเสนอราคาใน 24 ชม." },
+      { num: "03", label: "ดูตัวอย่างสินค้าฟรี" },
+      { num: "04", label: "ยืนยันและเริ่มผลิต" },
     ],
     quote: "ขอใบเสนอราคาเลย",
     line: "LINE @168innovative",
@@ -27,12 +27,12 @@ const COPY = {
   en: {
     trusted: "Trusted by our customers and partners",
     title: "Ready to start your project?",
-    body: "Share your specs, get a quote, and move into production with a simpler first step.",
+    body: "Share your specs, get a quote, and move into production — one simple step.",
     steps: [
-      "Share specs and quantity",
-      "Receive quotation within 24 hrs",
-      "Review sample",
-      "Confirm and start production",
+      { num: "01", label: "Share specs & quantity" },
+      { num: "02", label: "Receive quote within 24 hrs" },
+      { num: "03", label: "Review free sample" },
+      { num: "04", label: "Confirm & start production" },
     ],
     quote: "Request a Quote",
     line: "LINE @168innovative",
@@ -43,21 +43,22 @@ const COPY = {
 export default function ContactSection({ data, locale }: ContactSectionProps) {
   const copy = COPY[locale]
   const contactHref = locale === "en" ? "/en/contact" : "/contact"
-  const lineUrl = data.socials.find((social) => social.type === "line")?.url
+  const lineUrl = data.socials.find((s) => s.type === "line")?.url
   const primaryPhone = data.phones[0]?.number
 
   return (
     <>
-      <section className="border-t border-black/6 bg-white px-4 py-7 sm:px-5">
+      {/* Trusted brands strip */}
+      <section className="border-t border-[#e3e1da] bg-white px-4 py-6 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <p className="mb-4 text-center text-[11px] font-bold uppercase tracking-[0.14em] text-[#8896a8]">
+          <p className="mb-4 text-center text-[10px] font-bold uppercase tracking-[0.24em] text-[#4c6b35]/70">
             {copy.trusted}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {BRANDS.map((brand) => (
               <span
                 key={brand}
-                className="rounded-lg border border-black/7 bg-[#f7f2ee] px-4 py-2 font-heading text-[13px] font-bold text-[#4a5568]"
+                className="rounded-lg border border-[#e3e1da] bg-white px-4 py-2 font-heading text-[12px] font-bold text-[#3d3d38]"
               >
                 {brand}
               </span>
@@ -66,64 +67,71 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
         </div>
       </section>
 
-      <section className="bg-[linear-gradient(135deg,#c47b8a_0%,#a86272_100%)] px-4 py-14 text-center sm:px-5">
-        <div className="mx-auto max-w-4xl">
+      {/* CTA section */}
+      <section className="contact-cta-bg relative overflow-hidden px-4 py-16 sm:px-6 sm:py-20">
+        <div aria-hidden className="contact-cta-rule absolute inset-x-0 top-0 h-px opacity-30" />
+
+        <div className="mx-auto max-w-4xl text-center">
           <h2
-            className={`mx-auto max-w-[24ch] text-white ${
+            className={`mx-auto max-w-[22ch] text-white ${
               locale === "th"
-                ? "font-body text-[clamp(1.4rem,2.3vw,2rem)] font-extrabold leading-[1.28]"
-                : "font-heading text-[clamp(1.9rem,3vw,2.4rem)] font-black"
+                ? "font-body text-[clamp(1.5rem,2.6vw,2.2rem)] font-extrabold leading-[1.26]"
+                : "font-display text-[clamp(2rem,3.2vw,2.8rem)] font-bold leading-[1.08]"
             }`}
           >
             {copy.title}
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-[14px] leading-[1.8] text-white/82">
+          <p className="mx-auto mt-4 max-w-[46ch] text-[14px] leading-[1.85] text-white/60 sm:text-[15px]">
             {copy.body}
           </p>
 
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-5">
+          {/* Process steps */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-4">
             {copy.steps.map((step, index) => (
-              <div key={step} className="flex items-start gap-2.5 sm:items-center">
-                <span className="mt-0.5 flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-white/18 text-[11px] font-extrabold text-white sm:mt-0">
-                  {index + 1}
-                </span>
-                <span className="text-left text-[12px] font-semibold leading-snug text-white/88 sm:text-center">
-                  {step}
-                </span>
-                {index < copy.steps.length - 1 ? (
-                  <span className="hidden text-white/28 sm:inline">→</span>
-                ) : null}
+              <div key={step.num} className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/6 px-4 py-2.5 backdrop-blur-sm">
+                  <span className="font-display text-[11px] font-bold tabular-nums text-[#6e8a50]">
+                    {step.num}
+                  </span>
+                  <span className="text-[12px] font-semibold text-white/80">
+                    {step.label}
+                  </span>
+                </div>
+                {index < copy.steps.length - 1 && (
+                  <span aria-hidden className="text-[18px] font-light text-white/20">→</span>
+                )}
               </div>
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {/* CTAs */}
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link
               href={contactHref}
-              className="inline-flex items-center gap-2 rounded-[9px] bg-[#f9a825] px-6 py-3 text-[13px] font-extrabold text-[#2c2521] transition-transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#4c6b35] px-7 py-3.5 text-[13px] font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#5a7e40]"
             >
               {copy.quote}
             </Link>
 
-            {lineUrl ? (
+            {lineUrl && (
               <a
                 href={lineUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-[9px] border-2 border-white/38 px-6 py-3 text-[13px] font-bold text-white transition-colors hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-7 py-3.5 text-[13px] font-bold text-white/85 backdrop-blur-sm transition-all duration-200 hover:border-white/35 hover:bg-white/8"
               >
                 {copy.line}
               </a>
-            ) : null}
+            )}
 
-            {primaryPhone ? (
+            {primaryPhone && (
               <a
                 href={`tel:${primaryPhone.replace(/[^+\d]/g, "")}`}
-                className="inline-flex items-center gap-2 rounded-[9px] border-2 border-white/38 px-6 py-3 text-[13px] font-bold text-white transition-colors hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-7 py-3.5 text-[13px] font-bold text-white/85 backdrop-blur-sm transition-all duration-200 hover:border-white/35 hover:bg-white/8"
               >
                 {copy.call}
               </a>
-            ) : null}
+            )}
           </div>
         </div>
       </section>
