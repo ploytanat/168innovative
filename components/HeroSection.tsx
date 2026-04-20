@@ -104,12 +104,12 @@ export default function HeroSection({ hero }: HeroSectionProps) {
 
   const hasPromoCards = hero.promoCards.length > 0
   const shellClassName = hasPromoCards
-    ? "grid w-full overflow-hidden lg:h-[400px] lg:grid-cols-[260px_minmax(0,1fr)_210px] "
-    : "grid w-full overflow-hidden lg:h-[400px] lg:grid-cols-[260px_minmax(0,1fr)]"
+    ? "grid w-full overflow-hidden rounded-2xl lg:h-[400px] lg:grid-cols-[260px_minmax(0,1fr)_210px]"
+    : "grid w-full overflow-hidden rounded-2xl lg:h-[400px] lg:grid-cols-[260px_minmax(0,1fr)]"
 
   return (
-    <section className="py-4">
-      <div className={shellClassName}  style={{ backgroundColor: hero.bgColor }}>
+    <section className="px-4 py-4 sm:px-5">
+      <div className={shellClassName} style={{ backgroundColor: hero.bgColor }}>
         <div className=" order-2 flex flex-col justify-center px-6 pb-8 pt-2 sm:px-8 lg:order-1 lg:px-5 lg:py-9 xl:pl-8 xl:pr-5">
           {hero.eyebrow ? (
             <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#807a73]">

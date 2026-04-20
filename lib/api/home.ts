@@ -148,7 +148,7 @@ function toProductCardModel(product: ProductView, locale: Locale): ProductCardMo
     },
     category: product.categorySlug.replace(/-/g, " ").toUpperCase(),
     name: product.name,
-    price: "",
+    price: formatProductPrice(product.price, locale),
   }
 }
 
