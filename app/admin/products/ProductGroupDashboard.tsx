@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import { Check, ChevronDown, ChevronUp, Plus, X } from "lucide-react"
 
 export interface AdminProduct {
   id: number
@@ -276,7 +277,13 @@ function ViewFamilyCard({ familyName, members }: { familyName: string; members: 
         </div>
         <div className="pg-parent-card-meta">
           <Badge variant="count" text={`${members.length} สินค้า`} />
-          <span className="pg-parent-card-arrow">{open ? "▲" : "▼"}</span>
+          <span className="pg-parent-card-arrow">
+            {open ? (
+              <ChevronUp aria-hidden="true" size={14} strokeWidth={2.2} />
+            ) : (
+              <ChevronDown aria-hidden="true" size={14} strokeWidth={2.2} />
+            )}
+          </span>
         </div>
       </button>
 
@@ -393,7 +400,13 @@ function EditFamilyCard({
                 }}
                 title="นำออกจากกลุ่ม"
               >
-                {isSaved ? "✓" : isSaving ? "…" : "×"}
+                {isSaved ? (
+                  <Check aria-hidden="true" size={14} strokeWidth={2.4} />
+                ) : isSaving ? (
+                  "..."
+                ) : (
+                  <X aria-hidden="true" size={14} strokeWidth={2.2} />
+                )}
               </button>
             </span>
           )
@@ -404,7 +417,15 @@ function EditFamilyCard({
       {candidates.length > 0 && (
         <>
           <button type="button" className="pg-picker-toggle" onClick={() => setExpanded((v) => !v)}>
-            {expanded ? "▲ ซ่อน" : "▼ เพิ่มสินค้าเข้ากลุ่มนี้"}
+            {expanded ? (
+              <>
+                <ChevronUp aria-hidden="true" size={14} strokeWidth={2.2} /> ซ่อน
+              </>
+            ) : (
+              <>
+                <ChevronDown aria-hidden="true" size={14} strokeWidth={2.2} /> เพิ่มสินค้าเข้ากลุ่มนี้
+              </>
+            )}
           </button>
           {expanded && (
             <div className="pg-picker">
@@ -421,7 +442,15 @@ function EditFamilyCard({
                       setTimeout(() => onSave(c.id), 0)
                     }}
                   >
-                    {saving === c.id ? "..." : success === c.id ? "✓" : "+ เพิ่ม"}
+                    {saving === c.id ? (
+                      "..."
+                    ) : success === c.id ? (
+                      <Check aria-hidden="true" size={14} strokeWidth={2.4} />
+                    ) : (
+                      <>
+                        <Plus aria-hidden="true" size={14} strokeWidth={2.2} /> เพิ่ม
+                      </>
+                    )}
                   </button>
                 </div>
               ))}
@@ -521,7 +550,15 @@ function SoloProductCard({
               onClick={onSave}
               disabled={saving || !familyNameTh}
             >
-              {saving ? "กำลังบันทึก..." : saved ? "✓ บันทึกแล้ว" : "บันทึก"}
+              {saving ? (
+                "กำลังบันทึก..."
+              ) : saved ? (
+                <>
+                  <Check aria-hidden="true" size={14} strokeWidth={2.4} /> บันทึกแล้ว
+                </>
+              ) : (
+                "บันทึก"
+              )}
             </button>
           )}
         </div>

@@ -1,4 +1,5 @@
 import { HOME_PRODUCT_SPOTLIGHT_ORDER } from "../config/home-product-spotlight"
+import { getArticles } from "./articles"
 import { getCategories } from "./categories"
 import { getCompany } from "./company"
 import { getHeroSlides } from "./hero"
@@ -20,7 +21,7 @@ async function loadWithFallback<T>(
 }
 
 export async function getHomeSections(locale: Locale) {
-  const [heroSlides, spoutProducts, allProducts, categories, whys, company] =
+  const [heroSlides, spoutProducts, allProducts, categories, whys, company, articles] =
     await Promise.all([
       loadWithFallback(getHeroSlides(locale), [], `hero slides (${locale})`),
 
@@ -37,6 +38,8 @@ export async function getHomeSections(locale: Locale) {
       loadWithFallback(getWhy(locale), [], `why items (${locale})`),
 
       loadWithFallback(getCompany(locale), null, `company (${locale})`),
+
+      loadWithFallback(getArticles(locale), [], `articles (${locale})`),
     ])
 
   const spotlightProducts = HOME_PRODUCT_SPOTLIGHT_ORDER.flatMap((slug) => {
@@ -60,5 +63,6 @@ export async function getHomeSections(locale: Locale) {
     categories,
     whys,
     company,
+    articles: articles.slice(0, 4),
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { LayoutGrid, List } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import CatalogFilterPanel from "@/app/components/product/CatalogFilterPanel";
@@ -13,38 +14,6 @@ import {
   type SortOrder,
 } from "@/app/lib/catalog/view-model";
 import type { CategoryView, ProductView } from "@/app/lib/types/view";
-
-const GridIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-4 w-4"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-    />
-  </svg>
-);
-
-const ListIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-4 w-4"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M4 6h16M4 12h16M4 18h16"
-    />
-  </svg>
-);
 
 const copy = {
   th: {
@@ -266,7 +235,7 @@ export default function ProductGrid({
                     : "bg-white text-slate-600 hover:bg-slate-50"
                 }`}
               >
-                <GridIcon />
+                <LayoutGrid className="h-4 w-4" strokeWidth={2} />
                 <span className="hidden sm:inline">{t.viewGrid}</span>
               </button>
               <button
@@ -279,7 +248,7 @@ export default function ProductGrid({
                     : "bg-white text-slate-600 hover:bg-slate-50"
                 }`}
               >
-                <ListIcon />
+                <List className="h-4 w-4" strokeWidth={2} />
                 <span className="hidden sm:inline">{t.viewList}</span>
               </button>
             </div>

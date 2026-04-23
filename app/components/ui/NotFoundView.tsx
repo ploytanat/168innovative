@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
 type Locale = "th" | "en"
 
@@ -247,7 +248,7 @@ export default function NotFoundView({ locale }: { locale: Locale }) {
 
           <div className="btn-group">
             <Link href={text.homeHref} className="btn-primary">
-              {locale === "th" ? "← " : ""}
+              {locale === "th" ? <ArrowLeft className="h-4 w-4" strokeWidth={2} /> : null}
               {text.homeLabel}
             </Link>
             <Link href={text.contactHref} className="btn-secondary">

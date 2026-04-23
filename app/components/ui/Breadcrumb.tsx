@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
 import {
@@ -13,23 +14,6 @@ export type BreadcrumbItem = {
   label: string
   href?: string
 }
-
-const ChevronRightIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-3.5 w-3.5"
-    style={{ color: COLORS.hint }}
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.8}
-      d="M9 5l7 7-7 7"
-    />
-  </svg>
-)
 
 const TH_LABELS: Record<string, string> = {
   categories: 'หมวดสินค้า',
@@ -89,7 +73,7 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
 
           return (
             <li key={`${item.label}-${index}`} className="inline-flex items-center gap-2">
-              <ChevronRightIcon />
+              <ChevronRight className="h-3.5 w-3.5" style={{ color: COLORS.hint }} strokeWidth={1.8} />
               {isLast ? (
                 <span
                   className="rounded-full px-3 py-1.5"

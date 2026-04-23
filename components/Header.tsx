@@ -1,4 +1,5 @@
 import type { NavLink } from "@/types/homepage"
+import { ChevronDown, Search } from "lucide-react"
 import Link from "next/link"
 interface HeaderProps {
   brandName: string
@@ -20,17 +21,7 @@ export default function Header({ brandName, searchHref, links }: HeaderProps) {
           method="GET"
           className="flex flex-1 items-center gap-[8px] rounded-[6px] border border-[#e0e0e0] bg-[#f7f7f7] px-[14px] py-[9px]"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-[16px] w-[16px] shrink-0 text-[#999]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path strokeLinecap="round" d="M21 21l-4.35-4.35" />
-          </svg>
+          <Search className="h-[16px] w-[16px] shrink-0 text-[#999]" strokeWidth={2} />
           <input
             type="text"
             name="q"
@@ -56,9 +47,7 @@ export default function Header({ brandName, searchHref, links }: HeaderProps) {
                 className="flex items-center gap-[4px] px-[12px] py-[10px] text-[13px] font-bold uppercase text-[#111] hover:text-[#333]"
               >
                 สินค้าทั้งหมด
-                <svg className="h-[10px] w-[10px]" viewBox="0 0 10 6" fill="currentColor">
-                  <path d="M0 0l5 6 5-6z" />
-                </svg>
+                <ChevronDown className="h-[10px] w-[10px]" strokeWidth={2.5} />
               </Link>
             </li>
             {links.map((link) => (

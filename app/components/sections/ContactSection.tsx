@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 import type { CompanyView } from "@/app/lib/types/view"
 
@@ -75,8 +76,8 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
           <h2
             className={`mx-auto max-w-[22ch] text-white ${
               locale === "th"
-                ? "font-body text-[clamp(1.5rem,2.6vw,2.2rem)] font-extrabold leading-[1.26]"
-                : "font-display text-[clamp(2rem,3.2vw,2.8rem)] font-bold leading-[1.08]"
+                ? "font-heading text-[clamp(1.6rem,2.6vw,2.3rem)] font-black leading-[1.18]"
+                : "font-display text-[clamp(2rem,3.2vw,2.9rem)] font-extrabold leading-[1.05]"
             }`}
           >
             {copy.title}
@@ -98,7 +99,11 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
                   </span>
                 </div>
                 {index < copy.steps.length - 1 && (
-                  <span aria-hidden className="text-[18px] font-light text-white/20">→</span>
+                  <ArrowRight
+                    className="h-4 w-4 text-white/20"
+                    aria-hidden="true"
+                    strokeWidth={1.8}
+                  />
                 )}
               </div>
             ))}

@@ -183,8 +183,8 @@ export default function HeroSection({ slides, categories, locale }: HeroSectionP
                   <span
                     className={`block leading-[0.88] text-[#141412] ${
                       locale === "th"
-                        ? "font-body text-[clamp(2.4rem,9vw,6.5rem)] font-extrabold"
-                        : "font-display text-[clamp(3rem,10.5vw,8rem)] font-bold"
+                        ? "font-heading text-[clamp(2.6rem,9vw,6.5rem)] font-black"
+                        : "font-display text-[clamp(3rem,10.5vw,8rem)] font-extrabold"
                     }`}
                   >
                     {line}
@@ -213,10 +213,10 @@ export default function HeroSection({ slides, categories, locale }: HeroSectionP
             <div className="mt-10 flex gap-8 border-t border-[#e3e1da] pt-7">
               {copy.stats.map((stat) => (
                 <div key={stat.label}>
-                  <p className="font-display text-[1.65rem] font-bold leading-none text-[#141412]">
+                  <p className="font-heading text-[1.75rem] font-extrabold leading-none tracking-[-0.03em] text-[#141412]">
                     {stat.value}
                   </p>
-                  <p className="mt-1 text-[11px] font-medium text-[#9a9892]">
+                  <p className="mt-1 text-[11px] font-semibold tracking-[0.04em] text-[#9a9892]">
                     {stat.label}
                   </p>
                 </div>

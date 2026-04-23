@@ -1,6 +1,7 @@
 "use client";
 
 import "./admin.css";
+import { ArrowDown, ArrowUp, Check, Circle, ChevronsUpDown, X } from "lucide-react";
 import {
   useState,
   useEffect,
@@ -148,7 +149,7 @@ function Modal({
             onClick={onClose}
             aria-label="ปิด"
           >
-            ×
+            <X aria-hidden="true" size={18} strokeWidth={2} />
           </button>
         </div>
         {children}
@@ -538,7 +539,7 @@ export default function ProductsPanel() {
         <div className="a-error">
           {error}
           <button type="button" onClick={() => setError(null)}>
-            ×
+            <X aria-hidden="true" size={16} strokeWidth={2} />
           </button>
         </div>
       )}
@@ -663,8 +664,15 @@ function Pagination({
 // ─── ProductTable ─────────────────────────────────────────────────────────────
 
 function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
-  if (!active) return <span className="a-sort-icon--inactive"> ↕</span>;
-  return <span> {dir === "asc" ? "↑" : "↓"}</span>;
+  const Icon = active ? (dir === "asc" ? ArrowUp : ArrowDown) : ChevronsUpDown;
+  return (
+    <Icon
+      aria-hidden="true"
+      className={active ? undefined : "a-sort-icon--inactive"}
+      size={14}
+      strokeWidth={2}
+    />
+  );
 }
 
 function ProductTable({
@@ -982,7 +990,15 @@ function ProductModal({
                   className="a-radio-no-margin"
                   onChange={() => set("status", s)}
                 />
-                {s === "publish" ? "✓ Publish" : "◎ Draft"}
+                {s === "publish" ? (
+                  <>
+                    <Check aria-hidden="true" size={14} strokeWidth={2.4} /> Publish
+                  </>
+                ) : (
+                  <>
+                    <Circle aria-hidden="true" size={12} strokeWidth={2.2} /> Draft
+                  </>
+                )}
               </label>
             ))}
           </div>

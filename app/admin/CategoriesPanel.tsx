@@ -1,6 +1,7 @@
 "use client"
 
 import "./admin.css"
+import { Plus, X } from "lucide-react"
 import { useState, useEffect, useCallback, useRef, useId } from "react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -62,7 +63,9 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
       <div className="a-modal">
         <div className="a-modal-header">
           <h2 className="a-modal-title">{title}</h2>
-          <button type="button" className="a-btn--close" onClick={onClose} aria-label="ปิด">×</button>
+          <button type="button" className="a-btn--close" onClick={onClose} aria-label="ปิด">
+            <X aria-hidden="true" size={18} strokeWidth={2} />
+          </button>
         </div>
         {children}
       </div>
@@ -114,7 +117,11 @@ function ImageUploader({ currentUrl = "", onUploaded, label = "รูปภา�
         >
           {preview
             ? <img src={preview} alt="" />
-            : <span className="a-img-thumb-placeholder">+</span>}
+            : (
+              <span className="a-img-thumb-placeholder">
+                <Plus aria-hidden="true" size={20} strokeWidth={2} />
+              </span>
+            )}
           {uploading && <div className="a-img-uploading">กำลังอัปโหลด...</div>}
         </div>
         <div className="a-img-info">
@@ -174,14 +181,16 @@ export default function CategoriesPanel() {
           onChange={(e) => setSearch(e.target.value)} />
         <button type="button" className="a-btn a-btn--add"
           onClick={() => setModal({ item: null })}>
-          + เพิ่มหมวดหมู่
+          <Plus aria-hidden="true" size={16} strokeWidth={2} /> เพิ่มหมวดหมู่
         </button>
       </div>
 
       {error && (
         <div className="a-error">
           {error}
-          <button type="button" onClick={() => setError(null)}>×</button>
+          <button type="button" onClick={() => setError(null)}>
+            <X aria-hidden="true" size={16} strokeWidth={2} />
+          </button>
         </div>
       )}
 

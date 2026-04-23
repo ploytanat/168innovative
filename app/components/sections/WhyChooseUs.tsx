@@ -82,8 +82,8 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
             id="why-heading"
             className={`text-[#141412] ${
               locale === "th"
-                ? "font-body text-[clamp(1.4rem,2.5vw,2rem)] font-extrabold"
-                : "font-display text-[clamp(1.6rem,2.8vw,2.4rem)] font-bold"
+                ? "font-heading text-[clamp(1.5rem,2.5vw,2.1rem)] font-black"
+                : "font-display text-[clamp(1.7rem,2.8vw,2.5rem)] font-extrabold"
             }`}
           >
             {copy.title}

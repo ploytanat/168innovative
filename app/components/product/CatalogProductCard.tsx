@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Check, ChevronRight, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { saveRecentlyViewed } from "@/app/components/product/RecentlyViewed";
@@ -12,50 +13,6 @@ import {
 } from "@/app/lib/catalog/view-model";
 import { useQuote } from "@/app/lib/quote/QuoteContext";
 import type { ProductView } from "@/app/lib/types/view";
-
-const ChevronRight = () => (
-  <svg
-    className="h-3.5 w-3.5"
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2.5}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-  </svg>
-);
-
-const PlusIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-4 w-4"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2.5}
-      d="M12 4v16m8-8H4"
-    />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    className="h-4 w-4"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2.5}
-      d="M5 13l4 4L19 7"
-    />
-  </svg>
-);
 
 const copy = {
   th: {
@@ -217,7 +174,11 @@ export default function CatalogProductCard({
                 : { background: "#f1f5f9", color: "#475569" }
             }
           >
-            {inQuote ? <CheckIcon /> : <PlusIcon />}
+            {inQuote ? (
+              <Check className="h-4 w-4" strokeWidth={2.5} />
+            ) : (
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
+            )}
             {inQuote ? t.inQuote : t.addQuote}
           </button>
           <Link
@@ -226,7 +187,7 @@ export default function CatalogProductCard({
             onClick={handleLinkClick}
             className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-slate-950"
           >
-            {t.viewDetails} <ChevronRight />
+            {t.viewDetails} <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </Link>
         </div>
       </article>
@@ -358,7 +319,11 @@ export default function CatalogProductCard({
                 : { background: "#f1f5f9", color: "#475569" }
             }
           >
-            {inQuote ? <CheckIcon /> : <PlusIcon />}
+            {inQuote ? (
+              <Check className="h-4 w-4" strokeWidth={2.5} />
+            ) : (
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
+            )}
             {inQuote ? t.inQuote : t.addQuote}
           </button>
           <Link
@@ -368,7 +333,7 @@ export default function CatalogProductCard({
             className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-slate-950"
           >
             {t.viewDetails}
-            <ChevronRight />
+            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </Link>
         </div>
       </div>

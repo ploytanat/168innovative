@@ -39,9 +39,9 @@
       0 16px 40px rgba(20, 20, 18, 0.09),
       inset 0 1px 0 rgba(255, 255, 255, 0.95);
     /* ── Typography ──────────────────────────────────────── */
-    --font-display-stack: var(--font-display), "Bricolage Grotesque", sans-serif;
-    --font-heading-stack: var(--font-heading), sans-serif;
-    --font-body-stack: var(--font-body), sans-serif;
+    --font-display-stack: var(--font-kanit), "Kanit", sans-serif;
+    --font-heading-stack: var(--font-kanit), "Kanit", sans-serif;
+    --font-body-stack: var(--font-kanit), "Kanit", sans-serif;
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
     --text-base: 1rem;
@@ -62,7 +62,8 @@
   body {
     font-family: var(--font-body-stack);
     font-size: var(--text-base);
-    line-height: 1.72;
+    font-weight: 400;
+    line-height: 1.70;
     color: var(--color-ink);
     text-rendering: optimizeLegibility;
     -webkit-overflow-scrolling: touch;
@@ -78,20 +79,12 @@
   h6 {
     font-family: var(--font-heading-stack);
     font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
   }
 
-  html[lang="th"] h1,
-  html[lang="th"] h2,
-  html[lang="th"] h3,
-  html[lang="th"] h4,
-  html[lang="th"] h5,
-  html[lang="th"] h6 {
-    font-family: var(--font-body-stack);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    line-height: 1.18;
+  h3, h4 {
+    letter-spacing: -0.018em;
   }
 
   button,
@@ -128,16 +121,17 @@
 @layer components {
   .font-body {
     font-family: var(--font-body-stack);
+    letter-spacing: -0.01em;
   }
 
   .font-heading {
     font-family: var(--font-heading-stack);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 
   .font-display {
     font-family: var(--font-display-stack);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.04em;
   }
 
   .hero-gradient-card {

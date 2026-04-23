@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 
 import type {
   CatalogProduct,
@@ -146,15 +147,7 @@ export default function ProductFamilyCard({ family }: Props) {
           className="mt-1 flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-slate-950"
         >
           View Details
-          <svg
-            className="h-3.5 w-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
+          <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} />
         </Link>
       </div>
     </div>

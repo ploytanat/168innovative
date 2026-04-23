@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ArrowUp } from 'lucide-react'
 import { COLORS, GHOST_BUTTON_STYLE } from '@/app/components/ui/designSystem'
 
 export default function BackToTop() {
@@ -40,7 +41,7 @@ export default function BackToTop() {
       }`}
       style={{ ...GHOST_BUTTON_STYLE, color: COLORS.dark }}
     >
-      <span className="text-lg">↑</span>
+      <ArrowUp className="h-[18px] w-[18px]" strokeWidth={2.2} />
     </button>
   )
 }

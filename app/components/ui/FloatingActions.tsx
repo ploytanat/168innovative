@@ -1,33 +1,13 @@
 "use client"
 
 import Image from "next/image"
+import { FileText, Phone, Trash2, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 
 import { useQuote } from "@/app/lib/quote/QuoteContext"
 
 // ─── Icons ────────────────────────────────────────────────────────────────────
-
-const CloseIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-  </svg>
-)
-const PhoneIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-  </svg>
-)
-const TrashIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-4 w-4">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-  </svg>
-)
-const DocumentIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>
-)
 
 // ─── Copy ─────────────────────────────────────────────────────────────────────
 
@@ -133,7 +113,7 @@ export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
           className="flex h-12 w-12 items-center justify-center rounded-full text-white shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
           style={{ background: "#e53935" }}
         >
-          <PhoneIcon />
+          <Phone className="h-6 w-6" strokeWidth={2} />
         </a>
 
         {/* Quote basket button */}
@@ -144,7 +124,7 @@ export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
           title={t.quoteLabel}
           className="relative flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 shadow-xl transition-all duration-200 hover:scale-110 hover:bg-slate-800 active:scale-95"
         >
-          <DocumentIcon />
+          <FileText className="h-6 w-6" strokeWidth={1.8} />
           <span className="sr-only">{t.quoteLabel}</span>
           {mounted && count > 0 && (
             <span
@@ -188,7 +168,7 @@ export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
             aria-label="ปิด"
             className="rounded-xl border border-slate-200 p-2 transition hover:bg-slate-50"
           >
-            <CloseIcon />
+            <X className="h-5 w-5" strokeWidth={2} />
           </button>
         </div>
 
@@ -197,7 +177,7 @@ export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
           {items.length === 0 ? (
             <div className="mt-16 flex flex-col items-center text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
-                <DocumentIcon />
+                <FileText className="h-6 w-6" strokeWidth={1.8} />
               </div>
               <p className="mt-4 font-semibold text-slate-700">{t.drawerEmpty}</p>
               <p className="mt-1.5 text-sm text-slate-400">{t.drawerEmptyHint}</p>
@@ -239,7 +219,7 @@ export default function FloatingActions({ lineUrl, phoneHref, locale }: Props) {
                     aria-label="ลบออกจากรายการ"
                     className="shrink-0 rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
                   >
-                    <TrashIcon />
+                    <Trash2 className="h-4 w-4" strokeWidth={2} />
                   </button>
                 </li>
               ))}

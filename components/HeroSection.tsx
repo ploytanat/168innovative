@@ -1,26 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowRight, Check } from "lucide-react"
 import type { HeroModel, HeroPromoCard } from "@/types/homepage"
-
-function ArrowIcon({ className = "h-3 w-3" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-    >
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2.3"
-        d="M5 12h14m-7-7 7 7-7 7"
-      />
-    </svg>
-  )
-}
 
 function getBadgeClasses(variant: HeroPromoCard["badgeVariant"]) {
   if (variant === "sale") {
@@ -86,9 +67,31 @@ function PromoCard({ card }: { card: HeroPromoCard }) {
       ) : null}
 
       <span className="absolute bottom-2.5 right-2.5 translate-x-[-5px] text-[#111] opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100">
-        <ArrowIcon className="h-[11px] w-[11px]" />
+        <ArrowRight className="h-[11px] w-[11px]" aria-hidden="true" strokeWidth={2.3} />
       </span>
     </Link>
+  )
+}
+
+function parseHeroDescription(description: string) {
+  const lines = description
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+
+  return lines.reduce(
+    (result, line) => {
+      const checklistMatch = line.match(/^[\u2713\u2714]\s*(.+)$/)
+
+      if (checklistMatch?.[1]) {
+        result.checkItems.push(checklistMatch[1].trim())
+      } else {
+        result.summaryLines.push(line)
+      }
+
+      return result
+    },
+    { summaryLines: [] as string[], checkItems: [] as string[] }
   )
 }
 
@@ -102,6 +105,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
     .map((line) => line.trim())
     .filter(Boolean)
 
+  const { summaryLines, checkItems } = parseHeroDescription(hero.description)
   const hasPromoCards = hero.promoCards.length > 0
   const shellClassName = hasPromoCards
     ? "grid w-full overflow-hidden rounded-2xl lg:h-[400px] lg:grid-cols-[260px_minmax(0,1fr)_210px]"
@@ -110,7 +114,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
   return (
     <section className="px-4 py-4 sm:px-5">
       <div className={shellClassName} style={{ backgroundColor: hero.bgColor }}>
-        <div className=" order-2 flex flex-col justify-center px-6 pb-8 pt-2 sm:px-8 lg:order-1 lg:px-5 lg:py-9 xl:pl-8 xl:pr-5">
+        <div className="order-2 flex flex-col justify-center px-6 pb-8 pt-2 sm:px-8 lg:order-1 lg:px-5 lg:py-9 xl:pl-8 xl:pr-5">
           {hero.eyebrow ? (
             <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.14em] text-[#807a73]">
               <span className="inline-block h-px w-[18px] bg-[#807a73]" />
@@ -132,16 +136,35 @@ export default function HeroSection({ hero }: HeroSectionProps) {
               : hero.title}
           </h1>
 
-          <p className="mt-4 max-w-[26ch] text-[12.5px] leading-[1.65] text-[#666] sm:text-[13px]">
-            {hero.description}
-          </p>
+          {summaryLines.length > 0 || checkItems.length > 0 ? (
+            <div className="mt-4 max-w-[34ch] space-y-3 text-[#5f5a54]">
+              {summaryLines.length > 0 ? (
+                <p className="whitespace-pre-line text-[12.5px] leading-[1.75] sm:text-[13px]">
+                  {summaryLines.join("\n")}
+                </p>
+              ) : null}
+
+              {checkItems.length > 0 ? (
+                <ul className="space-y-1.5 text-[12px] leading-[1.55] sm:text-[12.5px]">
+                  {checkItems.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="mt-[0.1em] font-bold text-[#4c6b35]" aria-hidden="true">
+                        <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
 
           <Link
             href={hero.ctaHref}
-            className="mt-6 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[8px] bg-[#111] px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#333] sm:w-fit"
+            className="mt-5 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[8px] bg-[#111] px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#333] sm:w-fit"
           >
             <span>{hero.ctaLabel}</span>
-            <ArrowIcon />
+            <ArrowRight className="h-3 w-3" aria-hidden="true" strokeWidth={2.3} />
           </Link>
         </div>
 
@@ -150,12 +173,6 @@ export default function HeroSection({ hero }: HeroSectionProps) {
             className="absolute bottom-[-64px] left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full"
             style={{ backgroundColor: `${hero.bgColor}aa` }}
           />
-
-          {hero.centerTag ? (
-            <div className="absolute top-5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-black/8 bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.06em] text-[#111] shadow-[0_1px_0_rgba(0,0,0,0.03)]">
-              {hero.centerTag}
-            </div>
-          ) : null}
 
           <div className="relative z-[1] h-[115%] w-full">
             <Image
@@ -190,7 +207,7 @@ export default function HeroSection({ hero }: HeroSectionProps) {
               >
                 <span>{hero.promoViewAllLabel ?? "View all"}</span>
                 <span className="h-px flex-1 bg-black/8" />
-                <ArrowIcon className="h-[13px] w-[13px]" />
+                <ArrowRight className="h-[13px] w-[13px]" aria-hidden="true" strokeWidth={2.3} />
               </Link>
             ) : null}
           </div>
