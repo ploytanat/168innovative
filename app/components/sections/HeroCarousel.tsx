@@ -60,7 +60,7 @@ function SideBanner({
   return (
     <Link
       href={withLocalePath(banner.href, locale)}
-      className="group relative flex-1 overflow-hidden rounded-2xl border"
+      className="group relative flex-1 overflow-hidden rounded-[14px] border"
       style={{
         borderColor: 'rgba(15,23,42,.06)',
         boxShadow: '0 12px 28px rgba(17,24,39,.08)',
@@ -165,17 +165,16 @@ export default function HeroCarousel({
 
       <section
         aria-label={locale === 'th' ? 'สินค้าแนะนำ' : 'Featured products'}
-        className="relative overflow-hidden py-3"
-        style={{ background: 'linear-gradient(180deg,#f7f5f2 0%,#f3efe9 100%)' }}
+        className="relative overflow-hidden bg-transparent py-4"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        <div className="mx-auto px-3 sm:px-5">
+        <div className="mx-auto max-w-7xl px-3 sm:px-5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_320px]">
 
             {/* ── Main slide ── */}
             <div
-              className="relative overflow-hidden rounded-[1.7rem] border shadow-[0_18px_45px_rgba(17,24,39,0.08)]"
+              className="relative overflow-hidden rounded-[18px] border shadow-[0_16px_38px_rgba(35,31,28,0.08)]"
               style={{ borderColor: 'rgba(15,23,42,.06)' }}
             >
               <HeroSlide
@@ -199,7 +198,7 @@ export default function HeroCarousel({
 
             {/* ── Side banners — only renders when data is provided ── */}
             {sideBanners && sideBanners.length > 0 && (
-              <div className="hidden flex-col gap-3 lg:flex">
+              <div className="hidden min-h-[28rem] flex-col gap-3 lg:flex">
                 {sideBanners.slice(0, 2).map((banner) => (
                   <SideBanner key={banner.id} banner={banner} locale={locale} />
                 ))}

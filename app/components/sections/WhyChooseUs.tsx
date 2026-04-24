@@ -54,8 +54,8 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
   return (
     <section className="relative z-10 mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-5 lg:py-14">
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
-        <div className="glass-frosted rounded-4xl p-6 sm:p-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
+        <div className="rounded-[18px] bg-white p-6 shadow-[0_12px_36px_rgba(35,31,28,.06)] sm:p-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#597197]">
             {copy.eyebrow}
           </p>
           <h2
@@ -75,7 +75,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
             {items.slice(0, 4).map((item) => (
               <article
                 key={item.title}
-                className="glass-frosted rounded-3xl p-4"
+                className="rounded-[1rem] border border-[rgba(205,218,235,0.72)] bg-[#f8fbfd] p-4"
               >
                 <div className="flex items-start gap-4">
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#f4f6f8]">
@@ -107,7 +107,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
           </div>
         </div>
 
-        <div className="rounded-[2rem] bg-[linear-gradient(160deg,#2d3340_0%,#151922_100%)] p-6 text-white shadow-[0_20px_44px_rgba(21,25,34,0.24)] sm:p-8">
+        <div className="rounded-[1.25rem] bg-[linear-gradient(160deg,#1a2232_0%,#24457c_58%,#2ab8b0_100%)] p-6 text-white shadow-[0_20px_44px_rgba(30,40,60,0.18)] sm:p-8">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/55">
             {copy.panelTitle}
           </p>
@@ -121,7 +121,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
                 key={label}
                 className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.05] px-4 py-3"
               >
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/[0.08] text-[#f2c06b]">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/[0.10] text-[#ffe45c]">
                   <Icon className="h-5 w-5" strokeWidth={1.8} />
                 </span>
                 <span className="text-sm text-white/[0.82]">{label}</span>
@@ -131,7 +131,7 @@ export default function WhyChooseUs({ items, locale }: WhyChooseUsProps) {
 
           <Link
             href={contactHref}
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#f2c06b] transition-opacity hover:opacity-80"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#ffe45c] transition-opacity hover:opacity-80"
           >
             {copy.cta}
             <ArrowRight className="h-4 w-4" strokeWidth={2} />

@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import HeroCarousel from "@/app/components/sections/HeroCarousel"
-import CategoryBar from "@/app/components/sections/CategoryBar"
 import CategorySection from "@/app/components/sections/CategorySection"
 import ProductMarquee from "@/app/components/sections/ProductMarquee"
 import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
@@ -39,6 +38,7 @@ export default async function HomePage() {
 
       {/* 1. Hero — ดึงดูดและแนะนำแบรนด์ */}
       {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} locale={locale} sideBanners={getSideBanners(locale)} />}
+
 
  
       {/* 3. Category Section — แสดง editorial ของหมวดหลัก */}

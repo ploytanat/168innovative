@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
   ChevronDown,
+  Globe2,
   HelpCircle,
   Menu,
   PackageCheck,
@@ -43,6 +44,53 @@ const NAV_MENU: NavItem[] = [
   { href: "/about", label: { th: "เกี่ยวกับเรา", en: "About" } },
   { href: "/contact", label: { th: "ติดต่อเรา", en: "Contact" } },
 ]
+
+function LanguageSwitch({
+  isEN,
+  compact = false,
+  onClick,
+}: {
+  isEN: boolean
+  compact?: boolean
+  onClick: () => void
+}) {
+  const currentLabel = isEN ? "EN" : "TH"
+  const nextLabel = isEN ? "ไทย" : "EN"
+  const fullLabel = isEN ? "English" : "ภาษาไทย"
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`Switch language to ${nextLabel}`}
+      className={`
+        group inline-flex shrink-0 items-center rounded-full border border-black/[0.08]
+        bg-white text-black shadow-[0_2px_10px_rgba(35,31,28,.06)]
+        transition-all duration-200 hover:-translate-y-0.5 hover:border-black/15 hover:shadow-[0_8px_22px_rgba(35,31,28,.10)]
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 focus-visible:ring-offset-2
+        ${compact ? "gap-2 px-3 py-2" : "gap-2.5 px-3 py-1.5"}
+      `}
+    >
+      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#f7f2ee] text-black">
+        <Globe2 className="h-3.5 w-3.5" strokeWidth={2.2} />
+      </span>
+      <span className="flex flex-col items-start leading-none">
+        {!compact && (
+          <span className="text-[9px] font-bold uppercase text-black/45">
+            {fullLabel}
+          </span>
+        )}
+        <span className="mt-0.5 flex items-center gap-1.5 text-[12px] font-black">
+          {currentLabel}
+          <span className="text-black/30">/</span>
+          <span className="text-black/45 transition-colors group-hover:text-black">
+            {nextLabel}
+          </span>
+        </span>
+      </span>
+    </button>
+  )
+}
 
 export default function Navigation(props: NavigationProps) {
   const pathname = usePathname()
@@ -195,19 +243,7 @@ function NavigationInner({
           </div>
 
           <div className="flex items-center gap-5 text-[12px] font-medium text-[#4f4f4f]">
-            <span className="flex items-center gap-2">
-              {isEN ? "🇬🇧 United Kingdom" : "🇹🇭 Thailand"}
-            </span>
-
-            <div className="h-5 w-px bg-black/10" />
-
-            <button
-              type="button"
-              onClick={toggleLang}
-              className="flex items-center gap-2 hover:text-black"
-            >
-              {isEN ? "EN" : "TH"}
-            </button>
+            <LanguageSwitch isEN={isEN} onClick={toggleLang} />
 
             <div className="h-5 w-px bg-black/10" />
 
@@ -397,13 +433,7 @@ function NavigationInner({
                 })}
 
                 <div className="flex items-center justify-between border-t border-black/10 pt-4">
-                  <button
-                    type="button"
-                    onClick={toggleLang}
-                    className="rounded-full bg-[#f7f7f7] px-4 py-2 text-[13px] font-black text-black"
-                  >
-                    {isEN ? "🇹🇭 TH" : "🇬🇧 EN"}
-                  </button>
+                  <LanguageSwitch compact isEN={isEN} onClick={toggleLang} />
 
                   <Link
                     href={withLocale("/contact")}

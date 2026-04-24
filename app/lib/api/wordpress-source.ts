@@ -1958,7 +1958,9 @@ export async function getWordPressCompany(
   };
 }
 
-export async function getWordPressHeroSlides(locale: Locale) {
+export async function getWordPressHeroSlides(
+  locale: Locale,
+): Promise<HeroSlideView[]> {
   const slides = await fetchWordPressHeroSlidesRaw();
 
   return slides.map((slide, index) => {

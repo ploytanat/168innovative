@@ -25,11 +25,19 @@ interface ProductGridProps {
 // ─── Static data ─────────────────────────────────────────────────────────────
 
 const BADGE_CYCLE = [
-  { label: { th: "ขายดี",  en: "Best Seller" }, style: "bg-[#c47b8a] text-white" },
+  { label: { th: "ขายดี",  en: "Best Seller" }, style: "bg-[#d7627d] text-white" },
   { label: { th: "นิยม",   en: "Popular" },     style: "bg-[#d4956a] text-white" },
-  { label: { th: "OEM",    en: "OEM" },         style: "bg-[#6b94c7] text-white" },
-  { label: { th: "ใหม่",   en: "New" },         style: "bg-[#5a8e6d] text-white" },
-  { label: { th: "Custom", en: "Custom" },      style: "bg-[#9b8ec4] text-white" },
+  { label: { th: "OEM",    en: "OEM" },         style: "bg-[#4a86f4] text-white" },
+  { label: { th: "ใหม่",   en: "New" },         style: "bg-[#2ab8b0] text-white" },
+  { label: { th: "Custom", en: "Custom" },      style: "bg-[#8e79c6] text-white" },
+] as const
+
+const IMAGE_BG_CYCLE = [
+  "bg-[#fff4f7]",
+  "bg-[#fff6e8]",
+  "bg-[#eef6ff]",
+  "bg-[#effbf8]",
+  "bg-[#f5f2ff]",
 ] as const
 
 const VARIANT_COPY = {
@@ -56,23 +64,25 @@ function ImageBox({
   item,
   href,
   badge,
+  imageBg,
   locale,
 }: {
   item: ProductView
   href: string
   badge: (typeof BADGE_CYCLE)[number]
+  imageBg: (typeof IMAGE_BG_CYCLE)[number]
   locale: Locale
 }) {
   return (
     <Link href={href} tabIndex={-1} aria-hidden className="block">
-      <div className="relative aspect-square overflow-hidden bg-[#f0ebe4]">
+      <div className={`relative aspect-[4/5] overflow-hidden rounded-t-[12px] ${imageBg}`}>
         {item.image?.src ? (
           <Image
             src={item.image.src}
             alt={item.image.alt ?? item.name}
             fill
             sizes="(max-width:640px) 100vw, (max-width:1280px) 25vw, 18vw"
-            className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.05]"
+            className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.05]"
           />
         ) : (
           // Placeholder — color-matched to badge
@@ -138,18 +148,19 @@ function ProductCard({
 }) {
   const href  = productHref(item, locale)
   const badge = BADGE_CYCLE[index % BADGE_CYCLE.length]
+  const imageBg = IMAGE_BG_CYCLE[index % IMAGE_BG_CYCLE.length]
 
   return (
     <article
       className="
-        group flex flex-col overflow-hidden rounded-[10px]
-        border border-black/[0.05] bg-white
-        shadow-[0_2px_12px_rgba(0,0,0,.07)]
+        group flex flex-col overflow-hidden rounded-[12px]
+        border border-black/[0.035] bg-white
+        shadow-[0_8px_24px_rgba(30,40,60,.06)]
         transition-all duration-200
-        hover:-translate-y-1 hover:shadow-[0_8px_28px_rgba(0,0,0,.11)]
+        hover:-translate-y-1 hover:shadow-[0_16px_34px_rgba(30,40,60,.11)]
       "
     >
-      <ImageBox item={item} href={href} badge={badge} locale={locale} />
+      <ImageBox item={item} href={href} badge={badge} imageBg={imageBg} locale={locale} />
 
       <div className="flex flex-1 flex-col p-3">
         {/* Name — links to product page */}
@@ -157,7 +168,7 @@ function ProductCard({
           <h3
             className={`
               min-h-[3em] text-[12px] font-semibold text-[#1e2535]
-              transition-colors duration-150 group-hover:text-[#c47b8a]
+              transition-colors duration-150 group-hover:text-[#3a7bd5]
               ${locale === "th" ? "font-body leading-[1.55]" : "leading-[1.4]"}
             `}
           >
@@ -172,9 +183,9 @@ function ProductCard({
           <Link
             href={withLocalePath("/contact", locale)}
             className="
-              block rounded-[7px] bg-[#c47b8a] px-3 py-2
+              block rounded-[7px] bg-[linear-gradient(135deg,#3a7bd5,#2ab8b0)] px-3 py-2
               text-center text-[11px] font-bold text-white
-              transition-opacity duration-150 hover:opacity-90
+              transition-all duration-150 hover:shadow-[0_8px_18px_rgba(58,123,213,.22)]
               active:scale-[0.98]
             "
           >
@@ -200,9 +211,9 @@ function SectionHeader({
   totalAvailable: number
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
       <div className="flex items-center gap-3">
-        <span className="rounded bg-[#c47b8a] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.05em] text-white">
+        <span className="rounded-full bg-[#fff0d7] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.05em] text-[#6b4a20]">
           {VARIANT_COPY[variant][locale]}
         </span>
         <h2
@@ -226,8 +237,8 @@ function SectionHeader({
         className="
           inline-flex items-center gap-1.5 rounded-full
           border border-black/[0.08] bg-white px-3.5 py-1.5
-          text-[12px] font-bold text-[#4a7c59]
-          transition-all duration-150 hover:bg-neutral-50 hover:shadow-sm
+          text-[12px] font-bold text-[#24457c]
+          transition-all duration-150 hover:border-[#3a7bd5]/25 hover:bg-[#eef6ff] hover:shadow-sm
           active:scale-[0.98]
         "
       >

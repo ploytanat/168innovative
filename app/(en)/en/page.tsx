@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import HeroCarousel from "@/app/components/sections/HeroCarousel"
-import CategoryBar from "@/app/components/sections/CategoryBar"
 import CategorySection from "@/app/components/sections/CategorySection"
 import ProductMarquee from "@/app/components/sections/ProductMarquee"
 import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
@@ -39,9 +38,6 @@ export default async function HomePage() {
 
       {/* 1. Hero — brand intro & main visuals */}
       {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} locale={locale} sideBanners={getSideBanners(locale)} />}
-
-      {/* 2. Category Bar — quick navigation to product categories */}
-      {categories.length > 0 && <CategoryBar items={categories} locale={locale} />}
 
       {/* 3. Category Section — editorial showcase of main categories */}
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}

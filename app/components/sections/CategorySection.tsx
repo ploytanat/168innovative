@@ -28,18 +28,15 @@ function CategoryCard({
   item,
   locale,
   className,
-  style,
 }: {
   item: CategoryView
   locale: Locale
   className?: string
-  style?: React.CSSProperties
 }) {
   return (
     <Link
       href={withLocalePath(`/categories/${item.slug}`, locale)}
-      className={`group relative overflow-hidden rounded-2xl ${className ?? ''}`}
-      style={style}
+      className={`group relative min-h-[9.5rem] overflow-hidden rounded-[1rem] bg-[#eef6ff] ${className ?? ''}`}
     >
       {item.image?.src && (
         <Image
@@ -49,7 +46,8 @@ function CategoryCard({
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
       )}
-      <div className="absolute bottom-3 left-3">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+      <div className="absolute bottom-3 left-3 right-3">
         <Badge label={item.name} />
       </div>
     </Link>
@@ -65,19 +63,17 @@ export default function CategorySection({ items = [], locale }: CategorySectionP
   const bottomRow = rest.slice(3)   // bars, extra...
 
   return (
-    <section className="mx-auto container px-6 py-12" aria-labelledby="cat-heading">
+    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-5" aria-labelledby="cat-heading">
       <h2 id="cat-heading" className="sr-only">{copy.all}</h2>
 
       {/* Top grid: hero | 2 stacked | tall */}
       <div
-        className="grid gap-2.5"
-        style={{ gridTemplateColumns: "2fr 1.35fr 1fr", gridTemplateRows: "210px 210px" }}
+        className="grid gap-2.5 lg:grid-cols-[2fr_1.35fr_1fr] lg:grid-rows-[210px_210px]"
       >
         {/* Hero card */}
         <Link
           href={withLocalePath(`/categories/${hero.slug}`, locale)}
-          className="group relative overflow-hidden rounded-2xl bg-neutral-200"
-          style={{ gridColumn: "1", gridRow: "1 / 3" }}
+          className="group relative min-h-[20.5rem] overflow-hidden rounded-[1rem] bg-[#f7e5ed] lg:col-start-1 lg:row-span-2 lg:min-h-0"
         >
           {hero.image?.src && (
             <Image
@@ -88,10 +84,10 @@ export default function CategorySection({ items = [], locale }: CategorySectionP
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-          <div className="absolute inset-0 flex flex-col justify-between p-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a2232]/55 via-[#1a2232]/8 to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-between p-5 sm:p-6">
             <div>
-              <h3 className="whitespace-pre-line text-5xl font-black leading-none tracking-tight text-white drop-shadow">
+              <h3 className="whitespace-pre-line text-[clamp(2.1rem,5vw,3.4rem)] font-black uppercase leading-[0.92] text-white drop-shadow">
                 {copy.headline}
               </h3>
               <p className="mt-2 text-md font-medium text-white/80">{copy.sub}</p>
@@ -102,28 +98,27 @@ export default function CategorySection({ items = [], locale }: CategorySectionP
 
         {/* Top-middle: dried fruits */}
         {topRow[0] && (
-          <CategoryCard item={topRow[0]} locale={locale} style={{ gridColumn: "2", gridRow: "1" }} />
+          <CategoryCard item={topRow[0]} locale={locale} className="lg:col-start-2 lg:row-start-1 lg:min-h-0" />
         )}
 
         {/* Bottom-middle: supplements */}
         {topRow[1] && (
-          <CategoryCard item={topRow[1]} locale={locale} style={{ gridColumn: "2", gridRow: "2" }} />
+          <CategoryCard item={topRow[1]} locale={locale} className="lg:col-start-2 lg:row-start-2 lg:min-h-0" />
         )}
 
         {/* Right tall: drinks */}
         {topRow[2] && (
-          <CategoryCard item={topRow[2]} locale={locale} style={{ gridColumn: "3", gridRow: "1 / 3" }} />
+          <CategoryCard item={topRow[2]} locale={locale} className="lg:col-start-3 lg:row-span-2 lg:min-h-0" />
         )}
       </div>
 
       {/* Bottom row */}
       {bottomRow.length > 0 && (
         <div
-          className="mt-2.5 grid gap-2.5"
-          style={{ gridTemplateColumns: `repeat(${Math.min(bottomRow.length, 3)}, 1fr)` }}
+          className="mt-2.5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3"
         >
           {bottomRow.slice(0, 3).map((item) => (
-            <CategoryCard key={item.slug} item={item} locale={locale} className="h-44" />
+            <CategoryCard key={item.slug} item={item} locale={locale} className="min-h-44" />
           ))}
         </div>
       )}
@@ -136,7 +131,7 @@ export default function CategorySection({ items = [], locale }: CategorySectionP
         >
           {copy.all}
         </Link>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#24457c] text-[#24457c] transition-colors hover:bg-[#24457c] hover:text-white">
           <ArrowRight size={14} strokeWidth={2} />
         </div>
       </div>

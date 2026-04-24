@@ -29,31 +29,31 @@ interface CategoryBarProps {
 const SLOT_CONFIG = {
   spout: {
     icon: Droplets,
-    palette: { bg: "#f0f7f2", iconColor: "#3a7a52", accent: "#c8e8d4" },
+    palette: { bg: "#eafffb", iconColor: "#0aa79d", accent: "#9eeaf3" },
   },
   "powder-compact": {
     icon: Palette,
-    palette: { bg: "#faf0ee", iconColor: "#a05a44", accent: "#f0cfc4" },
+    palette: { bg: "#fff0f5", iconColor: "#ff4f7b", accent: "#ffc2d2" },
   },
   "soap-bag": {
     icon: Package,
-    palette: { bg: "#f0f2f7", iconColor: "#445a8a", accent: "#c8d0e8" },
+    palette: { bg: "#edf7ff", iconColor: "#2f8cff", accent: "#b7dcff" },
   },
   "plastic-pump-bottle-cap": {
     icon: SprayCan,
-    palette: { bg: "#f5f0fa", iconColor: "#7a4a9a", accent: "#dcc8ec" },
+    palette: { bg: "#f3efff", iconColor: "#8b5cf6", accent: "#d8ccff" },
   },
   "mascara-packaging": {
     icon: Eye,
-    palette: { bg: "#fdf5e8", iconColor: "#9a6a2a", accent: "#f0dcb8" },
+    palette: { bg: "#fff4df", iconColor: "#ff8a3d", accent: "#ffd49f" },
   },
   "lipstick-packaging": {
     icon: Sparkles,
-    palette: { bg: "#fdf0f3", iconColor: "#a04060", accent: "#f0c8d4" },
+    palette: { bg: "#fff0f5", iconColor: "#ff4f7b", accent: "#ffc2d2" },
   },
   fallback: {
     icon: Package,
-    palette: { bg: "#f5f5f5", iconColor: "#666", accent: "#e0e0e0" },
+    palette: { bg: "#f7fdff", iconColor: "#0aa79d", accent: "#9eeaf3" },
   },
 } as const
 
@@ -94,18 +94,18 @@ function CategoryPill({
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={`
-        group relative flex shrink-0 flex-col items-center gap-1.5 rounded-2xl px-4 py-3
+        group relative flex shrink-0 flex-row items-center gap-2 rounded-full px-3.5 py-2
         outline-none transition-all duration-200
         focus-visible:ring-2 focus-visible:ring-[#c47b8a] focus-visible:ring-offset-2
         ${isActive
-          ? "bg-[#1f2430] shadow-md"
-          : "bg-white shadow-[0_1px_4px_rgba(0,0,0,.07)] hover:shadow-[0_3px_12px_rgba(0,0,0,.11)] hover:-translate-y-0.5"
+          ? "bg-[#111827] shadow-md"
+          : "bg-white shadow-[0_1px_6px_rgba(31,41,55,.06)] hover:shadow-[0_8px_22px_rgba(31,41,55,.10)] hover:-translate-y-0.5"
         }
       `}
     >
       {/* Icon container */}
       <span
-        className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl"
+        className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full"
         style={{ background: isActive ? "rgba(255,255,255,.12)" : cfg.palette.bg }}
       >
         {image?.src ? (
@@ -128,7 +128,7 @@ function CategoryPill({
       {/* Label */}
       <span
         className={`
-          whitespace-nowrap text-[11px] font-semibold leading-tight
+          whitespace-nowrap text-[11px] font-bold leading-tight
           ${isActive ? "text-white" : "text-[#3a4252]"}
         `}
       >
@@ -193,12 +193,12 @@ export default function CategoryBar({
   return (
     <section
       aria-label={locale === "th" ? "หมวดหมู่สินค้า" : "Product categories"}
-      className="border-b border-t border-black/[0.06] bg-white shadow-[0_2px_10px_rgba(0,0,0,.04)]"
+      className="border-y border-black/[0.05] bg-[#fbfeff]"
     >
       {/* Scroll container */}
       <div
         className="
-          flex gap-2 overflow-x-auto px-4 py-3
+          mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3
           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
           sm:justify-center sm:overflow-visible sm:flex-wrap
         "
