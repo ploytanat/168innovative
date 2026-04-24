@@ -10,7 +10,8 @@
       "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative/app/\\(en\\)\" -name \"page.tsx\")",
       "Bash(find \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative/app/\\(th\\)\" -name \"page.tsx\")",
       "Bash(npm install:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(curl -s \"https://wb.168innovative.co.th/wp-json/wp/v2/hero_slide?_embed=1&per_page=3\")"
     ]
   }
 }

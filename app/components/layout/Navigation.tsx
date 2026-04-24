@@ -6,15 +6,12 @@ import { usePathname, useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
   ChevronDown,
-  Heart,
   HelpCircle,
   Menu,
   PackageCheck,
   Search,
-  ShoppingBag,
   Star,
   Truck,
-  User,
   X,
 } from "lucide-react"
 
@@ -34,13 +31,12 @@ type NavCategory = {
 type NavItem = {
   href: string
   label: { th: string; en: string }
-  hasDropdown?: boolean
 }
 
 const NAV_MENU: NavItem[] = [
-  { href: "/categories", label: { th: "สินค้าทั้งหมด", en: "All products" }, hasDropdown: true },
-  { href: "/categories/spout", label: { th: "จุกซอง", en: "Spout" }, hasDropdown: true },
-  { href: "/categories/plastic-handle", label: { th: "หูหิ้วพลาสติก", en: "Plastic handles" }, hasDropdown: true },
+  { href: "/categories", label: { th: "สินค้าทั้งหมด", en: "All products" } },
+  { href: "/categories/spout", label: { th: "จุกซอง", en: "Spout" } },
+  { href: "/categories/plastic-handle", label: { th: "หูหิ้วพลาสติก", en: "Plastic handles" } },
   { href: "/categories/soap-bag", label: { th: "ถุงบรรจุภัณฑ์", en: "Packaging bags" } },
   { href: "/categories/cosmetic-packaging", label: { th: "ตลับเครื่องสำอาง", en: "Cosmetic cases" } },
   { href: "/articles", label: { th: "บทความ", en: "Articles" } },
@@ -113,7 +109,6 @@ function NavigationInner({
   categories = [],
 }: NavigationProps & { pathname: string }) {
   const router = useRouter()
-  const inputRef = useRef<HTMLInputElement>(null)
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const [open, setOpen] = useState(false)
@@ -157,6 +152,10 @@ function NavigationInner({
     closeTimerRef.current = setTimeout(() => setProductsOpen(false), 80)
   }, [])
 
+  useEffect(() => () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current)
+  }, [])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (!query.trim()) return
@@ -196,10 +195,9 @@ function NavigationInner({
           </div>
 
           <div className="flex items-center gap-5 text-[12px] font-medium text-[#4f4f4f]">
-            <button type="button" className="flex items-center gap-2 hover:text-black">
+            <span className="flex items-center gap-2">
               {isEN ? "🇬🇧 United Kingdom" : "🇹🇭 Thailand"}
-              <ChevronDown className="h-3.5 w-3.5" />
-            </button>
+            </span>
 
             <div className="h-5 w-px bg-black/10" />
 
@@ -209,7 +207,6 @@ function NavigationInner({
               className="flex items-center gap-2 hover:text-black"
             >
               {isEN ? "EN" : "TH"}
-              <ChevronDown className="h-3.5 w-3.5" />
             </button>
 
             <div className="h-5 w-px bg-black/10" />
@@ -217,14 +214,13 @@ function NavigationInner({
             <Link href={withLocale("/contact")} className="flex items-center gap-2 hover:text-black">
               <HelpCircle className="h-4 w-4" strokeWidth={1.8} />
               {lang === "th" ? "บริการและช่วยเหลือ" : "Services & Help"}
-              <ChevronDown className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
       </div>
 
       <div className="bg-[#f8f8f8]">
-        <div className="w-full bg-white px-3 pt-6 shadow-[0_-10px_32px_rgba(0,0,0,0.035)] lg:px-5 lg:pt-7">
+        <div className="w-full bg-white px-3 pt-3 shadow-[0_-10px_32px_rgba(0,0,0,0.035)] lg:px-5 lg:pt-4">
           <div className="mx-auto max-w-7xl">
             <div className="flex h-14 items-center gap-5 lg:h-16">
               <Link
@@ -233,13 +229,13 @@ function NavigationInner({
                 className="flex shrink-0 items-center"
               >
                 {logo?.src ? (
-                  <div className="relative h-12 w-16 overflow-hidden">
+                  <div className="relative h-16 w-28 overflow-hidden">
                     <Image
                       src={logo.src}
                       alt={logo.alt || "168 Innovative"}
                       fill
                       priority
-                      sizes="64px"
+                      sizes="112px"
                       className="object-contain"
                     />
                   </div>
@@ -256,7 +252,6 @@ function NavigationInner({
               >
                 <Search className="mr-4 h-5 w-5 shrink-0 text-black" strokeWidth={2.4} />
                 <input
-                  ref={inputRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={lang === "th" ? "ค้นหาสินค้าและหมวดหมู่" : "Search all categories"}
@@ -264,26 +259,6 @@ function NavigationInner({
                 />
               </form>
 
-              <div className="ml-auto hidden items-center gap-5 lg:flex">
-                <button type="button" aria-label="Wishlist" className="transition-opacity hover:opacity-60">
-                  <Heart className="h-5.5 w-5.5 text-black" strokeWidth={2.4} />
-                </button>
-
-                <button type="button" aria-label="Account" className="transition-opacity hover:opacity-60">
-                  <User className="h-5.5 w-5.5 text-black" strokeWidth={2.4} />
-                </button>
-
-                <button type="button" aria-label="Bag" className="transition-opacity hover:opacity-60">
-                  <ShoppingBag className="h-5.5 w-5.5 text-black" strokeWidth={2.4} />
-                </button>
-
-                <Link
-                  href={withLocale("/contact")}
-                  className="text-[17px] font-black text-black transition-opacity hover:opacity-60"
-                >
-                  ฿ 0.00
-                </Link>
-              </div>
 
               <button
                 type="button"
@@ -295,7 +270,7 @@ function NavigationInner({
               </button>
             </div>
 
-            <nav className="hidden items-center gap-7 overflow-x-auto py-6 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <nav className="hidden items-center gap-7 overflow-x-auto py-3 lg:flex [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {NAV_MENU.map((item) => {
                 const isProducts = item.href === "/categories"
                 const showDropdown = isProducts && productsOpen && categories.length > 0
@@ -309,15 +284,12 @@ function NavigationInner({
                   >
                     <Link
                       href={navHref(item)}
-                      className="flex items-center gap-2 text-[14px] font-black text-black transition-opacity hover:opacity-60"
+                      className="font-heading flex items-center gap-2 text-[15px] font-bold tracking-wide text-black transition-opacity hover:opacity-60"
                     >
                       {item.label[lang]}
-                      {(item.hasDropdown || (isProducts && categories.length > 0)) && (
+                      {(isProducts && categories.length > 0) && (
                         <ChevronDown
-                          className="h-3.5 w-3.5 transition-transform duration-200"
-                          style={{
-                            transform: showDropdown ? "rotate(180deg)" : "rotate(0deg)",
-                          }}
+                          className={`h-3.5 w-3.5 transition-transform duration-200 ${showDropdown ? "rotate-180" : "rotate-0"}`}
                         />
                       )}
                     </Link>
@@ -336,11 +308,7 @@ function NavigationInner({
             </nav>
 
             <div
-              className="overflow-hidden transition-all duration-300 lg:hidden"
-              style={{
-                maxHeight: open ? "760px" : "0",
-                opacity: open ? 1 : 0,
-              }}
+              className={`overflow-hidden transition-all duration-300 lg:hidden ${open ? "max-h-190 opacity-100" : "max-h-0 opacity-0"}`}
             >
               <form
                 onSubmit={handleSearch}
@@ -365,7 +333,7 @@ function NavigationInner({
                         <Link
                           href={navHref(item)}
                           onClick={closeMenu}
-                          className="flex flex-1 items-center justify-between rounded-xl px-4 py-3 text-[15px] font-black text-black transition-colors hover:bg-[#f7f7f7]"
+                          className="font-heading flex flex-1 items-center justify-between rounded-xl px-4 py-3 text-[16px] font-bold tracking-wide text-black transition-colors hover:bg-[#f7f7f7]"
                         >
                           {item.label[lang]}
                         </Link>
@@ -386,10 +354,7 @@ function NavigationInner({
                             }
                           >
                             <ChevronDown
-                              className="h-4 w-4 transition-transform duration-200"
-                              style={{
-                                transform: mobileProductsOpen ? "rotate(180deg)" : "rotate(0deg)",
-                              }}
+                              className={`h-4 w-4 transition-transform duration-200 ${mobileProductsOpen ? "rotate-180" : "rotate-0"}`}
                             />
                           </button>
                         )}

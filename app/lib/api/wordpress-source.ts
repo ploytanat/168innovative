@@ -438,7 +438,12 @@ function buildGroupedProductView(
 
 function normalizeImageUrl(value?: string) {
   const url = trimText(value);
-  return url || undefined;
+  if (!url) return undefined;
+  try {
+    return new URL(url).href;
+  } catch {
+    return url;
+  }
 }
 
 function pickMediaUrl(media?: EmbeddedMediaLike) {

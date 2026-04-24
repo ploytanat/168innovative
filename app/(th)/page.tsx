@@ -40,9 +40,7 @@ export default async function HomePage() {
       {/* 1. Hero — ดึงดูดและแนะนำแบรนด์ */}
       {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} locale={locale} sideBanners={getSideBanners(locale)} />}
 
-      {/* 2. Category Bar — นำทางด่วนไปยังหมวดสินค้า */}
-      {categories.length > 0 && <CategoryBar items={categories} locale={locale} />}
-
+ 
       {/* 3. Category Section — แสดง editorial ของหมวดหลัก */}
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
 

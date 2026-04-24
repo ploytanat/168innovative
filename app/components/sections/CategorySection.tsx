@@ -38,7 +38,7 @@ function CategoryCard({
   return (
     <Link
       href={withLocalePath(`/categories/${item.slug}`, locale)}
-      className={`group relative overflow-hidden rounded-2xl ${className}`}
+      className={`group relative overflow-hidden rounded-2xl ${className ?? ''}`}
       style={style}
     >
       {item.image?.src && (
