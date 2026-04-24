@@ -1,12 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
-
-import { uiText } from "@/app/lib/i18n/ui"
 import type { CategoryView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
-
-// ─── Types ─────────────────────────────────────────────────────────────────
 
 type Locale = "th" | "en"
 
@@ -15,308 +11,135 @@ interface CategorySectionProps {
   locale: Locale
 }
 
-// ─── Copy ──────────────────────────────────────────────────────────────────
-
 const COPY = {
-  th: {
-    eyebrow: "Category Showcase",
-    title: "เลือกเข้าแค็ตตาล็อกตามงานที่ต้องการ",
-    summary:
-      "จัดหมวดสินค้าให้เห็นคอลเลกชันหลักชัดขึ้น ทั้งกลุ่มที่ใช้บ่อยในงานเครื่องสำอาง งานแพ็กเกจรีฟิล และงานประกอบ OEM",
-    featuredLabel: "หมวดเด่น",
-    collectionLabel: "คอลเลกชัน",
-    explore: "เปิดดูหมวดนี้",
-  },
-  en: {
-    eyebrow: "Category Showcase",
-    title: "Move into the catalog by product group",
-    summary:
-      "Core packaging collections are grouped more clearly so customers can enter the right catalog path faster — from cosmetics to refill packaging and OEM support items.",
-    featuredLabel: "Featured",
-    collectionLabel: "Collection",
-    explore: "Open category",
-  },
+  th: { headline: "IT'S YOUR\nFIRST TIME?", sub: "Explore categories!", all: "ALL CATEGORIES" },
+  en: { headline: "IT'S YOUR\nFIRST TIME?", sub: "Explore categories!", all: "ALL CATEGORIES" },
 } as const
 
-// ─── Pill badge ─────────────────────────────────────────────────────────────
-
-function Pill({ label }: { label: string }) {
+function Badge({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center rounded-full bg-white/14 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm ring-1 ring-white/10">
+    <span className="inline-flex items-center rounded-full bg-black px-3 py-1 text-[9px] font-bold uppercase tracking-[0.06em] text-white max-w-30 truncate">
       {label}
     </span>
   )
 }
 
-// ─── Featured card (large, left column) ────────────────────────────────────
-
-function FeaturedCard({
+function CategoryCard({
   item,
   locale,
+  className,
+  style,
 }: {
   item: CategoryView
   locale: Locale
+  className?: string
+  style?: React.CSSProperties
 }) {
-  const copy = COPY[locale]
-
   return (
     <Link
       href={withLocalePath(`/categories/${item.slug}`, locale)}
-      aria-label={`${copy.explore}: ${item.name}`}
-      className="group relative flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] lg:min-h-full"
+      className={`group relative overflow-hidden rounded-2xl ${className}`}
+      style={style}
     >
-      {/* Image */}
-      {item.image?.src ? (
+      {item.image?.src && (
         <Image
           src={item.image.src}
-          alt={item.image.alt ?? item.name}
+          alt={item.image.alt || item.name}
           fill
-          priority
-          sizes="(max-width: 1024px) 100vw, 55vw"
-          className="object-cover transition-transform duration-700 ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:scale-[1.04]"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
-      ) : (
-        <div className="absolute inset-0 bg-neutral-100" />
       )}
-
-      {/* Overlay — darkens more on hover */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/78
-                   transition-opacity duration-500 group-hover:opacity-90"
-      />
-
-      {/* Decorative corner accent */}
-      <div
-        aria-hidden
-        className="absolute right-5 top-5 h-[72px] w-[72px] rounded-full border border-white/12
-                   opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110"
-      />
-
-      {/* Content */}
-      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-        <Pill label={copy.featuredLabel} />
-
-        <h3
-          className={`
-            mt-4 text-white
-            ${locale === "th"
-              ? "font-body text-[clamp(1.5rem,2.4vw,2.1rem)] font-extrabold leading-[1.2]"
-              : "font-heading text-[clamp(2rem,3.2vw,2.9rem)] font-black leading-[1.04]"
-            }
-            translate-y-1 transition-transform duration-300 group-hover:translate-y-0
-          `}
-        >
-          {item.name}
-        </h3>
-
-        {item.description && (
-          <p className="mt-3 max-w-lg text-sm leading-7 text-white/75 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-            {item.description}
-          </p>
-        )}
-
-        <ExploreLink label={copy.explore} />
+      <div className="absolute bottom-3 left-3">
+        <Badge label={item.name} />
       </div>
     </Link>
   )
 }
 
-// ─── Small card (right grid) ────────────────────────────────────────────────
+export default function CategorySection({ items = [], locale }: CategorySectionProps) {
+  if (items.length < 5) return null
 
-function SmallCard({
-  item,
-  locale,
-  index,
-}: {
-  item: CategoryView
-  locale: Locale
-  index: number
-}) {
   const copy = COPY[locale]
+  const [hero, ...rest] = items
+  const topRow = rest.slice(0, 3)   // dried fruits, supplements, drinks
+  const bottomRow = rest.slice(3)   // bars, extra...
 
   return (
-    <Link
-      href={withLocalePath(`/categories/${item.slug}`, locale)}
-      aria-label={`${copy.explore}: ${item.name}`}
-      className="group relative flex min-h-[220px] flex-col overflow-hidden rounded-[1.4rem]"
-      style={{ animationDelay: `${index * 60}ms` }}
-    >
-      {/* Image */}
-      {item.image?.src ? (
-        <Image
-          src={item.image.src}
-          alt={item.image.alt ?? item.name}
-          fill
-          sizes="(max-width: 768px) 50vw, 22vw"
-          className="object-cover transition-transform duration-500 ease-[cubic-bezier(.25,.46,.45,.94)] group-hover:scale-[1.06]"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-neutral-100" />
-      )}
+    <section className="mx-auto container px-6 py-12" aria-labelledby="cat-heading">
+      <h2 id="cat-heading" className="sr-only">{copy.all}</h2>
 
-      {/* Overlay */}
+      {/* Top grid: hero | 2 stacked | tall */}
       <div
-        aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/8 to-black/75
-                   transition-opacity duration-400 group-hover:opacity-90"
-      />
-
-      {/* Content */}
-      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-        <Pill label={copy.collectionLabel} />
-        <h3
-          className={`
-            mt-3 text-white
-            ${locale === "th"
-              ? "font-body text-[1.02rem] font-extrabold leading-[1.3]"
-              : "font-heading text-xl font-black leading-[1.1]"
-            }
-            translate-y-0.5 transition-transform duration-300 group-hover:translate-y-0
-          `}
+        className="grid gap-2.5"
+        style={{ gridTemplateColumns: "2fr 1.35fr 1fr", gridTemplateRows: "210px 210px" }}
+      >
+        {/* Hero card */}
+        <Link
+          href={withLocalePath(`/categories/${hero.slug}`, locale)}
+          className="group relative overflow-hidden rounded-2xl bg-neutral-200"
+          style={{ gridColumn: "1", gridRow: "1 / 3" }}
         >
-          {item.name}
-        </h3>
+          {hero.image?.src && (
+            <Image
+              src={hero.image.src}
+              alt={hero.image.alt || hero.name}
+              fill
+              priority
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          <div className="absolute inset-0 flex flex-col justify-between p-6">
+            <div>
+              <h3 className="whitespace-pre-line text-5xl font-black leading-none tracking-tight text-white drop-shadow">
+                {copy.headline}
+              </h3>
+              <p className="mt-2 text-md font-medium text-white/80">{copy.sub}</p>
+            </div>
+            <Badge label={hero.name}   />
+          </div>
+        </Link>
 
-        {item.description && (
-          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/70">
-            {item.description}
-          </p>
+        {/* Top-middle: dried fruits */}
+        {topRow[0] && (
+          <CategoryCard item={topRow[0]} locale={locale} style={{ gridColumn: "2", gridRow: "1" }} />
         )}
 
-        <ExploreLink label={copy.explore} small />
+        {/* Bottom-middle: supplements */}
+        {topRow[1] && (
+          <CategoryCard item={topRow[1]} locale={locale} style={{ gridColumn: "2", gridRow: "2" }} />
+        )}
+
+        {/* Right tall: drinks */}
+        {topRow[2] && (
+          <CategoryCard item={topRow[2]} locale={locale} style={{ gridColumn: "3", gridRow: "1 / 3" }} />
+        )}
       </div>
-    </Link>
-  )
-}
 
-// ─── Explore CTA link row ───────────────────────────────────────────────────
-
-function ExploreLink({ label, small = false }: { label: string; small?: boolean }) {
-  return (
-    <span
-      className={`
-        mt-4 inline-flex items-center gap-1.5 font-semibold text-[#ffd7b8]
-        ${small ? "text-[11px]" : "text-[13px]"}
-        -translate-x-1 opacity-0 transition-all duration-300
-        group-hover:translate-x-0 group-hover:opacity-100
-      `}
-    >
-      {label}
-      <ArrowRight
-        className={small ? "h-3 w-3" : "h-4 w-4"}
-        strokeWidth={2.2}
-      />
-    </span>
-  )
-}
-
-// ─── Section header ─────────────────────────────────────────────────────────
-
-function SectionHeader({ locale, items }: { locale: Locale; items: CategoryView[] }) {
-  const copy = COPY[locale]
-
-  return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
-      <div className="max-w-2xl">
-        {/* Eyebrow with decorative line */}
-        <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-[#8d6070]" aria-hidden />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#8d6070]">
-            {copy.eyebrow}
-          </p>
+      {/* Bottom row */}
+      {bottomRow.length > 0 && (
+        <div
+          className="mt-2.5 grid gap-2.5"
+          style={{ gridTemplateColumns: `repeat(${Math.min(bottomRow.length, 3)}, 1fr)` }}
+        >
+          {bottomRow.slice(0, 3).map((item) => (
+            <CategoryCard key={item.slug} item={item} locale={locale} className="h-44" />
+          ))}
         </div>
+      )}
 
-        <h2
-          className={`
-            mt-3 text-[#1f2430]
-            ${locale === "th"
-              ? "font-body text-[clamp(1.35rem,2.2vw,1.9rem)] font-extrabold leading-[1.3]"
-              : "font-heading text-[clamp(1.8rem,3vw,2.8rem)] font-black leading-[1.04]"
-            }
-          `}
+      {/* All categories link */}
+      <div className="mt-5 flex items-center gap-3">
+        <Link
+          href={withLocalePath("/categories", locale)}
+          className="text-[11px] font-bold uppercase tracking-[0.1em] text-black"
         >
-          {copy.title}
-        </h2>
-
-        <p className="mt-3 max-w-xl text-sm leading-[1.85] text-neutral-500 sm:text-[15px]">
-          {copy.summary}
-        </p>
+          {copy.all}
+        </Link>
+        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-black transition-colors hover:bg-black hover:text-white">
+          <ArrowRight size={14} strokeWidth={2} />
+        </div>
       </div>
-
-      <Link
-        href={withLocalePath("/categories", locale)}
-        className="
-          inline-flex items-center gap-2 rounded-full border border-black/[0.08]
-          bg-white px-4 py-2.5 text-[12px] font-semibold text-[#1f2430]
-          transition-all duration-200 hover:bg-neutral-50 hover:shadow-sm
-          active:scale-[0.98]
-        "
-      >
-        {uiText.categories.viewAll[locale]}
-        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.2} />
-      </Link>
-    </div>
-  )
-}
-
-// ─── Grid layouts by item count ─────────────────────────────────────────────
-//
-//  4 items → featured (7col) + 3 small stacked right (5col)
-//  5 items → featured (7col) + 4 small 2×2 right  (5col)  ← original
-//  6 items → featured (6col) + 5 small irregular  (6col)
-
-function CategoryGrid({ featured, rest, locale }: {
-  featured: CategoryView
-  rest: CategoryView[]
-  locale: Locale
-}) {
-  // Clamp rest to max 5 so the right column never overflows
-  const rightItems = rest.slice(0, 5)
-  const isWide = rightItems.length <= 3
-
-  return (
-    <div className={`grid gap-4 lg:grid-cols-12`}>
-      {/* Featured — wider when fewer right-side items */}
-      <div className={isWide ? "lg:col-span-8" : "lg:col-span-7"}>
-        <FeaturedCard item={featured} locale={locale} />
-      </div>
-
-      {/* Right column */}
-      <div
-        className={`
-          grid gap-4
-          ${isWide ? "lg:col-span-4" : "lg:col-span-5"}
-          ${rightItems.length >= 4 ? "sm:grid-cols-2" : "sm:grid-cols-1 lg:grid-cols-1"}
-        `}
-      >
-        {rightItems.map((item, i) => (
-          <SmallCard key={item.id} item={item} locale={locale} index={i} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ─── Root export ────────────────────────────────────────────────────────────
-
-export default function CategorySection({
-  items = [],
-  locale,
-}: CategorySectionProps) {
-  if (items.length === 0) return null
-
-  const [featured, ...rest] = items.slice(0, 6)
-  if (!featured) return null
-
-  return (
-    <section
-      aria-labelledby="category-section-heading"
-      className="relative z-10 mx-auto max-w-7xl overflow-hidden px-4 py-12 sm:px-5 lg:py-16"
-    >
-      <SectionHeader locale={locale} items={items} />
-
-      <CategoryGrid featured={featured} rest={rest} locale={locale} />
     </section>
   )
 }

@@ -80,7 +80,7 @@ function SideBanner({
       >
         {banner.tag && (
           <span
-            className="mb-1 w-fit rounded-[3px] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.10em] text-white"
+            className="mb-1 w-fit rounded-[3px] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-white"
             style={{ background: banner.tagColor ?? '#1565c0' }}
           >
             {banner.tag}
@@ -170,7 +170,7 @@ export default function HeroCarousel({
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        <div className="mx-auto max-w-[1480px] px-3 sm:px-5">
+        <div className="mx-auto px-3 sm:px-5">
           <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_320px]">
 
             {/* ── Main slide ── */}
