@@ -570,6 +570,69 @@
   .article-compare-table tbody tr:last-child td {
     border-bottom: 0;
   }
+
+  /* ── Homepage redesign helpers ───────────────────────────── */
+  .home-btn {
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .home-btn:active {
+    transform: translateY(1px);
+  }
+
+  .home-btn-accent {
+    background: #2b5092;
+    color: #ffffff;
+  }
+
+  .home-btn-accent:hover {
+    background: #1e3d73;
+  }
+
+  .home-btn-outline {
+    background: #ffffff;
+    color: #1a1c20;
+    border: 1px solid #e6e3db;
+  }
+
+  .home-btn-outline:hover {
+    border-color: #1a1c20;
+  }
+
+  .home-btn-light {
+    background: #f3f2ee;
+    color: #181a1e;
+  }
+
+  .home-btn-light:hover {
+    background: #ffffff;
+  }
+
+  .home-btn-ghost-dark {
+    background: transparent;
+    color: #f3f2ee;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .home-btn-ghost-dark:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .home-card {
+    transition:
+      transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .home-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px -18px rgba(20, 22, 28, 0.28);
+  }
 }
 
 /* ─────────────────────────────
