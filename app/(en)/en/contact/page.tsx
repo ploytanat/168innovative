@@ -140,7 +140,7 @@ function ContactSection({
   return (
     <div className="flex flex-col items-center text-center md:items-start md:text-left">
       <div className="mb-4 rounded-[0.9rem] border border-[rgba(205,218,235,0.82)] bg-[#f2f4f7] p-3 text-[var(--color-ink)]">{icon}</div>
-      <h3 className="mb-4 text-[12px] font-black uppercase tracking-[0.14em] text-[#73839e]">
+      <h3 className="mb-4 text-[12px] font-bold uppercase tracking-[0.14em] text-[#73839e]">
         {title}
       </h3>
       <div className="mb-6 h-px w-12 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)]" />

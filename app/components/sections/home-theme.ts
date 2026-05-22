@@ -1,43 +1,40 @@
-// Shared design tokens for the homepage redesign ("168 Studio").
-// Calm, editorial, product-forward — one accent, solid surfaces, restrained shadows.
-// Scoped to the homepage sections; the rest of the site still uses designSystem.ts.
+// Homepage design tokens — cloned from the "Organic Store" template:
+// cream / mint / pastel palette, flat e-commerce surfaces.
+// Scoped to the homepage sections; the rest of the site still uses
+// designSystem.ts. Typeface stays IBM Plex Sans Thai (site-wide preference).
 
 export const HOME = {
   // Ink
-  ink: "#1a1c20",
-  inkMid: "#565961",
-  inkSoft: "#8b8e96",
+  ink: "#333333",
+  inkMid: "#555555",
+  inkSoft: "#888888",
 
-  // Hairlines & surfaces
-  line: "#e6e3db",
-  lineSoft: "#efece4",
+  // Surfaces
+  line: "#ececec",
   surface: "#ffffff",
-  paper: "#f6f4ef",
-  paperDeep: "#eeeae1",
+  cream: "#fdfcf5",
+  mist: "#f9f9f9",
 
-  // Single accent — deep brand blue
-  accent: "#2b5092",
-  accentDeep: "#1e3d73",
-  accentTint: "#e9eef6",
-  accentInk: "#1b3a6b",
+  // Mint (hero + add-to-cart)
+  mint: "#e0f2f1",
+  mintSoft: "#e8f5e9",
+  mintInk: "#2e7d32",
 
-  // Dark closing section
-  darkBg: "#181a1e",
-  darkPanel: "#202329",
-  onDark: "#f3f2ee",
-  onDarkMid: "#b9bcc4",
-  onDarkSoft: "#80838c",
-  darkLine: "rgba(255,255,255,0.10)",
+  // Pastel promo cells
+  pink: "#fce4ec",
+  yellow: "#fffde7",
+
+  // Misc
+  star: "#fbc02d",
+  dark: "#333333",
 } as const
 
-// Consistent section rhythm.
-export const SECTION_PAD = "py-16 sm:py-20 lg:py-28"
-export const CONTAINER = "mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8"
+// Section rhythm — template uses ~60px section padding.
+export const SECTION_PAD = "py-14 sm:py-[60px]"
+export const CONTAINER = "mx-auto w-full max-w-[1200px] px-5"
 
-// Heading helpers — neutralise the global -0.035em tracking / 1.1 leading,
-// which clips Thai vowel and tone marks.
-export const DISPLAY_HEADING = "font-heading tracking-[-0.012em] leading-[1.12]"
-export const SECTION_HEADING = "font-heading tracking-[-0.008em] leading-[1.16]"
-
-// Soft card shadow, used on hover only.
-export const CARD_SHADOW = "0 18px 40px -16px rgba(20,22,28,0.22)"
+// Heading helpers — template titles are uppercase + bold. The `uppercase`
+// is a no-op for Thai but gives Latin the template look; the tracking
+// override neutralises the global -0.035em (which clips Thai marks).
+export const DISPLAY_HEADING = "uppercase leading-[1.12] tracking-[0.005em]"
+export const SECTION_HEADING = "uppercase leading-[1.2] tracking-[0.012em]"

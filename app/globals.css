@@ -52,8 +52,8 @@
       0 1px 0 rgba(255, 255, 255, 0.56) inset,
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
       inset 0 0 0 1px rgba(255, 255, 255, 0.16);
-    --font-heading-stack: var(--font-heading-latin), var(--font-thai), sans-serif;
-    --font-body-stack: var(--font-body-latin), var(--font-thai), sans-serif;
+    --font-heading-stack: var(--font-ibm), sans-serif;
+    --font-body-stack: var(--font-ibm), sans-serif;
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
     --text-base: 1rem;
@@ -585,22 +585,32 @@
   }
 
   .home-btn-accent {
-    background: #2b5092;
+    background: #333333;
     color: #ffffff;
   }
 
   .home-btn-accent:hover {
-    background: #1e3d73;
+    background: #000000;
+  }
+
+  .home-btn-soft {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .home-btn-soft:hover {
+    background: #2e7d32;
+    color: #ffffff;
   }
 
   .home-btn-outline {
     background: #ffffff;
-    color: #1a1c20;
-    border: 1px solid #e6e3db;
+    color: #333333;
+    border: 1px solid #dddddd;
   }
 
   .home-btn-outline:hover {
-    border-color: #1a1c20;
+    border-color: #333333;
   }
 
   .home-btn-light {
@@ -630,8 +640,8 @@
   }
 
   .home-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 22px 44px -18px rgba(20, 22, 28, 0.28);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.09);
   }
 }
 

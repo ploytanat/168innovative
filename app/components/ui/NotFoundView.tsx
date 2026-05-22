@@ -29,8 +29,6 @@ export default function NotFoundView({ locale }: { locale: Locale }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Noto+Sans+Thai:wght@300;400;500&display=swap');
-
         body {
           background: #f8f7f4;
           overflow: hidden;
@@ -44,7 +42,7 @@ export default function NotFoundView({ locale }: { locale: Locale }) {
           justify-content: center;
           overflow: hidden;
           background: #f8f7f4;
-          font-family: 'Noto Sans Thai', 'Syne', sans-serif;
+          font-family: var(--font-ibm), sans-serif;
         }
 
         .blob {
@@ -98,7 +96,7 @@ export default function NotFoundView({ locale }: { locale: Locale }) {
 
         .big-404,
         .big-404-fill {
-          font-family: 'Syne', sans-serif;
+          font-family: var(--font-ibm), sans-serif;
           font-size: clamp(100px, 20vw, 220px);
           font-weight: 700;
           line-height: 1;
@@ -192,7 +190,7 @@ export default function NotFoundView({ locale }: { locale: Locale }) {
           left: 50%;
           transform: translateX(-50%);
           color: rgba(60, 40, 20, 0.18);
-          font-family: 'Syne', sans-serif;
+          font-family: var(--font-ibm), sans-serif;
           font-size: 0.68rem;
           font-weight: 600;
           letter-spacing: 0.2em;

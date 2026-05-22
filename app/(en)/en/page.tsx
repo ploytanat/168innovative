@@ -4,7 +4,8 @@ import CategorySection from "@/app/components/sections/CategorySection"
 import ContactSection from "@/app/components/sections/ContactSection"
 import HeroCarousel from "@/app/components/sections/HeroCarousel"
 import ProductMarquee from "@/app/components/sections/ProductMarquee"
-import WhyChooseUs from "@/app/components/sections/WhyChooseUs"
+import PromoGrid from "@/app/components/sections/PromoGrid"
+import UspBar from "@/app/components/sections/UspBar"
 import { buildMetadata } from "@/app/config/seo"
 import { getHomeSections } from "@/app/lib/api/home"
 
@@ -34,11 +35,12 @@ export default async function HomePage() {
         168 Innovative cosmetic packaging and OEM packaging solutions
       </h1>
       {heroSlides.length > 0 && <HeroCarousel hero={{ slides: heroSlides }} />}
+      <UspBar locale={locale} />
       {products.length > 0 && <ProductMarquee items={products} locale={locale} />}
       {categories.length > 0 && (
         <CategorySection items={categories} locale={locale} />
       )}
-      {whys.length > 0 && <WhyChooseUs items={whys} locale={locale} />}
+      {whys.length > 0 && <PromoGrid whys={whys} locale={locale} />}
       {company && <ContactSection locale={locale} data={company} />}
     </>
   )

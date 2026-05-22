@@ -36,7 +36,7 @@ export default function ContactPhoneList({
 
       {officePhones.length > 0 && salesPhones.length > 0 && (
         <div className="mb-4 mt-7">
-          <p className="text-[12px] font-black tracking-[0.16em]" style={{ color: COLORS.soft }}>
+          <p className="text-[12px] font-bold tracking-[0.16em]" style={{ color: COLORS.soft }}>
             {salesHeading}
           </p>
           <div className="mt-3 h-px w-14" style={{ background: "rgba(30,40,60,0.10)" }} />

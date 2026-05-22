@@ -1,13 +1,9 @@
-"use client"
-
 import Image from "next/image"
-import { motion } from "framer-motion"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
 
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "../ui/motion"
-import { CONTAINER, DISPLAY_HEADING, HOME, SECTION_PAD } from "./home-theme"
+import { CONTAINER, HOME, SECTION_HEADING, SECTION_PAD } from "./home-theme"
 
 const PhoneIcon = () => (
   <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
@@ -31,118 +27,75 @@ const PinIcon = () => (
   </svg>
 )
 
-const ArrowIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"
-    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M7 17L17 7M7 7h10v10" />
-  </svg>
-)
-
 interface ContactSectionProps {
   data: CompanyView
   locale: "th" | "en"
 }
 
 export default function ContactSection({ data, locale }: ContactSectionProps) {
-  const gallery = data.contactGallery?.slice(0, 4) ?? []
-
   return (
-    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.darkBg }}>
+    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.cream }}>
       <div className={CONTAINER}>
-        <motion.div
-          className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14"
-          variants={staggerSmall}
-          initial="hidden"
-          whileInView="visible"
-          viewport={MOTION_VIEWPORT}
-        >
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+
           {/* ── Left: message ────────────────────────────────────── */}
-          <motion.div variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-9" style={{ background: "#86a9da" }} />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#86a9da" }}>
-                {locale === "th" ? "ติดต่อเรา" : "Get in touch"}
-              </span>
-            </div>
-
-            <h2
-              className={`mt-5 ${DISPLAY_HEADING} font-bold text-[clamp(2rem,1.4rem+2.4vw,3.2rem)]`}
-              style={{ color: HOME.onDark }}
+          <div>
+            <p
+              className="text-[12px] font-bold uppercase tracking-[0.14em]"
+              style={{ color: HOME.mintInk }}
             >
-              {uiText.contact.title[locale]}{" "}
-              <span style={{ color: "#86a9da" }}>{uiText.contact.subtitle[locale]}</span>
+              {locale === "th" ? "ติดต่อเรา" : "Get in touch"}
+            </p>
+            <h2
+              className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`}
+              style={{ color: HOME.ink }}
+            >
+              {uiText.contact.title[locale]} {uiText.contact.subtitle[locale]}
             </h2>
-
-            <p className="mt-5 max-w-md text-[1rem] leading-[1.85]" style={{ color: HOME.onDarkMid }}>
+            <p className="mt-4 max-w-md text-[1rem] leading-[1.7]" style={{ color: HOME.inkMid }}>
               {uiText.contact.desc[locale]}
             </p>
 
             {data.address && (
-              <div className="mt-8 flex items-start gap-3" style={{ color: HOME.onDarkMid }}>
-                <span className="mt-0.5 shrink-0" style={{ color: "#86a9da" }}><PinIcon /></span>
-                <p className="text-[0.92rem] leading-[1.7]">{data.address}</p>
+              <div className="mt-7 flex items-start gap-3" style={{ color: HOME.inkMid }}>
+                <span className="mt-0.5 shrink-0" style={{ color: HOME.mintInk }}><PinIcon /></span>
+                <p className="text-[0.92rem] leading-[1.65]">{data.address}</p>
               </div>
             )}
-
-            {/* Gallery strip */}
-            {gallery.length > 0 && (
-              <div className="mt-9 grid grid-cols-4 gap-2.5">
-                {gallery.map(image => (
-                  <div
-                    key={image.src}
-                    className="relative aspect-square overflow-hidden rounded-xl"
-                    style={{ border: `1px solid ${HOME.darkLine}`, background: HOME.darkPanel }}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt || "168 Innovative"}
-                      fill
-                      sizes="(max-width:1024px) 22vw, 12vw"
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </motion.div>
+          </div>
 
           {/* ── Right: contact card ──────────────────────────────── */}
-          <motion.div
-            className="overflow-hidden rounded-2xl"
-            style={{ background: HOME.surface }}
-            variants={fadeUp}
-            transition={{ duration: 0.6, ease: MOTION_EASE }}
+          <div
+            className="overflow-hidden rounded-lg"
+            style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
           >
             {/* Phones */}
-            <div className="p-7 sm:p-9">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: HOME.inkSoft }}>
+            <div className="p-7 sm:p-8">
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
                 {uiText.contact.phoneLabel[locale]}
               </p>
-              <div className="mt-5 space-y-3">
+              <div className="mt-4 space-y-3">
                 {data.phones.map(phone => (
                   <a
                     key={phone.number}
                     href={`tel:${phone.number.replace(/-/g, "")}`}
-                    className="home-card group flex items-center justify-between gap-4 rounded-xl px-4 py-3.5"
-                    style={{ border: `1px solid ${HOME.line}`, background: HOME.paper }}
+                    className="home-card flex items-center gap-3.5 rounded-[6px] px-4 py-3"
+                    style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}
                   >
-                    <span className="flex items-center gap-3.5">
-                      <span
-                        className="flex h-10 w-10 items-center justify-center rounded-lg"
-                        style={{ background: HOME.accentTint, color: HOME.accent }}
-                      >
-                        <PhoneIcon />
+                    <span
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                      style={{ background: HOME.mintSoft, color: HOME.mintInk }}
+                    >
+                      <PhoneIcon />
+                    </span>
+                    <span>
+                      <span className="block text-[10px] font-bold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
+                        {phone.label}
                       </span>
-                      <span>
-                        <span className="block text-[10px] font-semibold uppercase tracking-[0.1em]" style={{ color: HOME.inkSoft }}>
-                          {phone.label}
-                        </span>
-                        <span className="text-[1.05rem] font-bold" style={{ color: HOME.ink }}>
-                          {phone.number}
-                        </span>
+                      <span className="text-[1.05rem] font-bold" style={{ color: HOME.ink }}>
+                        {phone.number}
                       </span>
                     </span>
-                    <span style={{ color: HOME.accent }}><ArrowIcon /></span>
                   </a>
                 ))}
               </div>
@@ -150,16 +103,16 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
 
             {/* Emails */}
             {data.email.length > 0 && (
-              <div className="border-t px-7 py-7 sm:px-9" style={{ borderColor: HOME.line }}>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: HOME.inkSoft }}>
+              <div className="border-t px-7 py-6 sm:px-8" style={{ borderColor: HOME.line }}>
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
                   {uiText.contact.emailLabel[locale]}
                 </p>
-                <div className="mt-4 space-y-3">
+                <div className="mt-3 space-y-2.5">
                   {data.email.map(email => (
-                    <a key={email} href={`mailto:${email}`} className="group flex items-center gap-3.5">
+                    <a key={email} href={`mailto:${email}`} className="flex items-center gap-3.5">
                       <span
-                        className="flex h-10 w-10 items-center justify-center rounded-lg"
-                        style={{ border: `1px solid ${HOME.line}`, color: HOME.inkMid }}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                        style={{ background: HOME.mist, color: HOME.inkMid }}
                       >
                         <MailIcon />
                       </span>
@@ -175,18 +128,18 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
             {/* LINE */}
             {data.lineQrCode && (
               <div
-                className="flex items-center gap-5 border-t px-7 py-7 sm:px-9"
-                style={{ borderColor: HOME.line, background: HOME.accentTint }}
+                className="flex items-center gap-4 border-t px-7 py-6 sm:px-8"
+                style={{ borderColor: HOME.line, background: HOME.mintSoft }}
               >
                 <div
-                  className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl"
+                  className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[6px]"
                   style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}
                 >
                   <Image
                     src={data.lineQrCode.src}
                     alt={data.lineQrCode.alt}
                     fill
-                    sizes="5rem"
+                    sizes="72px"
                     className="object-contain p-1.5"
                   />
                 </div>
@@ -194,14 +147,15 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
                   <p className="text-[0.95rem] font-bold" style={{ color: HOME.ink }}>
                     {uiText.contact.lineLabel[locale]}
                   </p>
-                  <p className="mt-1 text-[0.85rem] leading-[1.6]" style={{ color: HOME.inkMid }}>
+                  <p className="mt-1 text-[0.85rem] leading-[1.55]" style={{ color: HOME.inkMid }}>
                     {uiText.contact.lineDesc[locale]}
                   </p>
                 </div>
               </div>
             )}
-          </motion.div>
-        </motion.div>
+          </div>
+
+        </div>
       </div>
     </section>
   )

@@ -1,34 +1,16 @@
-import {
-  Inter,
-  Noto_Sans_Thai,
-  Plus_Jakarta_Sans,
-} from "next/font/google"
+import { IBM_Plex_Sans_Thai } from "next/font/google"
 
-const headingLatin = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-heading-latin",
-  display: "swap",
-})
-
-const bodyLatin = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body-latin",
-  display: "swap",
-})
-
-const thaiSans = Noto_Sans_Thai({
-  subsets: ["thai"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-thai",
+// Single typeface for the whole site — IBM Plex Sans Thai covers both
+// Thai and Latin, so headings and body all share one font.
+const ibmPlexSansThai = IBM_Plex_Sans_Thai({
+  subsets: ["latin", "thai"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm",
   display: "swap",
 })
 
 export const rootBodyClassName = [
-  headingLatin.variable,
-  bodyLatin.variable,
-  thaiSans.variable,
+  ibmPlexSansThai.variable,
   "font-body",
   "antialiased",
 ].join(" ")
