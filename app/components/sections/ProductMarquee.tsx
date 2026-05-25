@@ -41,15 +41,15 @@ export default function ProductMarquee({ items, locale }: { items: ProductView[]
       <div className={CONTAINER}>
         <div className="mb-9 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <h2 className={`${SECTION_HEADING} text-[clamp(1.5rem,1.1rem+1.4vw,2rem)] font-bold`} style={{ color: HOME.ink }}>
+            <h2 className={`${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.6vw,2.3rem)] font-bold`} style={{ color: HOME.ink }}>
               {title}
             </h2>
-            <p className="mt-3 text-[0.97rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
+            <p className="mt-3 text-[1.02rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
               {summary}
             </p>
           </div>
           <Link href={withLocalePath(ctaHref, locale)}
-            className="shrink-0 text-[13px] font-bold uppercase tracking-[0.04em] transition-colors hover:opacity-70"
+            className="shrink-0 text-[14px] font-bold uppercase tracking-[0.04em] transition-colors hover:opacity-70"
             style={{ color: HOME.inkSoft }}>
             {COPY.viewAll[locale]} →
           </Link>
@@ -78,19 +78,19 @@ function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
         </div>
       </Link>
       <div className="flex flex-1 flex-col p-4">
-        <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
+        <p className="mb-1.5 text-[12px] font-semibold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
           {prettifySlug(item.categorySlug)}
         </p>
         <Link href={href}>
-          <h3 className="text-[15px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>{item.name}</h3>
+          <h3 className="text-[16px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>{item.name}</h3>
         </Link>
         {item.description && (
-          <p className="mt-2 line-clamp-3 text-[0.85rem] leading-[1.65]" style={{ color: HOME.inkMid }}>
+          <p className="mt-2 line-clamp-3 text-[0.95rem] leading-[1.65]" style={{ color: HOME.inkMid }}>
             {item.description}
           </p>
         )}
         <Link href={href}
-          className="home-btn home-btn-soft mt-4 block rounded-[5px] py-2.5 text-center text-[13px] font-bold">
+          className="home-btn home-btn-soft mt-4 block rounded-[5px] py-2.5 text-center text-[14px] font-bold">
           {COPY.viewProduct[locale]}
         </Link>
       </div>

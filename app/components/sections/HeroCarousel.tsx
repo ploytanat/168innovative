@@ -50,7 +50,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
             <h2 className={`${DISPLAY_HEADING} font-bold text-[clamp(2.5rem,1.5rem+4.4vw,4.4rem)]`} style={{ color: HOME.ink }}>
               {active.title}
             </h2>
-            <p className="mt-6 max-w-lg text-[1.05rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
+            <p className="mt-6 max-w-lg text-[1.1rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
               {active.description}
             </p>
 

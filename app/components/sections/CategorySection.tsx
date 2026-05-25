@@ -16,7 +16,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
         <h2 className={`${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.9vw,2.5rem)] font-bold`} style={{ color: HOME.ink }}>
           {uiText.categories.title[locale]}
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-[0.97rem] leading-[1.7]" style={{ color: HOME.inkMid }}>
+        <p className="mx-auto mt-3 max-w-md text-[1.02rem] leading-[1.7]" style={{ color: HOME.inkMid }}>
           {locale === "th" ? "เลือกดูบรรจุภัณฑ์ตามกลุ่มสินค้าที่ต้องการ" : "Browse our packaging by product group."}
         </p>
 
@@ -34,7 +34,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
                   </span>
                 )}
               </div>
-              <span className="text-[13.5px] font-bold uppercase leading-[1.3] tracking-[0.03em]" style={{ color: HOME.ink }}>
+              <span className="text-[15px] font-bold uppercase leading-[1.3] tracking-[0.03em]" style={{ color: HOME.ink }}>
                 {item.name}
               </span>
             </Link>
@@ -42,7 +42,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
         </div>
 
         <Link href={withLocalePath("/categories", locale)}
-          className="mt-8 inline-block text-[13px] font-bold uppercase tracking-[0.04em] transition-colors hover:opacity-70"
+          className="mt-8 inline-block text-[14px] font-bold uppercase tracking-[0.04em] transition-colors hover:opacity-70"
           style={{ color: HOME.inkSoft }}>
           {uiText.categories.viewAll[locale]} →
         </Link>

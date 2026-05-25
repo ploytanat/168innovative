@@ -72,7 +72,7 @@ export default function AboutHero({ hero }: { hero: AboutHeroView }) {
                   <Image src={hero.image1.src} alt={hero.image1.alt} fill priority sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
                 )}
                 <div className="absolute right-3 top-3 z-10 rounded-[0.9rem] px-3 py-1.5" style={GLASS.card}>
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: COLORS.dark }}>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: COLORS.dark }}>
                     Est. 2022
                   </p>
                 </div>

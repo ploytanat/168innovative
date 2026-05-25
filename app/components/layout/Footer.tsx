@@ -58,19 +58,19 @@ export default function Footer({ company }: { company: CompanyView }) {
             <Link href={withLocale('/')} className="inline-block">
               <Image src={company.logo.src} alt={company.logo.alt} width={140} height={45} className="h-12 w-auto" />
             </Link>
-            <p className="mt-6 max-w-sm text-[14px] leading-[1.75]" style={{ color: HOME.inkMid }}>
+            <p className="mt-6 max-w-sm text-[15px] leading-[1.75]" style={{ color: HOME.inkMid }}>
               {text.description}
             </p>
           </div>
 
           <div>
-            <h3 className="text-[13px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
+            <h3 className="text-[14px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
               {text.navigation}
             </h3>
             <ul className="mt-5 space-y-3">
               {NAV.map(item => (
                 <li key={item.href}>
-                  <Link href={withLocale(item.href)} className="text-[14px] transition-colors hover:opacity-70" style={{ color: HOME.inkMid }}>
+                  <Link href={withLocale(item.href)} className="text-[15px] transition-colors hover:opacity-70" style={{ color: HOME.inkMid }}>
                     {item.label[locale]}
                   </Link>
                 </li>
@@ -79,10 +79,10 @@ export default function Footer({ company }: { company: CompanyView }) {
           </div>
 
           <div>
-            <h3 className="text-[13px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
+            <h3 className="text-[14px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
               {text.contact}
             </h3>
-            <ul className="mt-5 space-y-4 text-[14px]" style={{ color: HOME.inkMid }}>
+            <ul className="mt-5 space-y-4 text-[15px]" style={{ color: HOME.inkMid }}>
               {company.address && (
                 <li className="flex items-start gap-2.5">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
@@ -110,7 +110,7 @@ export default function Footer({ company }: { company: CompanyView }) {
           <div>
             {company.socials.length > 0 && (
               <>
-                <h3 className="text-[13px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
+                <h3 className="text-[14px] font-bold uppercase tracking-[0.06em]" style={{ color: HOME.ink }}>
                   {text.connect}
                 </h3>
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -128,15 +128,15 @@ export default function Footer({ company }: { company: CompanyView }) {
               </>
             )}
 
-            <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
+            <p className="mt-6 text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
               {text.language}
             </p>
             <div className="mt-3 inline-flex overflow-hidden rounded-full" style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}>
-              <Link href={toTH} hrefLang="th" className="px-3.5 py-1.5 text-[12px] font-bold transition-colors"
+              <Link href={toTH} hrefLang="th" className="px-3.5 py-1.5 text-[13px] font-bold transition-colors"
                 style={{ background: !isEN ? HOME.ink : 'transparent', color: !isEN ? HOME.surface : HOME.inkMid }}>
                 TH
               </Link>
-              <Link href={toEN} hrefLang="en" className="px-3.5 py-1.5 text-[12px] font-bold transition-colors"
+              <Link href={toEN} hrefLang="en" className="px-3.5 py-1.5 text-[13px] font-bold transition-colors"
                 style={{ background: isEN ? HOME.ink : 'transparent', color: isEN ? HOME.surface : HOME.inkMid }}>
                 EN
               </Link>
@@ -144,7 +144,7 @@ export default function Footer({ company }: { company: CompanyView }) {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-2 border-t pt-7 text-[12px] sm:flex-row sm:items-center sm:justify-between"
+        <div className="mt-14 flex flex-col gap-2 border-t pt-7 text-[13px] sm:flex-row sm:items-center sm:justify-between"
           style={{ borderColor: HOME.line, color: HOME.inkSoft }}>
           <p>© {new Date().getFullYear()} {company.name}. {text.rights}</p>
           <p className="uppercase tracking-[0.12em]">Cosmetic Packaging • OEM • ODM</p>
