@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative\" push --force-with-lease origin develop)"
+    ]
+  }
+}
