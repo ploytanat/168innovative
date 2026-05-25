@@ -43,7 +43,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
           <div key={`c-${animKey}`}
             className="h-in order-2 flex flex-col justify-center px-5 py-14 sm:px-6 sm:py-20 lg:order-1 lg:py-24 lg:pl-[max(1.25rem,calc((100vw-1200px)/2+1.25rem))] lg:pr-12">
             {active.subtitle && (
-              <p className="mb-5 text-[13px] font-bold uppercase tracking-[0.16em]" style={{ color: HOME.mintInk }}>
+              <p className="mb-5 text-[13px] font-bold uppercase tracking-[0.16em]" style={{ color: "#8c5a3a" }}>
                 {active.subtitle}
               </p>
             )}

@@ -25,12 +25,16 @@ const SOCIAL_ICONS: Record<string, LucideIcon> = {
 
 const COPY = {
   th: {
+    tagline: 'บรรจุภัณฑ์เครื่องสำอาง · OEM · ODM',
     description: 'บรรจุภัณฑ์เครื่องสำอางจากแหล่งผลิตโดยตรง ทำงานง่ายขึ้น ตอบกลับไวขึ้น และติดต่อทีมขายได้ตรงกว่าเดิม',
+    quote: 'ขอใบเสนอราคา',
     navigation: 'เมนู', contact: 'ติดต่อ', connect: 'โซเชียล', language: 'ภาษา',
     rights: 'สงวนลิขสิทธิ์',
   },
   en: {
+    tagline: 'Cosmetic Packaging · OEM · ODM',
     description: 'Factory-sourced cosmetic packaging with a cleaner process, faster response, and direct contact with sales.',
+    quote: 'Request a quote',
     navigation: 'Menu', contact: 'Contact', connect: 'Connect', language: 'Language',
     rights: 'All rights reserved.',
   },
@@ -52,15 +56,22 @@ export default function Footer({ company }: { company: CompanyView }) {
   return (
     <footer style={{ background: HOME.mist, borderTop: `1px solid ${HOME.line}`, color: HOME.inkMid }} aria-label="Site footer">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:py-16">
-        <div className="grid gap-x-12 gap-y-10 lg:grid-cols-[1.6fr_1fr_1.3fr_1fr] lg:gap-x-16">
+        <div className="grid gap-x-12 gap-y-10 lg:grid-cols-[1.4fr_1fr_1.3fr_1fr] lg:gap-x-16">
 
           <div>
             <Link href={withLocale('/')} className="inline-block">
               <Image src={company.logo.src} alt={company.logo.alt} width={140} height={45} className="h-12 w-auto" />
             </Link>
-            <p className="mt-6 max-w-sm text-[15px] leading-[1.75]" style={{ color: HOME.inkMid }}>
+            <p className="mt-5 text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: HOME.ink }}>
+              {text.tagline}
+            </p>
+            <p className="mt-3 max-w-sm text-[15px] leading-[1.75]" style={{ color: HOME.inkMid }}>
               {text.description}
             </p>
+            <Link href={withLocale('/contact')}
+              className="home-btn home-btn-accent mt-6 inline-flex items-center rounded-[5px] px-5 py-2.5 text-[14px] font-bold">
+              {text.quote} →
+            </Link>
           </div>
 
           <div>

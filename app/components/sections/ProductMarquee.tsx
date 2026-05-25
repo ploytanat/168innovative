@@ -90,7 +90,7 @@ function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
           </p>
         )}
         <Link href={href}
-          className="home-btn home-btn-soft mt-4 block rounded-[5px] py-2.5 text-center text-[14px] font-bold">
+          className="home-btn home-btn-accent mt-4 block rounded-[5px] py-2.5 text-center text-[14px] font-bold">
           {COPY.viewProduct[locale]}
         </Link>
       </div>
