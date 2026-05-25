@@ -22,116 +22,75 @@ const COPY = {
   viewProduct: { th: "ดูรายละเอียด", en: "View Product" },
 } as const
 
-interface ProductMarqueeProps { items: ProductView[]; locale: Locale }
+const prettifySlug = (slug: string) => slug.replace(/-/g, " ")
 
-function prettifySlug(slug: string) {
-  return slug.replace(/-/g, " ")
-}
+const getProductHref = (item: ProductView, locale: Locale) =>
+  withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
 
-function getProductHref(item: ProductView, locale: Locale) {
-  return withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
-}
-
-// ─── Main ─────────────────────────────────────────────────────────────────────
-
-export default function ProductMarquee({ items, locale }: ProductMarqueeProps) {
+export default function ProductMarquee({ items, locale }: { items: ProductView[]; locale: Locale }) {
   if (!items.length) return null
 
-  const isSpoutShowcase = items.every(i => i.categorySlug === "spout")
-  const visibleItems = items.slice(0, 8)
-
-  const ctaHref      = isSpoutShowcase ? "/categories/spout" : "/categories"
-  const sectionTitle = isSpoutShowcase ? uiText.spoutProducts[locale] : uiText.featuredProducts[locale]
-  const summary      = isSpoutShowcase ? COPY.spoutSummary[locale]     : COPY.summary[locale]
+  const isSpout = items.every(i => i.categorySlug === "spout")
+  const visible = items.slice(0, 8)
+  const ctaHref = isSpout ? "/categories/spout" : "/categories"
+  const title   = isSpout ? uiText.spoutProducts[locale] : uiText.featuredProducts[locale]
+  const summary = isSpout ? COPY.spoutSummary[locale]    : COPY.summary[locale]
 
   return (
     <section className={`relative ${SECTION_PAD}`} style={{ background: HOME.surface }}>
       <div className={CONTAINER}>
-
-        {/* ── Header ─────────────────────────────────────────────── */}
         <div className="mb-9 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <h2
-              className={`${SECTION_HEADING} text-[clamp(1.5rem,1.1rem+1.4vw,2rem)] font-bold`}
-              style={{ color: HOME.ink }}
-            >
-              {sectionTitle}
+            <h2 className={`${SECTION_HEADING} text-[clamp(1.5rem,1.1rem+1.4vw,2rem)] font-bold`} style={{ color: HOME.ink }}>
+              {title}
             </h2>
             <p className="mt-3 text-[0.97rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
               {summary}
             </p>
           </div>
-          <Link
-            href={withLocalePath(ctaHref, locale)}
+          <Link href={withLocalePath(ctaHref, locale)}
             className="shrink-0 text-[13px] font-bold uppercase tracking-[0.04em] transition-colors hover:opacity-70"
-            style={{ color: HOME.inkSoft }}
-          >
+            style={{ color: HOME.inkSoft }}>
             {COPY.viewAll[locale]} →
           </Link>
         </div>
 
-        {/* ── Product grid ───────────────────────────────────────── */}
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {visibleItems.map(item => (
-            <ProductCard key={item.id} item={item} locale={locale} />
-          ))}
+          {visible.map(item => <ProductCard key={item.id} item={item} locale={locale} />)}
         </div>
       </div>
     </section>
   )
 }
 
-// ─── ProductCard ──────────────────────────────────────────────────────────────
-
 function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
   const href = getProductHref(item, locale)
-
   return (
-    <div
-      className="home-card flex flex-col overflow-hidden rounded-lg"
-      style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
-    >
+    <div className="home-card flex flex-col overflow-hidden rounded-lg"
+      style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}>
       <Link href={href} className="block">
-        <div
-          className="flex h-[200px] items-center justify-center p-5"
-          style={{ background: HOME.mist }}
-        >
+        <div className="flex h-[200px] items-center justify-center p-5" style={{ background: HOME.mist }}>
           <div className="relative h-full w-full">
-            <Image
-              src={item.image.src}
-              alt={item.image.alt || item.name}
-              fill
-              sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
-              className="object-contain"
-            />
+            <Image src={item.image.src} alt={item.image.alt || item.name}
+              fill sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
+              className="object-contain" />
           </div>
         </div>
       </Link>
-
       <div className="flex flex-1 flex-col p-4">
-        <p
-          className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em]"
-          style={{ color: HOME.inkSoft }}
-        >
+        <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
           {prettifySlug(item.categorySlug)}
         </p>
         <Link href={href}>
-          <h3 className="text-[15px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>
-            {item.name}
-          </h3>
+          <h3 className="text-[15px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>{item.name}</h3>
         </Link>
         {item.description && (
-          <p
-            className="mt-2 line-clamp-3 text-[0.85rem] leading-[1.65]"
-            style={{ color: HOME.inkMid }}
-          >
+          <p className="mt-2 line-clamp-3 text-[0.85rem] leading-[1.65]" style={{ color: HOME.inkMid }}>
             {item.description}
           </p>
         )}
-        <Link
-          href={href}
-          className="home-btn home-btn-soft mt-4 block rounded-[5px] py-2.5 text-center text-[13px] font-bold"
-        >
+        <Link href={href}
+          className="home-btn home-btn-soft mt-4 block rounded-[5px] py-2.5 text-center text-[13px] font-bold">
           {COPY.viewProduct[locale]}
         </Link>
       </div>

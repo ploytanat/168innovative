@@ -1,92 +1,96 @@
+import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, ShoppingBag, type LucideIcon } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
+import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
 import { CONTAINER, HOME, SECTION_HEADING, SECTION_PAD } from "./home-theme"
 
-const PhoneIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
-      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-  </svg>
-)
-
-const MailIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
-      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>
-)
-
-const PinIcon = () => (
-  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-5 w-5">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6}
-      d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-  </svg>
-)
-
-interface ContactSectionProps {
-  data: CompanyView
-  locale: "th" | "en"
+const SOCIAL_ICONS: Record<string, LucideIcon> = {
+  facebook: Facebook,
+  line: MessageCircle,
+  instagram: Instagram,
+  shopee: ShoppingBag,
 }
 
-export default function ContactSection({ data, locale }: ContactSectionProps) {
+const COPY = {
+  sendMessage: { th: "ส่งข้อความหาเรา", en: "Send us a message" },
+  followUs:    { th: "ติดตามเรา",        en: "Follow us" },
+} as const
+
+const DARK_BG    = "#1c1f24"
+const DARK_TEXT  = "#ffffff"
+const DARK_MUTED = "#b5b7bc"
+const DARK_DIM   = "#8c8f96"
+const DARK_LINE  = "rgba(255,255,255,0.14)"
+const DARK_TILE  = "rgba(255,255,255,0.06)"
+
+export default function ContactSection({ data, locale }: { data: CompanyView; locale: "th" | "en" }) {
   return (
-    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.cream }}>
+    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: DARK_BG }}>
       <div className={CONTAINER}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
 
-          {/* ── Left: message ────────────────────────────────────── */}
           <div>
-            <p
-              className="text-[12px] font-bold uppercase tracking-[0.14em]"
-              style={{ color: HOME.mintInk }}
-            >
+            <p className="text-[12px] font-bold uppercase tracking-[0.14em]" style={{ color: HOME.mint }}>
               {locale === "th" ? "ติดต่อเรา" : "Get in touch"}
             </p>
-            <h2
-              className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`}
-              style={{ color: HOME.ink }}
-            >
-              {uiText.contact.title[locale]} {uiText.contact.subtitle[locale]}
+            <h2 className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`} style={{ color: DARK_TEXT }}>
+              {uiText.contact.title[locale]}<br />
+              <span style={{ color: HOME.mint }}>{uiText.contact.subtitle[locale]}</span>
             </h2>
-            <p className="mt-4 max-w-md text-[1rem] leading-[1.7]" style={{ color: HOME.inkMid }}>
+            <p className="mt-4 max-w-md text-[1rem] leading-[1.7]" style={{ color: DARK_MUTED }}>
               {uiText.contact.desc[locale]}
             </p>
 
+            <Link href={withLocalePath("/contact", locale)}
+              className="home-btn home-btn-light mt-7 inline-flex items-center rounded-[5px] px-6 py-3 text-[13px] font-bold">
+              {COPY.sendMessage[locale]} →
+            </Link>
+
             {data.address && (
-              <div className="mt-7 flex items-start gap-3" style={{ color: HOME.inkMid }}>
-                <span className="mt-0.5 shrink-0" style={{ color: HOME.mintInk }}><PinIcon /></span>
+              <div className="mt-7 flex items-start gap-3" style={{ color: DARK_MUTED }}>
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0" style={{ color: HOME.mint }} />
                 <p className="text-[0.92rem] leading-[1.65]">{data.address}</p>
+              </div>
+            )}
+
+            {data.socials.length > 0 && (
+              <div className="mt-7">
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: DARK_DIM }}>
+                  {COPY.followUs[locale]}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2.5">
+                  {data.socials.map(s => {
+                    const Icon = SOCIAL_ICONS[s.type] ?? MessageCircle
+                    return (
+                      <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.type}
+                        className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/15"
+                        style={{ background: DARK_TILE, border: `1px solid ${DARK_LINE}`, color: DARK_TEXT }}>
+                        <Icon className="h-[18px] w-[18px]" />
+                      </a>
+                    )
+                  })}
+                </div>
               </div>
             )}
           </div>
 
-          {/* ── Right: contact card ──────────────────────────────── */}
-          <div
-            className="overflow-hidden rounded-lg"
-            style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
-          >
-            {/* Phones */}
+          <div className="overflow-hidden rounded-lg" style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}>
             <div className="p-7 sm:p-8">
               <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
                 {uiText.contact.phoneLabel[locale]}
               </p>
               <div className="mt-4 space-y-3">
                 {data.phones.map(phone => (
-                  <a
-                    key={phone.number}
-                    href={`tel:${phone.number.replace(/-/g, "")}`}
+                  <a key={phone.number} href={`tel:${phone.number.replace(/-/g, "")}`}
                     className="home-card flex items-center gap-3.5 rounded-[6px] px-4 py-3"
-                    style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}
-                  >
-                    <span
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                      style={{ background: HOME.mintSoft, color: HOME.mintInk }}
-                    >
-                      <PhoneIcon />
+                    style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                      style={{ background: HOME.mintSoft, color: HOME.mintInk }}>
+                      <Phone className="h-5 w-5" strokeWidth={1.6} />
                     </span>
                     <span>
                       <span className="block text-[10px] font-bold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
@@ -101,7 +105,6 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
               </div>
             </div>
 
-            {/* Emails */}
             {data.email.length > 0 && (
               <div className="border-t px-7 py-6 sm:px-8" style={{ borderColor: HOME.line }}>
                 <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
@@ -110,11 +113,9 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
                 <div className="mt-3 space-y-2.5">
                   {data.email.map(email => (
                     <a key={email} href={`mailto:${email}`} className="flex items-center gap-3.5">
-                      <span
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                        style={{ background: HOME.mist, color: HOME.inkMid }}
-                      >
-                        <MailIcon />
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                        style={{ background: HOME.mist, color: HOME.inkMid }}>
+                        <Mail className="h-5 w-5" strokeWidth={1.6} />
                       </span>
                       <span className="break-all text-[0.95rem] font-semibold" style={{ color: HOME.ink }}>
                         {email}
@@ -125,23 +126,12 @@ export default function ContactSection({ data, locale }: ContactSectionProps) {
               </div>
             )}
 
-            {/* LINE */}
             {data.lineQrCode && (
-              <div
-                className="flex items-center gap-4 border-t px-7 py-6 sm:px-8"
-                style={{ borderColor: HOME.line, background: HOME.mintSoft }}
-              >
-                <div
-                  className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[6px]"
-                  style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}
-                >
-                  <Image
-                    src={data.lineQrCode.src}
-                    alt={data.lineQrCode.alt}
-                    fill
-                    sizes="72px"
-                    className="object-contain p-1.5"
-                  />
+              <div className="flex items-center gap-4 border-t px-7 py-6 sm:px-8"
+                style={{ borderColor: HOME.line, background: HOME.mintSoft }}>
+                <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[6px]"
+                  style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}>
+                  <Image src={data.lineQrCode.src} alt={data.lineQrCode.alt} fill sizes="72px" className="object-contain p-1.5" />
                 </div>
                 <div>
                   <p className="text-[0.95rem] font-bold" style={{ color: HOME.ink }}>
