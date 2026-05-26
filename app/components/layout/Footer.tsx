@@ -56,7 +56,7 @@ export default function Footer({ company }: { company: CompanyView }) {
   return (
     <footer style={{ background: HOME.mist, borderTop: `1px solid ${HOME.line}`, color: HOME.inkMid }} aria-label="Site footer">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:py-16">
-        <div className="grid gap-x-12 gap-y-10 lg:grid-cols-[1.4fr_1fr_1.3fr_1fr] lg:gap-x-16">
+        <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.3fr_1fr] lg:gap-x-16">
 
           <div>
             <Link href={withLocale('/')} className="inline-block">

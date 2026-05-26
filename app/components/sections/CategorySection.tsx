@@ -24,10 +24,10 @@ export default function CategorySection({ items = [], locale }: { items: Categor
           {items.slice(0, 8).map(item => (
             <Link key={item.id} href={withLocalePath(`/categories/${item.slug}`, locale)}
               className="group flex flex-col items-center gap-3">
-              <div className="relative h-44 w-44 overflow-hidden rounded-3xl transition-transform duration-300 group-hover:-translate-y-1.5 sm:h-52 sm:w-52 lg:h-64 lg:w-64"
+              <div className="relative aspect-square w-full max-w-[256px] overflow-hidden rounded-3xl transition-transform duration-300 group-hover:-translate-y-1.5"
                 style={{ border: "2px solid #ffffff", boxShadow: "0 10px 26px rgba(0,0,0,0.12)", background: HOME.mint }}>
                 {item.image?.src ? (
-                  <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 176px, (max-width:1024px) 208px, 256px" className="object-cover" />
+                  <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 256px" className="object-cover" />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-3xl font-bold" style={{ color: HOME.mintInk }}>
                     {item.name.charAt(0)}

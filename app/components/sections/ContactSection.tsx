@@ -31,7 +31,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
   return (
     <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: DARK_BG }}>
       <div className={CONTAINER}>
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+        <div className="grid gap-10 md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-14">
 
           <div>
             <p className="text-[13px] font-bold uppercase tracking-[0.14em]" style={{ color: HOME.mint }}>

@@ -45,7 +45,7 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
       <div aria-hidden className="pointer-events-none absolute -bottom-16 -right-20 h-[420px] w-[420px] rounded-full" style={{ background: "#fde3cc", filter: "blur(80px)", opacity: 0.6 }} />
 
       <div className={`${CONTAINER} relative`}>
-        <div className="grid gap-4 lg:grid-cols-[1.2fr_2fr_1.2fr]">
+        <div className="grid gap-4 md:grid-cols-[1.2fr_2fr_1.2fr]">
 
           <div className="flex flex-col justify-between gap-8 rounded-lg p-8 sm:p-10" style={glass("rgba(252,228,236,0.55)")}>
             <div>

@@ -38,23 +38,23 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
       <style>{`@keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.h-in{animation:heroIn .5s cubic-bezier(.22,1,.36,1) both}`}</style>
 
       <section className="relative" style={{ background: HOME.mint }}>
-        <div className="grid items-stretch lg:min-h-[520px] lg:grid-cols-[0.82fr_1.18fr]">
+        <div className="grid items-stretch lg:grid-cols-[0.82fr_1.18fr] lg:min-h-[min(960px,calc(100vh-6rem))]">
 
           <div key={`c-${animKey}`}
-            className="h-in order-2 flex flex-col justify-center px-5 py-14 sm:px-6 sm:py-20 lg:order-1 lg:py-24 lg:pl-[max(1.25rem,calc((100vw-1200px)/2+1.25rem))] lg:pr-12">
+            className="h-in order-2 flex flex-col justify-center px-5 py-9 sm:px-6 sm:py-10 md:px-8 md:py-12 lg:order-1 lg:py-28 lg:pl-[max(1.25rem,calc((100vw-1200px)/2+1.25rem))] lg:pr-12">
             {active.subtitle && (
               <p className="mb-5 text-[13px] font-bold uppercase tracking-[0.16em]" style={{ color: "#8c5a3a" }}>
                 {active.subtitle}
               </p>
             )}
-            <h2 className={`${DISPLAY_HEADING} font-bold text-[clamp(2.5rem,1.5rem+4.4vw,4.4rem)]`} style={{ color: HOME.ink }}>
+            <h2 className={`${DISPLAY_HEADING} break-words font-bold text-[clamp(1.8rem,0.8rem+2.6vw,2.8rem)] lg:text-[clamp(2.5rem,1rem+4vw,4.4rem)]`} style={{ color: HOME.ink }}>
               {active.title}
             </h2>
-            <p className="mt-6 max-w-lg text-[1.1rem] leading-[1.75]" style={{ color: HOME.inkMid }}>
+            <p className="mt-4 max-w-lg text-[1rem] leading-[1.7] lg:mt-6 lg:text-[1.1rem] lg:leading-[1.75]" style={{ color: HOME.inkMid }}>
               {active.description}
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-4 lg:mt-8">
               <Link href={active.ctaPrimary.href} className="home-btn home-btn-accent inline-flex items-center rounded-[5px] px-7 py-3 text-[14px] font-bold">
                 {active.ctaPrimary.label}
               </Link>
@@ -66,7 +66,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
             </div>
 
             {hasMultiple && (
-              <div className="mt-10 flex items-center gap-4">
+              <div className="mt-7 flex items-center gap-4 lg:mt-10">
                 <div className="flex items-center gap-2">
                   <button type="button" aria-label="Previous slide" onClick={previous}
                     className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/70 transition-colors hover:bg-white"
@@ -95,10 +95,13 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
           </div>
 
           <div key={`i-${animKey}`}
-            className="h-in order-1 relative aspect-[3/2] lg:order-2 lg:aspect-auto">
+            className="h-in order-1 relative aspect-[16/9] overflow-hidden md:aspect-[21/9] lg:order-2 lg:aspect-auto">
             <Image src={active.image.src} alt={active.image.alt}
               fill priority sizes="(max-width:1024px) 100vw, 60vw"
-              className="object-cover" />
+              className="object-cover"
+              style={{ objectPosition: 'center 75%' }} />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-1/4"
+              style={{ background: `linear-gradient(180deg, ${HOME.mint} 0%, transparent 100%)` }} />
           </div>
 
         </div>
