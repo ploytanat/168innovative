@@ -1,16 +1,18 @@
 'use client'
 
-import { Menu, X } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { HOME } from '@/app/components/sections/home-theme'
+import type { CategoryView } from '@/app/lib/types/view'
 
 interface NavigationProps {
   locale: string
   logo: { src: string; alt: string }
+  categories?: CategoryView[]
 }
 
 const NAV_MENU = [
@@ -22,16 +24,22 @@ const NAV_MENU = [
 ] as const
 
 const QUOTE_LABEL = { th: 'ขอใบเสนอราคา', en: 'Get a quote' }
+const MENU_LABEL  = { th: 'เมนู',          en: 'Menu' }
 
 export default function Navigation(props: NavigationProps) {
   const pathname = usePathname()
   return <NavInner key={pathname} pathname={pathname} {...props} />
 }
 
-function NavInner({ locale, logo, pathname }: NavigationProps & { pathname: string }) {
+function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps & { pathname: string }) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [productsOpen, setProductsOpen] = useState(false)
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false)
+  const closeTimer = useRef<number | null>(null)
+
+  const hasCategories = categories.length > 0
 
   const isEN = locale === 'en' || pathname.startsWith('/en')
   const lang = isEN ? 'en' : 'th'
@@ -43,12 +51,24 @@ function NavInner({ locale, logo, pathname }: NavigationProps & { pathname: stri
     return pathname === full || pathname.startsWith(`${full}/`)
   }
 
-  const closeMenu = useCallback(() => setOpen(false), [])
+  const closeMenu = useCallback(() => {
+    setOpen(false)
+    setMobileProductsOpen(false)
+  }, [])
   const toggleLanguage = useCallback(() => {
     closeMenu()
     const next = isEN ? (pathname.replace(/^\/en/, '') || '/') : (pathname === '/' ? '/en' : `/en${pathname}`)
     router.push(next)
   }, [closeMenu, isEN, pathname, router])
+
+  const openProducts = useCallback(() => {
+    if (closeTimer.current) { window.clearTimeout(closeTimer.current); closeTimer.current = null }
+    setProductsOpen(true)
+  }, [])
+  const closeProducts = useCallback(() => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current)
+    closeTimer.current = window.setTimeout(() => setProductsOpen(false), 180)
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -64,39 +84,101 @@ function NavInner({ locale, logo, pathname }: NavigationProps & { pathname: stri
     return () => { window.removeEventListener('scroll', onScroll); if (frame) window.cancelAnimationFrame(frame) }
   }, [])
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setProductsOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <header
       className="sticky top-0 z-[60] w-full transition-all duration-300"
       style={{
-        background: scrolled ? 'rgba(255,255,255,0.92)' : HOME.surface,
-        backdropFilter: scrolled ? 'blur(12px) saturate(140%)' : 'none',
-        WebkitBackdropFilter: scrolled ? 'blur(12px) saturate(140%)' : 'none',
-        borderBottom: `1px solid ${HOME.line}`,
-        boxShadow: scrolled ? '0 4px 16px rgba(20,22,28,0.06)' : 'none',
+        background: scrolled ? 'rgba(255,255,255,0.88)' : HOME.surface,
+        backdropFilter: scrolled ? 'blur(14px) saturate(140%)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(140%)' : 'none',
+        borderBottom: `1px solid ${scrolled ? HOME.line : 'transparent'}`,
+        boxShadow: scrolled ? '0 4px 18px rgba(20,22,28,0.05)' : 'none',
       }}
     >
-      <nav className="mx-auto flex h-20 max-w-[1200px] items-center justify-between px-5 lg:h-24">
-        <Link href={withLocale('/')} onClick={closeMenu}
-          className="relative flex h-12 w-40 items-center sm:h-14 sm:w-48 lg:h-16 lg:w-56">
-          <Image src={logo.src} alt={logo.alt || 'Logo'} fill priority sizes="224px" className="object-contain object-left" />
+      <nav className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:h-20">
+        <Link
+          href={withLocale('/')}
+          onClick={closeMenu}
+          aria-label="168 Innovative"
+          className="relative flex h-11 w-36 shrink-0 items-center sm:h-12 sm:w-40 lg:h-14 lg:w-48"
+        >
+          <Image
+            src={logo.src}
+            alt={logo.alt || 'Logo'}
+            fill
+            priority
+            sizes="192px"
+            className="object-contain object-left"
+          />
         </Link>
 
-        <ul className="hidden items-center gap-8 lg:flex">
+        {/* Desktop nav */}
+        <ul className="hidden items-center gap-1 lg:flex">
           {NAV_MENU.map(item => {
             const active = isActive(item.href)
+            const isProductsItem = item.href === '/categories' && hasCategories
+            const showAccent = active || (isProductsItem && productsOpen)
+
+            if (isProductsItem) {
+              return (
+                <li
+                  key={item.href}
+                  onMouseEnter={openProducts}
+                  onMouseLeave={closeProducts}
+                  className="relative"
+                >
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={productsOpen ? 'true' : 'false'}
+                    onClick={() => setProductsOpen(o => !o)}
+                    className="group relative inline-flex items-center gap-1 rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-black/[0.04]"
+                    style={{
+                      color: showAccent ? HOME.ink : HOME.inkMid,
+                      fontWeight: showAccent ? 700 : 500,
+                    }}
+                  >
+                    {item.label[lang]}
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform duration-200 ${productsOpen ? 'rotate-180' : ''}`}
+                      strokeWidth={2.2}
+                    />
+                    <span
+                      aria-hidden
+                      className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-200 ${
+                        showAccent ? 'h-[3px] w-6 opacity-100' : 'h-[2px] w-0 opacity-0 group-hover:w-3 group-hover:opacity-100'
+                      }`}
+                      style={{ background: HOME.ink, bottom: '-2px' }}
+                    />
+                  </button>
+                </li>
+              )
+            }
+
             return (
               <li key={item.href}>
                 <Link
                   href={withLocale(item.href)}
-                  className="group relative inline-flex items-center pb-1.5 text-[14px] font-bold uppercase tracking-[0.08em] transition-colors"
-                  style={{ color: active ? HOME.ink : HOME.inkMid }}
+                  aria-current={active ? 'page' : undefined}
+                  className="group relative inline-flex items-center rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-black/[0.04]"
+                  style={{
+                    color: active ? HOME.ink : HOME.inkMid,
+                    fontWeight: active ? 700 : 500,
+                  }}
                 >
                   {item.label[lang]}
                   <span
-                    className={`absolute bottom-0 left-1/2 h-[2px] -translate-x-1/2 rounded-full transition-all duration-300 ${
-                      active ? 'w-7' : 'w-0 group-hover:w-4'
+                    aria-hidden
+                    className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-200 ${
+                      active ? 'h-[3px] w-6 opacity-100' : 'h-[2px] w-0 opacity-0 group-hover:w-3 group-hover:opacity-100'
                     }`}
-                    style={{ background: HOME.ink }}
+                    style={{ background: HOME.ink, bottom: '-2px' }}
                   />
                 </Link>
               </li>
@@ -104,52 +186,228 @@ function NavInner({ locale, logo, pathname }: NavigationProps & { pathname: stri
           })}
         </ul>
 
-        <div className="flex items-center gap-3">
-          <Link href={withLocale('/contact')} onClick={closeMenu}
-            className="home-btn home-btn-accent hidden items-center rounded-full px-5 py-2.5 text-[14px] font-bold uppercase tracking-[0.08em] lg:inline-flex">
+        {/* Right cluster */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <LangToggle isEN={isEN} onToggle={toggleLanguage} />
+
+          <Link
+            href={withLocale('/contact')}
+            onClick={closeMenu}
+            className="home-btn home-btn-accent hidden items-center gap-1.5 rounded-full px-5 py-2.5 text-[14px] font-semibold lg:inline-flex"
+          >
             {QUOTE_LABEL[lang]}
-            <span className="ml-1.5">→</span>
+            <ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />
           </Link>
-          <LangPills isEN={isEN} onToggle={toggleLanguage} />
-          <button type="button" onClick={() => setOpen(c => !c)}
+
+          <button
+            type="button"
+            onClick={() => setOpen(c => !c)}
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-black/5 lg:hidden"
-            style={{ color: HOME.ink }}>
+            aria-expanded={open ? 'true' : 'false'}
+            aria-controls="mobile-menu"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-black/[0.05] lg:hidden"
+            style={{ color: HOME.ink, border: `1px solid ${HOME.line}` }}
+          >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </nav>
 
+      {/* Desktop mega menu — Products */}
+      {hasCategories && (
+        <div
+          onMouseEnter={openProducts}
+          onMouseLeave={closeProducts}
+          className="absolute inset-x-0 top-full hidden lg:block"
+          style={{ pointerEvents: productsOpen ? 'auto' : 'none' }}
+        >
+          <div
+            className="overflow-hidden transition-[opacity,transform] duration-200 ease-out"
+            style={{
+              opacity: productsOpen ? 1 : 0,
+              transform: productsOpen ? 'translateY(0)' : 'translateY(-6px)',
+              background: HOME.surface,
+              borderBottom: `1px solid ${HOME.line}`,
+              boxShadow: '0 18px 38px rgba(20,22,28,0.08)',
+            }}
+          >
+            <div className="mx-auto max-w-[1200px] px-5 py-8">
+              <div className="mb-5 flex items-end justify-between gap-6">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
+                    {lang === 'th' ? 'หมวดสินค้า' : 'Product Categories'}
+                  </p>
+                  <p className="mt-1 text-[14px]" style={{ color: HOME.inkMid }}>
+                    {lang === 'th' ? 'เลือกหมวดสินค้าที่คุณสนใจ' : 'Choose a product category to explore'}
+                  </p>
+                </div>
+                <Link
+                  href={withLocale('/categories')}
+                  onClick={() => setProductsOpen(false)}
+                  className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold transition-colors hover:opacity-70"
+                  style={{ color: HOME.ink }}
+                >
+                  {lang === 'th' ? 'ดูทั้งหมด' : 'View all'}
+                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+                </Link>
+              </div>
+
+              <ul className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+                {categories.slice(0, 8).map(cat => (
+                  <li key={cat.id}>
+                    <Link
+                      href={withLocale(`/categories/${cat.slug}`)}
+                      onClick={() => setProductsOpen(false)}
+                      className="group flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-[#f9f9f9]"
+                    >
+                      <div
+                        className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg"
+                        style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+                      >
+                        {cat.image ? (
+                          <Image src={cat.image.src} alt={cat.image.alt || cat.name} fill sizes="56px" className="object-cover" />
+                        ) : (
+                          <span className="flex h-full w-full items-center justify-center text-[18px] font-bold" style={{ color: HOME.inkSoft }}>
+                            {cat.name.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-[14px] font-semibold transition-colors" style={{ color: HOME.ink }}>
+                          {cat.name}
+                        </p>
+                        {cat.description && (
+                          <p className="truncate text-[12px]" style={{ color: HOME.inkSoft }}>
+                            {cat.description}
+                          </p>
+                        )}
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile menu */}
       <div
-        className="overflow-hidden transition-all duration-300 ease-out lg:hidden"
+        id="mobile-menu"
+        className="overflow-hidden transition-[max-height,opacity] duration-300 ease-out lg:hidden"
         style={{
-          maxHeight: open ? '520px' : '0',
+          maxHeight: open ? (mobileProductsOpen ? '1100px' : '600px') : '0',
+          opacity: open ? 1 : 0,
           borderTop: open ? `1px solid ${HOME.line}` : 'none',
+          background: HOME.surface,
         }}
+        aria-hidden={open ? 'false' : 'true'}
       >
-        <ul className="space-y-1 px-5 pt-4">
+        <p
+          className="px-5 pt-5 text-[11px] font-bold uppercase tracking-[0.22em]"
+          style={{ color: HOME.mintInk }}
+        >
+          {MENU_LABEL[lang]}
+        </p>
+
+        <ul className="space-y-1 px-3 pt-3">
           {NAV_MENU.map(item => {
             const active = isActive(item.href)
+            const isProductsItem = item.href === '/categories' && hasCategories
+
+            if (isProductsItem) {
+              return (
+                <li key={item.href}>
+                  <button
+                    type="button"
+                    onClick={() => setMobileProductsOpen(o => !o)}
+                    aria-expanded={mobileProductsOpen ? 'true' : 'false'}
+                    className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-[16px] transition-colors"
+                    style={{
+                      background: active || mobileProductsOpen ? HOME.mist : 'transparent',
+                      color: active ? HOME.ink : HOME.inkMid,
+                      fontWeight: active ? 700 : 500,
+                    }}
+                  >
+                    <span>{item.label[lang]}</span>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${mobileProductsOpen ? 'rotate-180' : ''}`}
+                      strokeWidth={2}
+                      style={{ color: HOME.inkSoft }}
+                    />
+                  </button>
+
+                  <div
+                    className="overflow-hidden transition-[max-height,opacity] duration-300 ease-out"
+                    style={{
+                      maxHeight: mobileProductsOpen ? `${Math.min(categories.length, 8) * 56 + 64}px` : '0',
+                      opacity: mobileProductsOpen ? 1 : 0,
+                    }}
+                  >
+                    <ul className="mt-1 space-y-0.5 pl-3">
+                      {categories.slice(0, 8).map(cat => (
+                        <li key={cat.id}>
+                          <Link
+                            href={withLocale(`/categories/${cat.slug}`)}
+                            onClick={closeMenu}
+                            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] transition-colors"
+                            style={{ color: HOME.inkMid }}
+                          >
+                            <span className="h-1 w-1 shrink-0 rounded-full" style={{ background: HOME.line }} />
+                            <span className="truncate">{cat.name}</span>
+                          </Link>
+                        </li>
+                      ))}
+                      <li>
+                        <Link
+                          href={withLocale('/categories')}
+                          onClick={closeMenu}
+                          className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-[14px] font-semibold transition-colors"
+                          style={{ color: HOME.ink }}
+                        >
+                          {lang === 'th' ? 'ดูทั้งหมด' : 'View all'}
+                          <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              )
+            }
+
             return (
               <li key={item.href}>
-                <Link href={withLocale(item.href)} onClick={closeMenu}
-                  className="flex items-center justify-between rounded-md px-4 py-3 text-[14px] font-bold uppercase tracking-[0.06em] transition-colors"
+                <Link
+                  href={withLocale(item.href)}
+                  onClick={closeMenu}
+                  aria-current={active ? 'page' : undefined}
+                  className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] transition-colors"
                   style={{
-                    background: active ? HOME.cream : 'transparent',
+                    background: active ? HOME.mist : 'transparent',
                     color: active ? HOME.ink : HOME.inkMid,
-                  }}>
+                    fontWeight: active ? 700 : 500,
+                  }}
+                >
                   <span>{item.label[lang]}</span>
-                  {active && <span className="h-1.5 w-1.5 rounded-full" style={{ background: HOME.ink }} />}
+                  {active ? (
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: HOME.mintInk }} />
+                  ) : (
+                    <ArrowUpRight className="h-4 w-4 opacity-40" strokeWidth={1.8} />
+                  )}
                 </Link>
               </li>
             )
           })}
         </ul>
-        <div className="px-5 pb-5 pt-3">
-          <Link href={withLocale('/contact')} onClick={closeMenu}
-            className="home-btn home-btn-accent flex w-full items-center justify-center rounded-full py-3 text-[14px] font-bold uppercase tracking-[0.08em]">
+
+        <div className="px-5 pb-6 pt-4">
+          <Link
+            href={withLocale('/contact')}
+            onClick={closeMenu}
+            className="home-btn home-btn-accent flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-semibold"
+          >
             {QUOTE_LABEL[lang]}
-            <span className="ml-1.5">→</span>
+            <ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />
           </Link>
         </div>
       </div>
@@ -157,19 +415,40 @@ function NavInner({ locale, logo, pathname }: NavigationProps & { pathname: stri
   )
 }
 
-function LangPills({ isEN, onToggle }: { isEN: boolean; onToggle: () => void }) {
+function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void }) {
   return (
-    <div className="inline-flex overflow-hidden rounded-full" style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}>
-      <button type="button" onClick={isEN ? onToggle : undefined} aria-label="ภาษาไทย" disabled={!isEN}
-        className="px-3 py-1.5 text-[13px] font-bold transition-colors"
-        style={{ background: !isEN ? HOME.ink : 'transparent', color: !isEN ? HOME.surface : HOME.inkMid }}>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={isEN}
+      aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
+      onClick={onToggle}
+      className="group relative inline-flex h-9 w-[72px] shrink-0 items-center rounded-full p-1 text-[11px] font-bold tracking-[0.08em] transition-colors"
+      style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+    >
+      <span
+        aria-hidden
+        className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{
+          background: HOME.ink,
+          transform: isEN ? 'translateX(100%)' : 'translateX(0)',
+          boxShadow: '0 1px 2px rgba(20,22,28,0.18)',
+        }}
+      />
+      <span
+        aria-hidden
+        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
+        style={{ color: !isEN ? HOME.surface : HOME.inkSoft }}
+      >
         TH
-      </button>
-      <button type="button" onClick={!isEN ? onToggle : undefined} aria-label="English" disabled={isEN}
-        className="px-3 py-1.5 text-[13px] font-bold transition-colors"
-        style={{ background: isEN ? HOME.ink : 'transparent', color: isEN ? HOME.surface : HOME.inkMid }}>
+      </span>
+      <span
+        aria-hidden
+        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
+        style={{ color: isEN ? HOME.surface : HOME.inkSoft }}
+      >
         EN
-      </button>
-    </div>
+      </span>
+    </button>
   )
 }

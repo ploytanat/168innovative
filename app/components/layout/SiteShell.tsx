@@ -2,6 +2,7 @@ import type { ReactNode } from "react"
 
 import BackToTop from "@/app/components/ui/BackToTop"
 import { COMPANY_NAME, SITE_NAME, SITE_URL, withSiteUrl } from "@/app/config/site"
+import { getCategories } from "@/app/lib/api/categories"
 import { getCompany } from "@/app/lib/api/company"
 import { buildOrganizationJsonLd, buildPostalAddressJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
@@ -17,7 +18,10 @@ export default async function SiteShell({
   locale,
   children,
 }: SiteShellProps) {
-  const company = await getCompany(locale)
+  const [company, categories] = await Promise.all([
+    getCompany(locale),
+    getCategories(locale),
+  ])
   const displayLogo = company?.logo ?? {
     src: "/logo.png",
     alt: "168 Innovative",
@@ -82,7 +86,7 @@ export default async function SiteShell({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
       <div className="site-frame min-h-screen">
-        <Navigation locale={locale} logo={displayLogo} />
+        <Navigation locale={locale} logo={displayLogo} categories={categories} />
         <main className="min-h-screen">{children}</main>
         {company && <Footer company={company} />}
         <BackToTop />
