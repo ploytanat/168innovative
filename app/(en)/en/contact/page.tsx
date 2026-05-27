@@ -2,13 +2,16 @@ import type { Metadata } from "next"
 import Image from "next/image"
 import { Mail, MapPin, Phone } from "lucide-react"
 
-import BackgroundBlobs from "@/app/components/ui/BackgroundBlobs"
-import ContactPhoneList from "@/app/components/ui/ContactPhoneList"
+import { HOME } from "@/app/components/sections/home-theme"
 import LazyMap from "@/app/components/ui/LazyMap"
 import PageIntro from "@/app/components/ui/PageIntro"
 import { buildMetadata } from "@/app/config/seo"
 import { getCompany } from "@/app/lib/api/company"
 import type { Locale } from "@/app/lib/types/content"
+import type { CompanyView } from "@/app/lib/types/view"
+
+const MAP_SRC =
+  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5536486253416!2d100.523186!3d13.736717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ0JzEyLjIiTiAxMDDCsDMxJzIzLjUiRQ!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth"
 
 export const metadata: Metadata = buildMetadata({
   locale: "en",
@@ -19,13 +22,27 @@ export const metadata: Metadata = buildMetadata({
   keywords: ["contact 168 Innovative", "cosmetic packaging contact", "OEM packaging inquiry"],
 })
 
+const COPY = {
+  phoneLabel: "Phone",
+  emailLabel: "Email",
+  salesLabel: "Sales Team",
+  qrLabel: "Scan to add on LINE",
+  socialLabel: "Other channels",
+  locationLabel: "Location",
+}
+
+function isOfficeLabel(label: string) {
+  const n = label.trim().toLowerCase()
+  return n.includes("สำนักงานใหญ่") || n.includes("ติดต่อสำนักงาน") || n.includes("head office") || n.includes("office")
+}
+
 export default async function ContactPage() {
   const locale: Locale = "en"
   const company = await getCompany(locale)
 
   if (!company) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <p>Contact information not found</p>
       </div>
     )
@@ -33,38 +50,56 @@ export default async function ContactPage() {
 
   return (
     <main className="overflow-x-hidden bg-transparent">
-      <BackgroundBlobs />
-
-      <div className="mx-auto max-w-7xl relative px-6 pb-16 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-6 pb-16 lg:px-8">
         <PageIntro
           title="Contact Us"
           description="Talk with our team about packaging products, pricing, OEM / ODM support, or sourcing requirements."
           breadcrumbs={[{ label: "Contact" }]}
         />
 
-        <section className="mt-12 border-t border-[rgba(211,217,225,0.96)] pt-6">
+        <section className="mt-10 lg:mt-12">
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_2fr]">
-            <div className="deck-card flex justify-center rounded-[1.15rem] p-8 md:p-12">
-              <div className="w-full max-w-md space-y-12">
-                <ContactSection icon={<Phone />} title="Phone">
-                  <ContactPhoneList phones={company.phones} locale="en" />
-                </ContactSection>
 
-                <ContactSection icon={<Mail />} title="Email">
-                  {company.email?.map((mail, i) => (
-                    <p key={i} className="text-lg font-semibold text-gray-800 break-all">
-                      {mail}
-                    </p>
-                  ))}
-                </ContactSection>
+            {/* Left: Phone + Email */}
+            <div
+              className="rounded-2xl p-7 md:p-10"
+              style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+            >
+              <div className="grid gap-y-10 gap-x-10 sm:grid-cols-2">
+                <ContactBlock icon={<Phone className="h-[18px] w-[18px]" strokeWidth={1.6} />} label={COPY.phoneLabel}>
+                  <PhoneList phones={company.phones} salesLabel={COPY.salesLabel} />
+                </ContactBlock>
+
+                <ContactBlock icon={<Mail className="h-[18px] w-[18px]" strokeWidth={1.6} />} label={COPY.emailLabel}>
+                  <ul className="space-y-2">
+                    {company.email.map((mail, i) => (
+                      <li key={i}>
+                        <a
+                          href={`mailto:${mail}`}
+                          className="text-[1.05rem] font-semibold break-all transition-colors hover:opacity-70"
+                          style={{ color: HOME.ink }}
+                        >
+                          {mail}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </ContactBlock>
               </div>
             </div>
 
-            <div className="deck-card-soft flex flex-col items-center justify-center rounded-[1.15rem] p-8 text-center md:p-12">
+            {/* Right: QR + socials */}
+            <div
+              className="flex flex-col items-center justify-center rounded-2xl p-7 text-center md:p-10"
+              style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}
+            >
               {company.lineQrCode && (
-                <div className="mb-8">
-                  <div className="inline-block rounded-[1rem] border border-[rgba(205,222,241,0.72)] bg-white p-3 shadow-[0_12px_28px_rgba(24,35,56,0.08)]">
-                    <div className="relative block h-40 w-40">
+                <div className="flex flex-col items-center">
+                  <div
+                    className="rounded-xl p-2.5"
+                    style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+                  >
+                    <div className="relative h-36 w-36 sm:h-40 sm:w-40">
                       <Image
                         src={company.lineQrCode.src}
                         alt={company.lineQrCode.alt}
@@ -74,77 +109,141 @@ export default async function ContactPage() {
                       />
                     </div>
                   </div>
-                  <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
-                    Scan to Add Line
+                  <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
+                    {COPY.qrLabel}
                   </p>
                 </div>
               )}
 
-              <div className="flex flex-wrap justify-center gap-4">
-                {company.socials?.map(
-                  (social, i) =>
-                    social.icon && (
-                      <a
-                        key={i}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-[1rem] border border-[rgba(205,222,241,0.72)] bg-white p-1.5 shadow-[0_8px_18px_rgba(24,35,56,0.06)] transition-transform hover:scale-105 active:scale-95"
-                      >
-                        <Image
-                          src={social.icon.src}
-                          alt={social.icon.alt || social.type}
-                          width={48}
-                          height={48}
-                          className="rounded-2xl shadow-md"
-                        />
-                      </a>
-                    )
-                )}
-              </div>
+              {company.socials && company.socials.length > 0 && (
+                <>
+                  {company.lineQrCode && (
+                    <span aria-hidden className="my-6 inline-block h-px w-10" style={{ background: HOME.line }} />
+                  )}
+                  <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+                    {COPY.socialLabel}
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-3">
+                    {company.socials.map((s, i) =>
+                      s.icon ? (
+                        <a
+                          key={i}
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={s.type}
+                          className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
+                          style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+                        >
+                          <Image
+                            src={s.icon.src}
+                            alt={s.icon.alt || s.type}
+                            width={44}
+                            height={44}
+                            className="block"
+                          />
+                        </a>
+                      ) : null
+                    )}
+                  </div>
+                </>
+              )}
             </div>
+
           </div>
         </section>
       </div>
 
-      <section className="mt-8">
-        <div className="mx-auto mb-12 max-w-4xl px-6 text-center">
-          <div className="inline-flex items-start gap-4 rounded-[1rem] border border-[rgba(205,218,235,0.84)] bg-white px-5 py-5 text-left shadow-[0_12px_28px_rgba(24,35,56,0.06)]">
-            <div className="mt-1 rounded-[0.9rem] border border-[rgba(205,218,235,0.76)] bg-[#f2f4f7] p-2.5 text-[var(--color-ink)]">
-              <MapPin className="h-5 w-5 shrink-0" />
+      {/* Address + Map */}
+      <section className="mt-2">
+        <div className="mx-auto mb-8 max-w-3xl px-6">
+          <div
+            className="flex items-start gap-4 rounded-xl p-5"
+            style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+          >
+            <span
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+              style={{ background: HOME.mintSoft, color: HOME.mintInk }}
+            >
+              <MapPin className="h-5 w-5" strokeWidth={1.6} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: HOME.inkSoft }}>
+                {COPY.locationLabel}
+              </p>
+              <p className="mt-1.5 text-[1.05rem] font-bold leading-[1.55] md:text-[1.15rem]" style={{ color: HOME.ink }}>
+                {company.address}
+              </p>
             </div>
-            <p className="text-xl font-bold leading-relaxed text-[var(--color-ink)] md:text-2xl">
-              {company.address}
-            </p>
           </div>
         </div>
 
-        <LazyMap
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.5536486253416!2d100.523186!3d13.736717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDQ0JzEyLjIiTiAxMDDCsDMxJzIzLjUiRQ!5e0!3m2!1sen!2sth!4v1700000000000!5m2!1sen!2sth"
-          title="168 Innovative Location"
-        />
+        <LazyMap src={MAP_SRC} title="168 Innovative Location" />
       </section>
     </main>
   )
 }
 
-function ContactSection({
-  icon,
-  title,
-  children,
-}: {
-  icon: React.ReactNode
-  title: string
-  children: React.ReactNode
-}) {
+function ContactBlock({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center text-center md:items-start md:text-left">
-      <div className="mb-4 rounded-[0.9rem] border border-[rgba(205,218,235,0.82)] bg-[#f2f4f7] p-3 text-[var(--color-ink)]">{icon}</div>
-      <h3 className="mb-4 text-[12px] font-bold uppercase tracking-[0.14em] text-[#73839e]">
-        {title}
-      </h3>
-      <div className="mb-6 h-px w-12 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)]" />
-      <div className="w-full">{children}</div>
+    <div>
+      <div className="mb-4 flex items-center gap-2.5">
+        <span
+          className="flex h-9 w-9 items-center justify-center rounded-full"
+          style={{ background: HOME.mist, color: HOME.mintInk }}
+        >
+          {icon}
+        </span>
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+          {label}
+        </p>
+      </div>
+      <span aria-hidden className="mb-5 inline-block h-px w-10" style={{ background: HOME.line }} />
+      {children}
     </div>
+  )
+}
+
+function PhoneList({ phones, salesLabel }: { phones: CompanyView["phones"]; salesLabel: string }) {
+  const office = phones.filter(p => isOfficeLabel(p.label))
+  const sales = phones.filter(p => !isOfficeLabel(p.label))
+
+  return (
+    <div>
+      <ul className="space-y-4">
+        {office.map((phone, i) => (
+          <PhoneRow key={`${phone.number}-${i}`} number={phone.number} label={phone.label} />
+        ))}
+      </ul>
+
+      {office.length > 0 && sales.length > 0 && (
+        <div className="mb-3 mt-6 flex items-center gap-2.5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+            {salesLabel}
+          </p>
+          <span aria-hidden className="inline-block h-px w-8" style={{ background: HOME.line }} />
+        </div>
+      )}
+
+      <ul className="space-y-4">
+        {sales.map((phone, i) => (
+          <PhoneRow key={`${phone.number}-${i}`} number={phone.number} label={phone.label} />
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function PhoneRow({ number, label }: { number: string; label: string }) {
+  return (
+    <li>
+      <a
+        href={`tel:${number.replace(/-/g, "")}`}
+        className="block transition-colors hover:opacity-70"
+      >
+        <p className="text-[1.3rem] font-bold tabular-nums" style={{ color: HOME.ink }}>{number}</p>
+        <p className="text-[13px]" style={{ color: HOME.inkMid }}>{label}</p>
+      </a>
+    </li>
   )
 }
