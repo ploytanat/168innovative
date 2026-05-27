@@ -41,11 +41,14 @@ export default function PageIntro({
         ) : null}
         <div className="mt-4 flex flex-col gap-5 md:mt-5 md:flex-row md:items-end md:justify-between md:gap-8">
           <motion.div className="max-w-4xl" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
-            <h1 className="font-heading text-4xl font-semibold tracking-tight md:text-6xl" style={{ color: COLORS.dark }}>
+            <h1
+              className="text-4xl font-semibold md:text-5xl"
+              style={{ color: COLORS.dark, letterSpacing: "-0.005em", lineHeight: 1.15, wordBreak: "keep-all", textWrap: "balance" }}
+            >
               {title}
             </h1>
             {description ? (
-              <motion.p className="mt-5 max-w-3xl text-[1rem] leading-8 md:mt-6 md:text-[1.05rem]" style={{ color: COLORS.mid }} variants={fadeUp}>
+              <motion.p className="mt-5 max-w-3xl text-[1rem] leading-[1.7] md:mt-6 md:text-[1.05rem] md:leading-[1.75]" style={{ color: COLORS.mid }} variants={fadeUp}>
                 {description}
               </motion.p>
             ) : null}
