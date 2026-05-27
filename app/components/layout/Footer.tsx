@@ -51,11 +51,7 @@ const COPY = {
     follow:      'ติดตาม',
     tagline:     'บรรจุภัณฑ์เครื่องสำอาง · OEM · ODM',
     location:    'กรุงเทพมหานคร, ประเทศไทย',
-    quoteEyebrow: 'เริ่มต้นโปรเจกต์',
-    quoteHeading: 'พร้อมเริ่มโปรเจกต์ของคุณหรือยัง',
-    quoteCopy:    'ส่งบรีฟให้เรา ทีมขายตอบกลับภายใน 24 ชั่วโมง',
-    quoteCta:     'ส่งบรีฟ',
-    rights:       'สงวนลิขสิทธิ์',
+    rights:      'สงวนลิขสิทธิ์',
   },
   en: {
     company:     'Company',
@@ -65,11 +61,7 @@ const COPY = {
     follow:      'Follow',
     tagline:     'Cosmetic Packaging · OEM · ODM',
     location:    'Bangkok, Thailand',
-    quoteEyebrow: 'Start a project',
-    quoteHeading: 'Ready to start your project?',
-    quoteCopy:    'Send us a brief — our team replies within 24 hours.',
-    quoteCta:     'Send a brief',
-    rights:       'All Rights Reserved.',
+    rights:      'All Rights Reserved.',
   },
 } as const
 
@@ -78,7 +70,7 @@ const GOOGLE_MAPS_URL =
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-5 inline-flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
+    <p className="mb-4 inline-flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
       <span aria-hidden className="inline-block h-px w-5" style={{ background: D.lineStrong }} />
       {children}
     </p>
@@ -130,43 +122,10 @@ export default function Footer({ company }: { company: CompanyView }) {
 
   return (
     <footer style={{ background: D.bg, color: D.text }} aria-label="Site footer">
-      <div className="mx-auto w-full max-w-[1200px] px-5 py-16 sm:py-20 lg:py-24">
-
-        {/* Quote CTA strip */}
-        <div
-          className="border-b py-10 sm:py-12 lg:py-14"
-          style={{ borderColor: D.line }}
-        >
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between md:gap-10">
-            <div className="md:max-w-xl">
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.accent }}>
-                — {text.quoteEyebrow}
-              </p>
-              <h2
-                lang={locale}
-                className="mt-3 text-[clamp(1.6rem,1.1rem+1.6vw,2.4rem)] font-bold leading-[1.18]"
-                style={{ color: D.text, wordBreak: 'keep-all', textWrap: 'balance' }}
-              >
-                {text.quoteHeading}
-              </h2>
-              <p className="mt-3 text-[15px] leading-[1.65]" style={{ color: D.mid }}>
-                {text.quoteCopy}
-              </p>
-            </div>
-
-            <Link
-              href={withLocale('/contact')}
-              className="group inline-flex shrink-0 items-center gap-3 rounded-full px-7 py-4 text-[14px] font-bold tracking-[0.04em] transition-all"
-              style={{ background: D.text, color: D.bg }}
-            >
-              {text.quoteCta}
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.2} />
-            </Link>
-          </div>
-        </div>
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:py-12 lg:py-14">
 
         {/* Main grid */}
-        <div className="mt-14 grid gap-y-10 gap-x-10 sm:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_1.2fr] lg:gap-x-12">
+        <div className="grid gap-y-8 gap-x-10 sm:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_1.2fr] lg:gap-x-12">
 
           {/* Company — logo + meta */}
           <div>
@@ -181,13 +140,13 @@ export default function Footer({ company }: { company: CompanyView }) {
                 width={320}
                 height={104}
                 priority={false}
-                className="h-16 w-auto transition-opacity hover:opacity-80 sm:h-20 lg:h-[88px]"
+                className="h-12 w-auto transition-opacity hover:opacity-80 sm:h-14 lg:h-16"
               />
             </Link>
-            <p className="mt-5 text-[14px] leading-[1.6]" style={{ color: D.mid }}>
+            <p className="mt-4 text-[14px] leading-[1.6]" style={{ color: D.mid }}>
               {text.tagline}
             </p>
-            <p className="mt-1 text-[14px]" style={{ color: D.mid }}>
+            <p className="mt-0.5 text-[14px]" style={{ color: D.mid }}>
               {text.location}
             </p>
           </div>
@@ -224,7 +183,7 @@ export default function Footer({ company }: { company: CompanyView }) {
           <div>
             <SectionLabel>{text.reach}</SectionLabel>
 
-            <ul className="space-y-3.5 text-[14px]" style={{ color: D.mid }}>
+            <ul className="space-y-2.5 text-[14px]" style={{ color: D.mid }}>
               {company.address && (
                 <li>
                   <a
@@ -266,8 +225,8 @@ export default function Footer({ company }: { company: CompanyView }) {
 
             {/* Follow */}
             {company.socials.length > 0 && (
-              <div className="mt-7">
-                <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
+              <div className="mt-5">
+                <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
                   {text.follow}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -297,8 +256,8 @@ export default function Footer({ company }: { company: CompanyView }) {
         {/* Decorative wave */}
         <svg
           aria-hidden
-          className="mt-16 w-full"
-          height="32"
+          className="mt-10 w-full"
+          height="20"
           viewBox="0 0 1200 32"
           preserveAspectRatio="none"
         >
@@ -312,7 +271,7 @@ export default function Footer({ company }: { company: CompanyView }) {
 
         {/* Bottom strip */}
         <div
-          className="mt-10 flex flex-col gap-4 border-t pt-6 text-[12px] sm:flex-row sm:items-center sm:justify-between"
+          className="mt-6 flex flex-col gap-3 border-t pt-5 text-[12px] sm:flex-row sm:items-center sm:justify-between"
           style={{ borderColor: D.line, color: D.soft }}
         >
           <p>
