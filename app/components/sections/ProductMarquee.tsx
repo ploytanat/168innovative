@@ -82,15 +82,15 @@ function ProductCard({ item, locale }: { item: ProductView; locale: Locale }) {
           {prettifySlug(item.categorySlug)}
         </p>
         <Link href={href}>
-          <h3 className="text-[16px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>{item.name}</h3>
+          <h3 className="line-clamp-2 min-h-[2.8rem] text-[16px] font-bold leading-[1.4]" style={{ color: HOME.ink }}>
+            {item.name}
+          </h3>
         </Link>
-        {item.description && (
-          <p className="mt-2 line-clamp-3 text-[0.95rem] leading-[1.65]" style={{ color: HOME.inkMid }}>
-            {item.description}
-          </p>
-        )}
+        <p className="mt-2 line-clamp-2 min-h-[3.05rem] text-[0.95rem] leading-[1.6]" style={{ color: HOME.inkMid }}>
+          {item.description || " "}
+        </p>
         <Link href={href}
-          className="home-btn home-btn-accent mt-4 block rounded-[5px] py-2.5 text-center text-[14px] font-bold">
+          className="home-btn home-btn-accent mt-auto block rounded-[5px] py-2.5 text-center text-[14px] font-bold">
           {COPY.viewProduct[locale]}
         </Link>
       </div>
