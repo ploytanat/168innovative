@@ -129,7 +129,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
               src={active.image.src} alt={active.image.alt}
               fill priority sizes="(max-width:1023px) 100vw, 52vw"
               className="h-img-in object-cover"
-              style={{ objectPosition: 'center 55%' }} />
+              style={{ objectPosition: 'center 45%' }} />
 
             {/* Soft mint fade at top (stacked layouts only) */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1/6 lg:hidden"
