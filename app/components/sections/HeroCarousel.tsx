@@ -37,9 +37,13 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
     <>
       <style>{`
         @keyframes heroCopyIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
-        @keyframes heroImgIn{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+        @keyframes heroImgIn{
+          0%{opacity:0;transform:scale(1.08)}
+          12%{opacity:1}
+          100%{opacity:1;transform:scale(1)}
+        }
         .h-copy-in{animation:heroCopyIn .65s cubic-bezier(.22,1,.36,1) both}
-        .h-img-in{animation:heroImgIn 7s cubic-bezier(.22,1,.36,1) both}
+        .h-img-in{animation:heroImgIn 7s linear both}
         @media (prefers-reduced-motion: reduce){
           .h-copy-in,.h-img-in{animation:none}
         }
