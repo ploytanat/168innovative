@@ -187,7 +187,7 @@ export default async function ContactPage() {
 function ContactBlock({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-4 flex items-center gap-2.5">
+      <div className="mb-5 flex items-center gap-2.5">
         <span
           className="flex h-9 w-9 items-center justify-center rounded-full"
           style={{ background: HOME.mist, color: HOME.mintInk }}
@@ -198,7 +198,6 @@ function ContactBlock({ icon, label, children }: { icon: React.ReactNode; label:
           {label}
         </p>
       </div>
-      <span aria-hidden className="mb-5 inline-block h-px w-10" style={{ background: HOME.line }} />
       {children}
     </div>
   )
@@ -217,12 +216,9 @@ function PhoneList({ phones, salesLabel }: { phones: CompanyView["phones"]; sale
       </ul>
 
       {office.length > 0 && sales.length > 0 && (
-        <div className="mb-3 mt-6 flex items-center gap-2.5">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
-            {salesLabel}
-          </p>
-          <span aria-hidden className="inline-block h-px w-8" style={{ background: HOME.line }} />
-        </div>
+        <p className="mb-3 mt-6 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+          {salesLabel}
+        </p>
       )}
 
       <ul className="space-y-4">

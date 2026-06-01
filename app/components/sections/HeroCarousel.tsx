@@ -36,17 +36,9 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
   return (
     <>
       <style>{`
-        @keyframes heroCopyIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
-        @keyframes heroImgIn{
-          0%{opacity:0;transform:scale(1.08)}
-          12%{opacity:1}
-          100%{opacity:1;transform:scale(1)}
-        }
-        .h-copy-in{animation:heroCopyIn .65s cubic-bezier(.22,1,.36,1) both}
-        .h-img-in{animation:heroImgIn 7s linear both}
-        @media (prefers-reduced-motion: reduce){
-          .h-copy-in,.h-img-in{animation:none}
-        }
+        @keyframes heroCopyIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+        .h-copy-in{animation:heroCopyIn .5s cubic-bezier(.22,1,.36,1) both}
+        @media (prefers-reduced-motion: reduce){.h-copy-in{animation:none}}
       `}</style>
 
       <section className="relative" style={{ background: HOME.mint }}>
@@ -129,31 +121,15 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
 
           {/* Image column */}
           <div className="relative order-1 aspect-[4/3] overflow-hidden sm:aspect-[16/10] md:aspect-video lg:order-2 lg:aspect-auto">
-            <Image key={`i-${animKey}`}
+            <Image
               src={active.image.src} alt={active.image.alt}
               fill priority sizes="(max-width:1023px) 100vw, 52vw"
-              className="h-img-in object-cover"
+              className="object-cover"
               style={{ objectPosition: 'center 45%' }} />
 
             {/* Soft mint fade at top (stacked layouts only) */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-1/6 lg:hidden"
               style={{ background: `linear-gradient(180deg, ${HOME.mint} 0%, transparent 100%)` }} />
-
-            {/* Slide counter chip */}
-            {hasMultiple && (
-              <div
-                className="absolute bottom-4 right-4 z-10 hidden items-center gap-3 rounded-full px-4 py-2 backdrop-blur-md sm:right-5 sm:bottom-5 sm:inline-flex lg:bottom-7 lg:right-7"
-                style={{ background: 'rgba(255,255,255,0.82)', border: `1px solid ${HOME.line}`, boxShadow: '0 4px 14px rgba(20,22,28,0.05)' }}
-              >
-                <span className="text-[12px] font-bold tabular-nums" style={{ color: HOME.ink }}>
-                  {String(safeCurrent + 1).padStart(2, '0')}
-                </span>
-                <span aria-hidden className="h-px w-7" style={{ background: HOME.line }} />
-                <span className="text-[12px] font-bold tabular-nums" style={{ color: HOME.inkSoft }}>
-                  {String(total).padStart(2, '0')}
-                </span>
-              </div>
-            )}
           </div>
 
         </div>

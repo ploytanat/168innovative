@@ -70,8 +70,7 @@ const GOOGLE_MAPS_URL =
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-4 inline-flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
-      <span aria-hidden className="inline-block h-px w-5" style={{ background: D.lineStrong }} />
+    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
       {children}
     </p>
   )
@@ -253,25 +252,9 @@ export default function Footer({ company }: { company: CompanyView }) {
 
         </div>
 
-        {/* Decorative wave */}
-        <svg
-          aria-hidden
-          className="mt-10 w-full"
-          height="20"
-          viewBox="0 0 1200 32"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0 16 Q 75 0, 150 16 T 300 16 T 450 16 T 600 16 T 750 16 T 900 16 T 1050 16 T 1200 16"
-            fill="none"
-            stroke={D.lineStrong}
-            strokeWidth="1"
-          />
-        </svg>
-
         {/* Bottom strip */}
         <div
-          className="mt-6 flex flex-col gap-3 border-t pt-5 text-[12px] sm:flex-row sm:items-center sm:justify-between"
+          className="mt-12 flex flex-col gap-3 border-t pt-5 text-[12px] sm:flex-row sm:items-center sm:justify-between"
           style={{ borderColor: D.line, color: D.soft }}
         >
           <p>
@@ -296,36 +279,14 @@ function FooterLangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => v
   return (
     <button
       type="button"
-      role="switch"
-      aria-checked={isEN}
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="group relative inline-flex h-9 w-[72px] shrink-0 items-center rounded-full p-1 text-[11px] font-bold tracking-[0.08em] transition-colors"
-      style={{ background: D.surface, border: `1px solid ${D.line}` }}
+      className="text-[12px] font-bold tracking-[0.08em] transition-colors"
+      style={{ color: D.mid }}
     >
-      <span
-        aria-hidden
-        className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{
-          background: D.text,
-          transform: isEN ? 'translateX(100%)' : 'translateX(0)',
-          boxShadow: '0 1px 2px rgba(20,22,28,0.18)',
-        }}
-      />
-      <span
-        aria-hidden
-        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
-        style={{ color: !isEN ? D.bg : D.soft }}
-      >
-        TH
-      </span>
-      <span
-        aria-hidden
-        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
-        style={{ color: isEN ? D.bg : D.soft }}
-      >
-        EN
-      </span>
+      <span style={{ color: !isEN ? D.text : D.soft }}>TH</span>
+      <span aria-hidden className="mx-1.5" style={{ color: D.soft }}>/</span>
+      <span style={{ color: isEN ? D.text : D.soft }}>EN</span>
     </button>
   )
 }

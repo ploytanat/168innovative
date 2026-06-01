@@ -228,63 +228,34 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
               transform: productsOpen ? 'translateY(0)' : 'translateY(-6px)',
               background: HOME.surface,
               borderBottom: `1px solid ${HOME.line}`,
-              boxShadow: '0 18px 38px rgba(20,22,28,0.08)',
+              boxShadow: '0 12px 28px rgba(20,22,28,0.06)',
             }}
           >
-            <div className="mx-auto max-w-[1200px] px-5 py-8">
-              <div className="mb-5 flex items-end justify-between gap-6">
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
-                    {lang === 'th' ? 'หมวดสินค้า' : 'Product Categories'}
-                  </p>
-                  <p className="mt-1 text-[14px]" style={{ color: HOME.inkMid }}>
-                    {lang === 'th' ? 'เลือกหมวดสินค้าที่คุณสนใจ' : 'Choose a product category to explore'}
-                  </p>
-                </div>
-                <Link
-                  href={withLocale('/categories')}
-                  onClick={() => setProductsOpen(false)}
-                  className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-semibold transition-colors hover:opacity-70"
-                  style={{ color: HOME.ink }}
-                >
-                  {lang === 'th' ? 'ดูทั้งหมด' : 'View all'}
-                  <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.2} />
-                </Link>
-              </div>
-
-              <ul className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-                {categories.slice(0, 8).map(cat => (
+            <div className="mx-auto max-w-[1200px] px-5 py-6">
+              <ul className="grid grid-cols-2 gap-x-6 gap-y-1 md:grid-cols-3 lg:grid-cols-4">
+                {categories.slice(0, 12).map(cat => (
                   <li key={cat.id}>
                     <Link
                       href={withLocale(`/categories/${cat.slug}`)}
                       onClick={() => setProductsOpen(false)}
-                      className="group flex items-center gap-3 rounded-xl p-2.5 transition-colors hover:bg-[#f9f9f9]"
+                      className="block truncate rounded-md py-2 text-[14px] transition-colors hover:bg-[#f9f9f9]"
+                      style={{ color: HOME.ink }}
                     >
-                      <div
-                        className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg"
-                        style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
-                      >
-                        {cat.image ? (
-                          <Image src={cat.image.src} alt={cat.image.alt || cat.name} fill sizes="56px" className="object-cover" />
-                        ) : (
-                          <span className="flex h-full w-full items-center justify-center text-[18px] font-bold" style={{ color: HOME.inkSoft }}>
-                            {cat.name.charAt(0)}
-                          </span>
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-[14px] font-semibold transition-colors" style={{ color: HOME.ink }}>
-                          {cat.name}
-                        </p>
-                        {cat.description && (
-                          <p className="truncate text-[12px]" style={{ color: HOME.inkSoft }}>
-                            {cat.description}
-                          </p>
-                        )}
-                      </div>
+                      {cat.name}
                     </Link>
                   </li>
                 ))}
+                <li className="col-span-full pt-2" style={{ borderTop: `1px solid ${HOME.line}` }}>
+                  <Link
+                    href={withLocale('/categories')}
+                    onClick={() => setProductsOpen(false)}
+                    className="inline-flex items-center gap-1.5 py-2 text-[13px] font-semibold transition-colors hover:opacity-70"
+                    style={{ color: HOME.ink }}
+                  >
+                    {lang === 'th' ? 'ดูทั้งหมด' : 'View all categories'}
+                    <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2.2} />
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -419,36 +390,14 @@ function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void })
   return (
     <button
       type="button"
-      role="switch"
-      aria-checked={isEN}
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="group relative inline-flex h-9 w-[72px] shrink-0 items-center rounded-full p-1 text-[11px] font-bold tracking-[0.08em] transition-colors"
-      style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+      className="text-[12px] font-bold tracking-[0.08em] transition-colors"
+      style={{ color: HOME.inkMid }}
     >
-      <span
-        aria-hidden
-        className="absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        style={{
-          background: HOME.ink,
-          transform: isEN ? 'translateX(100%)' : 'translateX(0)',
-          boxShadow: '0 1px 2px rgba(20,22,28,0.18)',
-        }}
-      />
-      <span
-        aria-hidden
-        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
-        style={{ color: !isEN ? HOME.surface : HOME.inkSoft }}
-      >
-        TH
-      </span>
-      <span
-        aria-hidden
-        className="relative z-10 flex w-1/2 items-center justify-center transition-colors duration-200"
-        style={{ color: isEN ? HOME.surface : HOME.inkSoft }}
-      >
-        EN
-      </span>
+      <span style={{ color: !isEN ? HOME.ink : HOME.inkSoft }}>TH</span>
+      <span aria-hidden className="mx-1.5" style={{ color: HOME.inkSoft }}>/</span>
+      <span style={{ color: isEN ? HOME.ink : HOME.inkSoft }}>EN</span>
     </button>
   )
 }
