@@ -238,7 +238,7 @@ export default function Footer({ company }: { company: CompanyView }) {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={s.type}
-                        className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-black hover:text-white"
+                        className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-[#0a0c10] hover:text-white"
                         style={{ background: D.surface, border: `1px solid ${D.line}`, color: D.text }}
                       >
                         <Icon className="h-[15px] w-[15px]" />
@@ -281,12 +281,27 @@ function FooterLangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => v
       type="button"
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="text-[12px] font-bold tracking-[0.08em] transition-colors"
-      style={{ color: D.mid }}
+      className="inline-flex items-center rounded-full p-0.5 text-[11px] font-bold tracking-[0.08em]"
+      style={{ background: D.surface, border: `1px solid ${D.line}` }}
     >
-      <span style={{ color: !isEN ? D.text : D.soft }}>TH</span>
-      <span aria-hidden className="mx-1.5" style={{ color: D.soft }}>/</span>
-      <span style={{ color: isEN ? D.text : D.soft }}>EN</span>
+      <span
+        className="rounded-full px-2.5 py-1 transition-colors"
+        style={{
+          background: !isEN ? D.text : 'transparent',
+          color: !isEN ? D.bg : D.soft,
+        }}
+      >
+        TH
+      </span>
+      <span
+        className="rounded-full px-2.5 py-1 transition-colors"
+        style={{
+          background: isEN ? D.text : 'transparent',
+          color: isEN ? D.bg : D.soft,
+        }}
+      >
+        EN
+      </span>
     </button>
   )
 }

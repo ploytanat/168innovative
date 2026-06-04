@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative\" push --force-with-lease origin develop)"
+      "Bash(git -C \"c:\\\\Users\\\\User\\\\Desktop\\\\168innovative\" push --force-with-lease origin develop)",
+      "Bash(git commit -m ' *)",
+      "Bash(git branch *)",
+      "Bash(npm view *)",
+      "Bash(npx --yes impeccable --help)",
+      "Bash(npx --yes impeccable detect app/)",
+      "Bash(awk 'NR>=237 && NR<=245' app/components/layout/Footer.tsx)",
+      "Bash(awk 'NR>=138 && NR<=145' app/components/layout/Navigation.tsx)",
+      "Bash(awk 'NR>=166 && NR<=171' app/components/layout/Navigation.tsx)",
+      "Bash(awk 'NR>=205 && NR<=210' app/components/layout/Navigation.tsx)",
+      "Bash(awk 'NR>=467 && NR<=472' app/globals.css)",
+      "Bash(echo \"---EXIT: $?---\")",
+      "Bash(awk 'NR>=135 && NR<=145' app/components/sections/HeroCarousel.tsx)",
+      "Bash(npx --yes impeccable detect app/components/sections/HeroCarousel.tsx)"
     ]
   }
 }

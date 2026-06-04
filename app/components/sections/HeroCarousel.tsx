@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -70,10 +70,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
                 {active.title}
               </h2>
 
-              <p className="mt-4 max-w-[42ch] text-[0.95rem] leading-[1.7] sm:mt-5 sm:text-[1rem] lg:mt-6 lg:text-[1.05rem] lg:leading-[1.75]"
-                style={{ color: HOME.inkMid }}>
-                {active.description}
-              </p>
+              <HeroDescription text={active.description} />
 
               <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 sm:mt-7 lg:mt-8">
                 <Link href={active.ctaPrimary.href}
@@ -134,6 +131,39 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
 
         </div>
       </section>
+    </>
+  )
+}
+
+function HeroDescription({ text }: { text: string }) {
+  const parts = text.split('✓').map(s => s.trim()).filter(Boolean)
+  const [lead, ...bullets] = parts
+
+  const leadClass =
+    'mt-4 max-w-[42ch] text-[0.95rem] leading-[1.7] sm:mt-5 sm:text-[1rem] lg:mt-6 lg:text-[1.05rem] lg:leading-[1.75]'
+
+  if (bullets.length === 0) {
+    return (
+      <p className={leadClass} style={{ color: HOME.inkMid }}>
+        {lead}
+      </p>
+    )
+  }
+
+  return (
+    <>
+      <p className={leadClass} style={{ color: HOME.inkMid }}>
+        {lead}
+      </p>
+      <ul className="mt-3 space-y-1.5 sm:mt-4">
+        {bullets.map((b, i) => (
+          <li key={i} className="flex items-start gap-2 text-[0.95rem] leading-[1.55] sm:text-[1rem] lg:text-[1.05rem]"
+              style={{ color: HOME.inkMid }}>
+            <Check className="mt-1 h-3.5 w-3.5 shrink-0" strokeWidth={2.5} style={{ color: HOME.mintInk }} />
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
     </>
   )
 }

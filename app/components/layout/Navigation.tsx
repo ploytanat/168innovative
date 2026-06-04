@@ -138,7 +138,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                     aria-haspopup="true"
                     aria-expanded={productsOpen ? 'true' : 'false'}
                     onClick={() => setProductsOpen(o => !o)}
-                    className="group relative inline-flex items-center gap-1 rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-black/[0.04]"
+                    className="group relative inline-flex items-center gap-1 rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
                     style={{
                       color: showAccent ? HOME.ink : HOME.inkMid,
                       fontWeight: showAccent ? 700 : 500,
@@ -166,7 +166,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                 <Link
                   href={withLocale(item.href)}
                   aria-current={active ? 'page' : undefined}
-                  className="group relative inline-flex items-center rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-black/[0.04]"
+                  className="group relative inline-flex items-center rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
                   style={{
                     color: active ? HOME.ink : HOME.inkMid,
                     fontWeight: active ? 700 : 500,
@@ -205,7 +205,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open ? 'true' : 'false'}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-black/[0.05] lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[rgba(20,22,28,0.05)] lg:hidden"
             style={{ color: HOME.ink, border: `1px solid ${HOME.line}` }}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -392,12 +392,27 @@ function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void })
       type="button"
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="text-[12px] font-bold tracking-[0.08em] transition-colors"
-      style={{ color: HOME.inkMid }}
+      className="inline-flex items-center rounded-full p-0.5 text-[11px] font-bold tracking-[0.08em]"
+      style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
     >
-      <span style={{ color: !isEN ? HOME.ink : HOME.inkSoft }}>TH</span>
-      <span aria-hidden className="mx-1.5" style={{ color: HOME.inkSoft }}>/</span>
-      <span style={{ color: isEN ? HOME.ink : HOME.inkSoft }}>EN</span>
+      <span
+        className="rounded-full px-2.5 py-1 transition-colors"
+        style={{
+          background: !isEN ? HOME.ink : 'transparent',
+          color: !isEN ? HOME.surface : HOME.inkSoft,
+        }}
+      >
+        TH
+      </span>
+      <span
+        className="rounded-full px-2.5 py-1 transition-colors"
+        style={{
+          background: isEN ? HOME.ink : 'transparent',
+          color: isEN ? HOME.surface : HOME.inkSoft,
+        }}
+      >
+        EN
+      </span>
     </button>
   )
 }
