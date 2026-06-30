@@ -1,3 +1,4 @@
+import { Check } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -10,24 +11,16 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    eyebrow: "ผู้ผลิตและจัดจำหน่าย",
-    badgeTop: "ครบวงจร",
-    badgeNumber: "10+",
-    badgeBottom: "ปีประสบการณ์",
     description:
-      "168 INNOVATIVE ผู้นำเข้าและจัดจำหน่ายบรรจุภัณฑ์เครื่องสำอาง ครบวงจรงาน OEM และ ODM พร้อมส่งจริง รองรับการสั่งผลิตตามแบบ และจัดส่งทั่วประเทศ",
+      "บรรจุภัณฑ์เครื่องสำอางคุณภาพโรงงาน พร้อมส่งจริง สั่งผลิต OEM/ODM ตามไอเดียของคุณ จัดส่งทั่วประเทศ",
     viewCatalog: "ดูสินค้าทั้งหมด",
-    contactSales: "ติดต่อทีมขาย",
+    contactSales: "คุยกับทีมเซลส์",
   },
   en: {
-    eyebrow: "Manufacturer & distributor",
-    badgeTop: "Full-service",
-    badgeNumber: "10+",
-    badgeBottom: "Years experience",
     description:
-      "168 INNOVATIVE — importer and distributor of cosmetic packaging. Full-service OEM & ODM, stock-ready, custom production, nationwide delivery.",
-    viewCatalog: "View catalog",
-    contactSales: "Contact sales",
+      "Factory-direct cosmetic packaging. Stock-ready, plus OEM & ODM built around your brand — delivered nationwide.",
+    viewCatalog: "Browse catalog",
+    contactSales: "Talk to sales",
   },
 } as const
 
@@ -37,45 +30,23 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
 
   const t = COPY[locale]
   const heroTitle = slide.title || "168 INNOVATIVE"
-  const heroSubtitle = slide.subtitle || t.eyebrow
 
   return (
-    <section className="relative overflow-hidden" style={{ background: HOME.surface }}>
-      {/* Soft mint tint backdrop */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background: `radial-gradient(circle at 85% 10%, ${HOME.mint} 0%, transparent 55%), radial-gradient(circle at 10% 90%, ${HOME.mintSoft} 0%, transparent 50%)`,
-        }}
-      />
-
+    <section className="relative overflow-hidden" style={{ background: HOME.mintSoft }}>
       <div className={`${CONTAINER} relative py-10 sm:py-14 lg:py-20`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
 
           {/* Copy column */}
           <div>
-            <p
-              className="text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: HOME.mintInk }}
-            >
-              {heroSubtitle}
-            </p>
-
             <h1
               lang={locale}
-              className="mt-4 text-[clamp(2.25rem,1.5rem+4vw,4.5rem)] font-bold leading-[1.05]"
-              style={{ color: HOME.ink, letterSpacing: "-0.01em", wordBreak: "keep-all", textWrap: "balance" }}
+              className="text-[clamp(1.9rem,1rem+3.4vw,3.4rem)] font-bold leading-[1.1] sm:leading-[1.08]"
+              style={{ color: HOME.ink, letterSpacing: "-0.005em", textWrap: "balance" }}
             >
               {heroTitle}
             </h1>
 
-            <p
-              className="mt-5 max-w-[44ch] text-[0.98rem] leading-[1.75] sm:text-[1.02rem] lg:mt-6"
-              style={{ color: HOME.inkMid }}
-            >
-              {slide.description || t.description}
-            </p>
+            <HeroBody text={slide.description || t.description} />
 
             <div className="mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
@@ -95,48 +66,58 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
             </div>
           </div>
 
-          {/* Image column with trust badge */}
-          <div className="relative">
-            <div
-              className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem] sm:aspect-[5/4] lg:aspect-[4/3.6]"
-              style={{ background: HOME.mint }}
-            >
-              <Image
-                src={slide.image.src}
-                alt={slide.image.alt || heroTitle}
-                fill
-                priority
-                sizes="(max-width:1023px) 100vw, 48vw"
-                className="object-cover"
-                style={{ objectPosition: "center 45%" }}
-              />
-            </div>
-
-            {/* Trust badge — circular, top-right */}
-            <div
-              className="absolute -top-3 -right-3 z-10 flex flex-col items-center justify-center rounded-full text-center sm:-top-5 sm:-right-5 lg:-top-7 lg:-right-7"
-              style={{
-                background: HOME.mintInk,
-                color: HOME.surface,
-                width: "clamp(96px,18vw,168px)",
-                height: "clamp(96px,18vw,168px)",
-                boxShadow: "0 12px 28px rgba(46,125,50,0.28)",
-              }}
-            >
-              <span className="text-[9px] font-bold uppercase tracking-[0.18em] opacity-90 sm:text-[10px]">
-                {t.badgeTop}
-              </span>
-              <span className="text-[clamp(1.8rem,4vw,3rem)] font-bold leading-none">
-                {t.badgeNumber}
-              </span>
-              <span className="text-[9px] font-semibold tracking-[0.08em] opacity-90 sm:text-[10px]">
-                {t.badgeBottom}
-              </span>
-            </div>
+          {/* Image column */}
+          <div
+            className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.5rem] sm:aspect-[5/4] lg:aspect-[4/3.6]"
+            style={{ background: HOME.mint }}
+          >
+            <Image
+              src={slide.image.src}
+              alt={slide.image.alt || heroTitle}
+              fill
+              priority
+              sizes="(max-width:1023px) 100vw, 48vw"
+              className="object-cover"
+              style={{ objectPosition: "center 45%" }}
+            />
           </div>
 
         </div>
       </div>
     </section>
+  )
+}
+
+function HeroBody({ text }: { text: string }) {
+  const parts = text.split("✓").map(s => s.trim()).filter(Boolean)
+  const [lead, ...bullets] = parts
+
+  const leadClass =
+    "mt-5 max-w-[44ch] text-[0.98rem] leading-[1.75] sm:text-[1.02rem] lg:mt-6"
+
+  if (bullets.length === 0) {
+    return (
+      <p className={leadClass} style={{ color: HOME.inkMid }}>
+        {lead}
+      </p>
+    )
+  }
+
+  return (
+    <>
+      <p className={leadClass} style={{ color: HOME.inkMid }}>
+        {lead}
+      </p>
+      <ul className="mt-3 space-y-1.5 sm:mt-4">
+        {bullets.map((b, i) => (
+          <li key={i}
+              className="flex items-start gap-2 text-[0.95rem] leading-[1.55] sm:text-[1rem]"
+              style={{ color: HOME.inkMid }}>
+            <Check className="mt-1 h-3.5 w-3.5 shrink-0" strokeWidth={2.5} style={{ color: HOME.mintInk }} />
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }

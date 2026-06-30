@@ -1,5 +1,7 @@
+import Image from "next/image"
 import Link from "next/link"
 
+import type { HeroSlideView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
 import { CONTAINER, HOME } from "./home-theme"
@@ -8,36 +10,38 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    eyebrow: "บริการครบวงจร",
-    displayWord: "ENJOY",
-    displayWordAccent: "YOUR PACKAGING",
-    heading: "รับผลิตและออกแบบบรรจุภัณฑ์เครื่องสำอาง ครบวงจร",
+    eyebrow: "บรรจุภัณฑ์ของคุณ เริ่มที่นี่",
+    displayWord: "MADE",
+    displayWordAccent: "FOR YOU",
+    heading: "บอกแค่ไอเดีย เราทำให้เป็นจริง",
     description:
-      "ตั้งแต่งานสต็อกพร้อมส่ง ไปจนถึงงานสั่งผลิตตามแบบ เลือกขนาด สี และรายละเอียดได้ตามคอนเซปต์แบรนด์ พร้อมทีมแนะนำที่ปรึกษาตลอดกระบวนการ",
-    ctaPrimary: "ดูบริการ",
-    ctaSecondary: "ขอใบเสนอราคา",
+      "บรรจุภัณฑ์สต็อกพร้อมส่งราคาคุ้ม หรือสั่งผลิตตามแบบในขั้นต่ำที่จับต้องได้ ทีมขายตอบกลับภายใน 24 ชั่วโมง พร้อมส่งทั่วประเทศ",
+    ctaPrimary: "ดูสินค้าเลย",
+    ctaSecondary: "ขอราคาฟรี",
   },
   en: {
-    eyebrow: "Full-service",
-    displayWord: "ENJOY",
-    displayWordAccent: "YOUR PACKAGING",
-    heading: "Cosmetic packaging — designed, sourced, produced.",
+    eyebrow: "Built around your brand",
+    displayWord: "MADE",
+    displayWordAccent: "FOR YOU",
+    heading: "Tell us the idea. We make it real.",
     description:
-      "From stock-ready packaging to fully custom production. Choose size, color, and finish around your brand concept — with a sales team guiding every step.",
-    ctaPrimary: "Our services",
-    ctaSecondary: "Request a quote",
+      "Stock packaging ready to ship at value prices, or fully custom production with friendly MOQs. Sales replies in 24 hours, delivered nationwide.",
+    ctaPrimary: "Browse catalog",
+    ctaSecondary: "Get a free quote",
   },
 } as const
 
-export default function IntroBand({ locale }: { locale: Locale }) {
+export default function IntroBand({ locale, slides = [] }: { locale: Locale; slides?: HeroSlideView[] }) {
   const t = COPY[locale]
+  // Prefer the 2nd hero banner so it doesn't duplicate the one in HomeHero.
+  const featured = slides[1] ?? slides[0]
 
   return (
     <section className="relative overflow-hidden" style={{ background: HOME.cream }}>
       <div className={`${CONTAINER} relative py-14 sm:py-20 lg:py-24`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
 
-          {/* Stylized display type — decorative anchor */}
+          {/* Stylized display type + featured banner image */}
           <div className="relative">
             <p
               aria-hidden
@@ -53,18 +57,22 @@ export default function IntroBand({ locale }: { locale: Locale }) {
               {t.displayWordAccent}
             </p>
 
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-6 top-1/2 -translate-y-1/2"
-            >
+            {featured && (
               <div
-                className="aspect-[3/2] w-full rounded-2xl"
-                style={{
-                  background: `linear-gradient(135deg, ${HOME.mint} 0%, ${HOME.mintSoft} 100%)`,
-                  opacity: 0.65,
-                }}
-              />
-            </div>
+                aria-hidden
+                className="pointer-events-none absolute inset-x-4 top-1/2 -translate-y-1/2 sm:inset-x-8"
+              >
+                <div className="relative aspect-[3/2] w-full">
+                  <Image
+                    src={featured.image.src}
+                    alt={featured.image.alt || featured.title || ""}
+                    fill
+                    sizes="(max-width:1023px) 90vw, 50vw"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Real content */}
