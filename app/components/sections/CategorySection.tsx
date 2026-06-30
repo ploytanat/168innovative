@@ -20,21 +20,21 @@ export default function CategorySection({ items = [], locale }: { items: Categor
           {locale === "th" ? "เลือกดูบรรจุภัณฑ์ตามกลุ่มสินค้าที่ต้องการ" : "Browse our packaging by product group."}
         </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-7 lg:mt-10 lg:grid-cols-4">
-          {items.slice(0, 8).map(item => (
+        <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-8 lg:mt-10 lg:gap-x-6 lg:gap-y-10">
+          {items.slice(0, 9).map(item => (
             <Link key={item.id} href={withLocalePath(`/categories/${item.slug}`, locale)}
               className="group flex flex-col items-center gap-3">
-              <div className="relative aspect-square w-full max-w-[256px] overflow-hidden rounded-3xl transition-transform duration-300 group-hover:-translate-y-1.5"
-                style={{ border: "2px solid #ffffff", boxShadow: "0 10px 26px rgba(0,0,0,0.12)", background: HOME.mint }}>
+              <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl transition-transform duration-300 group-hover:-translate-y-1.5"
+                style={{ border: `1px solid ${HOME.line}`, background: HOME.mint }}>
                 {item.image?.src ? (
-                  <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 256px" className="object-cover" />
+                  <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 280px" className="object-cover" />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-3xl font-bold" style={{ color: HOME.mintInk }}>
                     {item.name.charAt(0)}
                   </span>
                 )}
               </div>
-              <span className="text-[15px] font-bold uppercase leading-[1.3] tracking-[0.03em]" style={{ color: HOME.ink }}>
+              <span className="text-[15px] font-bold leading-[1.3] tracking-[0.01em]" style={{ color: HOME.ink }}>
                 {item.name}
               </span>
             </Link>
