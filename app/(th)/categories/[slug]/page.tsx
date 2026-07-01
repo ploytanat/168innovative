@@ -137,7 +137,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
+      <div className="mx-auto max-w-[1200px] px-5 pb-16">
         <PageIntro
           title={resolvedCategory.name}
           description={resolvedCategory.description}
@@ -148,7 +148,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           actions={
             <Link
               href="/categories"
-              className="inline-flex items-center gap-1 rounded-full border border-[rgba(221,211,201,0.9)] bg-white/82 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[var(--color-ink-soft)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="inline-flex items-center gap-1.5 rounded border border-[#ececec] px-4 py-2 text-[13px] font-semibold text-[#4a7a1e] transition-colors hover:border-[#4a7a1e] hover:bg-[#4a7a1e] hover:text-white"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               ดูหมวดสินค้าทั้งหมด

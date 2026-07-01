@@ -1,15 +1,7 @@
-"use client"
-
-import { motion } from "framer-motion"
+import { Plus } from "lucide-react"
 
 import type { FAQItemView } from "@/app/lib/types/view"
-import {
-  COLORS,
-  EYEBROW_PILL_STYLE,
-  GLASS,
-  SECTION_BORDER,
-} from "@/app/components/ui/designSystem"
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "@/app/components/ui/motion"
+import { HOME } from "@/app/components/sections/home-theme"
 
 type Props = {
   eyebrow?: string
@@ -29,43 +21,53 @@ export default function FaqSection({
   if (!Array.isArray(items) || items.length === 0) return null
 
   return (
-    <motion.section
-      id={sectionId}
-      className={className}
-      variants={staggerSmall}
-      initial="hidden"
-      whileInView="visible"
-      viewport={MOTION_VIEWPORT}
-    >
-      <div className="border-t pt-7 md:pt-10" style={{ borderColor: SECTION_BORDER }}>
+    <section id={sectionId} className={className}>
+      <div className="border-t pt-7 md:pt-10" style={{ borderColor: HOME.line }}>
         {eyebrow ? (
-          <motion.p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE} variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
+          <p
+            className="text-[11px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: HOME.mintInk }}
+          >
             {eyebrow}
-          </motion.p>
+          </p>
         ) : null}
-        <motion.h2 className="mt-4 font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }} variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+        <h2
+          className="font-display mt-3 text-[clamp(1.5rem,1.2rem+1vw,2rem)] font-bold leading-[1.2]"
+          style={{ color: HOME.ink }}
+        >
           {title}
-        </motion.h2>
-        <motion.div className="mt-7 space-y-4 md:mt-8 md:space-y-5" variants={staggerSmall}>
+        </h2>
+        <ul
+          className="mt-7 divide-y md:mt-8"
+          style={{ borderTop: `1px solid ${HOME.line}`, borderColor: HOME.line }}
+        >
           {items.map((item, index) => (
-            <motion.details
-              key={`${item.question}-${index}`}
-              className="group rounded-[1rem] p-5 md:p-6"
-              style={GLASS.card}
-              variants={fadeUp}
-              transition={{ duration: 0.45, ease: MOTION_EASE }}
-            >
-              <summary className="cursor-pointer list-none pr-8 text-[1.05rem] font-semibold leading-7 marker:hidden" style={{ color: COLORS.dark }}>
-                {item.question}
-              </summary>
-              <div
-                className="rich-content mt-4 text-base md:mt-5"
-                dangerouslySetInnerHTML={{ __html: item.answer }}
-              />
-            </motion.details>
+            <li key={`${item.question}-${index}`} style={{ borderBottomColor: HOME.line }}>
+              <details className="group py-5">
+                <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
+                  <span
+                    className="text-[16px] font-semibold leading-normal sm:text-[17px]"
+                    style={{ color: HOME.ink }}
+                  >
+                    {item.question}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-open:rotate-45"
+                    style={{ background: HOME.leaf, color: HOME.surface }}
+                  >
+                    <Plus className="h-4 w-4" strokeWidth={2.2} />
+                  </span>
+                </summary>
+                <div
+                  className="rich-content mt-3 max-w-[70ch] text-[15px] leading-[1.75] sm:text-[16px]"
+                  dangerouslySetInnerHTML={{ __html: item.answer }}
+                />
+              </details>
+            </li>
           ))}
-        </motion.div>
+        </ul>
       </div>
-    </motion.section>
+    </section>
   )
 }

@@ -1,11 +1,7 @@
-"use client"
-
 import type { ReactNode } from "react"
-import { motion } from "framer-motion"
 
 import Breadcrumb, { type BreadcrumbItem } from "@/app/components/ui/Breadcrumb"
-import { COLORS, EYEBROW_PILL_STYLE, SECTION_BORDER } from "@/app/components/ui/designSystem"
-import { fadeUp, MOTION_EASE, MOTION_VIEWPORT, staggerSmall } from "@/app/components/ui/motion"
+import { HOME } from "@/app/components/sections/home-theme"
 
 type Props = {
   eyebrow?: string
@@ -25,41 +21,45 @@ export default function PageIntro({
   className = "",
 }: Props) {
   return (
-    <motion.header
-      className={`pt-6 md:pt-8 ${className}`.trim()}
-      variants={staggerSmall}
-      initial="hidden"
-      whileInView="visible"
-      viewport={MOTION_VIEWPORT}
-    >
+    <header className={`pt-6 md:pt-8 ${className}`.trim()}>
       <Breadcrumb items={breadcrumbs} />
-      <div className="mt-7 border-t pt-8 md:mt-8 md:pt-10" style={{ borderColor: SECTION_BORDER }}>
+      <div className="mt-7 border-t pt-8 md:mt-8 md:pt-10" style={{ borderColor: HOME.line }}>
         {eyebrow ? (
-          <motion.p className="inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]" style={EYEBROW_PILL_STYLE} variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
+          <p
+            className="text-[11px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: HOME.mintInk }}
+          >
             {eyebrow}
-          </motion.p>
+          </p>
         ) : null}
-        <div className="mt-4 flex flex-col gap-5 md:mt-5 md:flex-row md:items-end md:justify-between md:gap-8">
-          <motion.div className="max-w-4xl" variants={fadeUp} transition={{ duration: 0.55, ease: MOTION_EASE }}>
+        <div className="mt-3 flex flex-col gap-5 md:mt-4 md:flex-row md:items-end md:justify-between md:gap-8">
+          <div className="max-w-4xl">
             <h1
-              className="text-4xl font-semibold md:text-5xl"
-              style={{ color: COLORS.dark, letterSpacing: "-0.005em", lineHeight: 1.15, wordBreak: "keep-all", textWrap: "balance" }}
+              className="font-display text-[clamp(1.9rem,1.2rem+2vw,3rem)] font-bold"
+              style={{
+                color: HOME.ink,
+                letterSpacing: "-0.005em",
+                lineHeight: 1.15,
+                wordBreak: "keep-all",
+                textWrap: "balance",
+              }}
             >
               {title}
             </h1>
             {description ? (
-              <motion.p className="mt-5 max-w-3xl text-[1rem] leading-[1.7] md:mt-6 md:text-[1.05rem] md:leading-[1.75]" style={{ color: COLORS.mid }} variants={fadeUp}>
+              <p
+                className="mt-5 max-w-3xl text-[15px] leading-[1.75] md:mt-6 md:text-[16px] lg:text-[17px]"
+                style={{ color: HOME.inkMid }}
+              >
                 {description}
-              </motion.p>
+              </p>
             ) : null}
-          </motion.div>
+          </div>
           {actions ? (
-            <motion.div className="shrink-0 pt-1 md:pt-0" variants={fadeUp} transition={{ duration: 0.45, ease: MOTION_EASE }}>
-              {actions}
-            </motion.div>
+            <div className="shrink-0 pt-1 md:pt-0">{actions}</div>
           ) : null}
         </div>
       </div>
-    </motion.header>
+    </header>
   )
 }

@@ -1,13 +1,7 @@
-'use client'
+import Link from "next/link"
+import type { ReactNode } from "react"
 
-import Link from 'next/link'
-import type { ReactNode } from 'react'
-import {
-  COLORS,
-  GLASS,
-  NAV_ACTIVE_PILL_STYLE,
-  NAV_SHELL_STYLE,
-} from '@/app/components/ui/designSystem'
+import { HOME } from "@/app/components/sections/home-theme"
 
 interface Props {
   currentPage: number
@@ -15,22 +9,22 @@ interface Props {
   basePath: string
 }
 
-function generatePages(current: number, total: number): (number | '...')[] {
+function generatePages(current: number, total: number): (number | "...")[] {
   const delta = 2
-  const pages: (number | '...')[] = []
+  const pages: (number | "...")[] = []
 
   const start = Math.max(2, current - delta)
   const end = Math.min(total - 1, current + delta)
 
   pages.push(1)
 
-  if (start > 2) pages.push('...')
+  if (start > 2) pages.push("...")
 
   for (let i = start; i <= end; i += 1) {
     pages.push(i)
   }
 
-  if (end < total - 1) pages.push('...')
+  if (end < total - 1) pages.push("...")
 
   if (total > 1) pages.push(total)
 
@@ -46,23 +40,30 @@ function PageLink({
   label: ReactNode
   active?: boolean
 }) {
+  const style = active
+    ? { background: HOME.leaf, color: HOME.surface, borderColor: HOME.leaf }
+    : { background: HOME.surface, color: HOME.ink, borderColor: HOME.line }
   return (
     <Link
       href={href}
       prefetch={false}
-      aria-current={active ? 'page' : undefined}
-      className="inline-flex min-w-10 items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold transition-all"
-      style={
-        active
-          ? NAV_ACTIVE_PILL_STYLE
-          : {
-              ...GLASS.card,
-              color: COLORS.brandMuted,
-            }
-      }
+      aria-current={active ? "page" : undefined}
+      className="inline-flex min-w-9 items-center justify-center rounded border px-3 py-2 text-[13px] font-semibold transition-colors hover:border-[#4a7a1e] hover:bg-[#4a7a1e] hover:text-white"
+      style={style}
     >
       {label}
     </Link>
+  )
+}
+
+function DisabledBadge({ label }: { label: ReactNode }) {
+  return (
+    <span
+      className="inline-flex min-w-9 cursor-not-allowed items-center justify-center rounded border px-3 py-2 text-[13px] font-semibold"
+      style={{ background: HOME.mist, color: HOME.inkSoft, borderColor: HOME.line }}
+    >
+      {label}
+    </span>
   )
 }
 
@@ -73,30 +74,22 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
 
   return (
     <nav
-      className="mt-14 flex flex-wrap items-center justify-center gap-2.5"
+      className="mt-12 flex flex-wrap items-center justify-center gap-2"
       aria-label="Pagination"
     >
       {currentPage > 1 ? (
         <PageLink href={`${basePath}?page=${currentPage - 1}`} label="Previous" />
       ) : (
-        <span
-          className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold"
-          style={{ ...GLASS.stats, color: COLORS.hint }}
-        >
-          Previous
-        </span>
+        <DisabledBadge label="Previous" />
       )}
 
-      <div
-        className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full px-2 py-2"
-        style={NAV_SHELL_STYLE}
-      >
+      <div className="inline-flex flex-wrap items-center justify-center gap-2">
         {pages.map((page, index) =>
-          page === '...' ? (
+          page === "..." ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-2 text-xs font-semibold"
-              style={{ color: COLORS.hint }}
+              className="px-2 text-[13px] font-semibold"
+              style={{ color: HOME.inkSoft }}
             >
               ...
             </span>
@@ -107,19 +100,14 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
               label={page}
               active={page === currentPage}
             />
-          )
+          ),
         )}
       </div>
 
       {currentPage < totalPages ? (
         <PageLink href={`${basePath}?page=${currentPage + 1}`} label="Next" />
       ) : (
-        <span
-          className="inline-flex min-w-10 cursor-not-allowed items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold"
-          style={{ ...GLASS.stats, color: COLORS.hint }}
-        >
-          Next
-        </span>
+        <DisabledBadge label="Next" />
       )}
     </nav>
   )
