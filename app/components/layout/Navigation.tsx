@@ -98,7 +98,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
         backdropFilter: scrolled ? 'blur(14px) saturate(140%)' : 'none',
         WebkitBackdropFilter: scrolled ? 'blur(14px) saturate(140%)' : 'none',
         borderBottom: `1px solid ${scrolled ? HOME.line : 'transparent'}`,
-        boxShadow: scrolled ? '0 4px 18px rgba(20,22,28,0.05)' : 'none',
+        boxShadow: scrolled ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
       }}
     >
       <nav className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-6 px-5 lg:h-20">
@@ -138,7 +138,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                     aria-haspopup="true"
                     aria-expanded={productsOpen ? 'true' : 'false'}
                     onClick={() => setProductsOpen(o => !o)}
-                    className="group relative inline-flex items-center gap-1 rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
+                    className="group relative inline-flex items-center gap-1 rounded px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
                     style={{
                       color: showAccent ? HOME.ink : HOME.inkMid,
                       fontWeight: showAccent ? 700 : 500,
@@ -151,7 +151,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                     />
                     <span
                       aria-hidden
-                      className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-200 ${
+                      className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded transition-all duration-200 ${
                         showAccent ? 'h-[3px] w-6 opacity-100' : 'h-[2px] w-0 opacity-0 group-hover:w-3 group-hover:opacity-100'
                       }`}
                       style={{ background: HOME.ink, bottom: '-2px' }}
@@ -166,7 +166,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                 <Link
                   href={withLocale(item.href)}
                   aria-current={active ? 'page' : undefined}
-                  className="group relative inline-flex items-center rounded-full px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
+                  className="group relative inline-flex items-center rounded px-4 py-2 text-[15px] transition-all duration-200 hover:bg-[rgba(20,22,28,0.04)]"
                   style={{
                     color: active ? HOME.ink : HOME.inkMid,
                     fontWeight: active ? 700 : 500,
@@ -175,7 +175,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                   {item.label[lang]}
                   <span
                     aria-hidden
-                    className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-full transition-all duration-200 ${
+                    className={`pointer-events-none absolute left-1/2 -translate-x-1/2 rounded transition-all duration-200 ${
                       active ? 'h-[3px] w-6 opacity-100' : 'h-[2px] w-0 opacity-0 group-hover:w-3 group-hover:opacity-100'
                     }`}
                     style={{ background: HOME.ink, bottom: '-2px' }}
@@ -193,7 +193,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
           <Link
             href={withLocale('/contact')}
             onClick={closeMenu}
-            className="home-btn home-btn-accent hidden items-center gap-1.5 rounded-full px-5 py-2.5 text-[14px] font-semibold lg:inline-flex"
+            className="home-btn home-btn-accent hidden items-center gap-1.5 rounded px-5 py-2.5 text-[14px] font-semibold lg:inline-flex"
           >
             {QUOTE_LABEL[lang]}
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />
@@ -205,7 +205,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open ? 'true' : 'false'}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-[rgba(20,22,28,0.05)] lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-[rgba(20,22,28,0.05)] lg:hidden"
             style={{ color: HOME.ink, border: `1px solid ${HOME.line}` }}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -228,7 +228,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
               transform: productsOpen ? 'translateY(0)' : 'translateY(-6px)',
               background: HOME.surface,
               borderBottom: `1px solid ${HOME.line}`,
-              boxShadow: '0 12px 28px rgba(20,22,28,0.06)',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
             }}
           >
             <div className="mx-auto max-w-[1200px] px-5 py-6">
@@ -293,7 +293,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                     type="button"
                     onClick={() => setMobileProductsOpen(o => !o)}
                     aria-expanded={mobileProductsOpen ? 'true' : 'false'}
-                    className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-[16px] transition-colors"
+                    className="flex w-full items-center justify-between rounded-lg px-4 py-3.5 text-[16px] transition-colors"
                     style={{
                       background: active || mobileProductsOpen ? HOME.mist : 'transparent',
                       color: active ? HOME.ink : HOME.inkMid,
@@ -324,7 +324,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                             className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-[15px] transition-colors"
                             style={{ color: HOME.inkMid }}
                           >
-                            <span className="h-1 w-1 shrink-0 rounded-full" style={{ background: HOME.line }} />
+                            <span className="h-1 w-1 shrink-0 rounded" style={{ background: HOME.line }} />
                             <span className="truncate">{cat.name}</span>
                           </Link>
                         </li>
@@ -352,7 +352,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                   href={withLocale(item.href)}
                   onClick={closeMenu}
                   aria-current={active ? 'page' : undefined}
-                  className="flex items-center justify-between rounded-xl px-4 py-3.5 text-[16px] transition-colors"
+                  className="flex items-center justify-between rounded-lg px-4 py-3.5 text-[16px] transition-colors"
                   style={{
                     background: active ? HOME.mist : 'transparent',
                     color: active ? HOME.ink : HOME.inkMid,
@@ -361,7 +361,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
                 >
                   <span>{item.label[lang]}</span>
                   {active ? (
-                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: HOME.mintInk }} />
+                    <span className="h-1.5 w-1.5 rounded" style={{ background: HOME.mintInk }} />
                   ) : (
                     <ArrowUpRight className="h-4 w-4 opacity-40" strokeWidth={1.8} />
                   )}
@@ -375,7 +375,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
           <Link
             href={withLocale('/contact')}
             onClick={closeMenu}
-            className="home-btn home-btn-accent flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-[15px] font-semibold"
+            className="home-btn home-btn-accent flex w-full items-center justify-center gap-2 rounded py-3.5 text-[15px] font-semibold"
           >
             {QUOTE_LABEL[lang]}
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />
@@ -392,11 +392,11 @@ function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void })
       type="button"
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="inline-flex items-center rounded-full p-0.5 text-[11px] font-bold tracking-[0.08em]"
+      className="inline-flex items-center rounded p-0.5 text-[11px] font-bold tracking-[0.08em]"
       style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
     >
       <span
-        className="rounded-full px-2.5 py-1 transition-colors"
+        className="rounded px-2.5 py-1 transition-colors"
         style={{
           background: !isEN ? HOME.ink : 'transparent',
           color: !isEN ? HOME.surface : HOME.inkSoft,
@@ -405,7 +405,7 @@ function LangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => void })
         TH
       </span>
       <span
-        className="rounded-full px-2.5 py-1 transition-colors"
+        className="rounded px-2.5 py-1 transition-colors"
         style={{
           background: isEN ? HOME.ink : 'transparent',
           color: isEN ? HOME.surface : HOME.inkSoft,

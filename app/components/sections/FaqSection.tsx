@@ -73,7 +73,7 @@ export default function FaqSection({ locale }: { locale: Locale }) {
   const t = COPY[locale]
 
   return (
-    <section className="relative py-14 sm:py-20 lg:py-24" style={{ background: HOME.cream }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.skySoft }}>
       <div className={CONTAINER}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
 
@@ -84,12 +84,12 @@ export default function FaqSection({ locale }: { locale: Locale }) {
             </p>
             <h2
               lang={locale}
-              className={`${SECTION_HEADING} mt-3 text-[clamp(1.6rem,1rem+2vw,2.4rem)] font-bold normal-case`}
-              style={{ color: HOME.ink, letterSpacing: "-0.005em", wordBreak: "keep-all", textWrap: "balance" }}
+              className={`font-display ${SECTION_HEADING} mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+              style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
             >
               {t.heading}
             </h2>
-            <p className="mt-3 max-w-md text-[15px] leading-[1.7]" style={{ color: HOME.inkMid }}>
+            <p className="mt-3 max-w-md text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
               {t.description}
             </p>
           </div>
@@ -100,18 +100,18 @@ export default function FaqSection({ locale }: { locale: Locale }) {
               <li key={i} style={{ borderBottomColor: HOME.line }}>
                 <details className="group py-5">
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-                    <span className="text-[15px] font-semibold sm:text-[16px]" style={{ color: HOME.ink }}>
+                    <span className="text-[16px] font-semibold sm:text-[17px]" style={{ color: HOME.ink }}>
                       {item.q}
                     </span>
                     <span
                       aria-hidden
-                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-open:rotate-45"
-                      style={{ background: HOME.mint, color: HOME.mintInk }}
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded transition-transform duration-200 group-open:rotate-45"
+                      style={{ background: HOME.peach, color: HOME.peachInk }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.2} />
                     </span>
                   </summary>
-                  <p className="mt-3 max-w-[60ch] text-[14px] leading-[1.7] sm:text-[15px]" style={{ color: HOME.inkMid }}>
+                  <p className="mt-3 max-w-[60ch] text-[15px] leading-[1.7] sm:text-[16px]" style={{ color: HOME.inkMid }}>
                     {item.a}
                   </p>
                 </details>

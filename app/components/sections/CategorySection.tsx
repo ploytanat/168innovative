@@ -11,12 +11,12 @@ export default function CategorySection({ items = [], locale }: { items: Categor
   if (items.length === 0) return null
 
   return (
-    <section className="relative py-10 sm:py-12 lg:py-14" style={{ background: HOME.cream }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.cream }}>
       <div className={`${CONTAINER} text-center`}>
-        <h2 className={`${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.9vw,2.5rem)] font-bold`} style={{ color: HOME.ink }}>
+        <h2 className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`} style={{ color: HOME.ink }}>
           {uiText.categories.title[locale]}
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-[1.02rem] leading-[1.7]" style={{ color: HOME.inkMid }}>
+        <p className="mx-auto mt-3 max-w-md text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
           {locale === "th" ? "เลือกดูบรรจุภัณฑ์ตามกลุ่มสินค้าที่ต้องการ" : "Browse our packaging by product group."}
         </p>
 
@@ -24,7 +24,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
           {items.slice(0, 9).map(item => (
             <Link key={item.id} href={withLocalePath(`/categories/${item.slug}`, locale)}
               className="group flex flex-col items-center gap-3">
-              <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-2xl transition-transform duration-300 group-hover:-translate-y-1.5"
+              <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-lg transition-transform duration-300 group-hover:-translate-y-2"
                 style={{ border: `1px solid ${HOME.line}`, background: HOME.mint }}>
                 {item.image?.src ? (
                   <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 280px" className="object-cover" />
@@ -34,7 +34,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
                   </span>
                 )}
               </div>
-              <span className="text-[15px] font-bold leading-[1.3] tracking-[0.01em]" style={{ color: HOME.ink }}>
+              <span className="text-[15px] font-bold leading-[1.3] tracking-[0.01em] sm:text-[16px]" style={{ color: HOME.ink }}>
                 {item.name}
               </span>
             </Link>

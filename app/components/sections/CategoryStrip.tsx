@@ -14,7 +14,7 @@ export default function CategoryStrip({ items, locale }: { items: CategoryView[]
 
   return (
     <section className="relative" style={{ background: HOME.surface }}>
-      <div className={`${CONTAINER} -mt-6 pb-10 sm:-mt-10 sm:pb-14 lg:-mt-14 lg:pb-16`}>
+      <div className={`${CONTAINER} -mt-4 pb-12 sm:-mt-6 sm:pb-16`}>
         <ul className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-5 sm:gap-4 sm:px-0 sm:overflow-visible">
           {visible.map(cat => (
             <li key={cat.id} className="shrink-0 snap-start" style={{ width: "min(36vw, 200px)" }}>
@@ -23,7 +23,7 @@ export default function CategoryStrip({ items, locale }: { items: CategoryView[]
                 className="group block"
               >
                 <div
-                  className="relative aspect-square w-full overflow-hidden rounded-2xl transition-transform duration-300 group-hover:-translate-y-1"
+                  className="relative aspect-square w-full overflow-hidden rounded-lg transition-transform duration-300 group-hover:-translate-y-1.5"
                   style={{
                     background: HOME.mintSoft,
                     border: `1px solid ${HOME.line}`,
@@ -47,7 +47,7 @@ export default function CategoryStrip({ items, locale }: { items: CategoryView[]
                   )}
                 </div>
                 <p
-                  className="mt-3 text-center text-[13px] font-semibold transition-colors"
+                  className="mt-3 text-center text-[14px] font-semibold transition-colors sm:text-[15px]"
                   style={{ color: HOME.ink }}
                 >
                   {cat.name}

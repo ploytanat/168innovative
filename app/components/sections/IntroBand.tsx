@@ -37,19 +37,18 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
   const featured = slides[1] ?? slides[0]
 
   return (
-    <section className="relative overflow-hidden" style={{ background: HOME.cream }}>
-      <div className={`${CONTAINER} relative py-14 sm:py-20 lg:py-24`}>
+    <section className="relative overflow-hidden" style={{ background: HOME.peachSoft }}>
+      <div className={`${CONTAINER} relative py-12 sm:py-16`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
 
           {/* Stylized display type + featured banner image */}
           <div className="relative">
             <p
               aria-hidden
-              className="select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
+              className="font-display select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
               style={{
-                color: HOME.mintInk,
-                opacity: 0.16,
-                letterSpacing: "-0.02em",
+                color: HOME.peachInk,
+                opacity: 0.22,
               }}
             >
               {t.displayWord}
@@ -79,21 +78,21 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
           <div>
             <p
               className="text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: HOME.mintInk }}
+              style={{ color: HOME.peachInk }}
             >
               {t.eyebrow}
             </p>
 
             <h2
               lang={locale}
-              className="mt-3 text-[clamp(1.6rem,1rem+2vw,2.4rem)] font-bold leading-[1.2]"
-              style={{ color: HOME.ink, letterSpacing: "-0.005em", wordBreak: "keep-all", textWrap: "balance" }}
+              className="font-display mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold leading-[1.2]"
+              style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
             >
               {t.heading}
             </h2>
 
             <p
-              className="mt-4 max-w-[44ch] text-[0.98rem] leading-[1.75] sm:text-[1.02rem]"
+              className="mt-4 max-w-[44ch] text-[15px] leading-[1.75] sm:text-[16px] lg:text-[17px]"
               style={{ color: HOME.inkMid }}
             >
               {t.description}
@@ -102,14 +101,14 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
             <div className="mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
                 href={withLocalePath("/categories", locale)}
-                className="inline-flex items-center justify-center rounded-full px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
+                className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
                 style={{ background: HOME.mintInk, color: HOME.surface }}
               >
                 {t.ctaPrimary}
               </Link>
               <Link
                 href={withLocalePath("/contact", locale)}
-                className="inline-flex items-center justify-center rounded-full border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
+                className="inline-flex items-center justify-center rounded border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
                 style={{ borderColor: HOME.mintInk, color: HOME.mintInk }}
               >
                 {t.ctaSecondary}

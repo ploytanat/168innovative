@@ -18,12 +18,22 @@ const COPY = {
   ctaTalk:    { th: "ปรึกษาทีมงาน",      en: "Talk to our team" },
 } as const
 
+// Editorial pastel rotation for icon circles
+const ICON_PALETTE = [
+  { bg: HOME.mint,   ink: HOME.mintInk },
+  { bg: HOME.peach,  ink: HOME.peachInk },
+  { bg: HOME.sky,    ink: HOME.skyInk },
+  { bg: HOME.butter, ink: HOME.butterInk },
+  { bg: HOME.peach,  ink: HOME.peachInk },
+  { bg: HOME.sky,    ink: HOME.skyInk },
+] as const
+
 export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; locale: Locale }) {
   const tiles = whys.slice(0, 6)
   if (tiles.length === 0) return null
 
   return (
-    <section className="relative py-14 sm:py-20 lg:py-24" style={{ background: HOME.surface }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface }}>
       <div className={`${CONTAINER} relative`}>
 
         <div className="mx-auto max-w-2xl text-center">
@@ -32,22 +42,24 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
           </p>
           <h2
             lang={locale}
-            className={`${SECTION_HEADING} mt-3 text-[clamp(1.6rem,1rem+2vw,2.4rem)] font-bold normal-case`}
-            style={{ color: HOME.ink, letterSpacing: "-0.005em", wordBreak: "keep-all", textWrap: "balance" }}
+            className={`font-display ${SECTION_HEADING} mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+            style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
           >
             {COPY.heading[locale]}
           </h2>
-          <p className="mt-3 text-[15px] leading-[1.7]" style={{ color: HOME.inkMid }}>
+          <p className="mt-3 text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
             {COPY.description[locale]}
           </p>
         </div>
 
         <ul className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-x-10 lg:mt-16 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-12">
-          {tiles.map((item, i) => (
+          {tiles.map((item, i) => {
+            const palette = ICON_PALETTE[i % ICON_PALETTE.length]
+            return (
             <li key={i} className="flex flex-col items-center text-center">
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-full sm:h-20 sm:w-20"
-                style={{ background: HOME.mint, color: HOME.mintInk }}
+                className="flex h-16 w-16 items-center justify-center rounded-lg transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20"
+                style={{ background: palette.bg, color: palette.ink }}
               >
                 {item.image?.src ? (
                   <div className="relative h-9 w-9 sm:h-11 sm:w-11">
@@ -64,20 +76,21 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
                 )}
               </div>
 
-              <h3 className="mt-5 text-[16px] font-bold leading-[1.35]" style={{ color: HOME.ink }}>
+              <h3 className="mt-5 text-[17px] font-bold leading-[1.35] sm:text-[18px]" style={{ color: HOME.ink }}>
                 {item.title}
               </h3>
-              <p className="mt-2 max-w-[36ch] text-[14px] leading-[1.65]" style={{ color: HOME.inkMid }}>
+              <p className="mt-2 max-w-[36ch] text-[15px] leading-[1.65]" style={{ color: HOME.inkMid }}>
                 {item.description}
               </p>
             </li>
-          ))}
+            )
+          })}
         </ul>
 
         <div className="mt-12 flex justify-center lg:mt-16">
           <Link
             href={withLocalePath("/contact", locale)}
-            className="inline-flex items-center justify-center rounded-full px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors"
+            className="inline-flex items-center justify-center rounded-lg px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors"
             style={{ background: HOME.mintInk, color: HOME.surface }}
           >
             {COPY.ctaTalk[locale]} →

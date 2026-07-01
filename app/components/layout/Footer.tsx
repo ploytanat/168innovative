@@ -16,7 +16,7 @@ const D = {
   soft: '#9aa0ac',
   line: 'rgba(10,12,16,0.09)',
   lineStrong: 'rgba(10,12,16,0.18)',
-  accent: '#2e7d32',
+  accent: '#14532d',
   surface: 'rgba(10,12,16,0.03)',
 } as const
 
@@ -238,7 +238,7 @@ export default function Footer({ company }: { company: CompanyView }) {
                         target="_blank"
                         rel="noreferrer"
                         aria-label={s.type}
-                        className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-[#0a0c10] hover:text-white"
+                        className="flex h-9 w-9 items-center justify-center rounded transition-colors hover:bg-[#0a0c10] hover:text-white"
                         style={{ background: D.surface, border: `1px solid ${D.line}`, color: D.text }}
                       >
                         <Icon className="h-[15px] w-[15px]" />
@@ -281,11 +281,11 @@ function FooterLangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => v
       type="button"
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="inline-flex items-center rounded-full p-0.5 text-[11px] font-bold tracking-[0.08em]"
+      className="inline-flex items-center rounded p-0.5 text-[11px] font-bold tracking-[0.08em]"
       style={{ background: D.surface, border: `1px solid ${D.line}` }}
     >
       <span
-        className="rounded-full px-2.5 py-1 transition-colors"
+        className="rounded px-2.5 py-1 transition-colors"
         style={{
           background: !isEN ? D.text : 'transparent',
           color: !isEN ? D.bg : D.soft,
@@ -294,7 +294,7 @@ function FooterLangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => v
         TH
       </span>
       <span
-        className="rounded-full px-2.5 py-1 transition-colors"
+        className="rounded px-2.5 py-1 transition-colors"
         style={{
           background: isEN ? D.text : 'transparent',
           color: isEN ? D.bg : D.soft,

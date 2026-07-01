@@ -9,16 +9,26 @@ export const HOME = {
   surface: "#ffffff",
   cream: "#fdfcf5",
   mist: "#f9f9f9",
-  mint: "#e0f2f1",
-  mintSoft: "#e8f5e9",
-  mintInk: "#2e7d32",
+  mint: "#dde7d8",
+  mintSoft: "#f5f7f1",
+  mintInk: "#14532d",
+  // Editorial pastel splash — playful accents over the forest base
+  peach: "#fde4d0",
+  peachSoft: "#fbeee2",
+  peachInk: "#b86a45",
+  sky: "#dceaf5",
+  skySoft: "#eef4fa",
+  skyInk: "#3a6587",
+  butter: "#fff3c4",
+  butterSoft: "#fef9e3",
+  butterInk: "#8a6516",
   pink: "#fce4ec",
   yellow: "#fffde7",
   star: "#fbc02d",
   dark: "#333333",
 } as const
 
-export const SECTION_PAD = "py-14 sm:py-[60px]"
+export const SECTION_PAD = "py-12 sm:py-16"
 export const CONTAINER = "mx-auto w-full max-w-[1200px] px-5"
 
 // `uppercase` is a no-op for Thai; tracking overrides globals.css -0.035em

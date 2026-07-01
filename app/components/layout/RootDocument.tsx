@@ -18,6 +18,11 @@ export default function RootDocument({
       <head>
         <link rel="preconnect" href="https://wb.168innovative.co.th" />
         <link rel="dns-prefetch" href="https://wb.168innovative.co.th" />
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&display=swap"
+        />
       </head>
       <body className={rootBodyClassName}>
         {children}

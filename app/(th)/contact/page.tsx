@@ -62,7 +62,7 @@ export default async function ContactPage() {
 
             {/* Left: Phone + Email */}
             <div
-              className="rounded-2xl p-7 md:p-10"
+              className="rounded-lg p-7 md:p-10"
               style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
             >
               <div className="grid gap-y-10 gap-x-10 sm:grid-cols-2">
@@ -90,13 +90,13 @@ export default async function ContactPage() {
 
             {/* Right: QR + socials */}
             <div
-              className="flex flex-col items-center justify-center rounded-2xl p-7 text-center md:p-10"
+              className="flex flex-col items-center justify-center rounded-lg p-7 text-center md:p-10"
               style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}
             >
               {company.lineQrCode && (
                 <div className="flex flex-col items-center">
                   <div
-                    className="rounded-xl p-2.5"
+                    className="rounded-lg p-2.5"
                     style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
                   >
                     <div className="relative h-36 w-36 sm:h-40 sm:w-40">
@@ -132,7 +132,7 @@ export default async function ContactPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={s.type}
-                          className="block overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
+                          className="block overflow-hidden rounded-lg transition-transform hover:-translate-y-0.5"
                           style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
                         >
                           <Image
@@ -158,11 +158,11 @@ export default async function ContactPage() {
       <section className="mt-2">
         <div className="mx-auto mb-8 max-w-3xl px-6">
           <div
-            className="flex items-start gap-4 rounded-xl p-5"
+            className="flex items-start gap-4 rounded-lg p-5"
             style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
           >
             <span
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded"
               style={{ background: HOME.mintSoft, color: HOME.mintInk }}
             >
               <MapPin className="h-5 w-5" strokeWidth={1.6} />
@@ -189,7 +189,7 @@ function ContactBlock({ icon, label, children }: { icon: React.ReactNode; label:
     <div>
       <div className="mb-5 flex items-center gap-2.5">
         <span
-          className="flex h-9 w-9 items-center justify-center rounded-full"
+          className="flex h-9 w-9 items-center justify-center rounded"
           style={{ background: HOME.mist, color: HOME.mintInk }}
         >
           {icon}

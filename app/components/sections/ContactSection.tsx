@@ -46,7 +46,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
             </p>
 
             <Link href={withLocalePath("/contact", locale)}
-              className="home-btn home-btn-light mt-7 inline-flex items-center rounded-[5px] px-6 py-3 text-[14px] font-bold">
+              className="home-btn home-btn-light mt-7 inline-flex items-center rounded px-6 py-3 text-[14px] font-bold">
               {COPY.sendMessage[locale]} →
             </Link>
 
@@ -67,7 +67,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                     const Icon = SOCIAL_ICONS[s.type] ?? MessageCircle
                     return (
                       <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.type}
-                        className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/15"
+                        className="flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-white/15"
                         style={{ background: DARK_TILE, border: `1px solid ${DARK_LINE}`, color: DARK_TEXT }}>
                         <Icon className="h-[18px] w-[18px]" />
                       </a>
@@ -86,9 +86,9 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
               <div className="mt-4 space-y-3">
                 {data.phones.map(phone => (
                   <a key={phone.number} href={`tel:${phone.number.replace(/-/g, "")}`}
-                    className="home-card flex items-center gap-3.5 rounded-[6px] px-4 py-3"
+                    className="home-card flex items-center gap-3.5 rounded-lg px-4 py-3"
                     style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded"
                       style={{ background: HOME.mintSoft, color: HOME.mintInk }}>
                       <Phone className="h-5 w-5" strokeWidth={1.6} />
                     </span>
@@ -113,7 +113,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                 <div className="mt-3 space-y-2.5">
                   {data.email.map(email => (
                     <a key={email} href={`mailto:${email}`} className="flex items-center gap-3.5">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded"
                         style={{ background: HOME.mist, color: HOME.inkMid }}>
                         <Mail className="h-5 w-5" strokeWidth={1.6} />
                       </span>
@@ -129,7 +129,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
             {data.lineQrCode && (
               <div className="flex items-center gap-4 border-t px-7 py-6 sm:px-8"
                 style={{ borderColor: HOME.line, background: HOME.mintSoft }}>
-                <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-[6px]"
+                <div className="relative h-[72px] w-[72px] shrink-0 overflow-hidden rounded-lg"
                   style={{ border: `1px solid ${HOME.line}`, background: HOME.surface }}>
                   <Image src={data.lineQrCode.src} alt={data.lineQrCode.alt} fill sizes="72px" className="object-contain p-1.5" />
                 </div>
