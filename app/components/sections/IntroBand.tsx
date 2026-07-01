@@ -48,7 +48,7 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
               className="font-display select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
               style={{
                 color: HOME.peachInk,
-                opacity: 0.22,
+                opacity: 0.16,
               }}
             >
               {t.displayWord}
