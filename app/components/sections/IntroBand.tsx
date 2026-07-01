@@ -43,35 +43,51 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
 
           {/* Stylized display type + featured banner image */}
           <div className="relative">
-            <p
-              aria-hidden
-              className="font-display select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
-              style={{
-                color: HOME.leaf,
-                opacity: 0.35,
-              }}
-            >
-              {t.displayWord}
-              <br />
-              {t.displayWordAccent}
-            </p>
-
+            {/* Mobile: featured image on its own — the poster overlay is too dense on small screens */}
             {featured && (
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-4 top-1/2 -translate-y-1/2 sm:inset-x-8"
-              >
-                <div className="relative aspect-[3/2] w-full">
-                  <Image
-                    src={featured.image.src}
-                    alt={featured.image.alt || featured.title || ""}
-                    fill
-                    sizes="(max-width:1023px) 90vw, 50vw"
-                    className="object-contain"
-                  />
-                </div>
+              <div className="relative aspect-3/2 w-full sm:hidden">
+                <Image
+                  src={featured.image.src}
+                  alt={featured.image.alt || featured.title || ""}
+                  fill
+                  sizes="90vw"
+                  className="object-contain"
+                />
               </div>
             )}
+
+            {/* Desktop poster: giant display type with image absolutely overlaid */}
+            <div className="hidden sm:block">
+              <p
+                aria-hidden
+                className="font-display select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
+                style={{
+                  color: HOME.leaf,
+                  opacity: 0.35,
+                }}
+              >
+                {t.displayWord}
+                <br />
+                {t.displayWordAccent}
+              </p>
+
+              {featured && (
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-8 top-1/2 -translate-y-1/2"
+                >
+                  <div className="relative aspect-3/2 w-full">
+                    <Image
+                      src={featured.image.src}
+                      alt={featured.image.alt || featured.title || ""}
+                      fill
+                      sizes="50vw"
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Real content */}

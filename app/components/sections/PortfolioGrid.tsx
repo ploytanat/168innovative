@@ -80,10 +80,10 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                     {/* Signature round arrow — bottom-right, slides on hover */}
                     <span
                       aria-hidden
-                      className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1"
+                      className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1 sm:bottom-3 sm:right-3 sm:h-9 sm:w-9"
                       style={{ background: HOME.leaf, color: HOME.surface }}
                     >
-                      <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+                      <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                     </span>
                   </div>
                   <p
