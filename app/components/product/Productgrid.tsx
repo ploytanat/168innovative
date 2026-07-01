@@ -159,7 +159,7 @@ export default function ProductGrid({
       {filtered.length === 0 && (
         <div
           className="rounded-lg px-6 py-16 text-center"
-          style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+          style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
         >
           <div
             aria-hidden
@@ -201,7 +201,7 @@ export default function ProductGrid({
                 <Link href={href} prefetch={false} className="group block">
                   <div
                     className="relative aspect-square overflow-hidden rounded-lg"
-                    style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+                    style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
                   >
                     {product.image?.src ? (
                       <Image

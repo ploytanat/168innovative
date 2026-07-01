@@ -61,7 +61,7 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                 <Link href={href} className="group block">
                   <div
                     className="relative aspect-square overflow-hidden rounded-lg"
-                    style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
+                    style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
                   >
                     <Image
                       src={item.image.src}
