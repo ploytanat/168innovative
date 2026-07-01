@@ -11,13 +11,11 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    eyebrow: "ผลงานของเรา",
     heading: "ผลงานการออกแบบบรรจุภัณฑ์",
     description: "ตัวอย่างงานที่ทีมเราออกแบบและผลิตให้กับแบรนด์ต่างๆ",
     viewAll: "ดูผลงานทั้งหมด",
   },
   en: {
-    eyebrow: "Our work",
     heading: "Portfolio of packaging design",
     description: "A selection of work our team has designed and produced for client brands.",
     viewAll: "View all work",
@@ -35,12 +33,9 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
       <div className={CONTAINER}>
         <div className="mb-9 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:mb-12">
           <div className="max-w-xl">
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
-              {t.eyebrow}
-            </p>
             <h2
               lang={locale}
-              className={`font-display ${SECTION_HEADING} mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+              className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
               style={{ color: HOME.ink }}
             >
               {t.heading}
