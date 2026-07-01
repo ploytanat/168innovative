@@ -58,14 +58,14 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
           </Link>
         </div>
 
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:gap-5">
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-10 lg:gap-x-6">
           {visible.map(item => {
             const href = withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
             return (
               <li key={item.id}>
                 <Link href={href} className="group block">
                   <div
-                    className="relative aspect-[4/5] overflow-hidden rounded-lg"
+                    className="relative aspect-square overflow-hidden rounded-lg"
                     style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
                   >
                     <Image
@@ -73,21 +73,30 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                       alt={item.image.alt || item.name}
                       fill
                       sizes="(max-width:640px) 48vw, (max-width:1024px) 32vw, 380px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-600 ease-out group-hover:scale-[1.04]"
+                      style={{ filter: "saturate(0.88)" }}
                     />
-                  </div>
-                  <div className="mt-3 flex items-center justify-between gap-3">
-                    <p className="line-clamp-1 text-[15px] font-semibold sm:text-[16px]" style={{ color: HOME.ink }}>
-                      {item.name}
-                    </p>
+                    {/* Leaf tonal wash — unifies mixed studio backgrounds. Fades on hover. */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 transition-opacity duration-500 group-hover:opacity-0"
+                      style={{ background: "rgba(124, 179, 66, 0.08)", mixBlendMode: "multiply" }}
+                    />
+                    {/* Signature round arrow — bottom-right, slides on hover */}
                     <span
                       aria-hidden
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5"
+                      className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1"
                       style={{ background: HOME.leaf, color: HOME.surface }}
                     >
-                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                      <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                     </span>
                   </div>
+                  <p
+                    className="mt-4 line-clamp-2 text-[14px] font-semibold leading-normal sm:text-[15px]"
+                    style={{ color: HOME.ink }}
+                  >
+                    {item.name}
+                  </p>
                 </Link>
               </li>
             )
