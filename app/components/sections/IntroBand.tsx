@@ -37,7 +37,7 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
   const featured = slides[1] ?? slides[0]
 
   return (
-    <section className="relative overflow-hidden" style={{ background: HOME.peachSoft }}>
+    <section className="relative overflow-hidden" style={{ background: HOME.surface, borderTop: `1px solid ${HOME.line}`, borderBottom: `1px solid ${HOME.line}` }}>
       <div className={`${CONTAINER} relative py-12 sm:py-16`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
 
@@ -47,8 +47,8 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
               aria-hidden
               className="font-display select-none text-[clamp(3rem,1rem+10vw,7rem)] font-bold leading-[0.95]"
               style={{
-                color: HOME.peachInk,
-                opacity: 0.16,
+                color: HOME.leaf,
+                opacity: 0.35,
               }}
             >
               {t.displayWord}
@@ -78,7 +78,7 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
           <div>
             <p
               className="text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: HOME.peachInk }}
+              style={{ color: HOME.mintInk }}
             >
               {t.eyebrow}
             </p>
@@ -102,7 +102,7 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
               <Link
                 href={withLocalePath("/categories", locale)}
                 className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
-                style={{ background: HOME.mintInk, color: HOME.surface }}
+                style={{ background: HOME.leaf, color: HOME.surface }}
               >
                 {t.ctaPrimary}
               </Link>

@@ -1,5 +1,5 @@
-// Homepage design tokens — "Organic Store" template clone
-// (cream / mint / pastel). Typeface stays IBM Plex Sans Thai.
+// Homepage design tokens — green / black / white only.
+// Typeface stays IBM Plex Sans Thai.
 
 export const HOME = {
   ink: "#333333",
@@ -9,23 +9,11 @@ export const HOME = {
   surface: "#ffffff",
   cream: "#f4f5f0",
   mist: "#f9f9f9",
-  mint: "#dbe6ce",
-  mintSoft: "#eef2e7",
-  mintInk: "#14532d",
-  // Editorial pastel splash — playful accents over the forest base
-  peach: "#f2c8b6",
-  peachSoft: "#f5ddd0",
-  peachInk: "#a15e42",
-  sky: "#c8dcee",
-  skySoft: "#dbe9f5",
-  skyInk: "#3a6587",
-  butter: "#ebd275",
-  butterSoft: "#f0e6b5",
-  butterInk: "#7a5a13",
-  pink: "#fce4ec",
-  yellow: "#fffde7",
-  star: "#fbc02d",
-  dark: "#333333",
+  mint: "#e6f0d9",     // pale leaf tint (was sage #dbe6ce)
+  mintSoft: "#f2f7ea", // whisper leaf (was sage #eef2e7)
+  mintInk: "#4a7a1e",  // deep leaf — legible on white (was forest #14532d)
+  leaf: "#7cb342",     // bright leaf — signature accent (new)
+  dark: "#1a1a1a",     // near-black (was #181a1e)
 } as const
 
 export const SECTION_PAD = "py-12 sm:py-16"

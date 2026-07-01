@@ -73,7 +73,7 @@ export default function FaqSection({ locale }: { locale: Locale }) {
   const t = COPY[locale]
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.skySoft }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface, borderTop: `1px solid ${HOME.line}` }}>
       <div className={CONTAINER}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
 
@@ -105,8 +105,8 @@ export default function FaqSection({ locale }: { locale: Locale }) {
                     </span>
                     <span
                       aria-hidden
-                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded transition-transform duration-200 group-open:rotate-45"
-                      style={{ background: HOME.peach, color: HOME.peachInk }}
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-open:rotate-45"
+                      style={{ background: HOME.leaf, color: HOME.surface }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.2} />
                     </span>

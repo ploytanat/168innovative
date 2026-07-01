@@ -603,12 +603,12 @@
   }
 
   .home-btn-soft {
-    background: #eef2e7;
-    color: #14532d;
+    background: #f2f7ea;
+    color: #4a7a1e;
   }
 
   .home-btn-soft:hover {
-    background: #14532d;
+    background: #7cb342;
     color: #ffffff;
   }
 

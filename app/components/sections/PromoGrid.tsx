@@ -18,14 +18,14 @@ const COPY = {
   ctaTalk:    { th: "ปรึกษาทีมงาน",      en: "Talk to our team" },
 } as const
 
-// Editorial pastel rotation for icon circles
+// Leaf-only rotation — bright solid, pale tint, white outline
 const ICON_PALETTE = [
-  { bg: HOME.mint,   ink: HOME.mintInk },
-  { bg: HOME.peach,  ink: HOME.peachInk },
-  { bg: HOME.sky,    ink: HOME.skyInk },
-  { bg: HOME.butter, ink: HOME.butterInk },
-  { bg: HOME.peach,  ink: HOME.peachInk },
-  { bg: HOME.sky,    ink: HOME.skyInk },
+  { bg: HOME.leaf,    ink: HOME.surface },
+  { bg: HOME.mint,    ink: HOME.mintInk },
+  { bg: HOME.surface, ink: HOME.mintInk },
+  { bg: HOME.leaf,    ink: HOME.surface },
+  { bg: HOME.mint,    ink: HOME.mintInk },
+  { bg: HOME.surface, ink: HOME.mintInk },
 ] as const
 
 export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; locale: Locale }) {
@@ -59,7 +59,11 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
             <li key={i} className="flex flex-col items-center text-center">
               <div
                 className="flex h-16 w-16 items-center justify-center rounded-lg transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20"
-                style={{ background: palette.bg, color: palette.ink }}
+                style={{
+                  background: palette.bg,
+                  color: palette.ink,
+                  border: palette.bg === HOME.surface ? `1px solid ${HOME.line}` : undefined,
+                }}
               >
                 {item.image?.src ? (
                   <div className="relative h-9 w-9 sm:h-11 sm:w-11">
@@ -90,8 +94,8 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
         <div className="mt-12 flex justify-center lg:mt-16">
           <Link
             href={withLocalePath("/contact", locale)}
-            className="inline-flex items-center justify-center rounded-lg px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors"
-            style={{ background: HOME.mintInk, color: HOME.surface }}
+            className="inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors"
+            style={{ background: HOME.leaf, color: HOME.surface }}
           >
             {COPY.ctaTalk[locale]} →
           </Link>

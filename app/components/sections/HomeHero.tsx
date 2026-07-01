@@ -32,7 +32,7 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
   const heroTitle = slide.title || "168 INNOVATIVE"
 
   return (
-    <section className="relative overflow-hidden" style={{ background: HOME.mintSoft }}>
+    <section className="relative overflow-hidden" style={{ background: HOME.surface }}>
       <div className={`${CONTAINER} relative py-12 sm:py-16`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
 
@@ -52,7 +52,7 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
               <Link
                 href={slide.ctaPrimary?.href || withLocalePath("/categories", locale)}
                 className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
-                style={{ background: HOME.mintInk, color: HOME.surface }}
+                style={{ background: HOME.leaf, color: HOME.surface }}
               >
                 {slide.ctaPrimary?.label || t.viewCatalog}
               </Link>
@@ -69,7 +69,7 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
           {/* Image column */}
           <div
             className="relative aspect-[4/3] w-full overflow-hidden rounded-lg sm:aspect-[5/4] lg:aspect-[4/3.6]"
-            style={{ background: HOME.mint }}
+            style={{ background: HOME.mist }}
           >
             <Image
               src={slide.image.src}

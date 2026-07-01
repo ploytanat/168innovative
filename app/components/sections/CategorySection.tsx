@@ -11,7 +11,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
   if (items.length === 0) return null
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.cream }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface, borderTop: `1px solid ${HOME.line}` }}>
       <div className={`${CONTAINER} text-center`}>
         <h2 className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`} style={{ color: HOME.ink }}>
           {uiText.categories.title[locale]}

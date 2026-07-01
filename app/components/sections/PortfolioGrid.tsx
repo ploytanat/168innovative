@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -65,7 +66,7 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                 <Link href={href} className="group block">
                   <div
                     className="relative aspect-[4/5] overflow-hidden rounded-lg"
-                    style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
+                    style={{ background: HOME.mist, border: `1px solid ${HOME.line}` }}
                   >
                     <Image
                       src={item.image.src}
@@ -75,9 +76,18 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
-                  <p className="mt-3 line-clamp-1 text-[15px] font-semibold transition-colors sm:text-[16px]" style={{ color: HOME.ink }}>
-                    {item.name}
-                  </p>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <p className="line-clamp-1 text-[15px] font-semibold sm:text-[16px]" style={{ color: HOME.ink }}>
+                      {item.name}
+                    </p>
+                    <span
+                      aria-hidden
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:translate-x-0.5"
+                      style={{ background: HOME.leaf, color: HOME.surface }}
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                    </span>
+                  </div>
                 </Link>
               </li>
             )
