@@ -10,7 +10,6 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    eyebrow: "บรรจุภัณฑ์ของคุณ เริ่มที่นี่",
     displayWord: "MADE",
     displayWordAccent: "FOR YOU",
     heading: "บอกแค่ไอเดีย เราทำให้เป็นจริง",
@@ -20,7 +19,6 @@ const COPY = {
     ctaSecondary: "ขอราคาฟรี",
   },
   en: {
-    eyebrow: "Built around your brand",
     displayWord: "MADE",
     displayWordAccent: "FOR YOU",
     heading: "Tell us the idea. We make it real.",
@@ -92,16 +90,9 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
 
           {/* Real content */}
           <div>
-            <p
-              className="text-[11px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: HOME.mintInk }}
-            >
-              {t.eyebrow}
-            </p>
-
             <h2
               lang={locale}
-              className="font-display mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold leading-[1.2]"
+              className="font-display text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold leading-[1.2]"
               style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
             >
               {t.heading}

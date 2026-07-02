@@ -42,7 +42,8 @@ Single body/heading family plus one display face for Latin.
 
 - Never tighten letter-spacing past `-0.02em` on display headings — Thai vowel/tone marks clip. `globals.css` sets `-0.035em` globally on `h1`–`h6`; override at the section level for Thai display (see `SECTION_HEADING` / `DISPLAY_HEADING` constants).
 - Use `text-wrap: balance` on `h1` / `h2` and `word-break: keep-all` when the heading contains Thai to prevent mid-word breaks (e.g. "บรรจุ/ภัณฑ์").
-- Eyebrows: 11px, `font-bold`, `uppercase`, `tracking-[0.22em]`, `color: mintInk`. Do not add an eyebrow above every section — only where the section genuinely earns a category label.
+- **No repeated section eyebrows.** Tiny uppercase tracked kickers (`ABOUT`, `PROCESS`, `WHY US`) stacked above every h2 are AI editorial scaffolding — Impeccable bans it explicitly. Sections carry themselves through the h2 and the section content; if a section truly needs framing, use a structural move (a lead sentence in a different scale, an artifact + short caption, or imagery), not a per-section kicker. At most one deliberate brand-system kicker per page.
+- Field labels in forms (`อีเมล`, `Phone`) and column headers in nav/footer are structural labels, not section kickers — those may stay as `text-[11px] font-bold uppercase tracking-[0.22em]`.
 
 ## Layout & Spacing
 

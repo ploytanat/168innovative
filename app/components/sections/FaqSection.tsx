@@ -6,7 +6,6 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    eyebrow: "คำถามที่พบบ่อย",
     heading: "คำถามที่พบบ่อย",
     description: "รวมคำถามและข้อสงสัยที่ลูกค้าถามเข้ามาบ่อย ก่อนตัดสินใจสั่งผลิต",
     items: [
@@ -37,7 +36,6 @@ const COPY = {
     ],
   },
   en: {
-    eyebrow: "FAQ",
     heading: "Frequently asked questions",
     description: "Common questions from customers before they place a packaging order.",
     items: [
@@ -79,12 +77,9 @@ export default function FaqSection({ locale }: { locale: Locale }) {
 
           {/* Heading column */}
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
-              {t.eyebrow}
-            </p>
             <h2
               lang={locale}
-              className={`font-display ${SECTION_HEADING} mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+              className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
               style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
             >
               {t.heading}

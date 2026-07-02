@@ -116,7 +116,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const categoryIntroSection = hasDistinctIntro ? (
     <RichTextSection
       className="mt-12"
-      eyebrow="Category Detail"
       title="Category Overview"
       html={resolvedCategory.introHtml ?? ""}
     />
@@ -168,8 +167,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
 
         <FaqSection
           className="mt-12"
-          eyebrow="Frequently Asked Questions"
-          title="FAQ"
+          title="Frequently Asked Questions"
           items={resolvedCategory.faqItems}
         />
         {categoryIntroSection}

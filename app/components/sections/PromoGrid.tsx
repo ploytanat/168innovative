@@ -9,7 +9,6 @@ import { CONTAINER, HOME, SECTION_HEADING } from "./home-theme"
 type Locale = "th" | "en"
 
 const COPY = {
-  eyebrow:    { th: "ทำไมต้องเรา",      en: "Why choose us" },
   heading:    { th: "ทำไมต้องผลิตบรรจุภัณฑ์กับ 168 INNOVATIVE", en: "Why work with 168 INNOVATIVE" },
   description: {
     th: "ทีมงานมีประสบการณ์ พร้อมบริการครบวงจรตั้งแต่ออกแบบจนถึงส่งมอบ",
@@ -37,12 +36,9 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
       <div className={`${CONTAINER} relative`}>
 
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
-            {COPY.eyebrow[locale]}
-          </p>
           <h2
             lang={locale}
-            className={`font-display ${SECTION_HEADING} mt-3 text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+            className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
             style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
           >
             {COPY.heading[locale]}
