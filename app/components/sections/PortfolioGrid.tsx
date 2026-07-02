@@ -11,14 +11,14 @@ type Locale = "th" | "en"
 
 const COPY = {
   th: {
-    heading: "ผลงานการออกแบบบรรจุภัณฑ์",
-    description: "ตัวอย่างงานที่ทีมเราออกแบบและผลิตให้กับแบรนด์ต่างๆ",
-    viewAll: "ดูผลงานทั้งหมด",
+    heading: "สินค้าของเรา",
+    description: "บางส่วนของสินค้าที่เราออกแบบและผลิต",
+    viewAll: "ดูสินค้าทั้งหมด",
   },
   en: {
-    heading: "Portfolio of packaging design",
-    description: "A selection of work our team has designed and produced for client brands.",
-    viewAll: "View all work",
+    heading: "Our products",
+    description: "A selection of the packaging we design and produce.",
+    viewAll: "View all products",
   },
 } as const
 
