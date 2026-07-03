@@ -38,27 +38,27 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
 
           {/* Copy column */}
           <div>
-            <h1
+            <h2
               lang={locale}
-              className="font-display text-[clamp(1.9rem,1rem+3.4vw,3.4rem)] font-bold leading-[1.1] sm:leading-[1.08]"
-              style={{ color: HOME.ink, textWrap: "balance" }}
+              className="font-display text-[clamp(1.6rem,1rem+2vw,2.5rem)] font-bold leading-[1.2] sm:leading-[1.15]"
+              style={{ color: HOME.ink, textWrap: "balance", wordBreak: "keep-all" }}
             >
               {heroTitle}
-            </h1>
+            </h2>
 
             <HeroBody text={slide.description || t.description} />
 
             <div className="mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
                 href={slide.ctaPrimary?.href || withLocalePath("/categories", locale)}
-                className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
-                style={{ background: HOME.leaf, color: HOME.surface }}
+                className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e] sm:px-7"
+                style={{ background: HOME.leaf, color: HOME.ink }}
               >
                 {slide.ctaPrimary?.label || t.viewCatalog}
               </Link>
               <Link
                 href={slide.ctaSecondary?.href || withLocalePath("/contact", locale)}
-                className="inline-flex items-center justify-center rounded border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
+                className="inline-flex items-center justify-center rounded border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e] sm:px-7"
                 style={{ borderColor: HOME.line, color: HOME.ink }}
               >
                 {slide.ctaSecondary?.label || t.contactSales}

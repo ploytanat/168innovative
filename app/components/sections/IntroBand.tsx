@@ -108,14 +108,14 @@ export default function IntroBand({ locale, slides = [] }: { locale: Locale; sli
             <div className="mt-7 flex flex-wrap items-center gap-3 sm:gap-4">
               <Link
                 href={withLocalePath("/categories", locale)}
-                className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
-                style={{ background: HOME.leaf, color: HOME.surface }}
+                className="inline-flex items-center justify-center rounded px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e] sm:px-7"
+                style={{ background: HOME.leaf, color: HOME.ink }}
               >
                 {t.ctaPrimary}
               </Link>
               <Link
                 href={withLocalePath("/contact", locale)}
-                className="inline-flex items-center justify-center rounded border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors sm:px-7"
+                className="inline-flex items-center justify-center rounded border px-6 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e] sm:px-7"
                 style={{ borderColor: HOME.mintInk, color: HOME.mintInk }}
               >
                 {t.ctaSecondary}

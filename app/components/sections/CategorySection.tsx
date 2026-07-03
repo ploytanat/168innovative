@@ -27,7 +27,7 @@ export default function CategorySection({ items = [], locale }: { items: Categor
               <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-lg transition-transform duration-300 group-hover:-translate-y-2"
                 style={{ border: `1px solid ${HOME.line}`, background: HOME.mint }}>
                 {item.image?.src ? (
-                  <Image src={item.image.src} alt={item.image.alt || item.name} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 280px" className="object-cover" />
+                  <Image src={item.image.src} alt={item.image.alt || ""} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 280px" className="object-cover" />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-3xl font-bold" style={{ color: HOME.mintInk }}>
                     {item.name.charAt(0)}

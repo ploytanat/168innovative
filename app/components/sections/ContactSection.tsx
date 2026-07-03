@@ -20,16 +20,9 @@ const COPY = {
   followUs:    { th: "ติดตามเรา",        en: "Follow us" },
 } as const
 
-const DARK_BG    = "#1c1f24"
-const DARK_TEXT  = "#ffffff"
-const DARK_MUTED = "#b5b7bc"
-const DARK_DIM   = "#8c8f96"
-const DARK_LINE  = "rgba(255,255,255,0.14)"
-const DARK_TILE  = "rgba(255,255,255,0.06)"
-
 export default function ContactSection({ data, locale }: { data: CompanyView; locale: "th" | "en" }) {
   return (
-    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: DARK_BG }}>
+    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.dark }}>
       <div className={CONTAINER}>
         <div className="grid gap-10 md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-14">
 
@@ -37,11 +30,11 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
             <p className="text-[13px] font-bold uppercase tracking-[0.14em]" style={{ color: HOME.mint }}>
               {locale === "th" ? "ติดต่อเรา" : "Get in touch"}
             </p>
-            <h2 className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`} style={{ color: DARK_TEXT }}>
+            <h2 className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`} style={{ color: HOME.darkText }}>
               {uiText.contact.title[locale]}<br />
               <span style={{ color: HOME.mint }}>{uiText.contact.subtitle[locale]}</span>
             </h2>
-            <p className="mt-4 max-w-md text-[1.05rem] leading-[1.7]" style={{ color: DARK_MUTED }}>
+            <p className="mt-4 max-w-md text-[1.05rem] leading-[1.7]" style={{ color: HOME.darkMuted }}>
               {uiText.contact.desc[locale]}
             </p>
 
@@ -51,7 +44,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
             </Link>
 
             {data.address && (
-              <div className="mt-7 flex items-start gap-3" style={{ color: DARK_MUTED }}>
+              <div className="mt-7 flex items-start gap-3" style={{ color: HOME.darkMuted }}>
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0" style={{ color: HOME.mint }} />
                 <p className="text-[1rem] leading-[1.65]">{data.address}</p>
               </div>
@@ -59,7 +52,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
 
             {data.socials.length > 0 && (
               <div className="mt-7">
-                <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: DARK_DIM }}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.darkDim }}>
                   {COPY.followUs[locale]}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2.5">
@@ -67,8 +60,8 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                     const Icon = SOCIAL_ICONS[s.type] ?? MessageCircle
                     return (
                       <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.type}
-                        className="flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-white/15"
-                        style={{ background: DARK_TILE, border: `1px solid ${DARK_LINE}`, color: DARK_TEXT }}>
+                        className="flex h-11 w-11 items-center justify-center rounded transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e6f0d9]"
+                        style={{ background: HOME.darkTile, border: `1px solid ${HOME.darkLine}`, color: HOME.darkText }}>
                         <Icon className="h-[18px] w-[18px]" />
                       </a>
                     )

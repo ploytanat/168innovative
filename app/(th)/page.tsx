@@ -38,7 +38,7 @@ export default async function HomePage() {
       </h1>
       {heroSlides.length > 0 && <HomeHero hero={{ slides: heroSlides }} locale={locale} />}
       {categories.length > 0 && <CategoryStrip items={categories} locale={locale} />}
-      <IntroBand locale={locale} />
+      <IntroBand locale={locale} slides={heroSlides} />
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
       {products.length > 0 && <PortfolioGrid items={products} locale={locale} />}
       {whys.length > 0 && <PromoGrid whys={whys} locale={locale} />}

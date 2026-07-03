@@ -12,12 +12,12 @@ type Locale = "th" | "en"
 const COPY = {
   th: {
     heading: "สินค้าของเรา",
-    description: "บางส่วนของสินค้าที่เราออกแบบและผลิต",
+    description: "บางส่วนของสินค้าที่เราออกแบบและดูแลการผลิต",
     viewAll: "ดูสินค้าทั้งหมด",
   },
   en: {
     heading: "Our products",
-    description: "A selection of the packaging we design and produce.",
+    description: "A selection of the packaging we design and coordinate production for.",
     viewAll: "View all products",
   },
 } as const
@@ -65,7 +65,7 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                   >
                     <Image
                       src={item.image.src}
-                      alt={item.image.alt || item.name}
+                      alt={item.image.alt || ""}
                       fill
                       sizes="(max-width:640px) 48vw, (max-width:1024px) 32vw, 380px"
                       className="object-cover transition-transform duration-600 ease-out group-hover:scale-[1.04]"
@@ -81,7 +81,7 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                     <span
                       aria-hidden
                       className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1 sm:bottom-3 sm:right-3 sm:h-9 sm:w-9"
-                      style={{ background: HOME.leaf, color: HOME.surface }}
+                      style={{ background: HOME.leaf, color: HOME.ink }}
                     >
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                     </span>

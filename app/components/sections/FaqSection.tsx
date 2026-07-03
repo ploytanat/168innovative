@@ -14,14 +14,6 @@ const COPY = {
         a: "มีครับ เรามีตัวอย่างสินค้าสต็อกพร้อมส่งให้พิจารณา ติดต่อทีมขายเพื่อขอตัวอย่างได้ทันที",
       },
       {
-        q: "รับออกแบบบรรจุภัณฑ์ตามแบบไหม",
-        a: "รับงานออกแบบและสั่งผลิตตามแบบ (ODM) เลือกขนาด สี วัสดุ และดีไซน์ได้ตามแบรนด์ของคุณ ทีมงานช่วยแนะนำตั้งแต่ขั้นตอนแรก",
-      },
-      {
-        q: "รับผลิต OEM / ODM ไหม",
-        a: "รับครับ ทั้งงาน OEM (ผลิตตามสเปคลูกค้า) และ ODM (ออกแบบให้พร้อมผลิต) ครบวงจรในที่เดียว",
-      },
-      {
         q: "สั่งผลิตขั้นต่ำเท่าไร",
         a: "ขั้นต่ำขึ้นกับชนิดสินค้าและความยาก-ง่ายของงาน โดยทั่วไปเริ่มต้นที่ 500–1,000 ชิ้น ติดต่อทีมขายเพื่อรับใบเสนอราคาที่ตรงกับโปรเจกต์",
       },
@@ -42,14 +34,6 @@ const COPY = {
       {
         q: "Do you provide samples before ordering?",
         a: "Yes. We have stock samples ready to review — contact our sales team to request one.",
-      },
-      {
-        q: "Do you offer custom packaging design?",
-        a: "Yes. We handle design and made-to-order production (ODM) — choose size, color, material, and finish around your brand. Our team guides you from the first step.",
-      },
-      {
-        q: "Do you handle OEM / ODM production?",
-        a: "Yes. Both OEM (produced to your spec) and ODM (we design, then produce) — full-service in one place.",
       },
       {
         q: "What is the minimum order quantity?",
@@ -101,7 +85,7 @@ export default function FaqSection({ locale }: { locale: Locale }) {
                     <span
                       aria-hidden
                       className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-open:rotate-45"
-                      style={{ background: HOME.leaf, color: HOME.surface }}
+                      style={{ background: HOME.leaf, color: HOME.ink }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.2} />
                     </span>

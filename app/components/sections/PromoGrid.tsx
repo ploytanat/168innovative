@@ -9,7 +9,7 @@ import { CONTAINER, HOME, SECTION_HEADING } from "./home-theme"
 type Locale = "th" | "en"
 
 const COPY = {
-  heading:    { th: "ทำไมต้องผลิตบรรจุภัณฑ์กับ 168 INNOVATIVE", en: "Why work with 168 INNOVATIVE" },
+  heading:    { th: "ทำไมต้องเลือก 168 INNOVATIVE", en: "Why work with 168 INNOVATIVE" },
   description: {
     th: "ทีมงานมีประสบการณ์ พร้อมบริการครบวงจรตั้งแต่ออกแบบจนถึงส่งมอบ",
     en: "Experienced team, full-service from design through delivery.",
@@ -17,14 +17,14 @@ const COPY = {
   ctaTalk:    { th: "ปรึกษาทีมงาน",      en: "Talk to our team" },
 } as const
 
-// Leaf-only rotation — bright solid, pale tint, white outline
+// Leaf reserved for one sparse highlight — pale tint / white outline carry the rest
 const ICON_PALETTE = [
-  { bg: HOME.leaf,    ink: HOME.surface },
+  { bg: HOME.leaf,    ink: HOME.ink },
   { bg: HOME.mint,    ink: HOME.mintInk },
   { bg: HOME.surface, ink: HOME.mintInk },
-  { bg: HOME.leaf,    ink: HOME.surface },
   { bg: HOME.mint,    ink: HOME.mintInk },
   { bg: HOME.surface, ink: HOME.mintInk },
+  { bg: HOME.mint,    ink: HOME.mintInk },
 ] as const
 
 export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; locale: Locale }) {
@@ -90,8 +90,8 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
         <div className="mt-12 flex justify-center lg:mt-16">
           <Link
             href={withLocalePath("/contact", locale)}
-            className="inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors"
-            style={{ background: HOME.leaf, color: HOME.surface }}
+            className="inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e]"
+            style={{ background: HOME.leaf, color: HOME.ink }}
           >
             {COPY.ctaTalk[locale]} →
           </Link>

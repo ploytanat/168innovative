@@ -32,7 +32,7 @@ export default function CategoryStrip({ items, locale }: { items: CategoryView[]
                   {cat.image?.src ? (
                     <Image
                       src={cat.image.src}
-                      alt={cat.image.alt || cat.name}
+                      alt={cat.image.alt || ""}
                       fill
                       sizes="(max-width:640px) 36vw, 200px"
                       className="object-cover"

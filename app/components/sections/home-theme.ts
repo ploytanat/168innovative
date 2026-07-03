@@ -14,6 +14,11 @@ export const HOME = {
   mintInk: "#4a7a1e",  // deep leaf — legible on white (was forest #14532d)
   leaf: "#7cb342",     // bright leaf — signature accent (new)
   dark: "#1a1a1a",     // near-black (was #181a1e)
+  darkText: "#ffffff",
+  darkMuted: "#b5b7bc",
+  darkDim: "#8c8f96",
+  darkLine: "rgba(255,255,255,0.14)",
+  darkTile: "rgba(255,255,255,0.06)",
 } as const
 
 export const SECTION_PAD = "py-12 sm:py-16"
