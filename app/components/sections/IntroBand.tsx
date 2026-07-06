@@ -14,7 +14,7 @@ const COPY = {
     displayWordAccent: "FOR YOU",
     heading: "บอกแค่ไอเดีย เราทำให้เป็นจริง",
     description:
-      "บรรจุภัณฑ์สต็อกพร้อมส่งราคาคุ้ม หรือสั่งผลิตตามแบบในขั้นต่ำที่จับต้องได้ ทีมขายตอบกลับภายใน 24 ชั่วโมง พร้อมส่งทั่วประเทศ",
+      "บรรจุภัณฑ์สต็อกพร้อมส่งราคาคุ้ม หรือบอกแบบที่ต้องการ ให้เราช่วยหาและนำเข้าให้ในขั้นต่ำที่จับต้องได้ ทีมขายตอบกลับภายใน 24 ชั่วโมง พร้อมส่งทั่วประเทศ",
     ctaPrimary: "ดูสินค้าเลย",
     ctaSecondary: "ขอราคาฟรี",
   },
@@ -23,7 +23,7 @@ const COPY = {
     displayWordAccent: "FOR YOU",
     heading: "Tell us the idea. We make it real.",
     description:
-      "Stock packaging ready to ship at value prices, or fully custom production with friendly MOQs. Sales replies in 24 hours, delivered nationwide.",
+      "Stock packaging ready to ship at value prices, or tell us what you need — we'll source and import it with friendly MOQs. Sales replies in 24 hours, delivered nationwide.",
     ctaPrimary: "Browse catalog",
     ctaSecondary: "Get a free quote",
   },
