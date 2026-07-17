@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 import { WhyItemView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
@@ -17,22 +20,44 @@ const COPY = {
   ctaTalk:    { th: "ปรึกษาทีมงาน",      en: "Talk to our team" },
 } as const
 
-// Leaf reserved for one sparse highlight — pale tint / white outline carry the rest
+// Deliberate exception to the site's green/black/white palette — this one
+// section reads as a benefits row, not brand chrome, so each icon gets its
+// own identity color (tint bg + darker icon, same formula as leaf/mint).
 const ICON_PALETTE = [
-  { bg: HOME.leaf,    ink: HOME.ink },
-  { bg: HOME.mint,    ink: HOME.mintInk },
-  { bg: HOME.surface, ink: HOME.mintInk },
-  { bg: HOME.mint,    ink: HOME.mintInk },
-  { bg: HOME.surface, ink: HOME.mintInk },
-  { bg: HOME.mint,    ink: HOME.mintInk },
+  { bg: HOME.mint,          ink: HOME.mintInk }, // green — price/value, ties to brand
+  { bg: "#e5eef7",          ink: "#2f5f8f" },    // blue — quality/trust
+  { bg: "#f1e9f5",          ink: "#7a4f96" },    // plum — OEM/custom
+  { bg: "#faf0dc",          ink: "#b8752e" },    // amber — sourcing/logistics speed
 ] as const
 
 export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; locale: Locale }) {
   const tiles = whys.slice(0, 6)
+  const gridRef = useRef<HTMLUListElement>(null)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            observer.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   if (tiles.length === 0) return null
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface }}>
+    <section className="relative py-12 sm:py-16" style={{ background: HOME.mist }}>
       <div className={`${CONTAINER} relative`}>
 
         <div className="mx-auto max-w-2xl text-center">
@@ -48,38 +73,40 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
           </p>
         </div>
 
-        <ul className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-x-10 lg:mt-16 lg:grid-cols-3 lg:gap-x-12 lg:gap-y-12">
+        <ul ref={gridRef} className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-x-10 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10">
           {tiles.map((item, i) => {
             const palette = ICON_PALETTE[i % ICON_PALETTE.length]
             return (
-            <li key={i} className="flex flex-col items-center text-center">
+            <li key={i}
+              className={`flex flex-col items-center text-center ${revealed ? "motion-reduce:animate-none animate-[icon-pop-reveal_450ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
+              style={revealed ? { animationDelay: `${(i % 4) * 90}ms` } : undefined}
+            >
               <div
-                className="flex h-16 w-16 items-center justify-center rounded-lg transition-transform duration-300 hover:scale-105 sm:h-20 sm:w-20"
+                className="flex h-14 w-14 items-center justify-center rounded-lg transition-transform duration-300 hover:scale-105 sm:h-16 sm:w-16"
                 style={{
                   background: palette.bg,
                   color: palette.ink,
-                  border: palette.bg === HOME.surface ? `1px solid ${HOME.line}` : undefined,
                 }}
               >
                 {item.image?.src ? (
-                  <div className="relative h-9 w-9 sm:h-11 sm:w-11">
+                  <div className="relative h-8 w-8 sm:h-9 sm:w-9">
                     <Image
                       src={item.image.src}
                       alt={item.image.alt || item.title}
                       fill
-                      sizes="44px"
+                      sizes="36px"
                       className="object-contain"
                     />
                   </div>
                 ) : (
-                  <span className="text-[22px] font-bold sm:text-[28px]">{i + 1}</span>
+                  <span className="text-[20px] font-bold sm:text-[24px]">{i + 1}</span>
                 )}
               </div>
 
-              <h3 className="mt-5 text-[17px] font-bold leading-[1.35] sm:text-[18px]" style={{ color: HOME.ink }}>
+              <h3 className="mt-4 text-[16px] font-bold leading-[1.35] sm:text-[17px]" style={{ color: HOME.ink }}>
                 {item.title}
               </h3>
-              <p className="mt-2 max-w-[36ch] text-[15px] leading-[1.65]" style={{ color: HOME.inkMid }}>
+              <p className="mt-2 max-w-[30ch] text-[14px] leading-[1.6]" style={{ color: HOME.inkMid }}>
                 {item.description}
               </p>
             </li>
@@ -90,8 +117,7 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
         <div className="mt-12 flex justify-center lg:mt-16">
           <Link
             href={withLocalePath("/contact", locale)}
-            className="inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e]"
-            style={{ background: HOME.leaf, color: HOME.ink }}
+            className="home-btn home-btn-glass inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e]"
           >
             {COPY.ctaTalk[locale]} →
           </Link>

@@ -6,6 +6,7 @@ import { getCategories } from "@/app/lib/api/categories"
 import { getCompany } from "@/app/lib/api/company"
 import { buildOrganizationJsonLd, buildPostalAddressJsonLd } from "@/app/lib/schema"
 import type { Locale } from "@/app/lib/types/content"
+import FloatingContact from "./FloatingContact"
 import Footer from "./Footer"
 import Navigation from "./Navigation"
 
@@ -30,6 +31,7 @@ export default async function SiteShell({
     new Set((company?.socials ?? []).map((social) => social.url).filter(Boolean))
   )
   const primaryPhone = company?.phones?.[0]?.number
+  const lineUrl = company?.socials?.find((social) => social.type === "line")?.url
   const contactPoint = primaryPhone
     ? [
         {
@@ -89,6 +91,7 @@ export default async function SiteShell({
         <Navigation locale={locale} logo={displayLogo} categories={categories} />
         <main className="min-h-screen">{children}</main>
         {company && <Footer company={company} />}
+        <FloatingContact locale={locale} lineUrl={lineUrl} phone={primaryPhone} />
         <BackToTop />
       </div>
     </>

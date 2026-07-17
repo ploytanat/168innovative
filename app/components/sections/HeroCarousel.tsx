@@ -85,7 +85,7 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
                   </Link>
                 )}
               </div>
-
+ย
               {hasMultiple && (
                 <div className="mt-8 flex items-center gap-4 sm:mt-9 lg:mt-10">
                   <div className="flex items-center gap-2">

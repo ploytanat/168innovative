@@ -1,6 +1,9 @@
+"use client"
+
 import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, ShoppingBag, type LucideIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
@@ -21,6 +24,28 @@ const COPY = {
 } as const
 
 export default function ContactSection({ data, locale }: { data: CompanyView; locale: "th" | "en" }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const el = cardRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            observer.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.dark }}>
       <div className={CONTAINER}>
@@ -71,7 +96,11 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
             )}
           </div>
 
-          <div className="overflow-hidden rounded-lg" style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}>
+          <div
+            ref={cardRef}
+            className={`overflow-hidden rounded-lg ${revealed ? "motion-reduce:animate-none animate-[hero-reveal_600ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
+            style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+          >
             <div className="p-7 sm:p-8">
               <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
                 {uiText.contact.phoneLabel[locale]}
@@ -89,7 +118,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                       <span className="block text-[11px] font-bold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
                         {phone.label}
                       </span>
-                      <span className="text-[1.1rem] font-bold" style={{ color: HOME.ink }}>
+                      <span className="font-display text-[1.1rem] font-bold" style={{ color: HOME.ink }}>
                         {phone.number}
                       </span>
                     </span>
@@ -110,7 +139,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                         style={{ background: HOME.mist, color: HOME.inkMid }}>
                         <Mail className="h-5 w-5" strokeWidth={1.6} />
                       </span>
-                      <span className="break-all text-[1rem] font-semibold" style={{ color: HOME.ink }}>
+                      <span className="font-display break-all text-[1rem] font-semibold" style={{ color: HOME.ink }}>
                         {email}
                       </span>
                     </a>

@@ -79,12 +79,12 @@ export default function FaqSection({ locale }: { locale: Locale }) {
               <li key={i} style={{ borderBottomColor: HOME.line }}>
                 <details className="group py-5">
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-                    <span className="text-[16px] font-semibold sm:text-[17px]" style={{ color: HOME.ink }}>
+                    <span className="text-[#333333] text-[16px] font-semibold transition-colors duration-200 group-hover:text-[#4a7a1e] sm:text-[17px]">
                       {item.q}
                     </span>
                     <span
                       aria-hidden
-                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-open:rotate-45"
+                      className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-110 group-open:rotate-45"
                       style={{ background: HOME.leaf, color: HOME.ink }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.2} />

@@ -54,7 +54,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
   const closeMenu = useCallback(() => {
     setOpen(false)
     setMobileProductsOpen(false)
-  }, [])
+  }, [setMobileProductsOpen])
   const toggleLanguage = useCallback(() => {
     closeMenu()
     const next = isEN ? (pathname.replace(/^\/en/, '') || '/') : (pathname === '/' ? '/en' : `/en${pathname}`)
@@ -119,7 +119,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
         </Link>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 xl:flex">
           {NAV_MENU.map(item => {
             const active = isActive(item.href)
             const isProductsItem = item.href === '/categories' && hasCategories
@@ -193,7 +193,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
           <Link
             href={withLocale('/contact')}
             onClick={closeMenu}
-            className="home-btn home-btn-accent hidden items-center gap-1.5 rounded px-5 py-2.5 text-[14px] font-semibold lg:inline-flex"
+            className="home-btn home-btn-accent hidden items-center gap-1.5 rounded px-5 py-2.5 text-[14px] font-semibold xl:inline-flex"
           >
             {QUOTE_LABEL[lang]}
             <ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />
@@ -205,7 +205,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open ? 'true' : 'false'}
             aria-controls="mobile-menu"
-            className="inline-flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-[rgba(20,22,28,0.05)] lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded transition-colors hover:bg-[rgba(20,22,28,0.05)] xl:hidden"
             style={{ color: HOME.ink, border: `1px solid ${HOME.line}` }}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -218,7 +218,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
         <div
           onMouseEnter={openProducts}
           onMouseLeave={closeProducts}
-          className="absolute inset-x-0 top-full hidden lg:block"
+          className="absolute inset-x-0 top-full hidden xl:block"
           style={{ pointerEvents: productsOpen ? 'auto' : 'none' }}
         >
           <div
@@ -265,7 +265,7 @@ function NavInner({ locale, logo, pathname, categories = [] }: NavigationProps &
       {/* Mobile menu */}
       <div
         id="mobile-menu"
-        className="overflow-hidden transition-[max-height,opacity] duration-300 ease-out lg:hidden"
+        className="overflow-hidden transition-[max-height,opacity] duration-300 ease-out xl:hidden"
         style={{
           maxHeight: open ? (mobileProductsOpen ? '1100px' : '600px') : '0',
           opacity: open ? 1 : 0,

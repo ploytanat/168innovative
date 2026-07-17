@@ -7,7 +7,9 @@ them.
 
 ## Palette
 
-Green / black / white only. No warm-neutral cream body, no pastel splash.
+Green / black / white only, with one deliberate exception: PromoGrid's benefit
+icons (see Sections below) each carry their own identity color instead of
+green. No warm-neutral cream body, no pastel splash.
 
 ### Neutrals
 
@@ -33,10 +35,11 @@ Green / black / white only. No warm-neutral cream body, no pastel splash.
 
 ## Typography
 
-Single body/heading family plus one display face for Latin.
+Three fonts, each with a distinct job. All via `next/font/google` in `app/config/fonts.ts`.
 
-- **Body & heading**: IBM Plex Sans Thai — via `next/font/google` in `app/config/fonts.ts` as `--font-ibm`. Covers Thai + Latin. Max weight 700 (family has no 800/900).
-- **Display**: Cabinet Grotesk — via Fontshare CDN, loaded in `app/components/layout/RootDocument.tsx`. Latin only; Thai gracefully falls back to IBM. Apply with the `.font-display` utility.
+- **Body**: IBM Plex Sans Thai — `--font-ibm`. Covers Thai + Latin. Max weight 700 (family has no 800/900). Applied via `.font-body` / the global body rule. Used for all copy, buttons, form fields, FAQ answers, product card descriptions.
+- **Heading**: Bai Jamjuree — `--font-bai-jamjuree`. Covers Thai + Latin natively (replaces the old Latin-only Cabinet Grotesk). Applied globally to `h1`–`h6` and via `.font-display` / `.font-heading`. Used for all major headings, product names, and phone/email in the contact zone.
+- **Mono**: IBM Plex Mono — `--font-plex-mono`, applied via `.font-mono`. **Latin/numeric only — no Thai glyphs on Google Fonts.** Never apply to a string containing Thai text; it silently falls back to a system font and breaks mid-line. Reserved for spec-sheet flavor: product codes, measurements, tags. Not yet wired up anywhere live — the only described use cases (product codes, spec tags, "IN STOCK" badges) live on the pre-redesign product detail page (`app/(th)/categories/[slug]/[productSlug]/page.tsx`), which hasn't been migrated to this design system yet.
 
 **Rules**
 
@@ -54,24 +57,24 @@ Single body/heading family plus one display face for Latin.
 ## Borders, Radii, Shadows
 
 - **Border**: `1px solid` only. Never 2px+ as decoration. Colour: `line` for neutral, `mintInk` for accent.
-- **Radius**: `rounded` (4px) for buttons and inputs; `rounded-lg` (8px) for cards and image tiles; `rounded-none` (0) for full-bleed panels. **`rounded-full` is banned** except for two signature elements: PortfolioGrid tile arrow button and FaqSection Plus icon.
-- **Shadow**: single utility, `--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08)`. No multi-layer elevation, no soft-wide drop shadows.
+- **Radius**: `rounded` (4px) for buttons and inputs; `rounded-lg` (8px) for HomeHero image and general tiles; `rounded-xl` (12px) for CategorySection and PortfolioGrid image tiles (deliberately softer, hover-lift cards); `rounded-none` (0) for full-bleed panels. **`rounded-full` is banned** except for two signature elements: PortfolioGrid tile arrow button and FaqSection Plus icon.
+- **Shadow**: single utility, `--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08)`. No multi-layer elevation, no soft-wide drop shadows. CategorySection/PortfolioGrid tiles reveal this shadow + a 6px lift on hover — still the one shadow value, just conditional.
 
 ## Sections (homepage rhythm)
 
-All white with thin rule dividers; the ContactSection closes on dark.
+All white with thin rule dividers except PromoGrid (`mist`) and ContactSection (`dark`).
 
-1. **HomeHero** — white, copy on the left, product image on the right. `leaf` CTA + outlined `mintInk` CTA.
-2. **CategoryStrip** — white, 5 category thumbs (mobile scroll → sm+ 5-col grid).
-3. **IntroBand** — white with 1px rules top and bottom. Desktop: giant "MADE FOR YOU" display type in `leaf` at 35% opacity with the featured banner image absolutely overlaid. Mobile: featured image on its own (poster overlay hidden — too dense at narrow widths).
-4. **CategorySection** — white with a top rule, 9 category tiles on `mint` fills.
-5. **PortfolioGrid** — white, 2-col mobile / 3-col sm+. Square tiles with an 8% `leaf` multiply wash over each product photo to unify mixed studio backgrounds; wash fades on hover. Signature 32px (mobile) / 36px (sm+) `leaf` round arrow anchored bottom-right of the image.
-6. **PromoGrid** — white, "Why work with 168" list. Icon palette rotates `leaf` solid → pale `mint` tint → white with 1px `line` border.
-7. **FaqSection** — white with a top rule, sticky heading on lg+, `<details>` accordion with a `leaf`-filled round Plus icon that rotates 45° on open.
-8. **ContactSection** — `dark` background, LINE OA card, and the contact form.
+1. **HomeHero** — white. Giant "168 INNOVATIVE" is a full-bleed ambient watermark (`whitespace-nowrap`, one line, `clamp(3.5rem,2rem+10vw,10rem)`, 14–16% opacity, vertically centered on the *section*, not the image) sitting behind both grid columns — deliberately decoupled from the product image's box. (Earlier version sized/positioned the text tightly behind just the image; that coupling broke repeatedly across breakpoints — image/text height mismatches, the image swallowing the text, etc. Making it a low-opacity full-width watermark means it can never visually compete with foreground content again, at any breakpoint.) Image is a plain `aspect-3/2 object-contain` box, no overlay tricks. Copy (headline, description, CTAs) stacks below on mobile / sits to the right at `lg`+. `leaf` glass CTA + outlined glass CTA.
+2. **CategorySection** — white with a top rule, 8 category tiles (`rounded-xl`, hover lift + shadow) on `mint` fills, 2-col mobile / 4-col sm+.
+3. **PortfolioGrid** — white, 2-col mobile / 3-col sm+. Square `rounded-xl` tiles with an 8% `leaf` multiply wash over each product photo to unify mixed studio backgrounds; wash fades on hover, tile lifts with `--shadow-sm`. Signature 32px (mobile) / 36px (sm+) round arrow anchored bottom-right, frosted-glass style (`.tile-arrow-glass`) so it doesn't fight the varied/often-muted product photo colors.
+4. **PromoGrid** — `mist` background (off-white, breaks up the white-on-white run above/below), "Why work with 168" list, 1-col mobile / 2-col sm / 4-col lg (single row). Icon palette is the one deliberate multi-color exception: green (brand/value) → blue (quality/trust) → plum (OEM/custom) → amber (sourcing/speed), each as a pale tint bg + darker icon, same formula as `mint`/`mintInk` just with a different hue per tile.
+5. **FaqSection** — white with a top rule, sticky heading on lg+, `<details>` accordion with a `leaf`-filled round Plus icon that rotates 45° on open.
+6. **ContactSection** — `dark` background, LINE OA card, and the contact form.
 
 ## Motion
 
 - Transitions: `ease-out` curves at 200-600ms. Nothing spring / bounce.
 - Hover reveals (PortfolioGrid wash fade, arrow slide, tile scale) all key on `.group:hover`.
-- The `prefers-reduced-motion: reduce` media query in `globals.css` already disables the marquee and floating utilities. Preserve this when adding new animations — every reveal needs a static fallback.
+- Scroll entrance: CategorySection/PortfolioGrid share `portfolio-reveal` (rise + scale-in, IntersectionObserver-triggered, staggered). PromoGrid uses a distinct `icon-pop-reveal` (scale from 0.82) since icons aren't photo tiles. ContactSection's form card gets a single (non-staggered) `hero-reveal`. Each section's reveal is chosen to fit what it reveals — not one identical fade copy-pasted everywhere.
+- HomeHero has a `framer-motion` scroll-linked parallax (the only scroll-linked, as opposed to IntersectionObserver-triggered, motion on the page): the giant "168 INNOVATIVE" display type drifts down while the product image drifts up + scales in slightly, as the hero scrolls past. Driven by `useScroll`/`useTransform` against the section ref; wrapped with `useReducedMotion()` to zero out the transforms when reduced motion is preferred. This is the site's one deliberate "wow" scroll moment — concentrated on first-view, not spread thin.
+- The `prefers-reduced-motion: reduce` media query in `globals.css` already disables the marquee, floating utilities, and all `[class*="animate-[..."]` reveal families. Preserve this when adding new animations — every reveal needs a static fallback.

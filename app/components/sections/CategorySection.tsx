@@ -1,5 +1,8 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 import { uiText } from "@/app/lib/i18n/ui"
 import { CategoryView } from "@/app/lib/types/view"
@@ -8,6 +11,28 @@ import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 import { CONTAINER, HOME, SECTION_HEADING } from "./home-theme"
 
 export default function CategorySection({ items = [], locale }: { items: CategoryView[]; locale: "th" | "en" }) {
+  const gridRef = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            observer.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   if (items.length === 0) return null
 
   return (
@@ -20,21 +45,23 @@ export default function CategorySection({ items = [], locale }: { items: Categor
           {locale === "th" ? "เลือกดูบรรจุภัณฑ์ตามกลุ่มสินค้าที่ต้องการ" : "Browse our packaging by product group."}
         </p>
 
-        <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-8 lg:mt-10 lg:gap-x-6 lg:gap-y-10">
-          {items.slice(0, 9).map(item => (
+        <div ref={gridRef} className="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-4 sm:gap-x-5 sm:gap-y-8 lg:mt-10 lg:gap-x-6 lg:gap-y-10">
+          {items.slice(0, 8).map((item, i) => (
             <Link key={item.id} href={withLocalePath(`/categories/${item.slug}`, locale)}
-              className="group flex flex-col items-center gap-3">
-              <div className="relative aspect-square w-full max-w-[280px] overflow-hidden rounded-lg transition-transform duration-300 group-hover:-translate-y-2"
+              className={`group flex flex-col items-center gap-3 ${revealed ? "motion-reduce:animate-none animate-[portfolio-reveal_650ms_cubic-bezier(0.16,1,0.3,1)_both]" : ""}`}
+              style={revealed ? { animationDelay: `${(i % 4) * 70}ms` } : undefined}
+            >
+              <div className="relative aspect-square w-full max-w-[260px] overflow-hidden rounded-xl transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1.5 group-hover:shadow-(--shadow-sm)"
                 style={{ border: `1px solid ${HOME.line}`, background: HOME.mint }}>
                 {item.image?.src ? (
-                  <Image src={item.image.src} alt={item.image.alt || ""} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 30vw, 280px" className="object-cover" />
+                  <Image src={item.image.src} alt={item.image.alt || ""} fill sizes="(max-width:640px) 42vw, (max-width:1024px) 22vw, 260px" className="object-cover" />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center text-3xl font-bold" style={{ color: HOME.mintInk }}>
                     {item.name.charAt(0)}
                   </span>
                 )}
               </div>
-              <span className="text-[15px] font-bold leading-[1.3] tracking-[0.01em] sm:text-[16px]" style={{ color: HOME.ink }}>
+              <span className="text-[15px] font-bold leading-relaxed tracking-wide sm:text-[16px]" style={{ color: HOME.ink }}>
                 {item.name}
               </span>
             </Link>

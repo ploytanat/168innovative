@@ -1,6 +1,9 @@
+"use client"
+
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, useState } from "react"
 
 import type { ProductView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
@@ -24,6 +27,28 @@ const COPY = {
 
 export default function PortfolioGrid({ items, locale }: { items: ProductView[]; locale: Locale }) {
   const visible = items.slice(0, 6)
+  const listRef = useRef<HTMLUListElement>(null)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const el = listRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealed(true)
+            observer.unobserve(el)
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   if (visible.length === 0) return null
 
   const t = COPY[locale]
@@ -53,14 +78,25 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
           </Link>
         </div>
 
-        <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-10 lg:gap-x-6">
-          {visible.map(item => {
+        <ul
+          ref={listRef}
+          className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-10 lg:gap-x-6"
+        >
+          {visible.map((item, i) => {
             const href = withLocalePath(`/categories/${item.categorySlug}/${item.slug}`, locale)
             return (
-              <li key={item.id}>
+              <li
+                key={item.id}
+                className={
+                  revealed
+                    ? "motion-reduce:animate-none animate-[portfolio-reveal_650ms_cubic-bezier(0.16,1,0.3,1)_both]"
+                    : undefined
+                }
+                style={revealed ? { animationDelay: `${i * 60}ms` } : undefined}
+              >
                 <Link href={href} className="group block">
                   <div
-                    className="relative aspect-square overflow-hidden rounded-lg"
+                    className="relative aspect-square overflow-hidden rounded-xl transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1.5 group-hover:shadow-(--shadow-sm)"
                     style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
                   >
                     <Image
@@ -80,14 +116,13 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                     {/* Signature round arrow — bottom-right, slides on hover */}
                     <span
                       aria-hidden
-                      className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1 sm:bottom-3 sm:right-3 sm:h-9 sm:w-9"
-                      style={{ background: HOME.leaf, color: HOME.ink }}
+                      className="tile-arrow-glass absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1 sm:bottom-3 sm:right-3 sm:h-9 sm:w-9"
                     >
                       <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} />
                     </span>
                   </div>
                   <p
-                    className="mt-4 line-clamp-2 text-[14px] font-semibold leading-normal sm:text-[15px]"
+                    className="font-display mt-4 line-clamp-2 text-[14px] font-semibold leading-relaxed tracking-wide sm:text-[15px]"
                     style={{ color: HOME.ink }}
                   >
                     {item.name}

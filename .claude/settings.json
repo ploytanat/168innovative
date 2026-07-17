@@ -2,7 +2,33 @@
   "permissions": {
     "allow": [
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(curl -s http://localhost:3000/ -o 'C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-168innovative\\\\59516a46-f1ba-433f-bf8d-cc006c1baaea\\\\scratchpad/home6.html')",
+      "Bash(node -e ' *)",
+      "Bash(find app/components/layout -type f)",
+      "Bash(find app/lib/api -iname \"company*\")",
+      "Bash(find app *)",
+      "Bash(find \"app/\\(th\\)\" -maxdepth 1 -iname \"layout.tsx\")",
+      "Bash(curl -s http://localhost:3000/ -o 'C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-168innovative\\\\59516a46-f1ba-433f-bf8d-cc006c1baaea\\\\scratchpad/home7.html')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(npm run *)",
+      "Bash(disown)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/contact)",
+      "Bash(curl -s http://localhost:3000/contact)",
+      "Bash(curl -s http://localhost:3000/ -o 'C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-User-Desktop-168innovative\\\\59516a46-f1ba-433f-bf8d-cc006c1baaea\\\\scratchpad/home8.html')",
+      "Bash(find .claude/skills -maxdepth 2)",
+      "Bash(grep -l \"description:\" .claude/skills/*/SKILL.md)",
+      "Bash(npm ls *)",
+      "Bash(npx --no-install playwright install chromium --dry-run)",
+      "Bash(node -e \"const {chromium}=require\\('playwright'\\); console.log\\('module ok'\\)\")",
+      "Bash(npx --no-install playwright screenshot --help)",
+      "Bash(mkdir -p /tmp/hero-check)",
+      "Bash(npx --no-install playwright screenshot --wait-for-timeout 2500 --viewport-size \"1440,900\" \"http://localhost:3000\" /tmp/hero-check/homepage-desktop.png)",
+      "Bash(npx --no-install playwright install chromium)",
+      "Read(//c/Users/User/AppData/Local/Temp/hero-check/**)",
+      "Bash(npx --no-install playwright screenshot --wait-for-timeout 2500 --viewport-size \"1440,900\" \"http://localhost:3000\" /tmp/hero-check/homepage-desktop-v2.png)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(pkill -f \"next-server\")"
     ]
   }
 }
