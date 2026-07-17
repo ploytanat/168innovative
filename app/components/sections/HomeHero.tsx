@@ -43,7 +43,6 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
     target: sectionRef,
     offset: ["start start", "end start"],
   })
-  const textY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 90])
   const imageY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : -40])
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, shouldReduceMotion ? 1 : 1.08])
 
@@ -54,44 +53,47 @@ export default function HomeHero({ hero, locale }: { hero: HomeHeroView; locale:
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden" style={{ background: HOME.surface }}>
-      {/* Ambient giant wordmark — a full-bleed watermark behind the whole
-          hero, decoupled from the image's box entirely. Earlier versions
-          tried to compose "168 INNOVATIVE" tightly behind the image itself
-          (same width, vertically centered on it), which kept breaking:
-          the image's height vs. the text's height mismatched on mobile
-          (image spilled into the headline below), then fixing that made
-          the image swallow most of the text (unreadable), then narrowing
-          the image re-opened the height/overlap problem elsewhere. Each
-          fix was a local patch on a structurally fragile coupling. Making
-          the text a section-wide watermark — independent of the image's
-          size, position, or aspect ratio — removes that coupling: it can
-          bleed off either edge, never needs to "fit" a box, and the image
-          is free to just be a clean, ordinary image. */}
-      <motion.p
-        aria-hidden
-        style={{ color: HOME.leaf, y: textY }}
-        className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none whitespace-nowrap text-center font-display text-[clamp(3.5rem,2rem+10vw,10rem)] font-bold leading-none opacity-[0.14] sm:opacity-[0.16]"
-      >
-        {t.displayWord} {t.displayWordAccent}
-      </motion.p>
-
       <div className={`${CONTAINER} relative py-12 sm:py-16`}>
         <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
 
-          {/* Image column — clean and self-contained, no longer shares its
-              box with the background text. Parallax: image drifts up and
-              scales in slightly as the hero scrolls past. */}
+          {/* Image column. The "168 INNOVATIVE" wordmark sits behind the
+              product shot, clipped by this column's own overflow-hidden —
+              it can never reach the copy column next to it, on any
+              breakpoint, because it's boxed to this element and nothing
+              wider. (Earlier attempts made it a full-section watermark,
+              independent of this box, which read fine over the bold
+              headline but still muddied the lighter-weight description
+              text wherever it drifted behind that instead — confining it
+              here removes that case entirely.) The photo is a fully opaque
+              studio shot with no transparent margin, so it's inset a few
+              percent from the column's edges (`p-[7%]` on the img) — that
+              ring is the only place anything behind it can show. The
+              wordmark is sized in container-query width units (`cqw`,
+              relative to this column, not the viewport) so its one-line
+              rendered width sits just at the column's full edge — wider
+              than the photo's inset content box, narrower than the column
+              itself — letting it peek out in that ring on both sides
+              instead of hiding dead-center behind the photo. Image and
+              wordmark share the same parallax drift so they move together
+              as one unit. */}
           <motion.div
-            className="relative aspect-3/2 w-full motion-reduce:animate-none animate-[hero-reveal-image_700ms_cubic-bezier(0.16,1,0.3,1)_both]"
+            className="relative aspect-3/2 w-full overflow-hidden @container motion-reduce:animate-none animate-[hero-reveal-image_700ms_cubic-bezier(0.16,1,0.3,1)_both]"
             style={{ y: imageY, scale: imageScale }}
           >
+            <p
+              aria-hidden
+              className="pointer-events-none absolute inset-0 flex select-none items-center justify-center whitespace-nowrap text-center font-display font-bold leading-none"
+              style={{ color: HOME.leaf, opacity: 0.22, fontSize: "clamp(1.6rem, 12cqw, 6rem)", letterSpacing: "0.01em" }}
+            >
+              {t.displayWord} {t.displayWordAccent}
+            </p>
             <Image
               src={slide.image.src}
               alt={slide.image.alt || heroTitle}
               fill
               priority
               sizes="(max-width:1023px) 90vw, 50vw"
-              className="object-contain"
+              className="relative z-10 object-contain p-[7%]"
               style={{ objectPosition: "center 45%" }}
             />
           </motion.div>
