@@ -22,8 +22,8 @@ export default async function CategoriesPage() {
 
   if (!categories.length) {
     return (
-      <main className="min-h-screen bg-transparent">
-        <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+      <div className="catalog-page min-h-screen bg-transparent">
+        <div className="mx-auto max-w-[1200px] px-5 pb-16">
           <PageIntro
             eyebrow="OEM / ODM"
             title="หมวดหมู่สินค้า"
@@ -31,13 +31,13 @@ export default async function CategoriesPage() {
             breadcrumbs={[{ label: "หมวดหมู่สินค้า" }]}
           />
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-transparent">
-      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
+    <div className="catalog-page min-h-screen bg-transparent">
+      <div className="mx-auto max-w-[1200px] px-5 pb-16">
         <PageIntro
           eyebrow="OEM / ODM"
           title="หมวดหมู่สินค้า"
@@ -46,13 +46,13 @@ export default async function CategoriesPage() {
         />
 
         <section aria-label="หมวดหมู่สินค้า" className="mt-10">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="catalog-category-grid grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {categories.map((category) => (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
                 prefetch={false}
-                className="group overflow-hidden rounded-[1rem] border border-[rgba(205,218,235,0.86)] bg-white p-2 shadow-[0_10px_24px_rgba(26,37,53,0.05)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(26,37,53,0.1)]"
+                className="catalog-category-card group"
               >
                 <div className="relative aspect-square overflow-hidden rounded-[0.85rem] bg-[linear-gradient(160deg,#eef4fb,#f5f7fa)]">
                   {category.image?.src ? (
@@ -60,25 +60,20 @@ export default async function CategoriesPage() {
                       src={category.image.src}
                       alt={category.image.alt || category.name}
                       fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-[#9B9085]">
+                    <div className="flex h-full items-center justify-center type-meta text-[#9B9085]">
                       No Image
                     </div>
                   )}
                 </div>
 
                 <div className="px-2 pb-3 pt-4">
-                  <h2 className="text-sm font-semibold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                  <h2 className="font-semibold text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                     {category.name}
                   </h2>
-                  {category.description && (
-                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-[var(--color-ink-soft)]">
-                      {category.description}
-                    </p>
-                  )}
                 </div>
               </Link>
             ))}
@@ -91,10 +86,10 @@ export default async function CategoriesPage() {
             aria-label="Category insights"
           >
             <header className="mb-10">
-              <p className="eyebrow-label text-[11px]">
+              <p className="eyebrow-label type-meta">
                 Product Knowledge
               </p>
-              <h2 className="mt-3 font-heading text-2xl text-[var(--color-ink)] md:text-3xl">
+              <h2 className="mt-3 font-heading text-[var(--color-ink)]">
                 เจาะลึกหมวดสินค้าที่มีการค้นหาสูง
               </h2>
             </header>
@@ -106,11 +101,11 @@ export default async function CategoriesPage() {
                   className="deck-card rounded-[1rem] p-5 transition-colors hover:border-[rgba(34,74,107,0.26)]"
                 >
                   <Link href={`/categories/${category.slug}`} prefetch={false}>
-                    <h3 className="text-base font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                    <h3 className="font-semibold text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                       {category.seoTitle || category.name}
                     </h3>
                   </Link>
-                  <p className="mt-2 text-sm leading-7 text-[var(--color-ink-soft)]">
+                  <p className="mt-2 text-[var(--color-ink-soft)]">
                     {category.seoDescription}
                   </p>
                 </article>
@@ -119,6 +114,6 @@ export default async function CategoriesPage() {
           </section>
         )}
       </div>
-    </main>
+    </div>
   )
 }

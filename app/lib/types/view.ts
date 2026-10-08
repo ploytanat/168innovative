@@ -1,3 +1,4 @@
+import type { ProductColorView } from "../product-colors"
 // types/view.ts
 
 // == Shared / Base ==
@@ -64,6 +65,7 @@ export type ProductSpecView = {
 }
 
 export type ProductView = {
+  colors?: ProductColorView[]
   id: string
   slug: string
   name: string

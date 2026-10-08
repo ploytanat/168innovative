@@ -26,14 +26,14 @@ export default function AboutHero({ hero }: { hero: AboutHeroView }) {
           <div>
             <div className="mb-5 inline-flex items-center gap-2.5">
               <span className="h-2 w-2 rounded-full bg-[#182338]" style={{ boxShadow: "0 0 0 3px rgba(154,191,231,0.18)" }} />
-              <span className="text-[10px] font-semibold uppercase tracking-[0.2em]" style={{ color: COLORS.soft }}>
+              <span className="type-meta font-semibold uppercase" style={{ color: COLORS.soft }}>
                 About our company
               </span>
             </div>
 
-            <h1 className="font-heading text-[2rem] leading-[1.1] tracking-tight sm:text-[2.4rem]" style={{ color: COLORS.dark }}>
+            <h1 className="font-heading" style={{ color: COLORS.dark }}>
               {words.map((word, i) => (
-                <span key={i} className="mr-[0.18em] inline-block last:mr-0">
+                <span key={i} className="mr-[0.18em] inline-block max-w-full break-words last:mr-0">
                   {i === 1 ? (
                     <em className="rounded-[0.28em] bg-gradient-to-t from-[#d9e9f8] to-transparent px-[0.08em]"
                       style={{ fontStyle: "normal", color: COLORS.brandNavy }}>
@@ -50,14 +50,14 @@ export default function AboutHero({ hero }: { hero: AboutHeroView }) {
               <div className="h-[5px] w-[5px] rounded-full bg-[#dbe3ec]" />
             </div>
 
-            <p className="mb-9 max-w-[38rem] text-[0.98rem] leading-[1.9] sm:text-[1rem]" style={{ color: COLORS.mid }}>
+            <p className="mb-9 max-w-[38rem]" style={{ color: COLORS.mid }}>
               {hero.description}
             </p>
 
             <div className="flex flex-wrap gap-2.5">
               {CHIPS.map(({ label, style }) => (
                 <span key={label}
-                  className="rounded-[0.9rem] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                  className="rounded-[0.9rem] px-4 py-2 type-meta font-semibold uppercase"
                   style={style}>
                   {label}
                 </span>
@@ -72,7 +72,7 @@ export default function AboutHero({ hero }: { hero: AboutHeroView }) {
                   <Image src={hero.image1.src} alt={hero.image1.alt} fill priority sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
                 )}
                 <div className="absolute right-3 top-3 z-10 rounded-[0.9rem] px-3 py-1.5" style={GLASS.card}>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: COLORS.dark }}>
+                  <p className="type-meta font-bold uppercase" style={{ color: COLORS.dark }}>
                     Est. 2022
                   </p>
                 </div>

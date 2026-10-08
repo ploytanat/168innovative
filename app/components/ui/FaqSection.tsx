@@ -25,14 +25,14 @@ export default function FaqSection({
       <div className="border-t pt-7 md:pt-10" style={{ borderColor: HOME.line }}>
         {eyebrow ? (
           <p
-            className="text-[11px] font-bold uppercase tracking-[0.22em]"
+            className="type-meta font-bold uppercase"
             style={{ color: HOME.mintInk }}
           >
             {eyebrow}
           </p>
         ) : null}
         <h2
-          className="font-display mt-3 text-[clamp(1.5rem,1.2rem+1vw,2rem)] font-bold leading-[1.2]"
+          className="font-display mt-3 font-bold"
           style={{ color: HOME.ink }}
         >
           {title}
@@ -46,7 +46,7 @@ export default function FaqSection({
               <details className="group py-5">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
                   <span
-                    className="text-[16px] font-semibold leading-normal sm:text-[17px]"
+                    className="font-semibold"
                     style={{ color: HOME.ink }}
                   >
                     {item.question}
@@ -60,7 +60,7 @@ export default function FaqSection({
                   </span>
                 </summary>
                 <div
-                  className="rich-content mt-3 max-w-[70ch] text-[15px] leading-[1.75] sm:text-[16px]"
+                  className="rich-content mt-3 max-w-[70ch]"
                   dangerouslySetInnerHTML={{ __html: item.answer }}
                 />
               </details>

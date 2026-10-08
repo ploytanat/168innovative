@@ -1,19 +1,17 @@
-// Homepage design tokens — green / black / white only.
-// Typeface stays IBM Plex Sans Thai.
-
+// Shared brand palette: navy sampled from the company logo.
 export const HOME = {
-  ink: "#333333",
-  inkMid: "#555555",
-  inkSoft: "#888888",
-  line: "#ececec",
+  ink: "#263859",
+  inkMid: "#52627a",
+  inkSoft: "#69778b",
+  line: "#e2e8f0",
   surface: "#ffffff",
-  cream: "#f4f5f0",
-  mist: "#f9f9f9",
-  mint: "#e6f0d9",     // pale leaf tint (was sage #dbe6ce)
-  mintSoft: "#f2f7ea", // whisper leaf (was sage #eef2e7)
-  mintInk: "#4a7a1e",  // deep leaf — legible on white (was forest #14532d)
-  leaf: "#7cb342",     // bright leaf — signature accent (new)
-  dark: "#1a1a1a",     // near-black (was #181a1e)
+  cream: "#f1f5f9",
+  mist: "#f6f8fb",
+  mint: "#e4ecf5",
+  mintSoft: "#f0f4f9",
+  mintInk: "#263859",
+  leaf: "#263859",
+  dark: "#1b2940",
   darkText: "#ffffff",
   darkMuted: "#b5b7bc",
   darkDim: "#8c8f96",
@@ -26,5 +24,5 @@ export const CONTAINER = "mx-auto w-full max-w-[1200px] px-5"
 
 // `uppercase` is a no-op for Thai; tracking overrides globals.css -0.035em
 // which clips Thai vowel/tone marks.
-export const DISPLAY_HEADING = "uppercase leading-[1.12] tracking-[0.005em]"
-export const SECTION_HEADING = "uppercase leading-[1.2] tracking-[0.012em]"
+export const DISPLAY_HEADING = ""
+export const SECTION_HEADING = ""

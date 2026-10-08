@@ -58,14 +58,14 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
             className="h-copy-in order-2 flex flex-col justify-center px-5 py-12 sm:px-7 sm:py-14 md:px-10 md:py-16 lg:order-1 lg:px-10 lg:py-16 xl:px-14 xl:py-20 2xl:px-16 2xl:py-24">
             <div className="w-full lg:max-w-[30rem] lg:mx-auto xl:max-w-[34rem] 2xl:max-w-[36rem]">
               {active.subtitle && (
-                <p className="mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] sm:mb-5 sm:text-[12px]" style={{ color: HOME.mintInk }}>
+                <p className="mb-4 inline-flex items-center gap-2 type-meta font-bold uppercase sm:mb-5" style={{ color: HOME.mintInk }}>
                   <span aria-hidden className="inline-block h-px w-6" style={{ background: HOME.mintInk }} />
                   {active.subtitle}
                 </p>
               )}
 
               <h2 lang="th"
-                className={`${DISPLAY_HEADING} font-bold text-[clamp(1.55rem,1rem+2.4vw,2.1rem)] sm:text-[clamp(1.75rem,1rem+2.6vw,2.4rem)] lg:text-[clamp(2rem,1rem+2vw,2.7rem)] xl:text-[clamp(2.25rem,1rem+2vw,3rem)]`}
+                className={`${DISPLAY_HEADING} font-bold    `}
                 style={{ color: HOME.ink, wordBreak: 'keep-all', textWrap: 'balance' }}>
                 {active.title}
               </h2>
@@ -74,12 +74,12 @@ export default function HeroCarousel({ hero }: { hero: HomeHeroView }) {
 
               <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 sm:mt-7 lg:mt-8">
                 <Link href={active.ctaPrimary.href}
-                  className="home-btn home-btn-accent inline-flex items-center rounded-[5px] px-6 py-3 text-[14px] font-bold sm:px-7 sm:py-3.5">
+                  className="home-btn home-btn-accent inline-flex items-center rounded-[5px] px-6 py-3 font-bold sm:px-7 sm:py-3.5">
                   {active.ctaPrimary.label}
                 </Link>
                 {active.ctaSecondary?.label && (
                   <Link href={active.ctaSecondary.href}
-                    className="text-[14px] font-bold underline underline-offset-4"
+                    className="font-bold underline underline-offset-4"
                     style={{ color: HOME.inkMid }}>
                     {active.ctaSecondary.label}
                   </Link>
@@ -140,7 +140,7 @@ function HeroDescription({ text }: { text: string }) {
   const [lead, ...bullets] = parts
 
   const leadClass =
-    'mt-4 max-w-[42ch] text-[0.95rem] leading-[1.7] sm:mt-5 sm:text-[1rem] lg:mt-6 lg:text-[1.05rem] lg:leading-[1.75]'
+    'mt-4 max-w-[42ch]   sm:mt-5  lg:mt-6  '
 
   if (bullets.length === 0) {
     return (
@@ -157,7 +157,7 @@ function HeroDescription({ text }: { text: string }) {
       </p>
       <ul className="mt-3 space-y-1.5 sm:mt-4">
         {bullets.map((b, i) => (
-          <li key={i} className="flex items-start gap-2 text-[0.95rem] leading-[1.55] sm:text-[1rem] lg:text-[1.05rem]"
+          <li key={i} className="flex items-start gap-2"
               style={{ color: HOME.inkMid }}>
             <Check className="mt-1 h-3.5 w-3.5 shrink-0" strokeWidth={2.5} style={{ color: HOME.mintInk }} />
             <span>{b}</span>

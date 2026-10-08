@@ -13,7 +13,6 @@ import { SITE_URL } from "@/app/config/site"
 import { getAllCategorySlugs, getCategoryBySlug } from "@/app/lib/api/categories"
 import {
   getAllProductsByCategory,
-  getProductsByCategory,
 } from "@/app/lib/api/products"
 import { shouldIndexCategory } from "@/app/lib/seo/indexability"
 import { buildBreadcrumbJsonLd, buildFaqJsonLd } from "@/app/lib/schema"
@@ -88,13 +87,19 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const locale: Locale = "th"
   const currentPage = parsePage((await searchParams).page)
 
-  const [category, result, allProducts] = await Promise.all([
+  const [category, allProducts] = await Promise.all([
     getCategoryBySlug(slug, locale),
-    getProductsByCategory(slug, locale, currentPage),
     getAllProductsByCategory(slug, locale),
   ])
 
   if (!category) notFound()
+  const pageSize = 15
+  const catalogProducts = allProducts.map(product => ({ id: product.id, slug: product.slug, name: product.name, image: product.image, categoryId: product.categoryId, categorySlug: product.categorySlug, specs: product.specs, description: "", faqItems: [] }))
+  const result = {
+    products: catalogProducts.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    totalPages: Math.max(1, Math.ceil(allProducts.length / pageSize)),
+    totalCount: allProducts.length,
+  }
   const resolvedCategory = category
   const categoryUrl =
     currentPage > 1
@@ -122,7 +127,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   ) : null
 
   return (
-    <main className="min-h-screen bg-transparent">
+    <div className="category-catalog-page min-h-screen bg-transparent">
       {faqJsonLd ? (
         <Script
           id="category-faq-jsonld"
@@ -147,7 +152,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           actions={
             <Link
               href="/categories"
-              className="inline-flex items-center gap-1.5 rounded border border-[#ececec] px-4 py-2 text-[13px] font-semibold text-[#4a7a1e] transition-colors hover:border-[#4a7a1e] hover:bg-[#4a7a1e] hover:text-white"
+              className="inline-flex items-center gap-1.5 rounded border border-[#ececec] px-4 py-2 type-meta font-semibold text-[#263859] transition-colors hover:border-[#263859] hover:bg-[#263859] hover:text-white"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               ดูหมวดสินค้าทั้งหมด
@@ -161,7 +166,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
           basePath={`/categories/${slug}`}
           currentPage={currentPage}
           products={result.products}
-          searchProducts={allProducts}
+          searchProducts={catalogProducts}
           totalPages={result.totalPages}
           totalCount={result.totalCount}
         />
@@ -173,6 +178,6 @@ export default async function CategoryPage({ params, searchParams }: Props) {
         />
         {categoryIntroSection}
       </div>
-    </main>
+    </div>
   )
 }

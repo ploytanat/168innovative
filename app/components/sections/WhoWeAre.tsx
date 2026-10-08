@@ -14,8 +14,8 @@ export default function WhoWeAre({ data }: {
           </div>
         </div>
         <div className="lg:col-span-6">
-          <h2 className="text-2xl font-semibold" style={{ color: COLORS.dark }}>{data.title}</h2>
-          <p className="mt-6 leading-relaxed" style={{ color: COLORS.mid }}>{data.content}</p>
+          <h2 className="font-semibold" style={{ color: COLORS.dark }}>{data.title}</h2>
+          <p className="mt-6" style={{ color: COLORS.mid }}>{data.content}</p>
         </div>
       </div>
     </section>

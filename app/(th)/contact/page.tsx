@@ -49,8 +49,8 @@ export default async function ContactPage() {
   }
 
   return (
-    <main className="overflow-x-hidden bg-transparent">
-      <div className="relative mx-auto max-w-7xl px-6 pb-16 lg:px-8">
+    <div className="contact-page bg-transparent">
+      <div className="relative mx-auto max-w-[1200px] px-5 pb-16">
         <PageIntro
           title="ติดต่อเรา"
           description="สอบถามข้อมูลสินค้า ราคา และบริการ OEM / ODM ผ่านโทรศัพท์ อีเมล หรือช่องทางโซเชียลของบริษัท"
@@ -62,7 +62,7 @@ export default async function ContactPage() {
 
             {/* Left: Phone + Email */}
             <div
-              className="rounded-lg p-7 md:p-10"
+              className="rounded-lg p-5 sm:p-7 md:p-10"
               style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
             >
               <div className="grid gap-y-10 gap-x-10 sm:grid-cols-2">
@@ -76,7 +76,7 @@ export default async function ContactPage() {
                       <li key={i}>
                         <a
                           href={`mailto:${mail}`}
-                          className="text-[1.05rem] font-semibold break-all transition-colors hover:opacity-70"
+                          className="font-semibold break-all transition-colors hover:opacity-70"
                           style={{ color: HOME.ink }}
                         >
                           {mail}
@@ -90,7 +90,7 @@ export default async function ContactPage() {
 
             {/* Right: QR + socials */}
             <div
-              className="flex flex-col items-center justify-center rounded-lg p-7 text-center md:p-10"
+              className="flex flex-col items-center justify-center rounded-lg p-5 sm:p-7 text-center md:p-10"
               style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}
             >
               {company.lineQrCode && (
@@ -109,7 +109,7 @@ export default async function ContactPage() {
                       />
                     </div>
                   </div>
-                  <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.mintInk }}>
+                  <p className="mt-4 type-meta font-bold uppercase" style={{ color: HOME.mintInk }}>
                     {COPY.qrLabel}
                   </p>
                 </div>
@@ -120,7 +120,7 @@ export default async function ContactPage() {
                   {company.lineQrCode && (
                     <span aria-hidden className="my-6 inline-block h-px w-10" style={{ background: HOME.line }} />
                   )}
-                  <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+                  <p className="mb-3 type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
                     {COPY.socialLabel}
                   </p>
                   <div className="flex flex-wrap justify-center gap-3">
@@ -168,10 +168,10 @@ export default async function ContactPage() {
               <MapPin className="h-5 w-5" strokeWidth={1.6} />
             </span>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: HOME.inkSoft }}>
+              <p className="type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
                 {COPY.locationLabel}
               </p>
-              <p className="mt-1.5 text-[1.05rem] font-bold leading-[1.55] md:text-[1.15rem]" style={{ color: HOME.ink }}>
+              <p className="mt-1.5 font-bold" style={{ color: HOME.ink }}>
                 {company.address}
               </p>
             </div>
@@ -180,7 +180,7 @@ export default async function ContactPage() {
 
         <LazyMap src={MAP_SRC} title="168 Innovative Location" />
       </section>
-    </main>
+    </div>
   )
 }
 
@@ -194,7 +194,7 @@ function ContactBlock({ icon, label, children }: { icon: React.ReactNode; label:
         >
           {icon}
         </span>
-        <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+        <p className="type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
           {label}
         </p>
       </div>
@@ -216,7 +216,7 @@ function PhoneList({ phones, salesLabel }: { phones: CompanyView["phones"]; sale
       </ul>
 
       {office.length > 0 && sales.length > 0 && (
-        <p className="mb-3 mt-6 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: HOME.inkSoft }}>
+        <p className="mb-3 mt-6 type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
           {salesLabel}
         </p>
       )}
@@ -237,8 +237,8 @@ function PhoneRow({ number, label }: { number: string; label: string }) {
         href={`tel:${number.replace(/-/g, "")}`}
         className="block transition-colors hover:opacity-70"
       >
-        <p className="text-[1.3rem] font-bold tabular-nums" style={{ color: HOME.ink }}>{number}</p>
-        <p className="text-[13px]" style={{ color: HOME.inkMid }}>{label}</p>
+        <p className="font-bold tabular-nums" style={{ color: HOME.ink }}>{number}</p>
+        <p className="type-meta" style={{ color: HOME.inkMid }}>{label}</p>
       </a>
     </li>
   )

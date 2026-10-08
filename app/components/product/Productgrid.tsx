@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import SaveProductButton from "@/app/components/product/SaveProductButton"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
 import { ArrowDownAZ, ArrowRight, ArrowUpAZ, Search, X } from "lucide-react"
@@ -103,7 +104,7 @@ export default function ProductGrid({
   return (
     <div>
       {/* Toolbar: search + sort + counter */}
-      <div className="mb-8 flex flex-col gap-3 md:mb-10 md:flex-row md:items-center md:justify-between md:gap-5">
+      <div className="catalog-toolbar mb-8 flex flex-col gap-3 md:mb-10 md:flex-row md:items-center md:justify-between md:gap-5">
         <div className="relative w-full md:max-w-sm">
           <Search
             aria-hidden
@@ -115,7 +116,8 @@ export default function ProductGrid({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full rounded border py-2.5 pl-10 pr-10 text-[14px] outline-none transition-colors focus:border-[#4a7a1e]"
+            aria-label={t.searchPlaceholder}
+            className="w-full rounded border py-2.5 pl-10 pr-10 outline-none transition-colors focus:border-[#263859]"
             style={{ background: HOME.surface, borderColor: HOME.line, color: HOME.ink }}
           />
           {query && (
@@ -123,7 +125,7 @@ export default function ProductGrid({
               type="button"
               onClick={() => setQuery("")}
               aria-label={t.clearSearch}
-              className="absolute right-2 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded transition-colors hover:bg-[#f9f9f9]"
+              className="absolute right-0 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded transition-colors hover:bg-[#f9f9f9]"
               style={{ color: HOME.inkSoft }}
             >
               <X className="h-3.5 w-3.5" />
@@ -135,7 +137,7 @@ export default function ProductGrid({
           <button
             type="button"
             onClick={cycleSort}
-            className="inline-flex items-center gap-2 rounded border px-3 py-2 text-[13px] font-semibold transition-colors"
+            className="inline-flex min-h-11 items-center gap-2 rounded border px-3 py-2 type-meta font-semibold transition-colors"
             style={
               sort === "default"
                 ? { background: HOME.surface, borderColor: HOME.line, color: HOME.ink }
@@ -146,7 +148,7 @@ export default function ProductGrid({
             {sortLabel}
           </button>
 
-          <p className="text-[13px] font-semibold" style={{ color: HOME.ink }}>
+          <p className="type-meta font-semibold" style={{ color: HOME.ink }}>
             <span>{displayCount}</span>
             <span className="ml-1 font-medium" style={{ color: HOME.inkSoft }}>
               {isSearching ? t.results : t.items}
@@ -168,10 +170,10 @@ export default function ProductGrid({
           >
             <Search className="h-5 w-5" />
           </div>
-          <p className="text-[15px] font-semibold" style={{ color: HOME.ink }}>
+          <p className="font-semibold" style={{ color: HOME.ink }}>
             {t.noProducts}
           </p>
-          <p className="mt-2 text-[14px]" style={{ color: HOME.inkMid }}>
+          <p className="mt-2" style={{ color: HOME.inkMid }}>
             {t.emptyHint}
             <button
               type="button"
@@ -191,14 +193,14 @@ export default function ProductGrid({
       {/* Grid */}
       {filtered.length > 0 && (
         <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-6">
-          {filtered.map((product) => {
+          {filtered.map((product, index) => {
             const href =
               locale === "en"
                 ? `/en/categories/${categorySlug}/${product.slug}`
                 : `/categories/${categorySlug}/${product.slug}`
             return (
               <li key={product.id}>
-                <Link href={href} prefetch={false} className="group block">
+                <Link href={href} className="group block">
                   <div
                     className="relative aspect-square overflow-hidden rounded-lg"
                     style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
@@ -208,23 +210,18 @@ export default function ProductGrid({
                         src={product.image.src}
                         alt={product.image.alt || product.name}
                         fill
+                        priority={index < 4}
                         sizes="(max-width:640px) 48vw, (max-width:1024px) 32vw, 300px"
-                        className="object-cover transition-transform duration-600 ease-out group-hover:scale-[1.04]"
-                        style={{ filter: "saturate(0.88)" }}
+                        className="object-cover transition-transform duration-200 ease-out group-hover:scale-[1.04]"
                       />
                     ) : (
                       <div
-                        className="flex h-full items-center justify-center text-xs"
+                        className="flex h-full items-center justify-center type-meta"
                         style={{ color: HOME.inkSoft }}
                       >
                         No Image
                       </div>
                     )}
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 transition-opacity duration-500 group-hover:opacity-0"
-                      style={{ background: "rgba(124, 179, 66, 0.08)", mixBlendMode: "multiply" }}
-                    />
                     <span
                       aria-hidden
                       className="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full transition-transform duration-300 group-hover:translate-x-1 sm:bottom-3 sm:right-3 sm:h-9 sm:w-9"
@@ -234,12 +231,18 @@ export default function ProductGrid({
                     </span>
                   </div>
                   <h2
-                    className="mt-4 line-clamp-2 text-[14px] font-semibold leading-normal sm:text-[15px]"
+                    className="catalog-product-name mt-4 line-clamp-2 font-semibold"
                     style={{ color: HOME.ink }}
                   >
                     {product.name}
                   </h2>
                 </Link>
+                <dl className="catalog-card-specs">
+                  {product.specs.filter(spec => !/^(model|รุ่น|รหัสสินค้า|applications?|การใช้งาน)$/i.test(spec.label.trim()) && spec.value.trim()).slice(0, 2).map(spec => (
+                    <div key={spec.label}><dt>{spec.label}</dt><dd>{spec.value}</dd></div>
+                  ))}
+                </dl>
+                <SaveProductButton product={product} locale={locale} />
               </li>
             )
           })}

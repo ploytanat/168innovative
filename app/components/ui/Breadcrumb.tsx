@@ -69,9 +69,9 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
       })
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav className="site-breadcrumb" aria-label="Breadcrumb">
       <ol
-        className="inline-flex flex-wrap items-center gap-1.5 rounded-full px-2 py-2 text-[11px] font-semibold uppercase tracking-[0.12em]"
+        className="inline-flex max-w-full flex-wrap items-center gap-1.5 rounded-xl px-2 py-2 type-meta font-semibold uppercase"
         style={NAV_SHELL_STYLE}
       >
         <li>
@@ -88,7 +88,7 @@ export default function Breadcrumb({ items }: { items?: BreadcrumbItem[] }) {
           const isLast = index === derivedItems.length - 1
 
           return (
-            <li key={`${item.label}-${index}`} className="inline-flex items-center gap-2">
+            <li key={`${item.label}-${index}`} className="inline-flex min-w-0 max-w-full items-center gap-2">
               <ChevronRightIcon />
               {isLast ? (
                 <span

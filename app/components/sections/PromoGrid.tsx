@@ -20,9 +20,7 @@ const COPY = {
   ctaTalk:    { th: "ปรึกษาทีมงาน",      en: "Talk to our team" },
 } as const
 
-// Deliberate exception to the site's green/black/white palette — this one
-// section reads as a benefits row, not brand chrome, so each icon gets its
-// own identity color (tint bg + darker icon, same formula as leaf/mint).
+// Distinct icon colors identify value, quality, customization and sourcing.
 const ICON_PALETTE = [
   { bg: HOME.mint,          ink: HOME.mintInk }, // green — price/value, ties to brand
   { bg: "#e5eef7",          ink: "#2f5f8f" },    // blue — quality/trust
@@ -57,28 +55,25 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
   if (tiles.length === 0) return null
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.mist }}>
+    <section className="showroom-why relative py-12 sm:py-16">
       <div className={`${CONTAINER} relative`}>
 
-        <div className="mx-auto max-w-2xl text-center">
+        <div className="showroom-why-heading">
           <h2
             lang={locale}
-            className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+            className={`font-display ${SECTION_HEADING}  font-bold normal-case`}
             style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
           >
             {COPY.heading[locale]}
           </h2>
-          <p className="mt-3 text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
-            {COPY.description[locale]}
-          </p>
         </div>
 
-        <ul ref={gridRef} className="mt-12 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-x-10 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-10">
+        <ul ref={gridRef} className="showroom-why-list">
           {tiles.map((item, i) => {
             const palette = ICON_PALETTE[i % ICON_PALETTE.length]
             return (
             <li key={i}
-              className={`flex flex-col items-center text-center ${revealed ? "motion-reduce:animate-none animate-[icon-pop-reveal_450ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
+              className={`showroom-why-item ${revealed ? "motion-reduce:animate-none animate-[icon-pop-reveal_450ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
               style={revealed ? { animationDelay: `${(i % 4) * 90}ms` } : undefined}
             >
               <div
@@ -99,14 +94,14 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
                     />
                   </div>
                 ) : (
-                  <span className="text-[20px] font-bold sm:text-[24px]">{i + 1}</span>
+                  <span className="font-bold">{i + 1}</span>
                 )}
               </div>
 
-              <h3 className="mt-4 text-[16px] font-bold leading-[1.35] sm:text-[17px]" style={{ color: HOME.ink }}>
+              <h3 className="mt-4 font-bold" style={{ color: HOME.ink }}>
                 {item.title}
               </h3>
-              <p className="mt-2 max-w-[30ch] text-[14px] leading-[1.6]" style={{ color: HOME.inkMid }}>
+              <p className="mt-2 max-w-[30ch]" style={{ color: HOME.inkMid }}>
                 {item.description}
               </p>
             </li>
@@ -114,10 +109,10 @@ export default function PromoGrid({ whys, locale }: { whys: WhyItemView[]; local
           })}
         </ul>
 
-        <div className="mt-12 flex justify-center lg:mt-16">
+        <div className="mt-8 flex justify-start">
           <Link
             href={withLocalePath("/contact", locale)}
-            className="home-btn home-btn-glass inline-flex items-center justify-center rounded px-7 py-3 text-[14px] font-bold tracking-[0.03em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4a7a1e]"
+            className="showroom-primary"
           >
             {COPY.ctaTalk[locale]} →
           </Link>

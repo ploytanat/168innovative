@@ -1,0 +1,29 @@
+[
+  {
+    "key": "group_168_product_colours",
+    "title": "Product - Colour images",
+    "fields": [
+      {
+        "key": "field_168_color_variants_json",
+        "label": "Colour images (JSON)",
+        "name": "color_variants_json",
+        "type": "textarea",
+        "instructions": "Array of colours: id, name_th, name_en, hex (#RRGGBB), image_url (Media Library file URL). Leave blank for products without colour images.",
+        "required": 0,
+        "rows": 10,
+        "new_lines": ""
+      }
+    ],
+    "location": [
+      [
+        {
+          "param": "post_type",
+          "operator": "==",
+          "value": "product"
+        }
+      ]
+    ],
+    "active": true,
+    "show_in_rest": 1
+  }
+]

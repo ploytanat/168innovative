@@ -22,8 +22,8 @@ export default async function ArticlesPage() {
 
   if (!articles.length) {
     return (
-      <main className="min-h-screen bg-transparent">
-        <div className="mx-auto max-w-7xl px-6 pb-24 lg:px-8">
+      <div className="articles-page min-h-screen bg-transparent">
+        <div className="mx-auto max-w-[1200px] px-5 pb-16">
           <PageIntro
             eyebrow="Articles & Insights"
             title="บทความและข้อมูลเชิงลึก"
@@ -31,15 +31,15 @@ export default async function ArticlesPage() {
             breadcrumbs={[{ label: "บทความ" }]}
           />
         </div>
-      </main>
+      </div>
     )
   }
 
   const [featured, ...others] = articles
 
   return (
-    <main className="min-h-screen bg-transparent">
-      <div className="mx-auto max-w-7xl px-6 pb-32 lg:px-8">
+    <div className="articles-page min-h-screen bg-transparent">
+      <div className="mx-auto max-w-[1200px] px-5 pb-16">
         <PageIntro
           eyebrow="Articles & Insights"
           title="บทความและข้อมูลเชิงลึก"
@@ -51,7 +51,7 @@ export default async function ArticlesPage() {
           <section className="mt-10 mb-20 border-t border-[rgba(211,217,225,0.96)] pt-6">
             <Link
               href={`/articles/${featured.slug}`}
-              className="deck-card-soft group grid overflow-hidden rounded-[1.15rem] transition-shadow hover:shadow-[0_22px_44px_rgba(28,40,66,0.1)] lg:grid-cols-[1.1fr_1fr]"
+              className="article-feature deck-card-soft group grid overflow-hidden rounded-[1.15rem] transition-shadow hover:shadow-[0_22px_44px_rgba(28,40,66,0.1)] lg:grid-cols-[1.1fr_1fr]"
             >
               <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] lg:aspect-auto lg:min-h-[360px] lg:rounded-r-none">
                 <Image
@@ -65,20 +65,20 @@ export default async function ArticlesPage() {
               </div>
 
               <div className="flex flex-col justify-center p-6 md:p-8">
-                <span className="inline-flex w-fit items-center rounded-[0.9rem] border border-[rgba(108,131,162,0.2)] bg-[var(--color-accent-soft)] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
+                <span className="inline-flex w-fit items-center rounded-[0.9rem] border border-[rgba(108,131,162,0.2)] bg-[var(--color-accent-soft)] px-3 py-1.5 type-meta font-semibold uppercase text-[var(--color-accent)]">
                   บทความแนะนำ
                 </span>
 
-                <h2 className="mt-5 font-heading text-2xl font-bold leading-snug text-[var(--color-ink)] md:text-3xl">
+                <h2 className="mt-5 font-heading font-bold text-[var(--color-ink)]">
                   {featured.title}
                 </h2>
 
-                <p className="mt-4 line-clamp-3 text-base leading-8 text-[var(--color-ink-soft)]">
+                <p className="mt-4 line-clamp-3 text-[var(--color-ink-soft)]">
                   {featured.excerpt}
                 </p>
 
                 {featured.publishedAt && (
-                  <p className="mt-6 flex items-center gap-1.5 text-[12px] text-[#6f8099]">
+                  <p className="mt-6 flex items-center gap-1.5 type-meta text-[#6f8099]">
                     <CalendarDays size={12} />
                     {new Date(featured.publishedAt).toLocaleDateString("th-TH", {
                       year: "numeric",
@@ -88,7 +88,7 @@ export default async function ArticlesPage() {
                   </p>
                 )}
 
-                <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[var(--color-accent)] transition-all group-hover:gap-3">
+                <div className="mt-8 flex items-center gap-2 font-medium text-[var(--color-accent)] transition-all group-hover:gap-3">
                   อ่านต่อ
                   <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                 </div>
@@ -99,7 +99,7 @@ export default async function ArticlesPage() {
 
         <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
           {others.map((article) => (
-            <Link key={article.id} href={`/articles/${article.slug}`} className="deck-card group flex flex-col rounded-[1rem] p-2.5">
+            <Link key={article.id} href={`/articles/${article.slug}`} className="article-preview deck-card group flex flex-col rounded-[1rem] p-2.5">
               <div className="relative aspect-[16/10] overflow-hidden rounded-[0.95rem] bg-[linear-gradient(145deg,#eef4fb,#f6f9ff)]">
                 {article.coverImage ? (
                   <Image
@@ -115,7 +115,7 @@ export default async function ArticlesPage() {
               </div>
 
               {article.publishedAt && (
-                <p className="mt-4 flex items-center gap-1.5 text-[12px] text-[#6f8099]">
+                <p className="mt-4 flex items-center gap-1.5 type-meta text-[#6f8099]">
                   <CalendarDays size={11} />
                   {new Date(article.publishedAt).toLocaleDateString("th-TH", {
                     year: "numeric",
@@ -125,19 +125,15 @@ export default async function ArticlesPage() {
                 </p>
               )}
 
-              <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+              <h3 className="mt-2 font-heading font-bold text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                 {article.title}
               </h3>
-
-              <p className="mt-2 line-clamp-2 text-base leading-7 text-[var(--color-ink-soft)]">
-                {article.excerpt}
-              </p>
 
               <div className="mt-3 h-px w-0 bg-[linear-gradient(90deg,#2a2d33,#7d94b0,#dbe3ec)] transition-all duration-300 group-hover:w-10" />
             </Link>
           ))}
         </div>
       </div>
-    </main>
+    </div>
   )
 }

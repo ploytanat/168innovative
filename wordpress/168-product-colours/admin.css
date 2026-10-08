@@ -1,0 +1,5 @@
+﻿.innovative-colour-row { display:flex; align-items:center; flex-wrap:wrap; gap:14px; padding:18px 0; border-bottom:1px solid #ddd; margin-bottom:14px; }
+.innovative-colour-row label { display:grid; gap:6px; max-width:100%; }
+.innovative-colour-row label:has(input[type=hidden]) { display:none; }
+.innovative-colour-row img { width:64px; height:64px; object-fit:contain; background:#f0f0f1; border-radius:6px; }
+.innovative-colour-row img[hidden] { display:none; }

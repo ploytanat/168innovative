@@ -75,12 +75,12 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
   const categoryLabel = article.category || copy.noCategory
 
   return (
-    <main className="min-h-screen bg-transparent">
-      <div className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-8 lg:pt-10">
+    <div className="article-detail-page min-h-screen bg-transparent">
+      <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-8 lg:pt-10">
         <div>
           <Link
             href={listHref}
-            className="inline-flex items-center gap-2 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white px-5 py-2.5 text-sm font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 rounded-[0.95rem] border border-[rgba(211,217,225,0.92)] bg-white px-5 py-2.5 font-medium text-[#5A6A7E] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             <ArrowLeft size={14} />
             {copy.backToList}
@@ -93,25 +93,25 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
               <p className="eyebrow-label">
                 {copy.eyebrow}
               </p>
-              <h1 className="mt-4 max-w-4xl font-heading text-4xl font-semibold leading-[1.08] tracking-tight text-[#122033] md:text-5xl lg:text-[3.7rem]">
+              <h1 className="mt-4 max-w-4xl font-heading font-semibold text-[#122033]">
                 {article.title}
               </h1>
               {article.excerpt ? (
-                <p className="mt-6 max-w-3xl text-[1.05rem] leading-8 text-[#44546b] md:text-xl">
+                <p className="mt-6 max-w-3xl text-[#44546b]">
                   {article.excerpt}
                 </p>
               ) : null}
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#55667d]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 type-meta font-semibold uppercase text-[#55667d]">
                   <CalendarDays size={14} />
                   {publishedAt}
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#55667d]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 type-meta font-semibold uppercase text-[#55667d]">
                   <BookOpen size={14} />
                   {locale === "th" ? `อ่าน ${readingTime} นาที` : `${readingTime} min read`}
                 </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-[#697384]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-4 py-2.5 type-meta font-semibold uppercase text-[#697384]">
                   <Tag size={14} />
                   {categoryLabel}
                 </div>
@@ -121,29 +121,29 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
             <aside className="deck-card rounded-[1rem] p-6">
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 <div className="deck-card-soft rounded-[0.95rem] p-4">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
+                  <p className="type-meta font-semibold uppercase text-[#69778d]">
                     {copy.published}
                   </p>
-                  <p className="mt-3 text-sm font-medium text-[#1A2535]">{publishedAt}</p>
+                  <p className="mt-3 font-medium text-[#1A2535]">{publishedAt}</p>
                 </div>
                 <div className="deck-card-soft rounded-[0.95rem] p-4">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
+                  <p className="type-meta font-semibold uppercase text-[#69778d]">
                     {copy.readingTime}
                   </p>
-                  <p className="mt-3 text-sm font-medium text-[#1A2535]">
+                  <p className="mt-3 font-medium text-[#1A2535]">
                     {locale === "th" ? `${readingTime} นาที` : `${readingTime} minutes`}
                   </p>
                 </div>
                 <div className="deck-card-soft rounded-[0.95rem] p-4">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
+                  <p className="type-meta font-semibold uppercase text-[#69778d]">
                     {copy.author}
                   </p>
-                  <p className="mt-3 text-sm font-medium text-[#1A2535]">
+                  <p className="mt-3 font-medium text-[#1A2535]">
                     {article.authorName || "168 Innovative"}
                   </p>
                 </div>
                 <div className="deck-card-soft rounded-[0.95rem] p-4">
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[#69778d]">
+                  <p className="type-meta font-semibold uppercase text-[#69778d]">
                     {copy.tags}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -151,13 +151,13 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                       article.tags.map((tag) => (
                         <span
                           key={tag.id}
-                          className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 text-[13px] font-medium text-[#697384]"
+                          className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 type-meta font-medium text-[#697384]"
                         >
                           {tag.name}
                         </span>
                       ))
                     ) : (
-                      <span className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 text-[13px] font-medium text-[#46576f]">
+                      <span className="rounded-full border border-[rgba(211,217,225,0.92)] bg-white px-3 py-1.5 type-meta font-medium text-[#46576f]">
                         {categoryLabel}
                       </span>
                     )}
@@ -186,7 +186,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
           <div className="min-w-0 space-y-8">
             <div className="overflow-hidden rounded-[1.1rem] border border-[#E3EAF1] bg-white shadow-[0_12px_26px_rgba(32,36,43,0.05)]">
               <div className="border-b border-[#EEF3F6] px-6 py-5 md:px-10 md:py-6">
-                <div className="flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                <div className="flex items-center gap-3 type-meta font-semibold uppercase text-[var(--color-accent)]">
                   <Clock size={14} />
                   <span>
                     {locale === "th"
@@ -207,13 +207,13 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
             {internalLinks ? (
               <section className="rounded-[1.1rem] border border-[#E3E8EE] bg-[#F7F8FA] px-6 py-8 shadow-sm md:px-8">
                 <div className="max-w-3xl">
-                  <p className="eyebrow-label text-[12px]">
+                  <p className="eyebrow-label type-meta">
                     {copy.internalLinks}
                   </p>
-                  <h2 className="mt-3 font-heading text-2xl font-semibold tracking-tight text-slate-900">
+                  <h2 className="mt-3 font-heading font-semibold text-slate-900">
                     {internalLinks.sectionTitle}
                   </h2>
-                  <p className="mt-3 text-sm leading-7 text-slate-600">
+                  <p className="mt-3 text-slate-600">
                     {internalLinks.sectionDescription}
                   </p>
                 </div>
@@ -224,7 +224,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                       key={group.title}
                       className="rounded-[1rem] border border-[#E3E8EE] bg-white p-5"
                     >
-                      <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-600">
+                      <h3 className="type-meta font-semibold uppercase text-slate-600">
                         {group.title}
                       </h3>
                       <div className="mt-4 space-y-3">
@@ -232,7 +232,7 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                           <Link
                             key={item.href}
                             href={item.href}
-                            className="block rounded-2xl border border-slate-200 px-4 py-3.5 text-base font-medium text-slate-700 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                            className="block rounded-2xl border border-slate-200 px-4 py-3.5 font-medium text-slate-700 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                           >
                             {item.label}
                           </Link>
@@ -257,17 +257,17 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
                 <p className="eyebrow-label">
                   {copy.category}
                 </p>
-                <h2 className="mt-4 font-heading text-2xl font-semibold tracking-tight text-[#1A2535]">
+                <h2 className="mt-4 font-heading font-semibold text-[#1A2535]">
                   {categoryLabel}
                 </h2>
-                <p className="mt-4 text-base leading-8 text-[#46576f]">
+                <p className="mt-4 text-[#46576f]">
                   {locale === "th"
                     ? "ใช้บทความนี้เป็นจุดเริ่มต้น แล้วไปต่อยังหน้าสินค้าและหมวดที่เกี่ยวข้องเพื่อเก็บ intent ให้ครบ"
                     : "Use this article as an entry point, then move to related category and product pages to cover the full search intent."}
                 </p>
                 <Link
                   href={listHref}
-                  className="btn-primary-soft mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium"
+                  className="btn-primary-soft mt-6 inline-flex items-center gap-2 rounded-full px-5 py-3 font-medium"
                 >
                   <ArrowLeft size={14} />
                   {copy.backToList}
@@ -277,6 +277,6 @@ export default function ArticleDetail({ article, locale, internalLinks }: Props)
           </aside>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

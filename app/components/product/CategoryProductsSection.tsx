@@ -31,7 +31,7 @@ export default function CategoryProductsSection({
   const [isSearching, setIsSearching] = useState(false)
 
   return (
-    <section className="mt-14 md:mt-16">
+    <section className="mt-6 md:mt-8">
       <ProductGrid
         products={products}
         searchProducts={searchProducts}

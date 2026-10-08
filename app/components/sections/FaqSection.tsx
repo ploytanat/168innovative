@@ -55,7 +55,7 @@ export default function FaqSection({ locale }: { locale: Locale }) {
   const t = COPY[locale]
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface, borderTop: `1px solid ${HOME.line}` }}>
+    <section className="showroom-faq relative py-12 sm:py-16">
       <div className={CONTAINER}>
         <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
 
@@ -63,34 +63,31 @@ export default function FaqSection({ locale }: { locale: Locale }) {
           <div className="lg:sticky lg:top-28 lg:self-start">
             <h2
               lang={locale}
-              className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+              className={`font-display ${SECTION_HEADING}  font-bold normal-case`}
               style={{ color: HOME.ink, wordBreak: "keep-all", textWrap: "balance" }}
             >
               {t.heading}
             </h2>
-            <p className="mt-3 max-w-md text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
-              {t.description}
-            </p>
           </div>
 
           {/* Accordion column */}
-          <ul className="divide-y" style={{ borderTop: `1px solid ${HOME.line}`, borderColor: HOME.line }}>
+          <ul className="showroom-faq-list">
             {t.items.map((item, i) => (
               <li key={i} style={{ borderBottomColor: HOME.line }}>
-                <details className="group py-5">
+                <details className="group showroom-faq-item">
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-4">
-                    <span className="text-[#333333] text-[16px] font-semibold transition-colors duration-200 group-hover:text-[#4a7a1e] sm:text-[17px]">
+                    <span className="text-[#333333] font-semibold transition-colors duration-200 group-hover:text-[#263859]">
                       {item.q}
                     </span>
                     <span
                       aria-hidden
                       className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-110 group-open:rotate-45"
-                      style={{ background: HOME.leaf, color: HOME.ink }}
+                      style={{ background: "#e6edf5", color: "#263859" }}
                     >
                       <Plus className="h-4 w-4" strokeWidth={2.2} />
                     </span>
                   </summary>
-                  <p className="mt-3 max-w-[60ch] text-[15px] leading-[1.7] sm:text-[16px]" style={{ color: HOME.inkMid }}>
+                  <p className="mt-3 max-w-[60ch]" style={{ color: HOME.inkMid }}>
                     {item.a}
                   </p>
                 </details>

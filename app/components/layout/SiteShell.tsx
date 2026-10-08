@@ -1,3 +1,4 @@
+import ProductShortlist from "@/app/components/product/ProductShortlist"
 import type { ReactNode } from "react"
 
 import BackToTop from "@/app/components/ui/BackToTop"
@@ -93,6 +94,7 @@ export default async function SiteShell({
         {company && <Footer company={company} />}
         <FloatingContact locale={locale} lineUrl={lineUrl} phone={primaryPhone} />
         <BackToTop />
+        <ProductShortlist locale={locale} email={company?.email[0]} />
       </div>
     </>
   )

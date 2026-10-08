@@ -31,7 +31,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
                 </p>
               ) : null}
               {block.heading ? (
-                <h2 className="font-heading text-3xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
+                <h2 className="font-heading font-semibold" style={{ color: COLORS.dark }}>
                   {block.heading}
                 </h2>
               ) : null}
@@ -51,11 +51,11 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
               className="article-block article-block--checklist rounded-[1rem] p-6 md:p-8"
               style={GLASS.secondary}
             >
-              <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
+              <h2 className="font-heading font-semibold" style={{ color: COLORS.dark }}>
                 {block.heading}
               </h2>
               {block.intro ? (
-                <p className="mt-4 text-sm leading-7 md:text-base" style={{ color: COLORS.mid }}>
+                <p className="mt-4" style={{ color: COLORS.mid }}>
                   {block.intro}
                 </p>
               ) : null}
@@ -63,7 +63,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
                 {block.items.map((item) => (
                   <li
                     key={item}
-                    className="rounded-[0.9rem] px-4 py-3 text-sm font-medium leading-6"
+                    className="rounded-[0.9rem] px-4 py-3 font-medium"
                     style={{ ...GLASS.card, color: COLORS.mid }}
                   >
                     {item}
@@ -82,7 +82,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
               style={GLASS.stats}
             >
               {block.heading ? (
-                <h2 className="font-heading text-xl font-semibold tracking-tight" style={{ color: COLORS.dark }}>
+                <h2 className="font-heading font-semibold" style={{ color: COLORS.dark }}>
                   {block.heading}
                 </h2>
               ) : null}
@@ -101,7 +101,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
               className="article-block article-block--table rounded-[1rem] p-6 md:p-8"
               style={GLASS.card}
             >
-              <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
+              <h2 className="font-heading font-semibold" style={{ color: COLORS.dark }}>
                 {block.heading}
               </h2>
               <div className="mt-6 overflow-x-auto">
@@ -134,12 +134,12 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
             className="article-block article-block--cta rounded-[1rem] px-6 py-7 text-center md:px-8"
             style={block.style === "soft" ? GLASS.card : GLASS.secondary}
           >
-            <h2 className="font-heading text-2xl font-semibold tracking-tight md:text-[2rem]" style={{ color: COLORS.dark }}>
+            <h2 className="font-heading font-semibold" style={{ color: COLORS.dark }}>
               {block.heading}
             </h2>
             {block.body ? (
               <p
-                className="mx-auto mt-4 max-w-2xl text-sm leading-7 md:text-base"
+                className="mx-auto mt-4 max-w-2xl"
                 style={{ color: COLORS.mid }}
               >
                 {block.body}
@@ -148,7 +148,7 @@ export default function ArticleBlocks({ blocks, locale }: Props) {
             {block.buttonLabel && block.buttonUrl ? (
               <Link
                 href={block.buttonUrl}
-                className="mt-6 inline-flex rounded-full px-5 py-3 text-sm font-semibold text-white transition"
+                className="mt-6 inline-flex rounded-full px-5 py-3 font-semibold text-white transition"
                 style={CTA_BUTTON_STYLE}
               >
                 {block.buttonLabel}

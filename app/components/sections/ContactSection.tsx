@@ -9,7 +9,15 @@ import { uiText } from "@/app/lib/i18n/ui"
 import { CompanyView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 
-import { CONTAINER, HOME, SECTION_HEADING, SECTION_PAD } from "./home-theme"
+import { CONTAINER, HOME as BASE_HOME, SECTION_HEADING, SECTION_PAD } from "./home-theme"
+
+const HOME = {
+  ...BASE_HOME,
+  ink: "#2d4149", inkMid: "#536a74", inkSoft: "#5d727a",
+  mint: "#cbe5e8", mintInk: "#3b7178", mintSoft: "rgba(209,231,234,.4)",
+  cream: "rgba(255,255,255,.42)", mist: "rgba(216,235,238,.5)",
+  line: "rgba(93,124,137,.16)", darkMuted: "#d8e6eb", darkDim: "#bdced6",
+} as const
 
 const SOCIAL_ICONS: Record<string, LucideIcon> = {
   facebook: Facebook,
@@ -47,37 +55,37 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
   }, [])
 
   return (
-    <section id="contact" className={`relative ${SECTION_PAD}`} style={{ background: HOME.dark }}>
+    <section id="contact" className={`showroom-contact relative ${SECTION_PAD}`}>
       <div className={CONTAINER}>
         <div className="grid gap-10 md:grid-cols-[1fr_1.05fr] md:gap-12 lg:gap-14">
 
           <div>
-            <p className="text-[13px] font-bold uppercase tracking-[0.14em]" style={{ color: HOME.mint }}>
+            <p className="type-meta font-bold uppercase" style={{ color: HOME.mint }}>
               {locale === "th" ? "ติดต่อเรา" : "Get in touch"}
             </p>
-            <h2 className={`mt-4 ${SECTION_HEADING} text-[clamp(1.6rem,1.1rem+1.8vw,2.5rem)] font-bold`} style={{ color: HOME.darkText }}>
+            <h2 className={`mt-4 ${SECTION_HEADING}  font-bold`} style={{ color: HOME.darkText }}>
               {uiText.contact.title[locale]}<br />
               <span style={{ color: HOME.mint }}>{uiText.contact.subtitle[locale]}</span>
             </h2>
-            <p className="mt-4 max-w-md text-[1.05rem] leading-[1.7]" style={{ color: HOME.darkMuted }}>
+            <p className="mt-4 max-w-md" style={{ color: HOME.darkMuted }}>
               {uiText.contact.desc[locale]}
             </p>
 
             <Link href={withLocalePath("/contact", locale)}
-              className="home-btn home-btn-light mt-7 inline-flex items-center rounded px-6 py-3 text-[14px] font-bold">
+              className="home-btn home-btn-light mt-7 inline-flex items-center rounded px-6 py-3 font-bold">
               {COPY.sendMessage[locale]} →
             </Link>
 
             {data.address && (
               <div className="mt-7 flex items-start gap-3" style={{ color: HOME.darkMuted }}>
                 <MapPin className="mt-0.5 h-5 w-5 shrink-0" style={{ color: HOME.mint }} />
-                <p className="text-[1rem] leading-[1.65]">{data.address}</p>
+                <p className="">{data.address}</p>
               </div>
             )}
 
             {data.socials.length > 0 && (
               <div className="mt-7">
-                <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.darkDim }}>
+                <p className="type-meta font-bold uppercase" style={{ color: HOME.darkDim }}>
                   {COPY.followUs[locale]}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2.5">
@@ -98,27 +106,27 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
 
           <div
             ref={cardRef}
-            className={`overflow-hidden rounded-lg ${revealed ? "motion-reduce:animate-none animate-[hero-reveal_600ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
-            style={{ background: HOME.surface, border: `1px solid ${HOME.line}` }}
+            className={`showroom-contact-panel overflow-hidden rounded-lg ${revealed ? "motion-reduce:animate-none animate-[hero-reveal_600ms_cubic-bezier(0.22,1,0.36,1)_both]" : ""}`}
+
           >
             <div className="p-7 sm:p-8">
-              <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
+              <p className="type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
                 {uiText.contact.phoneLabel[locale]}
               </p>
               <div className="mt-4 space-y-3">
                 {data.phones.map(phone => (
                   <a key={phone.number} href={`tel:${phone.number.replace(/-/g, "")}`}
-                    className="home-card flex items-center gap-3.5 rounded-lg px-4 py-3"
+                    className="showroom-phone-link flex items-center gap-3.5 rounded-lg px-4 py-3"
                     style={{ background: HOME.cream, border: `1px solid ${HOME.line}` }}>
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded"
                       style={{ background: HOME.mintSoft, color: HOME.mintInk }}>
                       <Phone className="h-5 w-5" strokeWidth={1.6} />
                     </span>
                     <span>
-                      <span className="block text-[11px] font-bold uppercase tracking-[0.08em]" style={{ color: HOME.inkSoft }}>
+                      <span className="block type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
                         {phone.label}
                       </span>
-                      <span className="font-display text-[1.1rem] font-bold" style={{ color: HOME.ink }}>
+                      <span className="font-display font-bold" style={{ color: HOME.ink }}>
                         {phone.number}
                       </span>
                     </span>
@@ -129,7 +137,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
 
             {data.email.length > 0 && (
               <div className="border-t px-7 py-6 sm:px-8" style={{ borderColor: HOME.line }}>
-                <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: HOME.inkSoft }}>
+                <p className="type-meta font-bold uppercase" style={{ color: HOME.inkSoft }}>
                   {uiText.contact.emailLabel[locale]}
                 </p>
                 <div className="mt-3 space-y-2.5">
@@ -139,7 +147,7 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                         style={{ background: HOME.mist, color: HOME.inkMid }}>
                         <Mail className="h-5 w-5" strokeWidth={1.6} />
                       </span>
-                      <span className="font-display break-all text-[1rem] font-semibold" style={{ color: HOME.ink }}>
+                      <span className="font-display break-all font-semibold" style={{ color: HOME.ink }}>
                         {email}
                       </span>
                     </a>
@@ -156,10 +164,10 @@ export default function ContactSection({ data, locale }: { data: CompanyView; lo
                   <Image src={data.lineQrCode.src} alt={data.lineQrCode.alt} fill sizes="72px" className="object-contain p-1.5" />
                 </div>
                 <div>
-                  <p className="text-[1rem] font-bold" style={{ color: HOME.ink }}>
+                  <p className="font-bold" style={{ color: HOME.ink }}>
                     {uiText.contact.lineLabel[locale]}
                   </p>
-                  <p className="mt-1 text-[0.95rem] leading-[1.55]" style={{ color: HOME.inkMid }}>
+                  <p className="mt-1" style={{ color: HOME.inkMid }}>
                     {uiText.contact.lineDesc[locale]}
                   </p>
                 </div>

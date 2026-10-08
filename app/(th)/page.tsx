@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
+import { homeFont } from "@/app/config/fonts"
 
 import CategorySection from "@/app/components/sections/CategorySection"
 import ContactSection from "@/app/components/sections/ContactSection"
 import FaqSection from "@/app/components/sections/FaqSection"
 import HomeHero from "@/app/components/sections/HomeHero"
+import PackagingStudio from "@/app/components/sections/PackagingStudio"
 import PortfolioGrid from "@/app/components/sections/PortfolioGrid"
 import PromoGrid from "@/app/components/sections/PromoGrid"
 import { buildMetadata } from "@/app/config/seo"
@@ -30,16 +32,17 @@ export default async function HomePage() {
     await getHomeSections(locale)
 
   return (
-    <>
+    <div className={`${homeFont.className} home-showroom`}>
       <h1 className="sr-only">
         168 Innovative บรรจุภัณฑ์เครื่องสำอางและพลาสติกสำหรับงาน OEM และ ODM
       </h1>
-      {heroSlides.length > 0 && <HomeHero hero={{ slides: heroSlides }} locale={locale} />}
+      {heroSlides.length > 0 && <HomeHero hero={{ slides: heroSlides }} locale={locale} showStudio={categories.length > 0} />}
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
+      {categories.length > 0 && <PackagingStudio categories={categories} locale={locale} email={company?.email[0]} />}
       {products.length > 0 && <PortfolioGrid items={products} locale={locale} />}
       {whys.length > 0 && <PromoGrid whys={whys} locale={locale} />}
       <FaqSection locale={locale} />
       {company && <ContactSection locale={locale} data={company} />}
-    </>
+    </div>
   )
 }

@@ -285,6 +285,7 @@ export type WPSpec = {
 }
 
 export interface WPProduct {
+  colour_images?: unknown;
   id: number;
   slug: string;
 
@@ -315,6 +316,7 @@ export interface WPProduct {
     image_alt_th?: string;
     image_alt_en?: string;
     specs_json?: string;
+    color_variants_json?: string;
     focus_keyword_th?: string;
     focus_keyword_en?: string;
     faq_items?: WPFaqItem[];

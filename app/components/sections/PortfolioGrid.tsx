@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react"
 import Image from "next/image"
+import SaveProductButton from "@/app/components/product/SaveProductButton"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 
@@ -54,25 +55,22 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
   const t = COPY[locale]
 
   return (
-    <section className="relative py-12 sm:py-16" style={{ background: HOME.surface }}>
+    <section className="showroom-portfolio relative py-12 sm:py-16">
       <div className={CONTAINER}>
         <div className="mb-9 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6 lg:mb-12">
           <div className="max-w-xl">
             <h2
               lang={locale}
-              className={`font-display ${SECTION_HEADING} text-[clamp(1.75rem,1.2rem+1.8vw,2.5rem)] font-bold normal-case`}
+              className={`font-display ${SECTION_HEADING}  font-bold normal-case`}
               style={{ color: HOME.ink }}
             >
               {t.heading}
             </h2>
-            <p className="mt-3 text-[15px] leading-[1.7] sm:text-[16px] lg:text-[17px]" style={{ color: HOME.inkMid }}>
-              {t.description}
-            </p>
           </div>
           <Link
             href={withLocalePath("/categories", locale)}
-            className="shrink-0 text-[14px] font-semibold transition-colors hover:opacity-70"
-            style={{ color: HOME.mintInk }}
+            className="shrink-0 font-semibold transition-colors hover:opacity-70"
+            style={{ color: "#263859" }}
           >
             {t.viewAll} →
           </Link>
@@ -94,10 +92,10 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                 }
                 style={revealed ? { animationDelay: `${i * 60}ms` } : undefined}
               >
-                <Link href={href} className="group block">
+                <Link href={href} className="showroom-product-card group block">
                   <div
-                    className="relative aspect-square overflow-hidden rounded-xl transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1.5 group-hover:shadow-(--shadow-sm)"
-                    style={{ background: HOME.mintSoft, border: `1px solid ${HOME.line}` }}
+                    className="showroom-product-photo relative aspect-square overflow-hidden rounded-xl"
+                    style={{ background: "#f4f1fa" }}
                   >
                     <Image
                       src={item.image.src}
@@ -105,13 +103,6 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                       fill
                       sizes="(max-width:640px) 48vw, (max-width:1024px) 32vw, 380px"
                       className="object-cover transition-transform duration-600 ease-out group-hover:scale-[1.04]"
-                      style={{ filter: "saturate(0.88)" }}
-                    />
-                    {/* Leaf tonal wash — unifies mixed studio backgrounds. Fades on hover. */}
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 transition-opacity duration-500 group-hover:opacity-0"
-                      style={{ background: "rgba(124, 179, 66, 0.08)", mixBlendMode: "multiply" }}
                     />
                     {/* Signature round arrow — bottom-right, slides on hover */}
                     <span
@@ -122,12 +113,14 @@ export default function PortfolioGrid({ items, locale }: { items: ProductView[];
                     </span>
                   </div>
                   <p
-                    className="font-display mt-4 line-clamp-2 text-[14px] font-semibold leading-relaxed tracking-wide sm:text-[15px]"
+                    className="font-display mt-4 line-clamp-2 font-semibold"
                     style={{ color: HOME.ink }}
                   >
                     {item.name}
                   </p>
+                  {item.specs?.some(spec => spec.value) && <dl className="product-proof-specs">{item.specs.filter(spec => spec.value).slice(0, 2).map((spec, index) => <div key={`${spec.label}-${index}`}><dt>{spec.label}</dt><dd>{spec.value}</dd></div>)}</dl>}
                 </Link>
+                <SaveProductButton product={item} locale={locale} />
               </li>
             )
           })}

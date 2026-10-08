@@ -30,7 +30,7 @@ export default function LazyMap({ src, title = "Map" }: LazyMapProps) {
   return (
     <div
       ref={containerRef}
-      className="relative h-[450px] w-full overflow-hidden rounded-[1.1rem] grayscale-[0.2] transition-all duration-700 hover:grayscale-0"
+      className="relative h-[300px] sm:h-[380px] lg:h-[450px] w-full overflow-hidden rounded-[1.1rem] grayscale-[0.2] transition-all duration-700 hover:grayscale-0"
       style={{ ...GLASS.primary, background: PAGE_BG }}
     >
       {isLoaded ? (
@@ -46,7 +46,7 @@ export default function LazyMap({ src, title = "Map" }: LazyMapProps) {
           className="absolute inset-0 flex items-center justify-center"
           style={{ ...GLASS.stats, background: "rgba(255,255,255,0.42)" }}
         >
-          <p className="text-sm" style={{ color: COLORS.mid }}>Loading map...</p>
+          <p className="" style={{ color: COLORS.mid }}>Loading map...</p>
         </div>
       )}
     </div>

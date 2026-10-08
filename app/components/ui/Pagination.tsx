@@ -48,7 +48,7 @@ function PageLink({
       href={href}
       prefetch={false}
       aria-current={active ? "page" : undefined}
-      className="inline-flex min-w-9 items-center justify-center rounded border px-3 py-2 text-[13px] font-semibold transition-colors hover:border-[#4a7a1e] hover:bg-[#4a7a1e] hover:text-white"
+      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded border px-3 py-2 type-meta font-semibold transition-colors hover:border-[#263859] hover:bg-[#263859] hover:text-white"
       style={style}
     >
       {label}
@@ -59,7 +59,7 @@ function PageLink({
 function DisabledBadge({ label }: { label: ReactNode }) {
   return (
     <span
-      className="inline-flex min-w-9 cursor-not-allowed items-center justify-center rounded border px-3 py-2 text-[13px] font-semibold"
+      className="inline-flex min-h-11 min-w-11 cursor-not-allowed items-center justify-center rounded border px-3 py-2 type-meta font-semibold"
       style={{ background: HOME.mist, color: HOME.inkSoft, borderColor: HOME.line }}
     >
       {label}
@@ -88,7 +88,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
           page === "..." ? (
             <span
               key={`ellipsis-${index}`}
-              className="px-2 text-[13px] font-semibold"
+              className="px-2 type-meta font-semibold"
               style={{ color: HOME.inkSoft }}
             >
               ...

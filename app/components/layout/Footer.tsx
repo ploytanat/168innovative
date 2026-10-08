@@ -11,12 +11,12 @@ import { CompanyView } from '@/app/lib/types/view'
 // Sonar-style palette — inverted (light)
 const D = {
   bg: '#ffffff',
-  text: '#0a0c10',
+  text: '#263859',
   mid: '#5a6172',
-  soft: '#9aa0ac',
+  soft: '#65758a',
   line: 'rgba(10,12,16,0.09)',
   lineStrong: 'rgba(10,12,16,0.18)',
-  accent: '#14532d',
+  accent: '#263859',
   surface: 'rgba(10,12,16,0.03)',
 } as const
 
@@ -70,14 +70,14 @@ const GOOGLE_MAPS_URL =
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
+    <p className="footer-section-label mb-4" style={{ color: D.mid }}>
       {children}
     </p>
   )
 }
 
 function ArrowLink({ href, external, children, onClick }: { href: string; external?: boolean; children: ReactNode; onClick?: () => void }) {
-  const linkClass = 'group flex items-center justify-between gap-3 py-2 text-[14.5px] transition-colors'
+  const linkClass = 'group flex items-center justify-between gap-3 py-2  transition-colors'
   const content = (
     <>
       <span className="transition-colors" style={{ color: D.text }}>
@@ -120,7 +120,7 @@ export default function Footer({ company }: { company: CompanyView }) {
   }, [isEN, pathname, router])
 
   return (
-    <footer style={{ background: D.bg, color: D.text }} aria-label="Site footer">
+    <footer className={pathname === "/" || pathname === "/en" ? "showroom-footer" : undefined} style={{ background: D.bg, color: D.text }} aria-label="Site footer">
       <div className="mx-auto w-full max-w-[1200px] px-5 py-10 sm:py-12 lg:py-14">
 
         {/* Main grid */}
@@ -142,10 +142,10 @@ export default function Footer({ company }: { company: CompanyView }) {
                 className="h-12 w-auto transition-opacity hover:opacity-80 sm:h-14 lg:h-16"
               />
             </Link>
-            <p className="mt-4 text-[14px] leading-[1.6]" style={{ color: D.mid }}>
+            <p className="mt-4" style={{ color: D.mid }}>
               {text.tagline}
             </p>
-            <p className="mt-0.5 text-[14px]" style={{ color: D.mid }}>
+            <p className="mt-0.5" style={{ color: D.mid }}>
               {text.location}
             </p>
           </div>
@@ -182,7 +182,7 @@ export default function Footer({ company }: { company: CompanyView }) {
           <div>
             <SectionLabel>{text.reach}</SectionLabel>
 
-            <ul className="space-y-2.5 text-[14px]" style={{ color: D.mid }}>
+            <ul className="space-y-2.5" style={{ color: D.mid }}>
               {company.address && (
                 <li>
                   <a
@@ -192,7 +192,7 @@ export default function Footer({ company }: { company: CompanyView }) {
                     className="group flex items-start gap-2.5 transition-colors hover:text-black"
                   >
                     <MapPin className="mt-0.5 h-4 w-4 shrink-0" style={{ color: D.accent }} strokeWidth={1.6} />
-                    <span className="leading-[1.55]">{company.address}</span>
+                    <span className="">{company.address}</span>
                   </a>
                 </li>
               )}
@@ -225,7 +225,7 @@ export default function Footer({ company }: { company: CompanyView }) {
             {/* Follow */}
             {company.socials.length > 0 && (
               <div className="mt-5">
-                <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.24em]" style={{ color: D.mid }}>
+                <p className="footer-section-label mb-2.5" style={{ color: D.mid }}>
                   {text.follow}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -254,7 +254,7 @@ export default function Footer({ company }: { company: CompanyView }) {
 
         {/* Bottom strip */}
         <div
-          className="mt-12 flex flex-col gap-3 border-t pt-5 text-[12px] sm:flex-row sm:items-center sm:justify-between"
+          className="mt-12 flex flex-col gap-3 border-t pt-5 type-meta sm:flex-row sm:items-center sm:justify-between"
           style={{ borderColor: D.line, color: D.soft }}
         >
           <p>
@@ -262,7 +262,7 @@ export default function Footer({ company }: { company: CompanyView }) {
           </p>
 
           <div className="flex items-center gap-5">
-            <span className="tracking-[0.16em] uppercase" style={{ color: D.mid }}>
+            <span className="uppercase" style={{ color: D.mid }}>
               {text.tagline}
             </span>
 
@@ -281,7 +281,7 @@ function FooterLangToggle({ isEN, onToggle }: { isEN: boolean; onToggle: () => v
       type="button"
       aria-label={isEN ? 'Switch language to Thai' : 'Switch language to English'}
       onClick={onToggle}
-      className="inline-flex items-center rounded p-0.5 text-[11px] font-bold tracking-[0.08em]"
+      className="inline-flex items-center rounded p-0.5 type-meta font-bold"
       style={{ background: D.surface, border: `1px solid ${D.line}` }}
     >
       <span

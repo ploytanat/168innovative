@@ -1,0 +1,121 @@
+/* Public-site typography. One family, consistent roles, Thai-safe spacing. */
+:root {
+  --type-family: var(--font-anuphan), sans-serif;
+  --type-meta: 1rem;
+  --type-control: 1rem;
+  --type-body: 1.125rem;
+  --type-card: 1.25rem;
+  --type-subtitle: 1.5rem;
+  --type-section: clamp(1.75rem, 1.4rem + 1vw, 2.125rem);
+  --type-title: clamp(2.25rem, 1.8rem + 1.7vw, 3rem);
+  --type-leading-body: 1.8;
+  --type-leading-heading: 1.45;
+}
+body { font-family: var(--type-family); font-size: var(--type-body); line-height: var(--type-leading-body); font-weight: 400; font-kerning: normal; }
+.site-frame { font-family: var(--type-family); font-size: var(--type-body); line-height: var(--type-leading-body); }
+.site-frame :is(h1,h2,h3,h4,h5,h6,p,li,dt,dd,a,button,label,input,select,textarea,summary,figcaption) { letter-spacing: normal; }
+.site-frame :is(h1,h2,h3,h4,h5,h6) { font-family: var(--type-family); font-weight: 600; line-height: var(--type-leading-heading); text-wrap: balance; }
+.site-frame h1 { font-size: var(--type-title); }
+.site-frame h2 { font-size: var(--type-section); }
+.site-frame h3 { font-size: var(--type-subtitle); }
+.site-frame :is(h4,h5,h6) { font-size: var(--type-card); }
+.site-frame :is(p,li,dt,dd) { font-size: var(--type-body); line-height: var(--type-leading-body); }
+.site-frame p { font-weight: 400; }
+.site-frame :is(button,input,select,textarea) { font-family: var(--type-family); font-size: var(--type-body); line-height: 1.6; }
+.site-frame :is(button,label,legend,summary) { font-weight: 500; }
+.site-frame :is(input,select,textarea) { font-weight: 400; }
+.site-frame :is(button,label,legend,summary,input,select,textarea) { overflow-wrap: anywhere; }
+.site-frame summary { font-size: var(--type-body); line-height: 1.7; }
+.site-frame :is(strong,b) { font-weight: 600; }
+.site-frame :is(.font-heading,.font-display,.font-body) { font-family: var(--type-family); }
+.site-frame .font-mono { font-family: var(--type-family); font-variant-numeric: tabular-nums; }
+.site-frame :is(.type-meta,figcaption,small) { font-size: var(--type-meta); line-height: 1.7; font-weight: 400; }
+.site-frame :is(.eyebrow-label,.studio-label,.showroom-signature,.about-brand) { font-size: var(--type-meta); line-height: 1.7; font-weight: 500; letter-spacing: normal; }
+.site-frame .showroom-hero-copy h2 { font-size: var(--type-title); }
+.site-frame :is(.showroom-intro,.about-lead,.brand-page-intro h1 + p,.studio-heading > p,.about-reach-copy > p) { font-size: var(--type-body); line-height: var(--type-leading-body); font-weight: 400; }
+.site-frame :is(.showroom-primary,.showroom-secondary,.nav-quote,.home-btn,.btn-primary-soft,.about-catalog-link,.about-reach-copy > a,.studio-brief-actions > a,.studio-brief-actions > button) { font-size: var(--type-body); line-height: 1.6; font-weight: 500; letter-spacing: normal; }
+.site-frame :is(.showroom-section-heading > a,.studio-entry,.about-story summary) { font-size: var(--type-body); line-height: 1.7; font-weight: 500; }
+.site-frame :is(.site-navigation-links > li > a,.site-navigation-links > li > button,.mobile-navigation-panel a,.mobile-navigation-panel button,.nav-category-link) { font-size: var(--type-body); line-height: 1.6; }
+.site-frame :is(.nav-language,.nav-language span,.nav-menu-toggle span,.site-breadcrumb a,.site-breadcrumb span) { font-size: var(--type-meta); line-height: 1.6; font-weight: 500; }
+.site-frame :is(.catalog-category-card h2,.showroom-category-name h3,.showroom-product-card > p,.catalog-product-name,.studio-preview-caption h3) { font-size: var(--type-card); line-height: 1.65; font-weight: 600; }
+.site-frame :is(.showroom-why-item h3,.about-service-list h3,.studio-brief-title h3) { font-size: var(--type-subtitle); line-height: 1.5; font-weight: 600; }
+.site-frame :is(.showroom-why-item > p,.about-service-list p,.catalog-category-card p,.about-service-context > p,.about-story > p,.about-contact-details p,.studio-controls > label,.studio-controls legend,.studio-modes label) { font-size: var(--type-body); line-height: var(--type-leading-body); }
+.site-frame :is(.showroom-benefits li,.showroom-visual-heading,.showroom-visual figcaption,.showroom-custom-note span,.showroom-custom-note strong,.product-proof-specs,.product-proof-specs dt,.product-proof-specs dd,.studio-note,.studio-feedback,.studio-preview-caption span,.studio-brief-title > span,.studio-controls > label > span,.about-identity > span,.about-contact-details span) { font-size: var(--type-meta); line-height: 1.7; }
+.site-frame :is(.about-identity strong,.about-contact-details strong) { font-size: var(--type-body); line-height: 1.7; font-weight: 500; }
+.site-frame .studio-brief textarea { font-size: var(--type-body); line-height: var(--type-leading-body); }
+.site-frame .showroom-faq-item summary span, .site-frame .showroom-faq-item > p { font-size: var(--type-body); line-height: var(--type-leading-body); }
+.site-frame :is(.showroom-contact-panel a[href^="tel:"] .font-display,.contact-page a[href^="tel:"] p:first-child) { font-size: var(--type-subtitle); font-weight: 600; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.site-frame :is(.showroom-contact-panel a[href^="mailto:"] .font-display,.contact-page a[href^="mailto:"]) { font-size: var(--type-body); line-height: 1.7; }
+.site-frame footer :is(a,p,span,button) { font-size: var(--type-meta); line-height: 1.75; letter-spacing: normal; }
+.site-frame .article-feature h2 { font-size: var(--type-section); }
+.site-frame .article-preview h3 { font-size: var(--type-subtitle); }
+.site-frame .rich-content { font-family: var(--type-family); font-size: var(--type-body); line-height: 1.85; }
+.site-frame .rich-content :is(p,li,td) { font-family: inherit; font-size: var(--type-body); line-height: 1.85; }
+.site-frame .rich-content h2 { font-size: var(--type-section); line-height: 1.5; }
+.site-frame .rich-content h3 { font-size: var(--type-subtitle); line-height: 1.5; }
+.site-frame .rich-content h4 { font-size: var(--type-card); line-height: 1.5; }
+.site-frame .rich-content :is(th,figcaption) { font-size: var(--type-meta); line-height: 1.7; }
+.site-frame .rich-content > p:first-child { font-size: var(--type-body); line-height: 1.85; }
+.site-frame .article-body__content > p:first-child::first-letter { float: none; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0; }
+@media (max-width: 639px) {
+  .site-frame :is(.showroom-signature,.about-brand) { letter-spacing: normal; }
+}
+/* Normalize CMS inline type styling without changing its layout or colors. */
+.site-frame .rich-content * { font-family: var(--type-family) !important; }
+.site-frame .rich-content [style*="font-size"], .site-frame .rich-content [style*="font:"] { font-size: inherit !important; }
+.site-frame .rich-content [style*="line-height"] { line-height: inherit !important; }
+.site-frame .rich-content :is(p,li,td,blockquote)[style] { font-size: var(--type-body) !important; }
+.site-frame .rich-content h1[style] { font-size: var(--type-title) !important; }
+.site-frame .rich-content h2[style] { font-size: var(--type-section) !important; }
+.site-frame .rich-content h3[style] { font-size: var(--type-subtitle) !important; }
+.site-frame .rich-content h4[style] { font-size: var(--type-card) !important; }
+.site-frame .rich-content :is(h5,h6)[style] { font-size: var(--type-card) !important; }
+.site-frame :is(.save-product-button,.save-product-notice,.shortlist-hint,.shortlist-status,.shortlist-table-scroll th,.shortlist-table-scroll td) { font-size: var(--type-meta); line-height: 1.7; }
+.site-frame .shortlist-header h2 { font-size: var(--type-subtitle); line-height: 1.5; }
+.site-frame .shortlist-comparison h3 { font-size: var(--type-card); line-height: 1.5; }
+.site-frame .shortlist-header h2 > span { font-size: var(--type-body); font-weight: 400; }
+.site-frame .shortlist-product { font-weight: 500; }
+@media (max-width: 639px) { .site-frame .shortlist-product { font-size: var(--type-meta); line-height: 1.65; } }
+.site-frame :is(.shortlist-slot,.shortlist-difference-toggle) { font-size: var(--type-meta); line-height: 1.6; }
+.site-frame .product-detail-heading h1 { font-size: var(--type-title); line-height: 1.45; }
+.site-frame .product-detail-heading .product-model-title { font-size: var(--type-title); font-weight: 600; }
+.site-frame .product-full-name { font-size: var(--type-card); line-height: 1.75; }
+.site-frame :is(.product-key-facts dt,.product-secondary-specs dt,.product-enquiry-panel > p) { font-size: var(--type-meta); line-height: 1.7; }
+.site-frame .product-key-facts dd { font-size: var(--type-subtitle); font-weight: 600; line-height: 1.5; }
+.site-frame .product-secondary-specs dd { font-size: var(--type-body); line-height: 1.8; }
+.site-frame :is(.nav-main-link,.nav-mobile-links > li > a,.nav-mobile-links > li > button) { font-size: var(--type-body); font-weight: 500; line-height: 1.6; }
+.site-frame :is(.nav-locale-switch,.nav-category-tile,.nav-catalog-intro p,.nav-mobile-all) { font-size: var(--type-meta); line-height: 1.65; }
+.site-frame .nav-catalog-intro h2 { font-size: var(--type-subtitle); line-height: 1.5; }
+
+.site-frame .nav-locale-switch > button { font-size: var(--type-meta); line-height: 1.6; }
+
+.site-frame .category-catalog-page .catalog-product-name { font-size: var(--type-card); }
+.site-frame .product-detail-page :is(.product-key-facts dt,.product-secondary-specs dt,.product-enquiry-panel > p) {
+  font-size: var(--type-body);
+}
+.site-frame .product-detail-page .product-spec-title { font-size: var(--type-subtitle); }
+.site-frame :is(.category-catalog-page,.product-detail-page) .save-product-button {
+  white-space: normal;
+  text-align: left;
+}
+
+/* Compact controls stay readable without crowding navigation or toolbars. */
+.site-frame :is(button,.nav-main-link,.nav-quote,.site-navigation-links > li > a,.site-navigation-links > li > button,.showroom-primary,.showroom-secondary,.home-btn,.btn-primary-soft,.about-catalog-link,.about-reach-copy > a,.studio-brief-actions > a,.studio-brief-actions > button) {
+  font-size: var(--type-control);
+  line-height: 1.6;
+  font-weight: 500;
+}
+.site-frame :is(.catalog-card-specs dt,.catalog-card-specs dd,.product-order-notes dt,.product-order-notes dd) { font-size: var(--type-body); }
+.site-frame :is(.catalog-product-name,.catalog-category-card h2,.showroom-product-card > p,.showroom-category-name h3) { overflow-wrap: anywhere; }
+.site-frame :is(.product-key-facts dd,.catalog-card-specs dd,.article-compare-table,.shortlist-table-scroll) { font-variant-numeric: tabular-nums; }
+.site-frame :is(.article-compare-table th,.article-compare-table td) { font-size: var(--type-body); line-height: 1.8; }
+.site-frame .footer-section-label { font-size: var(--type-meta); font-weight: 600; }
+.site-frame footer :is(a,p,span) { overflow-wrap: anywhere; }
+.site-frame .rich-content :is(p,li,blockquote) { max-width: 70ch; }
+.site-frame .rich-content :is(code,pre,kbd,samp) { font-family: var(--type-family); font-size: var(--type-meta); }
+.site-frame .rich-content [style*="font-weight"] { font-weight: inherit !important; }
+.site-frame .rich-content :is(h1,h2,h3,h4,h5,h6,strong,b)[style*="font-weight"] { font-weight: 600 !important; }
+.site-frame .rich-content [style*="letter-spacing"] { letter-spacing: normal !important; }
+.site-frame .not-found-code { font-size: clamp(4rem, 3rem + 5vw, 6rem); font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.site-frame .not-found-actions a { font-size: var(--type-control); font-weight: 500; line-height: 1.6; }
+.site-frame :is(.product-detail-page .deck-card h3,.home-card h3) { font-size: var(--type-card); line-height: 1.65; font-weight: 600; overflow-wrap: anywhere; }

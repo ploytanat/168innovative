@@ -32,15 +32,17 @@ export default function BackToTop() {
   return (
     <button
       aria-label="Back to top"
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className={`fixed bottom-42 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ${
+      tabIndex={visible ? 0 : -1}
+      aria-hidden={!visible}
+      onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}
+      className={`back-to-top fixed bottom-42 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full transition-all duration-500 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] ${
         visible
           ? 'translate-y-0 scale-100 opacity-100'
           : 'pointer-events-none translate-y-6 scale-95 opacity-0'
       }`}
       style={{ ...GHOST_BUTTON_STYLE, color: COLORS.dark }}
     >
-      <span className="text-lg">↑</span>
+      <span className="">↑</span>
     </button>
   )
 }

@@ -1,3 +1,4 @@
+import { parseProductColors } from "../product-colors"
 // app/lib/api/products.ts
 
 import { unstable_cache } from "next/cache"
@@ -11,7 +12,7 @@ const BASE = process.env.WP_API_URL
 if (!BASE) throw new Error("WP_API_URL is not defined")
 
 const PRODUCT_FIELDS =
-  "id,slug,title,acf,featured_image_url,product_category"
+  "id,slug,title,acf,featured_image_url,product_category,colour_images"
 
 /* ─────────────────────────────
    Fetch helpers
@@ -262,6 +263,7 @@ function mapWPToProductView(
       src: wp.featured_image_url ?? "/images/placeholder.webp",
       alt: pickLocalizedText(locale, wp.acf?.image_alt_th, wp.acf?.image_alt_en, wp.title.rendered),
     },
+    colors: parseProductColors(Array.isArray(wp.colour_images) && wp.colour_images.length ? wp.colour_images : wp.acf?.color_variants_json, locale),
     categoryId: categoryId.toString(),
     categorySlug: catMap[categoryId] ?? "",
     specs,
@@ -440,7 +442,7 @@ export async function getRelatedProducts(
   const raw = await _getRelatedRaw(categoryId)
 
   return raw
-    .filter((p) => p.id.toString() !== currentProductId)
+    .filter((p) => p.id.toString() !== currentProductId && p.slug !== currentProductId)
     .slice(0, 4)
     .map((wp) => mapWPToProductView(wp, locale, catMap))
 }

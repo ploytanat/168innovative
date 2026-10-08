@@ -29,14 +29,14 @@ export default function ContactPhoneList({
     <div className="w-full">
       {officePhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
-          <p className="text-base font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
+          <p className="font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
+          <p className="font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
         </div>
       ))}
 
       {officePhones.length > 0 && salesPhones.length > 0 && (
         <div className="mb-4 mt-7">
-          <p className="text-[12px] font-bold tracking-[0.16em]" style={{ color: COLORS.soft }}>
+          <p className="type-meta font-bold" style={{ color: COLORS.soft }}>
             {salesHeading}
           </p>
           <div className="mt-3 h-px w-14" style={{ background: "rgba(30,40,60,0.10)" }} />
@@ -45,8 +45,8 @@ export default function ContactPhoneList({
 
       {salesPhones.map((phone, index) => (
         <div key={`${phone.number}-${index}`} className="mb-4 last:mb-0">
-          <p className="text-2xl font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
-          <p className="text-base font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
+          <p className="font-bold" style={{ color: COLORS.dark }}>{phone.number}</p>
+          <p className="font-medium" style={{ color: COLORS.mid }}>{phone.label}</p>
         </div>
       ))}
     </div>
