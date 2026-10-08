@@ -119,5 +119,6 @@ body { font-family: var(--type-family); font-size: var(--type-body); line-height
 .site-frame .not-found-code { font-size: clamp(4rem, 3rem + 5vw, 6rem); font-weight: 600; line-height: 1.2; font-variant-numeric: tabular-nums; }
 .site-frame .not-found-actions a { font-size: var(--type-control); font-weight: 500; line-height: 1.6; }
 .site-frame :is(.product-detail-page .deck-card h3,.home-card h3) { font-size: var(--type-card); line-height: 1.65; font-weight: 600; overflow-wrap: anywhere; }
-.site-frame .facebook-update h3 { font-size: var(--type-card); line-height: 1.65; }
-.site-frame :is(.facebook-page-link,.facebook-update-action) { font-size: var(--type-control); line-height: 1.6; font-weight: 500; }
+.site-frame .facebook-page-link { font-size: var(--type-control); line-height: 1.6; font-weight: 500; }
+
+.site-frame .facebook-feed-help { font-size: var(--type-meta); line-height: 1.7; }

@@ -1587,19 +1587,13 @@ li:has(> .showroom-product-card) { display: flex; flex-direction: column; }
 .facebook-updates-heading p { margin-top: 10px; max-width: 55ch; color: #526176; }
 .facebook-page-link { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 10px; min-height: 48px; padding: 12px 18px; border: 1px solid #263859; border-radius: 8px; }
 .facebook-page-link:hover { background: #263859; color: #fff; }
-.facebook-updates-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; margin: 28px 0 0; padding: 0; list-style: none; }
-.facebook-updates-grid > li { min-width: 0; }
-.facebook-update { display: flex; flex-direction: column; height: 100%; }
-.facebook-update-image { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #fff; }
-.facebook-update-image img { transition: transform .2s ease-out; }
-.facebook-update:hover .facebook-update-image img { transform: scale(1.025); }
-.facebook-update h3 { margin-top: 18px; overflow-wrap: anywhere; }
-.facebook-update > p { margin-top: 10px; color: #526176; overflow-wrap: anywhere; }
-.facebook-update-action { display: flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 16px; }
-.facebook-update:hover .facebook-update-action { text-decoration: underline; text-underline-offset: 4px; }
-@media (max-width: 1023px) { .facebook-updates-heading { align-items: flex-start; flex-direction: column; } .facebook-updates-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
-@media (max-width: 639px) { .facebook-updates { padding-block: 36px; } .facebook-updates-grid { grid-template-columns: minmax(0,1fr); gap: 32px; } .facebook-page-link { flex-shrink: 1; max-width: 100%; flex-wrap: wrap; } }
-@media (prefers-reduced-motion: reduce) { .facebook-update-image img { transition: none; } .facebook-update:hover .facebook-update-image img { transform: none; } }
+.facebook-live-region { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 28px; }
+.facebook-feed-frame { width: 100%; max-width: 500px; min-width: 0; height: 600px; overflow: hidden; background: #fff; border-radius: 12px; }
+.facebook-feed-frame iframe { display: block; border: 0; max-width: 100%; }
+.facebook-feed-placeholder { padding: 24px; color: #526176; }
+.facebook-feed-help { max-width: 55ch; color: #526176; text-align: center; }
+@media (max-width: 1023px) { .facebook-updates-heading { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 639px) { .facebook-updates { padding-block: 36px; } .facebook-page-link { flex-shrink: 1; max-width: 100%; flex-wrap: wrap; } }
 @media (max-width: 639px) {
   .category-catalog-page .brand-page-intro > div { padding: 18px; }
   .product-order-notes > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }

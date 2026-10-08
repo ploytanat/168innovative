@@ -1,5 +1,9 @@
 # Design
 
+## Automatic Facebook timeline (October 8, 2026 — current)
+
+The user requested automatic posts. The homepage now embeds the Facebook Page Plugin timeline from the company page URL instead of querying curated WordPress posts. A client island mounts the iframe only near the viewport and measures its width (180–500px), with a reserved 600px height and a persistent external-page link. Host-page typography remains Anuphan; the cross-origin feed's internal design is controlled by Facebook. See `docs/facebook-updates.md` for verification limits and previous-mode instructions.
+
 ## Curated Facebook updates (October 8, 2026)
 
 The homepage has an Updates from 168 section below products. Native WordPress Posts in separate Thai/English categories supply up to three image-led cards, using the shared Anuphan scale, navy links and a pale blue section. Empty/error states show the existing company Facebook page link. This is editorial selection, not automatic Facebook synchronization. Server-side requests are cached for 60 seconds, time-limited and streamed separately; no Facebook SDK or iframe loads. Setup and content-entry instructions: `docs/facebook-updates.md`.
