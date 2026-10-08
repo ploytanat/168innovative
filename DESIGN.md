@@ -1,5 +1,9 @@
 # Design
 
+## Curated Facebook updates (October 8, 2026)
+
+The homepage has an Updates from 168 section below products. Native WordPress Posts in separate Thai/English categories supply up to three image-led cards, using the shared Anuphan scale, navy links and a pale blue section. Empty/error states show the existing company Facebook page link. This is editorial selection, not automatic Facebook synchronization. Server-side requests are cached for 60 seconds, time-limited and streamed separately; no Facebook SDK or iframe loads. Setup and content-entry instructions: `docs/facebook-updates.md`.
+
 ## System typography audit (October 8, 2026 — current)
 
 Anuphan is now the only loaded family, including numeric/spec text; IBM Plex Mono has been removed. The shared scale is 16px secondary text/compact controls, 18px body/form values/specifications, 20px card names including mobile, 24px subheadings, 28–34px section headings and 36–48px page headings (rem-based). Catalogue-only scale overrides are removed. CMS typography inherits the same family and semantic heading/body sizes. The custom not-found view now uses the shared scale and no longer locks body scrolling. See `docs/typography-audit.md` for scope, checks and remaining browser-verification limits. This supersedes the historical 14px metadata/16px body and Mono guidance below.

@@ -1,3 +1,5 @@
+import { Suspense } from "react"
+import FacebookUpdates, { FacebookUpdatesLink } from "@/app/components/sections/FacebookUpdates"
 import type { Metadata } from "next"
 import { homeFont } from "@/app/config/fonts"
 
@@ -31,6 +33,8 @@ export default async function HomePage() {
   const { heroSlides, products, categories, whys, company } =
     await getHomeSections(locale)
 
+  const facebookPage = company?.socials.find(social => social.type.toLowerCase() === "facebook")?.url
+
   return (
     <div className={`${homeFont.className} home-showroom`}>
       <h1 className="sr-only">
@@ -40,6 +44,7 @@ export default async function HomePage() {
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
       {categories.length > 0 && <PackagingStudio categories={categories} locale={locale} email={company?.email[0]} />}
       {products.length > 0 && <PortfolioGrid items={products} locale={locale} />}
+      <Suspense fallback={<FacebookUpdatesLink locale={locale} pageUrl={facebookPage} />}><FacebookUpdates locale={locale} pageUrl={facebookPage} /></Suspense>
       {whys.length > 0 && <PromoGrid whys={whys} locale={locale} />}
       <FaqSection locale={locale} />
       {company && <ContactSection locale={locale} data={company} />}
