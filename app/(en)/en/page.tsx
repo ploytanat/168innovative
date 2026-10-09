@@ -41,9 +41,10 @@ export default async function HomePage() {
       </h1>
       {heroSlides.length > 0 && <HomeHero hero={{ slides: heroSlides }} locale={locale} showStudio={categories.length > 0} />}
       {categories.length > 0 && <CategorySection items={categories} locale={locale} />}
-      {categories.length > 0 && <PackagingStudio categories={categories} locale={locale} email={company?.email[0]} />}
       {products.length > 0 && <PortfolioGrid items={products} locale={locale} />}
-      <FacebookUpdates locale={locale} pageUrl={facebookPage} />
+      <FacebookUpdates locale={locale} pageUrl={facebookPage}>
+        {categories.length > 0 && <PackagingStudio categories={categories} locale={locale} email={company?.email[0]} embedded />}
+      </FacebookUpdates>
       {whys.length > 0 && <PromoGrid whys={whys} locale={locale} />}
       <FaqSection locale={locale} />
       {company && <ContactSection locale={locale} data={company} />}

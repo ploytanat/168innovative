@@ -1,5 +1,6 @@
 // lib/mocks/company.mock.ts
 import { CompanyInfo } from "../types/content";
+import { FACEBOOK_PAGE_URL } from "@/app/config/site";
 
 export const companyMock: CompanyInfo = {
   logo:{
@@ -47,7 +48,7 @@ export const companyMock: CompanyInfo = {
     },
     {
       type: 'facebook',
-      url: 'https://facebook.com/168innovative',
+      url: FACEBOOK_PAGE_URL,
       icon: {
         src: '/icons/facebook.svg',
         alt: 'Facebook',

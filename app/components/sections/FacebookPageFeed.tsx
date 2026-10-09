@@ -29,7 +29,7 @@ export default function FacebookPageFeed({ pageUrl, locale }: { pageUrl: string;
   }, [])
 
   const parameters = new URLSearchParams({
-    href: pageUrl, tabs: "timeline", width: String(width || 500), height: "600",
+    href: pageUrl, tabs: "timeline", width: String(width || 500), height: "400",
     small_header: "true", adapt_container_width: "true", hide_cover: "false",
     show_facepile: "false", locale: locale === "th" ? "th_TH" : "en_US",
   })
@@ -38,7 +38,7 @@ export default function FacebookPageFeed({ pageUrl, locale }: { pageUrl: string;
     {nearby && width > 0 ? <iframe
       src={`https://www.facebook.com/plugins/page.php?${parameters}`}
       title={locale === "th" ? "โพสต์จากเพจ Facebook ของ 168 Innovative" : "Posts from the 168 Innovative Facebook page"}
-      width={width} height="600" loading="lazy"
+      width={width} height="400" loading="lazy"
       allow="encrypted-media; picture-in-picture"
       referrerPolicy="strict-origin-when-cross-origin"
     /> : <p className="facebook-feed-placeholder">{locale === "th" ? "โพสต์จากเพจ Facebook" : "Posts from our Facebook page"}</p>}

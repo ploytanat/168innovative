@@ -2,12 +2,13 @@ import FacebookPageFeed from "./FacebookPageFeed"
 import { ArrowUpRight, Facebook } from "lucide-react"
 import { facebookUrl } from "@/app/lib/facebook-updates"
 import { CONTAINER } from "./home-theme"
+import type { ReactNode } from "react"
 
-type Props = { locale: "th" | "en"; pageUrl?: string }
+type Props = { locale: "th" | "en"; pageUrl?: string; children?: ReactNode }
 
-export default function FacebookUpdates({ locale, pageUrl }: Props) {
+export default function FacebookUpdates({ locale, pageUrl, children }: Props) {
   const url = facebookUrl(pageUrl)
-  if (!url) return null
+  if (!url) return children ? <div className="facebook-updates"><div className={CONTAINER}>{children}</div></div> : null
   return <section className="facebook-updates facebook-updates--link" aria-labelledby="facebook-updates-title">
     <div className={CONTAINER}>
       <div className="facebook-updates-heading">
@@ -18,6 +19,7 @@ export default function FacebookUpdates({ locale, pageUrl }: Props) {
         <FacebookPageFeed pageUrl={url} locale={locale} />
         <p className="facebook-feed-help">{locale === "th" ? "หากไม่เห็นโพสต์ในกรอบ สามารถเปิดดูบน Facebook ได้โดยตรง" : "If posts do not appear here, open our page directly on Facebook."}</p>
       </div>
+      {children && <div className="facebook-brief-transition">{children}</div>}
     </div>
   </section>
 }

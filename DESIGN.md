@@ -1,5 +1,9 @@
 # Design
 
+## Updates and packaging brief together (October 8, 2026)
+
+Both homepages now place Packaging Studio after the Facebook timeline in one continuous pale-blue area below the portfolio. A localized invitation leads into the navy disclosure control; the existing brief form, preview, copy and email actions remain intact. The timeline and its reserved frame are now 400px tall. The hero's packaging-studio anchor is preserved, and the brief remains available when the Facebook URL is missing. TypeScript and scoped ESLint pass; visual and interaction verification is unavailable because no browser surface is connected. No build or deployment was run.
+
 ## Automatic Facebook timeline (October 8, 2026 — current)
 
 The user requested automatic posts. The homepage now embeds the Facebook Page Plugin timeline from the company page URL instead of querying curated WordPress posts. A client island mounts the iframe only near the viewport and measures its width (180–500px), with a reserved 600px height and a persistent external-page link. Host-page typography remains Anuphan; the cross-origin feed's internal design is controlled by Facebook. See `docs/facebook-updates.md` for verification limits and previous-mode instructions.

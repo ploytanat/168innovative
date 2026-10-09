@@ -2,6 +2,7 @@ import type { Locale } from "@/app/lib/types/content"
 
 export const SITE_URL = "https://168innovative.co.th"
 export const SITE_NAME = "168 Innovative"
+export const FACEBOOK_PAGE_URL = "https://www.facebook.com/profile.php?id=61591294259398"
 export const COMPANY_NAME = "168 Innovative Co., Ltd."
 export const ORGANIZATION_DESCRIPTION: Record<Locale, string> = {
   th: "ผู้ผลิตและจำหน่ายบรรจุภัณฑ์พลาสติก จุกซอง ฝาพลาสติก OEM/ODM",
@@ -9,7 +10,7 @@ export const ORGANIZATION_DESCRIPTION: Record<Locale, string> = {
 }
 export const ORGANIZATION_AVAILABLE_LANGUAGES = ["Thai", "English"] as const
 export const ORGANIZATION_SAME_AS_FALLBACK = [
-  "https://www.facebook.com/168innovative",
+  FACEBOOK_PAGE_URL,
   "https://line.me/ti/p/~168innovative",
 ]
 

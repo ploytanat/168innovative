@@ -1,5 +1,6 @@
 import { readJson } from "./read-json"
 import { unstable_cache } from "next/cache"
+import { FACEBOOK_PAGE_URL } from "@/app/config/site"
 
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
@@ -204,7 +205,9 @@ export async function getCompany(locale: Locale): Promise<CompanyView | null> {
       .map((social) => {
         const iconSrc = getMediaUrl(mediaMap, social.iconId)
         const type = social.type ?? "social"
-        const url = social.url ?? "#"
+        const url = type.trim().toLowerCase() === "facebook"
+          ? FACEBOOK_PAGE_URL
+          : social.url ?? "#"
 
         return {
           type,

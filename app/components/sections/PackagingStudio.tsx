@@ -8,7 +8,7 @@ import type { CategoryView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 import { CONTAINER } from "./home-theme"
 
-export default function PackagingStudio({ categories, locale, email }: { categories: CategoryView[]; locale: "th" | "en"; email?: string }) {
+export default function PackagingStudio({ categories, locale, email, embedded = false }: { categories: CategoryView[]; locale: "th" | "en"; email?: string; embedded?: boolean }) {
   const id = useId()
   const [slug, setSlug] = useState(categories[0]?.slug ?? "")
   const [mode, setMode] = useState("catalog")
@@ -29,8 +29,12 @@ export default function PackagingStudio({ categories, locale, email }: { categor
     catch { setCopyFailed(true); setCopied(false) }
   }
   return (
-    <section id="packaging-studio" className="packaging-studio" aria-labelledby={`${id}-title`}>
-      <div className={CONTAINER}>
+    <section id="packaging-studio" className={`packaging-studio${embedded ? " packaging-studio--embedded" : ""}`} aria-labelledby={`${id}-title`}>
+      <div className={embedded ? undefined : CONTAINER}>
+        {embedded && <div className="studio-invitation">
+          <h2>{th ? "มีไอเดียบรรจุภัณฑ์สำหรับแบรนด์ของคุณแล้ว?" : "Have a packaging idea for your brand?"}</h2>
+          <p>{th ? "บอกประเภทสินค้า จำนวนที่ต้องการ และแนวทางที่สนใจ เพื่อให้ทีมช่วยแนะนำ" : "Share your packaging type, planned quantity and project direction so our team can help."}</p>
+        </div>}
         <details className="studio-disclosure">
           <summary className="studio-heading"><h2 id={`${id}-title`}>{th ? "เตรียมบรีฟบรรจุภัณฑ์" : "Build your packaging brief"}</h2><ChevronDown size={24} aria-hidden="true" /></summary>
         <div className="studio-workspace">
