@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 // lib/api/categories.ts
 
 import { unstable_cache } from "next/cache";
@@ -53,7 +54,7 @@ async function fetchJSON<T>(
       return fallback;
     }
 
-    return res.json();
+    return await readJson(res, fallback);
   } catch (error) {
     console.error(`Failed to fetch ${label}:`, error);
     return fallback;

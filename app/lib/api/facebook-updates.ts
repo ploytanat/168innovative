@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 import { mapFacebookUpdates, type FacebookUpdate } from "../facebook-updates"
 
 export async function getFacebookUpdates(locale: "th" | "en"): Promise<FacebookUpdate[]> {
@@ -9,7 +10,7 @@ export async function getFacebookUpdates(locale: "th" | "en"): Promise<FacebookU
       signal: AbortSignal.timeout(3000),
     })
     if (!response.ok) return null
-    return await response.json()
+    return await readJson<unknown>(response, null)
   }
   try {
     const categories = await read(`categories?slug=facebook-updates-${locale}&_fields=id`)

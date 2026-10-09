@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 // lib/api/why.ts
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
@@ -31,7 +32,7 @@ async function getMediaMap(ids: number[]) {
       { next: { revalidate: 3600 } }
     )
     if (!res.ok) return {}
-    const data = (await res.json()) as WPMediaItem[]
+    const data = await readJson<WPMediaItem[]>(res, [])
     const map: Record<number, string> = {}
     data.forEach((media) => {
       map[media.id] = media.source_url ?? media.guid?.rendered ?? ""
@@ -50,7 +51,7 @@ export async function getWhy(locale: Locale): Promise<WhyItemView[]> {
     )
 
     if (!res.ok) return []
-    const data = (await res.json()) as WPWhyEntry[]
+    const data = await readJson<WPWhyEntry[]>(res, [])
 
     // 1. รวบรวม ID รูปภาพทั้งหมดจากทุกรายการ
     const imageIds = data

@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 import { unstable_cache } from "next/cache"
 
 import { Locale, WPMediaItem } from "../types/content"
@@ -72,7 +73,7 @@ const getCompanyData = unstable_cache(
       return null
     }
 
-    const data = (await res.json()) as Array<{ acf?: CompanyAcf }>
+    const data = await readJson<Array<{ acf?: CompanyAcf }>>(res, [])
     const acf = data?.[0]?.acf
 
     if (!acf) {
@@ -107,7 +108,7 @@ const getCompanyData = unstable_cache(
       )
 
       if (mediaRes.ok) {
-        const mediaData = (await mediaRes.json()) as WPMediaItem[]
+        const mediaData = await readJson<WPMediaItem[]>(mediaRes, [])
         mediaData.forEach((media) => {
           mediaMap[media.id] = media.source_url || media.guid?.rendered || ""
         })

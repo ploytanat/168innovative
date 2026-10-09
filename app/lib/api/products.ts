@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 import { parseProductColors } from "../product-colors"
 // app/lib/api/products.ts
 
@@ -29,7 +30,7 @@ async function fetchJSON<T>(
       console.error(`Fetch failed for ${label}: ${res.status} ${url}`)
       return fallback
     }
-    return res.json()
+    return await readJson(res, fallback)
   } catch (error) {
     console.error(`Fetch failed for ${label}:`, error)
     return fallback
@@ -149,7 +150,7 @@ function _getProductsByCategoryId(
         const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
         const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
 
-        const data = (await res.json()) as WPProduct[]
+        const data = await readJson<WPProduct[]>(res, [])
 
         return { data, totalPages, totalCount }
       } catch (error) {
@@ -184,7 +185,7 @@ function _getProductsByCategoryBatch(
 
         const totalPages = Number(res.headers.get("X-WP-TotalPages") ?? 1)
         const totalCount = Number(res.headers.get("X-WP-Total") ?? 0)
-        const data = (await res.json()) as WPProduct[]
+        const data = await readJson<WPProduct[]>(res, [])
 
         return { data, totalPages, totalCount }
       } catch (error) {

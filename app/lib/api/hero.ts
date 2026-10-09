@@ -1,3 +1,4 @@
+import { readJson } from "./read-json"
 // lib/api/hero.ts
 
 import { pickLocalizedText } from "./acf"
@@ -42,7 +43,7 @@ export async function getHeroSlides(locale: Locale) {
     throw new Error("Failed to fetch hero slides")
   }
 
-  const data = (await res.json()) as WPHeroSlide[]
+  const data = await readJson<WPHeroSlide[]>(res, [])
 
   return data.map((wp) => {
     const acf = wp.acf ?? {}
