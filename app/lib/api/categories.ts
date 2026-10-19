@@ -1,3 +1,5 @@
+import { WP_API_URL as BASE } from "../config"
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 // lib/api/categories.ts
 
@@ -6,7 +8,6 @@ import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf";
 import { Locale } from "../types/content";
 import { CategoryView } from "../types/view";
 
-const BASE = process.env.WP_API_URL;
 const CATEGORY_FIELDS = "id,slug,name,image_url,acf";
 
 if (!BASE) {
@@ -44,21 +45,13 @@ async function fetchJSON<T>(
   fallback: T,
   label: string
 ): Promise<T> {
-  try {
-    const res = await fetch(url, {
-      next: { revalidate: 300 },
-    });
-
-    if (!res.ok) {
-      console.error(`Failed to fetch ${label}: ${res.status} ${url}`);
-      return fallback;
-    }
-
-    return await readJson(res, fallback);
-  } catch (error) {
-    console.error(`Failed to fetch ${label}:`, error);
+  const res = await fetchWordPress(url, { next: { revalidate: 300 } });
+  if (!res) return fallback;
+  if (!res.ok) {
+    console.warn(`Failed to fetch ${label}: HTTP ${res.status} ${url}`);
     return fallback;
   }
+  return readJson(res, fallback);
 }
 
 /* ================= All Categories ================= */

@@ -1,10 +1,11 @@
+import { WP_API_URL as BASE } from "../config"
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 // lib/api/hero.ts
 
 import { pickLocalizedText } from "./acf"
 import { Locale, WPFeaturedMedia } from "../types/content"
 
-const BASE = process.env.WP_API_URL
 
 if (!BASE) {
   throw new Error("WP_API_URL is not defined")
@@ -34,13 +35,13 @@ type WPHeroSlide = {
 }
 
 export async function getHeroSlides(locale: Locale) {
-  const res = await fetch(
+  const res = await fetchWordPress(
     `${BASE}/wp-json/wp/v2/hero_slide?_embed`,
     { next: { revalidate: 60 } }
   )
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch hero slides")
+  if (!res?.ok) {
+    return []
   }
 
   const data = await readJson<WPHeroSlide[]>(res, [])

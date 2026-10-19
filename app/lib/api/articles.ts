@@ -1,3 +1,4 @@
+import { fetchWordPress } from "./fetch-wordpress"
 import { unstable_cache } from "next/cache"
 
 import { mapFaqItems, normalizeRichText, pickLocalizedText } from "./acf"
@@ -276,9 +277,9 @@ async function fetchArticlesFromWP<T = WPArticle[]>(
     Object.entries(params).forEach(([key, value]) =>
       url.searchParams.set(key, value)
     )
-    const res = await fetch(url.toString(), fetchConfig)
-    if (!res.ok) {
-      console.error("WP article fetch failed:", res.status, url.toString())
+    const res = await fetchWordPress(url.toString(), fetchConfig)
+    if (!res?.ok) {
+      console.error("WP article fetch failed:", res?.status, url.toString())
       return [] as T
     }
     return res.json() as Promise<T>

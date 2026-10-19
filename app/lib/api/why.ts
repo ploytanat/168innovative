@@ -1,10 +1,11 @@
+import { WP_API_URL as BASE } from "../config"
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 // lib/api/why.ts
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
 import { WhyItemView } from "../types/view"
 
-const BASE = process.env.WP_API_URL!
 
 interface WhyAcf {
   order?: number
@@ -27,11 +28,11 @@ async function getMediaMap(ids: number[]) {
   if (!uniqueIds.length) return {}
 
   try {
-    const res = await fetch(
+    const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(',')}&per_page=100`,
       { next: { revalidate: 3600 } }
     )
-    if (!res.ok) return {}
+    if (!res?.ok) return {}
     const data = await readJson<WPMediaItem[]>(res, [])
     const map: Record<number, string> = {}
     data.forEach((media) => {
@@ -45,12 +46,12 @@ async function getMediaMap(ids: number[]) {
 
 export async function getWhy(locale: Locale): Promise<WhyItemView[]> {
   try {
-    const res = await fetch(
+    const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/why?per_page=20`, // ปรับจำนวนตามต้องการ
       { next: { revalidate: 3600 } }
     )
 
-    if (!res.ok) return []
+    if (!res?.ok) return []
     const data = await readJson<WPWhyEntry[]>(res, [])
 
     // 1. รวบรวม ID รูปภาพทั้งหมดจากทุกรายการ

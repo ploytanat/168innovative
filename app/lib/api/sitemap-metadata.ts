@@ -1,4 +1,5 @@
-const BASE = process.env.WP_API_URL
+import { fetchWordPress } from "./fetch-wordpress"
+const BASE = process.env.WP_API_URL?.trim().replace(/\/+$/, "")
 
 if (!BASE) {
   throw new Error("WP_API_URL is not defined")
@@ -9,11 +10,11 @@ type ModifiedRecord = {
 }
 
 async function fetchModifiedRecords(path: string): Promise<ModifiedRecord[]> {
-  const res = await fetch(`${BASE}${path}`, {
+  const res = await fetchWordPress(`${BASE}${path}`, {
     next: { revalidate: 300 },
   })
 
-  if (!res.ok) {
+  if (!res?.ok) {
     return []
   }
 

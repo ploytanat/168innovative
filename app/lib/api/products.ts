@@ -1,3 +1,5 @@
+import { WP_API_URL as BASE } from "../config"
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 import { parseProductColors } from "../product-colors"
 // app/lib/api/products.ts
@@ -9,7 +11,6 @@ import { shouldIndexProduct } from "../seo/indexability"
 import { Locale, WPProduct } from "../types/content"
 import { ProductView, ProductSpecView } from "../types/view"
 
-const BASE = process.env.WP_API_URL
 if (!BASE) throw new Error("WP_API_URL is not defined")
 
 const PRODUCT_FIELDS =
@@ -25,9 +26,10 @@ async function fetchJSON<T>(
   label: string
 ): Promise<T> {
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } })
-    if (!res.ok) {
-      console.error(`Fetch failed for ${label}: ${res.status} ${url}`)
+    const res = await fetchWordPress(url, { next: { revalidate: 60 } })
+    if (!res) return fallback
+    if (!res?.ok) {
+      console.warn(`Fetch failed for ${label}: ${res.status} ${url}`)
       return fallback
     }
     return await readJson(res, fallback)
@@ -137,13 +139,13 @@ function _getProductsByCategoryId(
   return unstable_cache(
     async () => {
       try {
-        const res = await fetch(
+        const res = await fetchWordPress(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
           { next: { revalidate: 3600 } }
         )
 
-        if (!res.ok) {
-          console.error(`Fetch failed: category ${categoryId} page ${page}`)
+        if (!res?.ok) {
+          console.warn(`Fetch failed: category ${categoryId} page ${page}`)
           return { data: [], totalPages: 1, totalCount: 0 }
         }
 
@@ -154,7 +156,7 @@ function _getProductsByCategoryId(
 
         return { data, totalPages, totalCount }
       } catch (error) {
-        console.error(`Fetch failed: category ${categoryId} page ${page}`, error)
+        console.warn(`Fetch failed: category ${categoryId} page ${page}`, error)
         return { data: [], totalPages: 1, totalCount: 0 }
       }
     },
@@ -171,12 +173,12 @@ function _getProductsByCategoryBatch(
   return unstable_cache(
     async () => {
       try {
-        const res = await fetch(
+        const res = await fetchWordPress(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
           { next: { revalidate: 3600 } }
         )
 
-        if (!res.ok) {
+        if (!res?.ok) {
           console.error(
             `Fetch failed: category ${categoryId} page ${page} per_page ${perPage}`
           )

@@ -1,10 +1,11 @@
+import { fetchWordPress } from "./fetch-wordpress"
 // lib/api/about.ts
 
 import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
 import { AboutView } from "../types/view"
 
-const BASE = process.env.WP_API_URL!
+const BASE = process.env.WP_API_URL?.trim().replace(/\/+$/, "")
 
 interface AboutAcf {
   hero_title_th?: string
@@ -46,14 +47,14 @@ async function getMediaMap(ids: number[]) {
   if (!uniqueIds.length) return {}
 
   try {
-    const res = await fetch(
+    const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
       {
         next: { revalidate: 3600 },
       }
     )
 
-    if (!res.ok) return {}
+    if (!res?.ok) return {}
 
     const data = (await res.json()) as WPMediaItem[]
 
@@ -77,11 +78,11 @@ export async function getAbout(
   locale: Locale
 ): Promise<Omit<AboutView, "why"> | null> {
   try {
-    const res = await fetch(`${BASE}/wp-json/wp/v2/about?per_page=1`, {
+    const res = await fetchWordPress(`${BASE}/wp-json/wp/v2/about?per_page=1`, {
       next: { revalidate: 3600 },
     })
 
-    if (!res.ok) return null
+    if (!res?.ok) return null
 
     const data = (await res.json()) as WPAboutEntry[]
 

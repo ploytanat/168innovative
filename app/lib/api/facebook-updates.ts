@@ -1,3 +1,4 @@
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 import { mapFacebookUpdates, type FacebookUpdate } from "../facebook-updates"
 
@@ -5,11 +6,11 @@ export async function getFacebookUpdates(locale: "th" | "en"): Promise<FacebookU
   const base = process.env.WP_API_URL?.replace(/\/$/, "")
   if (!base) return []
   async function read(path: string): Promise<unknown> {
-    const response = await fetch(`${base}/wp-json/wp/v2/${path}`, {
+    const response = await fetchWordPress(`${base}/wp-json/wp/v2/${path}`, {
       next: { revalidate: 60, tags: ["facebook-updates"] },
       signal: AbortSignal.timeout(3000),
     })
-    if (!response.ok) return null
+    if (!response?.ok) return null
     return await readJson<unknown>(response, null)
   }
   try {

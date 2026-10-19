@@ -1,3 +1,5 @@
+import { WP_API_URL as BASE } from "../config"
+import { fetchWordPress } from "./fetch-wordpress"
 import { readJson } from "./read-json"
 import { unstable_cache } from "next/cache"
 import { FACEBOOK_PAGE_URL } from "@/app/config/site"
@@ -6,7 +8,6 @@ import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
 import { CompanyView } from "../types/view"
 
-const BASE = process.env.WP_API_URL
 const COMPANY_REVALIDATE_SECONDS = 60
 
 if (!BASE) {
@@ -66,11 +67,11 @@ type RawCompanyData = {
 
 const getCompanyData = unstable_cache(
   async (): Promise<RawCompanyData> => {
-    const res = await fetch(`${BASE}/wp-json/wp/v2/company?per_page=1`, {
+    const res = await fetchWordPress(`${BASE}/wp-json/wp/v2/company?per_page=1`, {
       next: { revalidate: COMPANY_REVALIDATE_SECONDS, tags: ["company"] },
     })
 
-    if (!res.ok) {
+    if (!res?.ok) {
       return null
     }
 
@@ -98,7 +99,7 @@ const getCompanyData = unstable_cache(
 
     if (imageIds.length > 0) {
       const uniqueIds = Array.from(new Set(imageIds))
-      const mediaRes = await fetch(
+      const mediaRes = await fetchWordPress(
         `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
         {
           next: {
@@ -108,7 +109,7 @@ const getCompanyData = unstable_cache(
         }
       )
 
-      if (mediaRes.ok) {
+      if (mediaRes?.ok) {
         const mediaData = await readJson<WPMediaItem[]>(mediaRes, [])
         mediaData.forEach((media) => {
           mediaMap[media.id] = media.source_url || media.guid?.rendered || ""
