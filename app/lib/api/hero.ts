@@ -37,7 +37,7 @@ type WPHeroSlide = {
 export async function getHeroSlides(locale: Locale) {
   const res = await fetchWordPress(
     `${BASE}/wp-json/wp/v2/hero_slide?_embed`,
-    { next: { revalidate: 60 } }
+    { next: { revalidate: 21600 } }
   )
 
   if (!res?.ok) {

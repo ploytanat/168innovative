@@ -191,7 +191,7 @@ const getSitemapData = unstable_cache(
     }
   },
   ["sitemap-data-v2"],
-  { revalidate: 300, tags: ["articles", "categories", "company", "products"] }
+  { revalidate: 21600, tags: ["articles", "categories", "company", "products"] }
 )
 
 export async function getCategorySitemapEntries(): Promise<MetadataRoute.Sitemap> {

@@ -1,5 +1,5 @@
 import ProductSummary, { ProductDescription } from "@/app/components/product/ProductSummary"
-export const revalidate = 3600
+export const revalidate = 21600
 
 import type { Metadata } from 'next'
 import Image from 'next/image'

@@ -6,4 +6,6 @@ export const homeFont = Anuphan({
   variable: "--font-anuphan",
   display: "swap",
 })
-export const rootBodyClassName = [homeFont.variable, "font-body", "antialiased"].join(" ")
+// Root typography tokens resolve on <html>, so the font variable must live there too.
+export const rootHtmlClassName = homeFont.variable
+export const rootBodyClassName = [homeFont.className, "font-body", "antialiased"].join(" ")

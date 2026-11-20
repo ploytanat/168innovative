@@ -7,7 +7,7 @@ export async function getFacebookUpdates(locale: "th" | "en"): Promise<FacebookU
   if (!base) return []
   async function read(path: string): Promise<unknown> {
     const response = await fetchWordPress(`${base}/wp-json/wp/v2/${path}`, {
-      next: { revalidate: 60, tags: ["facebook-updates"] },
+      next: { revalidate: 21600, tags: ["facebook-updates"] },
       signal: AbortSignal.timeout(3000),
     })
     if (!response?.ok) return null

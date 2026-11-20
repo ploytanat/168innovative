@@ -5,7 +5,7 @@ import {
   renderSitemapIndex,
 } from "@/app/lib/sitemap-utils"
 
-export const revalidate = 300
+export const revalidate = 21600
 
 export async function GET() {
   const items = await getSitemapIndexItems()

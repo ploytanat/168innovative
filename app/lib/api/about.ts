@@ -50,7 +50,7 @@ async function getMediaMap(ids: number[]) {
     const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(",")}&per_page=100`,
       {
-        next: { revalidate: 3600 },
+        next: { revalidate: 86400 },
       }
     )
 
@@ -79,7 +79,7 @@ export async function getAbout(
 ): Promise<Omit<AboutView, "why"> | null> {
   try {
     const res = await fetchWordPress(`${BASE}/wp-json/wp/v2/about?per_page=1`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     })
 
     if (!res?.ok) return null

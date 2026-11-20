@@ -11,7 +11,7 @@ type ModifiedRecord = {
 
 async function fetchModifiedRecords(path: string): Promise<ModifiedRecord[]> {
   const res = await fetchWordPress(`${BASE}${path}`, {
-    next: { revalidate: 300 },
+    next: { revalidate: 21600 },
   })
 
   if (!res?.ok) {

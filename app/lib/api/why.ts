@@ -30,7 +30,7 @@ async function getMediaMap(ids: number[]) {
   try {
     const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/media?include=${uniqueIds.join(',')}&per_page=100`,
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 86400 } }
     )
     if (!res?.ok) return {}
     const data = await readJson<WPMediaItem[]>(res, [])
@@ -48,7 +48,7 @@ export async function getWhy(locale: Locale): Promise<WhyItemView[]> {
   try {
     const res = await fetchWordPress(
       `${BASE}/wp-json/wp/v2/why?per_page=20`, // ปรับจำนวนตามต้องการ
-      { next: { revalidate: 3600 } }
+      { next: { revalidate: 86400 } }
     )
 
     if (!res?.ok) return []

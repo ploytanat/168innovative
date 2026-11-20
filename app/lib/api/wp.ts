@@ -7,7 +7,7 @@ if (!WP) {
 
 export async function getPosts() {
   const res = await fetchWordPress(`${WP}/wp-json/wp/v2/posts`, {
-    next: { revalidate: 60 },
+    next: { revalidate: 21600 },
   });
 
   if (!res?.ok) {

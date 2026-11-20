@@ -35,7 +35,7 @@ if (!WP_URL) {
 }
 
 const fetchConfig: RequestInit = {
-  next: { revalidate: 300 },
+  next: { revalidate: 21600 },
   headers: { "Content-Type": "application/json" },
 }
 
@@ -292,13 +292,13 @@ async function fetchArticlesFromWP<T = WPArticle[]>(
 const getArticlesRaw = unstable_cache(
   async (): Promise<WPArticle[]> => fetchArticlesFromWP({ ...ARTICLE_LIST_PARAMS }),
   ["articles-raw-v1"],
-  { revalidate: 300, tags: ["articles"] }
+  { revalidate: 21600, tags: ["articles"] }
 )
 const getArticlesSitemapRaw = unstable_cache(
   async (): Promise<WPArticle[]> =>
     fetchArticlesFromWP({ ...ARTICLE_SITEMAP_PARAMS }),
   ["articles-sitemap-raw-v1"],
-  { revalidate: 300, tags: ["articles"] }
+  { revalidate: 21600, tags: ["articles"] }
 )
 
 function getArticleRawBySlug(slug: string): Promise<WPArticle | null> {
@@ -312,7 +312,7 @@ function getArticleRawBySlug(slug: string): Promise<WPArticle | null> {
       return data[0] ?? null
     },
     [`article-raw-${slug}-v1`],
-    { revalidate: 300, tags: ["articles"] }
+    { revalidate: 21600, tags: ["articles"] }
   )()
 }
 
@@ -331,7 +331,7 @@ export function getAllArticleSlugs(): Promise<string[]> {
         .filter((slug): slug is string => Boolean(slug))
     },
     ["article-slugs-v1"],
-    { revalidate: 300, tags: ["articles"] }
+    { revalidate: 21600, tags: ["articles"] }
   )()
 }
 

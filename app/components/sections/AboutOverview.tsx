@@ -4,7 +4,6 @@ import { ArrowUpRight, Check, Mail, MapPin, Phone, Plus } from "lucide-react"
 import type { AboutHeroView, CompanyView } from "@/app/lib/types/view"
 import { withLocalePath } from "@/app/lib/utils/withLocalePath"
 import Breadcrumb from "@/app/components/ui/Breadcrumb"
-import { homeFont } from "@/app/config/fonts"
 
 export default function AboutOverview({ hero, company, locale }: { hero: AboutHeroView; company: CompanyView | null; locale: "th" | "en" }) {
   const th = locale === "th"
@@ -20,7 +19,7 @@ export default function AboutOverview({ hero, company, locale }: { hero: AboutHe
   const phone = company?.phones[0]
   const email = company?.email[0]
   return (
-    <div className={`${homeFont.className} about-overview`}>
+    <div className="about-overview">
       <section className="about-intro">
         <div className="about-container">
           <Breadcrumb items={[{ label: th ? "เกี่ยวกับเรา" : "About us" }]} />

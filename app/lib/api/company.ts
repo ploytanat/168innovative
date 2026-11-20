@@ -8,7 +8,7 @@ import { Locale, WPMediaItem } from "../types/content"
 import { pickLocalizedText } from "./acf"
 import { CompanyView } from "../types/view"
 
-const COMPANY_REVALIDATE_SECONDS = 60
+const COMPANY_REVALIDATE_SECONDS = 86400
 
 if (!BASE) {
   throw new Error("WP_API_URL is not defined")

@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
-import { rootBodyClassName } from "@/app/config/fonts"
+import { rootBodyClassName, rootHtmlClassName } from "@/app/config/fonts"
 
 interface RootDocumentProps {
   lang: "th" | "en"
@@ -14,7 +14,7 @@ export default function RootDocument({
   children,
 }: RootDocumentProps) {
   return (
-    <html lang={lang}>
+    <html lang={lang} className={rootHtmlClassName}>
       <head>
         <link rel="preconnect" href="https://wb.168innovative.co.th" />
         <link rel="dns-prefetch" href="https://wb.168innovative.co.th" />

@@ -1,6 +1,5 @@
 import FacebookUpdates from "@/app/components/sections/FacebookUpdates"
 import type { Metadata } from "next"
-import { homeFont } from "@/app/config/fonts"
 
 import CategorySection from "@/app/components/sections/CategorySection"
 import ContactSection from "@/app/components/sections/ContactSection"
@@ -35,7 +34,7 @@ export default async function HomePage() {
   const facebookPage = company?.socials.find(social => social.type.toLowerCase() === "facebook")?.url
 
   return (
-    <div className={`${homeFont.className} home-showroom`}>
+    <div className="home-showroom">
       <h1 className="sr-only">
         168 Innovative บรรจุภัณฑ์เครื่องสำอางและพลาสติกสำหรับงาน OEM และ ODM
       </h1>

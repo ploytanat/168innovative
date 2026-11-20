@@ -45,7 +45,7 @@ async function fetchJSON<T>(
   fallback: T,
   label: string
 ): Promise<T> {
-  const res = await fetchWordPress(url, { next: { revalidate: 300 } });
+  const res = await fetchWordPress(url, { next: { revalidate: 21600 } });
   if (!res) return fallback;
   if (!res.ok) {
     console.warn(`Failed to fetch ${label}: HTTP ${res.status} ${url}`);
@@ -67,7 +67,7 @@ export function getCategories(locale: Locale): Promise<CategoryView[]> {
       return data.map((wp) => mapCategory(wp, locale));
     },
     [`categories-${locale}-v2`],
-    { revalidate: 300, tags: ["categories"] }
+    { revalidate: 21600, tags: ["categories"] }
   )();
 }
 
@@ -84,7 +84,7 @@ export function getAllCategorySlugs(): Promise<string[]> {
         .filter((slug): slug is string => Boolean(slug));
     },
     ["category-slugs-v1"],
-    { revalidate: 300, tags: ["categories"] }
+    { revalidate: 21600, tags: ["categories"] }
   )();
 }
 
@@ -101,7 +101,7 @@ function getCategoryRawBySlug(slug: string): Promise<WPProductCategory | null> {
       return data[0] ?? null;
     },
     [`category-raw-${slug}-v1`],
-    { revalidate: 300, tags: ["categories"] }
+    { revalidate: 21600, tags: ["categories"] }
   )();
 }
 
@@ -121,7 +121,7 @@ export function getCategoryBySlug(
       return mapCategory(category, locale);
     },
     [`category-${slug}-${locale}-v2`],
-    { revalidate: 300, tags: ["categories"] }
+    { revalidate: 21600, tags: ["categories"] }
   )();
 }
 

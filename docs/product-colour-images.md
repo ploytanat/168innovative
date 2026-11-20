@@ -1,11 +1,11 @@
-﻿# รูปสินค้าแยกสี
+# รูปสินค้าแยกสี
 
 ฝั่ง Next.js รองรับแล้ว แต่ยังไม่ได้ติดตั้ง field หรือเพิ่มข้อมูลใน WordPress จริง
 
 1. WordPress → Custom Fields → Tools → Import Field Groups เลือก `docs/acf-import/product-colour-images.json` (ใช้ textarea จึงไม่ต้องใช้ ACF Pro repeater)
 2. อัปโหลดรูปสีจริงใน Media Library แล้วคัดลอก File URL
 3. เปิดสินค้ารุ่นนั้น ใส่รายการในช่อง Colour images (JSON) ตามตัวอย่างด้านล่าง โดยเปลี่ยน URL เป็นรูปจริง แล้วบันทึก
-4. ตรวจ REST API ของสินค้าให้มี `acf.color_variants_json` และรอแคชหน้าเว็บอัปเดตประมาณ 60 วินาที
+4. ตรวจ REST API ของสินค้าให้มี `acf.color_variants_json` และรอแคชหน้าเว็บหมดอายุ 6 ชั่วโมง โดยจะเริ่มอัปเดตเมื่อมีการเข้าชมหลังหมดอายุ
 
 ```json
 [

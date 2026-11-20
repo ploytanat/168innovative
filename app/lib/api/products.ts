@@ -26,7 +26,7 @@ async function fetchJSON<T>(
   label: string
 ): Promise<T> {
   try {
-    const res = await fetchWordPress(url, { next: { revalidate: 60 } })
+    const res = await fetchWordPress(url, { next: { revalidate: 21600 } })
     if (!res) return fallback
     if (!res?.ok) {
       console.warn(`Fetch failed for ${label}: ${res.status} ${url}`)
@@ -110,7 +110,7 @@ const _getCategoryMap = unstable_cache(
     return Object.fromEntries(terms.map((t) => [t.id, t.slug]))
   },
   ["category-map-v5"],
-  { revalidate: 3600, tags: ["categories"] }
+  { revalidate: 21600, tags: ["categories"] }
 )
 
 /* ─────────────────────────────
@@ -125,7 +125,7 @@ const _getProductsRaw = unstable_cache(
       "all products"
     ),
   ["products-home-v6"],
-  { revalidate: 3600, tags: ["products"] }
+  { revalidate: 21600, tags: ["products"] }
 )
 
 /* ─────────────────────────────
@@ -141,7 +141,7 @@ function _getProductsByCategoryId(
       try {
         const res = await fetchWordPress(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=15&page=${page}&_fields=${PRODUCT_FIELDS}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 21600 } }
         )
 
         if (!res?.ok) {
@@ -161,7 +161,7 @@ function _getProductsByCategoryId(
       }
     },
     [`products-category-${categoryId}-p${page}-v2`],
-    { revalidate: 3600, tags: ["products"] }
+    { revalidate: 21600, tags: ["products"] }
   )()
 }
 
@@ -175,7 +175,7 @@ function _getProductsByCategoryBatch(
       try {
         const res = await fetchWordPress(
           `${BASE}/wp-json/wp/v2/product?product_category=${categoryId}&per_page=${perPage}&page=${page}&_fields=${PRODUCT_FIELDS}`,
-          { next: { revalidate: 3600 } }
+          { next: { revalidate: 21600 } }
         )
 
         if (!res?.ok) {
@@ -199,7 +199,7 @@ function _getProductsByCategoryBatch(
       }
     },
     [`products-category-${categoryId}-p${page}-pp${perPage}-v1`],
-    { revalidate: 3600, tags: ["products"] }
+    { revalidate: 21600, tags: ["products"] }
   )()
 }
 
@@ -216,7 +216,7 @@ function _getProductRaw(slug: string): Promise<WPProduct[]> {
         `product ${slug}`
       ),
     [`product-single-${slug}-v2`],
-    { revalidate: 3600, tags: ["products"] }
+    { revalidate: 21600, tags: ["products"] }
   )()
 }
 
@@ -233,7 +233,7 @@ function _getRelatedRaw(categoryId: number): Promise<WPProduct[]> {
         `related products for category ${categoryId}`
       ),
     [`products-related-${categoryId}-v2`],
-    { revalidate: 3600, tags: ["products"] }
+    { revalidate: 21600, tags: ["products"] }
   )()
 }
 
